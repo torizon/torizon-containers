@@ -14,7 +14,7 @@ repository) into the container.
 
 Make sure that your user id on your host is **1000** (check using `id -u`). If
 not, make sure to edit the Dockerfile and set the user id to your main users
-user id. Also edit git user and email to your name and email.
+user id.
 
 Build the container using:
 

@@ -20,10 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Use UID 1000 to build packages
-RUN useradd debian -G tty,sudo,dialout,users,plugdev -u 1000
+RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 
-RUN git config --global user.name "Stefan Agner"
-RUN git config --global user.email "stefan.agner@toradex.com"
+# Copy sudoers with NOPASSWD to avoid "sudo: no tty present and no askpass
+# program specified" issue
+COPY sudoers /etc/sudoers
 
 ENV LC_ALL C.UTF-8
 
