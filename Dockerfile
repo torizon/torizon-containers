@@ -13,6 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     debhelper dh-make \
     git-buildpackage debootstrap pbuilder \
     wget procps vim \
+    bash-completion \
+    openssh-client \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    aptly \
     && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

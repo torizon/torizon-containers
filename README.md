@@ -2,7 +2,7 @@
 
 Container with packages for package building preinstalled.
 
-## Getting Started
+## Preparing Container
 
 This container is prepared to build Debian packages for i.MX devices to
 integrate the NXP downstream graphics stack. It is an `aarch64` container which
@@ -10,7 +10,7 @@ allows to build the Debian packages native (either via Qemu user emulation on
 `x86_64` or on an actual native device).
 
 The idea is to bind mount the directory containing the meta data (source git
-repository) into the container.
+repository as well as maintainers GPG keys) into the container.
 
 Make sure that your user id on your host is **1000** (check using `id -u`). If
 not, make sure to edit the Dockerfile and set the user id to your main users
@@ -22,11 +22,41 @@ Build the container using:
 docker build -t debian-package-devel .
 ```
 
+Prepare a folder to store the gnupg keys.
+
+```
+mkdir gnupg && chmod 700 gnupg
+```
+
+Also make sure that your hosts git config file is properly setup.
 
 Start the container using the following command:
 ```
-docker run --user debian -it -v /home/../../debian/:/home/debian/pkg-devel \
+docker run --user debian -it --rm
+       -v ~/.gitconfig:/home/debian/.gitconfig
+       -v /home/../../gnupg/:/home/debian/.gnupg/ \
+       -v /home/../../debian-pkg/:/home/debian/debian-pkg/ \
        debian-package-devel /bin/bash
+```
+
+### Creating/importing GPG keys
+
+We use two keys, a developer key to sign the sources (this is a personal key
+with the developers email address) and a repository key.
+
+To generate your developer key, use GPG inside the container:
+```
+gpg --generate-key
+```
+
+Use your full name and the Toradex email address.
+
+The repository key is a regular GPG key with expiration date set to be 10 years
+out. Unfortunately the version of aptly (our repository management tool) in
+buster does not support gpg2 yet. Import this key to the gpg1 databse:
+
+```
+gpg1 --import torizoncore-debian-repository.key
 ```
 
 ## Preparing Package Metadata
@@ -50,3 +80,57 @@ no later than say 2.4.94, that would not work anymore). To make sure that apt
 does not update packages despite newer versions available from the Debian main
 repository, we should make use of the pinning functionality (apt-pinning).
 
+## Building Package
+
+First make sure all build dependencies are installed. If the package has been
+derived from an existing package, build dependency of that existing package are
+a good start:
+
+```
+sudo apt-get build-dep libdrm2
+```
+
+To build the package various tools can be used. To build packages where sources
+as well as metadata are stored in git, git build-package is handy.
+
+```
+gbp buildpackage --git-debian-branch=toradex-debian-unstable \
+	--git-upstream-tree=rel_imx_4.14.98_2.0.0_ga
+```
+
+## Uploading package
+
+To maintain the repository we use `aptly`.
+
+### Create repository
+
+Create a local repository using `aptly`:
+
+```
+aptly repo create -comment="Toradex testing repository" testing
+```
+
+### Add package files
+
+Add source as well as binary package files:
+```
+aptly repo add testing ../libdrm_2.4.91-2+toradex1.dsc
+aptly repo add testing ../libdrm*2.4.91-2+toradex1*.deb
+```
+
+The current list of packages in the repository can be checked with:
+```
+aptly repo show -with-packages testing
+```
+
+### Publishing locally
+
+For first time publish the repository use this command:
+```
+aptly publish repo -distribution=buster -gpg-key=114F028BAA3F6DB1A41CECCA116A149EBBC0779B testing testing
+```
+
+To update the repository use:
+```
+aptly publish update buster testing
+```
