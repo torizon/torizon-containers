@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git gnupg2 dpkg-dev \
     debconf fakeroot \
-    debhelper dh-make \
+    debhelper dh-make debmake python3-debian\
     libtool pkg-config \
     git-buildpackage debootstrap pbuilder \
     wget procps vim \
