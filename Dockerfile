@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git gnupg2 dpkg-dev \
     debconf fakeroot \
     debhelper dh-make \
+    libtool pkg-config \
     git-buildpackage debootstrap pbuilder \
     wget procps vim \
     bash-completion \
