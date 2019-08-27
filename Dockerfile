@@ -35,5 +35,10 @@ COPY sudoers /etc/sudoers
 
 COPY sources.list /etc/apt/sources.list
 
+COPY toradex-buster.gpg /etc/apt/trusted.gpg.d/
+
+RUN echo "deb https://feeds.toradex.com/debian/testing/ buster main" >> /etc/apt/sources.list ; \
+    echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+
 ENV LC_ALL C.UTF-8
 
