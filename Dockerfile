@@ -33,5 +33,7 @@ RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 # program specified" issue
 COPY sudoers /etc/sudoers
 
+COPY sources.list /etc/apt/sources.list
+
 ENV LC_ALL C.UTF-8
 
