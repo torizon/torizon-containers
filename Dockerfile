@@ -1,4 +1,5 @@
-FROM arm64v8/debian:buster
+ARG IMAGE_ARCH=arm32v7
+FROM $IMAGE_ARCH/debian:buster
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
@@ -26,6 +27,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     execstack dh-python libpng16-16 \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    equivs devscripts \
+    && rm -rf /var/lib/apt/lists/*
+
 # Use UID 1000 to build packages
 RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 
@@ -41,4 +46,3 @@ RUN echo "deb https://feeds.toradex.com/debian/testing/ buster main" >> /etc/apt
     echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 ENV LC_ALL C.UTF-8
-
