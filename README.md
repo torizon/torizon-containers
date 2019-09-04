@@ -35,6 +35,7 @@ Start the container using the following command:
 docker run --user debian -it --rm
        -v ~/.gitconfig:/home/debian/.gitconfig
        -v /home/../../gnupg/:/home/debian/.gnupg/ \
+       -v /home/../../aptly/:/home/debian/.aptly/ \
        -v /home/../../debian-pkg/:/home/debian/debian-pkg/ \
        debian-package-devel /bin/bash
 ```
@@ -57,6 +58,11 @@ buster does not support gpg2 yet. Import this key to the gpg1 databse:
 
 ```
 gpg1 --import torizoncore-debian-repository.key
+```
+
+To export the public key of the repository key use:
+```
+gpg1 --export --armor <key-id>
 ```
 
 ## Preparing Package Metadata
@@ -133,4 +139,42 @@ aptly publish repo -distribution=buster -gpg-key=114F028BAA3F6DB1A41CECCA116A149
 To update the repository use:
 ```
 aptly publish update buster testing
+```
+
+### Testing
+
+Use `aptly serve` to run a testing http server:
+```
+aptly serve
+```
+
+Using a second container, we can test the repository as follows:
+```
+docker run -it --link=b7b1748dab50 arm64v8/debian:buster /bin/bash
+```
+
+Install the repository key, add the repository to the `source.list` and install
+a package:
+```
+# wget -qO - http://b7b1748dab50:8080/torizoncore.pub | apt-key add -
+# echo "deb http://b7b1748dab50:8080/testing/ buster main" >> /etc/apt/sources.list
+```
+
+Make sure to pin the repository so it takes preference even though there is a
+newer version available from the official Debian repository by adding the
+following content to `/etc/apt/preferences.d/torizoncore`:
+```
+Package: *
+Pin: origin b7b1748dab50
+Pin-Priority: 900
+```
+
+E.g . as a one liner:
+```
+# echo -e "Package: *\nPin: origin b7b1748dab50\nPin-Priority: 900" > /etc/apt/preferences.d/torizoncore
+```
+
+```
+# apt-get update
+# apt-get install libdrm2 libdrm-vivante1
 ```
