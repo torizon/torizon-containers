@@ -37,6 +37,7 @@ RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 # Copy sudoers with NOPASSWD to avoid "sudo: no tty present and no askpass
 # program specified" issue
 COPY sudoers /etc/sudoers
+RUN chmod 440 /etc/sudoers
 
 COPY sources.list /etc/apt/sources.list
 
