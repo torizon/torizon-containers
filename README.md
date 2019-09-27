@@ -138,7 +138,7 @@ aptly publish repo -distribution=buster -gpg-key=114F028BAA3F6DB1A41CECCA116A149
 
 To update the repository use:
 ```
-aptly publish update buster testing
+aptly publish update buster filesystem:toradex-feeds:testing
 ```
 
 ### Testing
