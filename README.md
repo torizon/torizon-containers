@@ -131,6 +131,8 @@ aptly repo show -with-packages testing
 
 ### Publishing locally
 
+**(for instructions about publishing packages on our official feed, please check [README-PACKAGE-REPO.md](./README-PACKAGE-REPO.md))**
+
 For first time publish the repository use this command:
 ```
 aptly publish repo -distribution=buster -gpg-key=114F028BAA3F6DB1A41CECCA116A149EBBC0779B testing testing
