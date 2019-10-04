@@ -33,9 +33,6 @@ Add the following section to `aptly.conf`
     }
   }
 ```
-
-
-
 ## Add package
 
 Copy the packages onto the server (make sure to upload all files referenced in
@@ -50,12 +47,19 @@ scp libdrm*2.4.91-2+toradex1_arm64.deb debian@feeds1.toradex.com:import/
 Add source as well as binary package files:
 ```
 aptly repo add testing import/libdrm_2.4.91-2+toradex1.dsc
-aptly repo add testing import/libdrm*2.4.91-2+toradex1_arm64.deb
+aptly repo add --architectures="arm64" testing import/libdrm*2.4.91-2+toradex1_arm64.deb
 ```
+
+For binary packages you will have to specify the architecture with "--architectures", otherwise you will end up with packages in the wrong folders.  
+Current our repository supports armhf and arm64 packages, to add a new architecture you'll have to unpublish the feed and re-publish it again after having added all the packages for the new architecture.  
 
 The current list of packages in the repository can be checked with:
 ```
 aptly repo show -with-packages testing
+```
+or
+```
+aptly repo query
 ```
 
 ## Publish
@@ -71,7 +75,8 @@ Note: This is only required the first time for each repository.
 
 ```
 aptly publish repo -distribution=buster -gpg-key=torizoncore@toradex.com \
-  testing filesystem:toradex-feeds:testing
+  testing 
+  
 ```
 ### Update published repository
 
@@ -80,3 +85,5 @@ When adding/removing packages, the published repository needs updating:
 ```
 aptly publish update buster filesystem:toradex-feeds:testing
 ```
+
+(the password for the gpg key associated with torizoncore@toradex.com is required to complete the update)
