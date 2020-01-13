@@ -34,7 +34,7 @@ stages:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
     - docker pull ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest || true
     - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
-      --build-arg AARCH_ARG=${AARCH_ARG}
+      --build-arg ARCH_ARG=${ARCH_ARG}
       --build-arg CROSS_COMPILE_ARG=${CROSS_COMPILE_ARG}
       --build-arg CROSSBUILD_ARCH_ARG=${CROSSBUILD_ARCH_ARG}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
@@ -84,8 +84,6 @@ docker-build-armhf-toolchain-ssh:
   extends: .docker-build
   variables:
     ARCH_ARG: armhf
-    CROSS_COMPILE_ARG: arm-linux-gnueabihf-
-    CROSSBUILD_ARCH_ARG: armhf
     BASE_NAME: debian-cross-toolchain-armhf
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
     DOCKERFILE_FOLDER: "ssh/"
@@ -115,8 +113,6 @@ docker-build-aarch64-toolchain-ssh:
   extends: .docker-build
   variables:
     ARCH_ARG: aarch64
-    CROSS_COMPILE_ARG: arm-linux-gnueabihf-
-    CROSSBUILD_ARCH_ARG: arm64
     BASE_NAME: debian-cross-toolchain-aarch64
     IMAGE_NAME: debian-cross-toolchain-ssh-aarch64
     DOCKERFILE_FOLDER: "ssh/"
