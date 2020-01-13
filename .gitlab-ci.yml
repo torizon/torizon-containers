@@ -88,7 +88,7 @@ docker-build-armhf-toolchain-ssh:
     CROSSBUILD_ARCH_ARG: armhf
     BASE_NAME: debian-cross-toolchain-armhf
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
-    DOCKERFILE_FOLDER: "base/"
+    DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
 
 docker-deploy-armhf-toolchain:
@@ -119,7 +119,7 @@ docker-build-aarch64-toolchain-ssh:
     CROSSBUILD_ARCH_ARG: arm64
     BASE_NAME: debian-cross-toolchain-aarch64
     IMAGE_NAME: debian-cross-toolchain-ssh-aarch64
-    DOCKERFILE_FOLDER: "base/"
+    DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
 
 docker-deploy-aarch64-toolchain:
