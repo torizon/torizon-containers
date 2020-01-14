@@ -1,6 +1,6 @@
 ARG ARCH_ARG=armhf
 
-FROM torizon/debian-cross-toolchain-$ARCH_ARG:latest
+FROM torizon/debian-cross-toolchain-$ARCH_ARG:buster
 
 
 # SSH
