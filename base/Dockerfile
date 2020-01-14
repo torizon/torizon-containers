@@ -2,7 +2,6 @@ FROM debian:buster-slim
 
 ARG ARCH_ARG=armhf
 ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf-"
-ARG CROSSBUILD_ARCH_ARG=armhf
 
 ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}
 
@@ -14,7 +13,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 # Install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y install \
-    crossbuild-essential-${CROSSBUILD_ARCH_ARG} \
+    crossbuild-essential-${ARCH_ARG} \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

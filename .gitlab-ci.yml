@@ -36,7 +36,6 @@ stages:
     - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
       --build-arg ARCH_ARG=${ARCH_ARG}
       --build-arg CROSS_COMPILE_ARG=${CROSS_COMPILE_ARG}
-      --build-arg CROSSBUILD_ARCH_ARG=${CROSSBUILD_ARCH_ARG}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
       ${DOCKER_NO_CACHE:+--no-cache}
       -f ${DOCKERFILE_FOLDER}Dockerfile
@@ -75,7 +74,6 @@ docker-build-armhf-toolchain:
   variables:
     ARCH_ARG: armhf
     CROSS_COMPILE_ARG: arm-linux-gnueabihf-
-    CROSSBUILD_ARCH_ARG: armhf
     IMAGE_NAME: debian-cross-toolchain-armhf
     DOCKERFILE_FOLDER: "base/"
   stage: build-base
@@ -99,31 +97,30 @@ docker-deploy-armhf-toolchain-ssh:
   variables:
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
 
-docker-build-aarch64-toolchain:
+docker-build-arm64-toolchain:
   extends: .docker-build
   variables:
-    ARCH_ARG: aarch64
-    CROSS_COMPILE_ARG: arm-linux-gnueabihf-
-    CROSSBUILD_ARCH_ARG: arm64
-    IMAGE_NAME: debian-cross-toolchain-aarch64
+    ARCH_ARG: arm64
+    CROSS_COMPILE_ARG: aarch64-linux-gnu-
+    IMAGE_NAME: debian-cross-toolchain-arm64
     DOCKERFILE_FOLDER: "base/"
   stage: build-base
 
-docker-build-aarch64-toolchain-ssh:
+docker-build-arm64-toolchain-ssh:
   extends: .docker-build
   variables:
-    ARCH_ARG: aarch64
-    BASE_NAME: debian-cross-toolchain-aarch64
-    IMAGE_NAME: debian-cross-toolchain-ssh-aarch64
+    ARCH_ARG: arm64
+    BASE_NAME: debian-cross-toolchain-arm64
+    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
     DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
 
-docker-deploy-aarch64-toolchain:
+docker-deploy-arm64-toolchain:
   extends: .docker-deploy
   variables:
-    IMAGE_NAME: debian-cross-toolchain-aarch64
+    IMAGE_NAME: debian-cross-toolchain-arm64
 
-docker-deploy-aarch64-toolchain-ssh:
+docker-deploy-arm64-toolchain-ssh:
   extends: .docker-deploy
   variables:
-    IMAGE_NAME: debian-cross-toolchain-ssh-aarch64
+    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
