@@ -1,0 +1,197 @@
+image: docker:latest
+
+variables:
+  # This should be set by docker image already, just to be sure...
+  DOCKER_HOST: tcp://docker:2375
+  # Use overlayfs driver for better performance
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  GITLAB_DOCKERREGISTRY_SUFFIX: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+  GITLAB_DOCKERREGISTRY_SUFFIX_LATEST: ${CI_COMMIT_REF_SLUG}-latest
+
+services:
+  - name: docker:dind
+
+before_script:
+  - docker info
+
+stages:
+  - build
+  - build-debug
+  - deploy
+
+.docker-build:
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - if test -n "${BASE_NAME}"; then docker pull ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} && docker tag ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} torizon/${BASE_NAME}:buster ; fi || exit 1
+    # Try to download latest image for cache, but don't fail if it does not exist
+    - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
+    - docker pull ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest || true
+    - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
+      --build-arg BASE_NAME=${BASE_NAME}
+      --build-arg DOWNLOAD_URL=${DOWNLOAD_URL}
+      --build-arg DEBUGGER_RELEASE=${DEBUGGER_RELEASE}
+      --build-arg DEBUGGER_ARCH=${DEBUGGER_ARCH}
+      --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
+      --cache-from ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest
+      ${DOCKER_NO_CACHE:+--no-cache}
+      -f ${DOCKERFILE_FOLDER}/Dockerfile
+      -t ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+      -t ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
+      ${DOCKERFILE_FOLDER}/
+    - docker push ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+    - docker push ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
+
+docker-build-arm32:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm32v7
+    IMAGE_NAME: arm32v7-debian-dotnet
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/98931269-612c-47cd-a5a1-f1d8e616c950/1ba015724bba919eccbf159dbda0a483/dotnet-runtime-3.1.1-linux-arm.tar.gz
+    DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build
+
+docker-build-arm32-asp:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm32v7
+    IMAGE_NAME: arm32v7-debian-aspdotnet
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/da60c9fc-c329-42d6-afaf-b8ef2bbadcf3/14655b5928319349e78da3327874592a/aspnetcore-runtime-3.1.1-linux-arm.tar.gz
+    DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build
+
+docker-build-arm64:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm64v8
+    IMAGE_NAME: arm64v8-debian-dotnet
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/38325910-0157-4f3a-b093-da799dcaa24b/d4892d3a53a6d917fbab4037624181a9/dotnet-runtime-3.1.1-linux-arm64.tar.gz
+    DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build
+
+docker-build-arm64-asp:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm64v8
+    IMAGE_NAME: arm64v8-debian-aspdotnet
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/6e16157f-154d-408d-b0cf-da0b26bea28e/330abbc17b7963efde5d5bdb36cd8933/aspnetcore-runtime-3.1.1-linux-arm64.tar.gz
+    DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build
+
+docker-build-debug-arm32:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm32v7
+    BASE_NAME: arm32v7-debian-dotnet
+    IMAGE_NAME: arm32v7-debian-dotnet-debug
+    DEBUGGER_RELEASE: 16-3-10904-1
+    DEBUGGER_ARCH: linux-arm
+    DOCKERFILE_FOLDER: debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build-debug
+
+docker-build-debug-arm32-asp:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm32v7
+    BASE_NAME: arm32v7-debian-aspdotnet
+    IMAGE_NAME: arm32v7-debian-aspdotnet-debug
+    DEBUGGER_RELEASE: 16-3-10904-1
+    DEBUGGER_ARCH: linux-arm
+    DOCKERFILE_FOLDER: debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build-debug
+
+docker-build-debug-arm64:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm64v8
+    BASE_NAME: arm64v8-debian-dotnet
+    IMAGE_NAME: arm64v8-debian-dotnet-debug
+    DEBUGGER_RELEASE: 16-3-10904-1
+    DEBUGGER_ARCH: linux-arm64
+    DOCKERFILE_FOLDER: debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build-debug
+
+docker-build-debug-arm64-asp:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: arm64v8
+    BASE_NAME: arm64v8-debian-aspdotnet
+    IMAGE_NAME: arm64v8-debian-aspdotnet-debug
+    DEBUGGER_RELEASE: 16-3-10904-1
+    DEBUGGER_ARCH: linux-arm64
+    DOCKERFILE_FOLDER: debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+  stage: build-debug
+
+  # Docker deploy jobs
+#
+# Make sure DOCKER_HUB_USER/DOCKER_HUB_PW is properly set in the project
+# specific Gitlab CI settings.
+.docker-deploy:
+  variables:
+    DOCKER_TAGS: "buster 10 10.2 latest"
+  before_script:
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+  stage: deploy
+  when: manual
+  script:
+    - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+    # Get creation date of this container. This make sure that we do not create
+    # new date tags when pushing the same container again.
+    - export TIMESTAMP=$(docker inspect -f '{{ .Created }}' ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX})
+    - export DATE_TAG=$(date '+%Y%m%d' -d ${TIMESTAMP} -D '%Y-%m-%dT%H:%M:%S')
+    - export DOCKER_TAGS="$DOCKER_TAGS $DATE_TAG"
+    - for tag in ${DOCKER_TAGS};
+      do
+      docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
+      done
+    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+
+docker-deploy-arm32:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-debian-dotnet
+
+docker-deploy-arm64:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-debian-dotnet
+
+docker-deploy-arm32-asp:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-debian-aspdotnet
+
+docker-deploy-arm64-asp:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-debian-aspdotnet
+
+docker-deploy-debug-arm32:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-debian-dotnet-debug
+
+docker-deploy-debug-arm64:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-debian-dotnet-debug
+
+docker-deploy-debug-arm32-asp:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-debian-aspdotnet-debug
+
+docker-deploy-debug-arm64-asp:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-debian-aspdotnet-debug
