@@ -138,7 +138,7 @@ docker-build-debug-arm64-asp:
 # specific Gitlab CI settings.
 .docker-deploy:
   variables:
-    DOCKER_TAGS: "buster 10 10.2 latest"
+    DOCKER_TAGS: $CONTAINER_TAGS
   before_script:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
   stage: deploy
