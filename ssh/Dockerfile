@@ -9,7 +9,6 @@ EXPOSE 22
 # Install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y install \
-    openssl \
     openssh-server \
     ssh \
     rsync \
