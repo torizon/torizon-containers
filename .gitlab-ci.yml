@@ -73,7 +73,7 @@ docker-build-armhf-toolchain:
   extends: .docker-build
   variables:
     ARCH_ARG: armhf
-    CROSS_COMPILE_ARG: arm-linux-gnueabihf-
+    CROSS_COMPILE_ARG: arm-linux-gnueabihf
     IMAGE_NAME: debian-cross-toolchain-armhf
     DOCKERFILE_FOLDER: "base/"
   stage: build-base
@@ -101,7 +101,7 @@ docker-build-arm64-toolchain:
   extends: .docker-build
   variables:
     ARCH_ARG: arm64
-    CROSS_COMPILE_ARG: aarch64-linux-gnu-
+    CROSS_COMPILE_ARG: aarch64-linux-gnu
     IMAGE_NAME: debian-cross-toolchain-arm64
     DOCKERFILE_FOLDER: "base/"
   stage: build-base
