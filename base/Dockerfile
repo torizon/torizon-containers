@@ -13,6 +13,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 # Install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y install \
+    git \
     openssl \
     crossbuild-essential-${ARCH_ARG} \
     && apt-get clean \
