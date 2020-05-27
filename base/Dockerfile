@@ -1,9 +1,10 @@
 FROM debian:buster-slim
 
 ARG ARCH_ARG=armhf
-ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf-"
+ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf"
 
-ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}
+ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}-
+ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILE_ARG}/pkgconfig
 
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
