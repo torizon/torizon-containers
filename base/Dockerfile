@@ -14,7 +14,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 # Adds Toradex feeds and gpg key
 # (same key is used in https://gitlab.int.toradex.com/rd/torizon-core-containers/debian-docker-image
 # if you change the key or feed configuration, please check the other repo!)
-ADD http://feeds.toradex.com/debian/toradex-debian-repo.pub /etc/apt/trusted.gpg.d/toradex-buster.asc
+ADD https://feeds.toradex.com/debian/toradex-debian-repo.pub /etc/apt/trusted.gpg.d/toradex-buster.asc
 
 # add toradex debian feed
 RUN chmod 644 /etc/apt/trusted.gpg.d/toradex-buster.asc ;\
