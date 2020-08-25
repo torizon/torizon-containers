@@ -1,50 +1,61 @@
-ARG IMAGE_ARCH=arm32v7
-FROM $IMAGE_ARCH/debian:buster
+ARG IMAGE_ARCH=arm64v8
+FROM $IMAGE_ARCH/debian:bullseye
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    sudo \
-    ca-certificates \
-    netbase \
-    && rm -rf /var/lib/apt/lists/*
-
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git gnupg2 dpkg-dev \
-    debconf fakeroot \
-    build-essential:native \
-    debhelper dh-make debmake python3-debian \
-    libtool pkg-config \
-    git-buildpackage debootstrap pbuilder \
-    wget procps vim \
-    bash-completion \
-    openssh-client \
-    && rm -rf /var/lib/apt/lists/*
-
+# Install a base set of build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     aptly \
+    bash-completion \
+    build-essential:native \
+    ca-certificates \
+    curl \
+    debconf \
+    debhelper \
+    debmake \
+    debootstrap \
+    devscripts \
+    dh-make \
+    dh-python \
+    dpkg-dev \
+    equivs \
+    execstack \
+    fakeroot \
+    git \
+    git-buildpackage \
+    gnupg \
+    libpng16-16 \
+    libtool \
+    netbase \
+    openssh-client \
+    pbuilder \
+    pkg-config \
+    procps \
+    python3-debian \
+    rsync \
+    sudo \
+    vim \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    execstack dh-python libpng16-16 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    equivs devscripts \
-    && rm -rf /var/lib/apt/lists/*
-
-# Use UID 1000 to build packages
+# Use UID 1000 to build packages.
+# Replace to the id of your user in the host.
 RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 
-# Copy sudoers with NOPASSWD to avoid "sudo: no tty present and no askpass
-# program specified" issue
-COPY sudoers /etc/sudoers
-RUN chmod 440 /etc/sudoers
+# Tell sudo not to ask for passwords for users of the sudo group
+RUN sed -i '/^%sudo\>/s/) *ALL$/) NOPASSWD: ALL/' /etc/sudoers && visudo -c
 
-COPY sources.list /etc/apt/sources.list
+# Setup access to Debian official package sources
+RUN echo 'deb-src http://deb.debian.org/debian bullseye main' >>/etc/apt/sources.list
 
-COPY toradex-buster.gpg /etc/apt/trusted.gpg.d/
+# Setup access to Debian official package updates
+RUN echo 'deb http://deb.debian.org/debian bullseye-updates main' >>/etc/apt/sources.list
+RUN echo 'deb-src http://deb.debian.org/debian bullseye-updates main' >>/etc/apt/sources.list
 
-RUN echo "deb https://feeds.toradex.com/debian/testing/ buster main" >> /etc/apt/sources.list ; \
-    echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+# Setup access to the Toradex package feed
+RUN echo "deb https://feeds.toradex.com/debian/ testing main non-free" >> /etc/apt/sources.list
+RUN echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+RUN wget -P /etc/apt/trusted.gpg.d https://feeds.toradex.com/debian/toradex-debian-repo.gpg
+
+# Apply eventual upgrades to installed packages
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 ENV LC_ALL C.UTF-8

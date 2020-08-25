@@ -1,182 +1,87 @@
 # Debian package development container
 
-Container with packages for package building preinstalled.
-
-## Preparing Container
+This is an container for the *arm* architecture with preinstalled packages for building TorizonCore Debian packages.
 
 This container is prepared to build Debian packages for i.MX devices to
 integrate the NXP downstream graphics stack. It is an `aarch64` container which
-allows to build the Debian packages native (either via Qemu user emulation on
+allows to build the Debian packages natively (either via Qemu user emulation on
 `x86_64` or on an actual native device).
 
-The idea is to bind mount the directory containing the meta data (source git
-repository as well as maintainers GPG keys) into the container.
+## 1. Setup
 
-Make sure that your user id on your host is **1000** (check using `id -u`). If
-not, make sure to edit the Dockerfile and set the user id to your main users
-user id.
+### 1.1 Assumptions
 
-Build the container using:
+The following instructions assume:
 
-```
-docker build -t debian-package-devel .
-```
+ * Your user id on your host is **1000** (check using `id -u`).
+   (You can adapt the Dockerfile otherwise.)
+ * You have
+   [created your own Toradex key pair](https://toradex.atlassian.net/wiki/spaces/TOR/pages/529432605/How+to+build+a+Debian+package+for+the+Torizon+platform#Create-your-Toradex-GPG-key-pair)
+   for signing packages,
+   and your default key ring is stored in `~/.gnupg/`
+ * There is a directory `~/debian-pkg` in your host
+   where packages will be built.
 
-Prepare a folder to store the gnupg keys.
-
-```
-mkdir gnupg && chmod 700 gnupg
-```
-
-Also make sure that your hosts git config file is properly setup.
-
-Start the container using the following command:
-```
-docker run --user debian -it --rm
-       -v ~/.gitconfig:/home/debian/.gitconfig
-       -v /home/../../gnupg/:/home/debian/.gnupg/ \
-       -v /home/../../aptly/:/home/debian/.aptly/ \
-       -v /home/../../debian-pkg/:/home/debian/debian-pkg/ \
-       debian-package-devel /bin/bash
-```
-
-### Creating/importing GPG keys
-
-We use two keys, a developer key to sign the sources (this is a personal key
-with the developers email address) and a repository key.
-
-To generate your developer key, use GPG inside the container:
-```
-gpg --generate-key
-```
-
-Use your full name and the Toradex email address.
-
-The repository key is a regular GPG key with expiration date set to be 10 years
-out. Unfortunately the version of aptly (our repository management tool) in
-buster does not support gpg2 yet. Import this key to the gpg1 databse:
+### 1.2 Building the container
 
 ```
-gpg1 --import torizoncore-debian-repository.key
+$ docker build -t debian-package-devel .
 ```
 
-To export the public key of the repository key use:
-```
-gpg1 --export --armor <key-id>
-```
-
-## Preparing Package Metadata
-
-Reuse existing package metadata.
-
-### Update Changelog
-
-Update changelog manually or using tooling (TODO: describe).
-
-#### Versioning
-
-We should make sure that our package has a higher version number than the
-version NXP (/Toradex) is building on. E.g. if we base on libdrm 2.4.91, and
-base our Debian package on the Debian release `2.4.91-2~bpo9+1`, we should use
-`2.4.91-2+toradex1` to make sure it takes precedence (the `+` sign makes sure
-that the Toradex package takes precedence. However, we should not come up with
-an unrealistic high number (e.g. by use toradex-2.4.91) since that would likely
-break version requirements of other packages (e.g. if somebody needs libdrm
-no later than say 2.4.94, that would not work anymore). To make sure that apt
-does not update packages despite newer versions available from the Debian main
-repository, we should make use of the pinning functionality (apt-pinning).
-
-## Building Package
-
-First make sure all build dependencies are installed. If the package has been
-derived from an existing package, build dependency of that existing package are
-a good start:
+## 2. Running the container
 
 ```
-sudo apt-get build-dep libdrm2
+$ docker run -it --rm \
+    --user debian \
+    --workdir /home/debian/debian-pkg  \
+    -v ~/.gitconfig:/home/debian/.gitconfig \
+    -v ~/.gnupg/:/home/debian/.gnupg/ \
+    -v ~/debian-pkg/:/home/debian/debian-pkg/ \
+    debian-package-devel /bin/bash -l
 ```
 
-To build the package various tools can be used. To build packages where sources
-as well as metadata are stored in git, git build-package is handy.
+## 3. Workflows
+
+### 3.1 Building packages
+
+Clone a package project from the
+[TorizonCore Debian projects](https://gitlab.int.toradex.com/rd/torizon-core/debian)
+and follow its build instructions,
+or peek the project's `.gitlab-ci.yml` file and the project's CI pipeline
+to hint on how the package is built by CI.
+
+Also,
+[How to build a Debian package for the Torizon platform](https://toradex.atlassian.net/wiki/spaces/TOR/pages/529432605/How+to+build+a+Debian+package+for+the+Torizon+platform)
+offers introductory information regarding building Debian packages for the Torizon platform.
+
+### 3.2 Test the package feed with new packages
+
+After building a
+[new version](https://toradex.atlassian.net/wiki/spaces/TOR/pages/364445852/Debian+packages+naming+and+versioning+convention)
+of the package,
+you may want to confirm that the package artifacts integrate well
+to the [Todarex Debian package feed](https://feeds.toradex.com/debian/).
+
+The [debian-package-feed](https://gitlab.int.toradex.com/rd/torizon-core/debian/debian-package-feed)
+project can regenerate the feed with your updates.
+Clone this project and follow its instructions to generate a test feed in the debian-package-devel container
+that exports your new packages.
+
+### 3.3 Access the test package feed from another container
+
+If the test feed was started inside the debian-package-devel container as instructed,
+by default it's not reachable outside it.
+In order to reach the test feed instance (TCP port 8080 by default) of the debian-package-devel container
+from another container (so you can test it),
+you can run the test container using the `--link` option:
 
 ```
-gbp buildpackage --git-debian-branch=toradex-debian-unstable \
-	--git-upstream-tree=rel_imx_4.14.98_2.0.0_ga
+$ docker run -it --link=<ID> arm64v8/debian:bullseye /bin/bash
 ```
+where `<ID>` is the id of the debian-package-devel container that is serving the feed locally.
+The test feed can then be accessed by `http://<ID>:8080` in the test container.
 
-## Uploading package
-
-To maintain the repository we use `aptly`.
-
-### Create repository
-
-Create a local repository using `aptly`:
-
-```
-aptly repo create -comment="Toradex testing repository" testing
-```
-
-### Add package files
-
-Add source as well as binary package files:
-```
-aptly repo add testing ../libdrm_2.4.91-2+toradex1.dsc
-aptly repo add testing ../libdrm*2.4.91-2+toradex1*.deb
-```
-
-The current list of packages in the repository can be checked with:
-```
-aptly repo show -with-packages testing
-```
-
-### Publishing locally
-
-**(for instructions about publishing packages on our official feed, please check [README-PACKAGE-REPO.md](./README-PACKAGE-REPO.md))**
-
-For first time publish the repository use this command:
-```
-aptly publish repo -distribution=buster -gpg-key=114F028BAA3F6DB1A41CECCA116A149EBBC0779B testing testing
-```
-
-To update the repository use:
-```
-aptly publish update buster filesystem:toradex-feeds:testing
-```
-
-### Testing
-
-Use `aptly serve` to run a testing http server:
-```
-aptly serve
-```
-
-Using a second container, we can test the repository as follows:
-```
-docker run -it --link=b7b1748dab50 arm64v8/debian:buster /bin/bash
-```
-
-Install the repository key, add the repository to the `source.list` and install
-a package:
-```
-# wget -qO - http://b7b1748dab50:8080/torizoncore.pub | apt-key add -
-# echo "deb http://b7b1748dab50:8080/testing/ buster main" >> /etc/apt/sources.list
-```
-
-Make sure to pin the repository so it takes preference even though there is a
-newer version available from the official Debian repository by adding the
-following content to `/etc/apt/preferences.d/torizoncore`:
-```
-Package: *
-Pin: origin b7b1748dab50
-Pin-Priority: 900
-```
-
-E.g . as a one liner:
-```
-# echo -e "Package: *\nPin: origin b7b1748dab50\nPin-Priority: 900" > /etc/apt/preferences.d/torizoncore
-```
-
-```
-# apt-get update
-# apt-get install libdrm2 libdrm-vivante1
-```
+Once accessing the feed, download its README file
+and follow the instructions to enable the feed in your test container.
+(Note that this file assumes the official feed,
+so adapt the instructions for accessing your testing feed instead.)
