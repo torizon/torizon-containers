@@ -23,7 +23,7 @@ stages:
 
 # Docker image builds
 #
-# Build the Docker images  specificd in DOCKERFILE_FOLDER/IMAGE_NAME and push
+# Build the Docker images specified in DOCKERFILE_FOLDER/IMAGE_NAME and push
 # it to Gitlab's internal Docker registry
 .docker-build:
   before_script:
@@ -34,6 +34,8 @@ stages:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
     - docker pull ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest || true
     - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
+      --build-arg DOCKER_REGISTRY_ARG=${CI_REGISTRY_IMAGE}
+      --build-arg DOCKER_SUFFIX_ARG=${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
       --build-arg ARCH_ARG=${ARCH_ARG}
       --build-arg CROSS_COMPILE_ARG=${CROSS_COMPILE_ARG}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}

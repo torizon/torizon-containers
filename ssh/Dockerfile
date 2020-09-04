@@ -1,7 +1,8 @@
 ARG ARCH_ARG=armhf
+ARG DOCKER_REGISTRY_ARG=torizon
+ARG DOCKER_SUFFIX_ARG=bullseye
 
-FROM torizon/debian-cross-toolchain-$ARCH_ARG:buster
-
+FROM $DOCKER_REGISTRY_ARG/debian-cross-toolchain-$ARCH_ARG:$DOCKER_SUFFIX_ARG
 
 # SSH
 EXPOSE 22
