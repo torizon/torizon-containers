@@ -1,8 +1,9 @@
 ARG ARCH_ARG=armhf
-ARG DOCKER_REGISTRY_ARG=torizon
-ARG DOCKER_SUFFIX_ARG=bullseye
+# For arm64 use:
+# ARG ARCH_ARG=arm64
+ARG IMAGE_TAG=2
 
-FROM $DOCKER_REGISTRY_ARG/debian-cross-toolchain-$ARCH_ARG:$DOCKER_SUFFIX_ARG
+FROM torizon/debian-cross-toolchain-$ARCH_ARG:$IMAGE_TAG
 
 # SSH
 EXPOSE 22

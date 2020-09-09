@@ -1,7 +1,11 @@
 FROM debian:bullseye-slim
 
 ARG ARCH_ARG=armhf
+# For arm64 use:
+# ARG ARCH_ARG=arm64
 ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf"
+# For arm64 use:
+# ARG CROSS_COMPILE_ARG="aarch64-linux-gnu"
 
 ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}-
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILE_ARG}/pkgconfig

@@ -1,6 +1,16 @@
 image: docker:latest
 
 variables:
+  DEBIAN_RELEASE: "bullseye"
+  # container version
+  DEBIAN_CROSS_TOOLCHAINS_MAJOR: "2"
+  DEBIAN_CROSS_TOOLCHAINS_MINOR: "0"
+  DEBIAN_CROSS_TOOLCHAINS_PATCH: "0"
+
+  DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR: "2"
+  DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR: "0"
+  DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH: "0"
+ 
   # This should be set by docker image already, just to be sure...
   DOCKER_HOST: tcp://docker:2375
   # Use overlayfs driver for better performance
@@ -9,7 +19,6 @@ variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   GITLAB_DOCKERREGISTRY_SUFFIX: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
   GITLAB_DOCKERREGISTRY_SUFFIX_LATEST: ${CI_COMMIT_REF_SLUG}-latest
-  DEBIAN_RELEASE: "bullseye"
 
 services:
   - name: docker:dind
@@ -20,27 +29,33 @@ before_script:
 stages:
   - build-base
   - build-ssh
-  - deploy
+  - deploy-major
+  - deploy-minor
+  - deploy-patch
+  - deploy-patch-date
 
 # Docker image builds
 #
-# Build the Docker images specified in DOCKERFILE_FOLDER/IMAGE_NAME and push
+# Build the Docker images  specified in DOCKERFILE_FOLDER/IMAGE_NAME and push
 # it to Gitlab's internal Docker registry
 .docker-build:
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - if test -n "${BASE_NAME}"; then docker pull ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} && docker tag ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} torizon/${BASE_NAME}:${DEBIAN_RELEASE} ; fi || exit 1
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - if test -n "${BASE_NAME}"; then docker pull ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} && docker tag ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} torizon/${BASE_NAME}:${MAJOR} ; fi || exit 1
     # Try to download latest image for cache, but don't fail if it does not exist
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
-    - docker pull ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:${DEBIAN_RELEASE}-latest || true
-    - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
-      --build-arg DOCKER_REGISTRY_ARG=${CI_REGISTRY_IMAGE}
-      --build-arg DOCKER_SUFFIX_ARG=${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
-      --build-arg ARCH_ARG=${ARCH_ARG}
+    - docker pull ${CI_REGISTRY}/rd/torizon-core-containers/debian-cross-toolchains/${IMAGE_NAME}:${DEBIAN_RELEASE}-latest || true
+    - export DATE=$(date +%Y%m%d)
+    - docker build --build-arg ARCH_ARG=${ARCH_ARG}
+      --build-arg IMAGE_TAG=${MAJOR}
       --build-arg CROSS_COMPILE_ARG=${CROSS_COMPILE_ARG}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
       ${DOCKER_NO_CACHE:+--no-cache}
+       --label container.name=${IMAGE_NAME} 
+       --label container.version=${MAJOR}.${MINOR}.${PATCH}-${DATE} 
+       --label git.branch=${CI_COMMIT_BRANCH}  
+       --label git.hash=${CI_COMMIT_SHA} 
+       --label pipeline.id=${CI_PIPELINE_ID} 
       -f ${DOCKERFILE_FOLDER}Dockerfile
       -t ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
       -t ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
@@ -48,32 +63,12 @@ stages:
     - docker push ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker push ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
 
-# Docker deploy jobs
-#
-# Make sure DOCKER_HUB_USER/DOCKER_HUB_PW is properly set in the project
-# specific Gitlab CI settings.
-.docker-deploy:
-  variables:
-    DOCKER_TAGS: $CONTAINER_TAGS
-  before_script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
-  stage: deploy
-  when: manual
-  script:
-    - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
-    # Get creation date of this container. This make sure that we do not create
-    # new date tags when pushing the same container again.
-    - export TIMESTAMP=$(docker inspect -f '{{ .Created }}' ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX})
-    - export DATE_TAG=$(date '+%Y%m%d' -d ${TIMESTAMP} -D '%Y-%m-%dT%H:%M:%S')
-    - export DOCKER_TAGS="$DOCKER_TAGS $DATE_TAG"
-    - for tag in ${DOCKER_TAGS};
-      do
-      docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
-      done
-    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
-
 docker-build-armhf-toolchain:
   extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
   variables:
     ARCH_ARG: armhf
     CROSS_COMPILE_ARG: arm-linux-gnueabihf
@@ -83,6 +78,10 @@ docker-build-armhf-toolchain:
 
 docker-build-armhf-toolchain-ssh:
   extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
   variables:
     ARCH_ARG: armhf
     BASE_NAME: debian-cross-toolchain-armhf
@@ -90,18 +89,12 @@ docker-build-armhf-toolchain-ssh:
     DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
 
-docker-deploy-armhf-toolchain:
-  extends: .docker-deploy
-  variables:
-    IMAGE_NAME: debian-cross-toolchain-armhf
-
-docker-deploy-armhf-toolchain-ssh:
-  extends: .docker-deploy
-  variables:
-    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
-
 docker-build-arm64-toolchain:
   extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
   variables:
     ARCH_ARG: arm64
     CROSS_COMPILE_ARG: aarch64-linux-gnu
@@ -111,6 +104,10 @@ docker-build-arm64-toolchain:
 
 docker-build-arm64-toolchain-ssh:
   extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
   variables:
     ARCH_ARG: arm64
     BASE_NAME: debian-cross-toolchain-arm64
@@ -118,12 +115,201 @@ docker-build-arm64-toolchain-ssh:
     DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
 
-docker-deploy-arm64-toolchain:
-  extends: .docker-deploy
+# Enable experimental features in Docker client (experimental feature are needed for manifest)
+.do_docker_experimental: &do_docker_experimental
+    - mkdir -p $HOME/.docker
+    - "echo -e '{\n  \"experimental\": \"enabled\"\n}' | tee $HOME/.docker/config.json"
+    - docker version
+
+# Docker deploy jobs
+#
+# Make sure DOCKER_HUB_USER/DOCKER_HUB_PW is properly set in the project
+# specific Gitlab CI settings.
+.docker-deploy-major:
+  when: manual
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+  - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+  - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+
+docker-deploy-armhf-toolchain-major:
+  extends: .docker-deploy-major
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-armhf
+  stage: deploy-major
+
+docker-deploy-armhf-toolchain-ssh-major:
+  extends: .docker-deploy-major
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
+  stage: deploy-major
+
+docker-deploy-arm64-toolchain-major:
+  extends: .docker-deploy-major
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
   variables:
     IMAGE_NAME: debian-cross-toolchain-arm64
+  stage: deploy-major
 
-docker-deploy-arm64-toolchain-ssh:
-  extends: .docker-deploy
+docker-deploy-arm64-toolchain-ssh-major:
+  extends: .docker-deploy-major
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
   variables:
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
+  stage: deploy-major
+
+.docker-deploy-minor:
+  when: manual
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+  - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+  - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+
+docker-deploy-armhf-toolchain-minor:
+  extends: .docker-deploy-minor
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-armhf
+  stage: deploy-minor
+
+docker-deploy-armhf-toolchain-ssh-minor:
+  extends: .docker-deploy-minor
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
+  stage: deploy-minor
+
+docker-deploy-arm64-toolchain-minor:
+  extends: .docker-deploy-minor
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-arm64
+  stage: deploy-minor
+
+docker-deploy-arm64-toolchain-ssh-minor:
+  extends: .docker-deploy-minor
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
+  stage: deploy-minor
+
+.docker-deploy-patch:
+  when: manual
+  script:
+  - *do_docker_experimental
+  - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH} > /dev/null && true; RESULT=$?
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+  - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+  - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME} ; else echo Image with this tag already exists. ; fi)
+
+docker-deploy-armhf-toolchain-patch:
+  extends: .docker-deploy-patch
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-armhf
+  stage: deploy-patch
+
+docker-deploy-armhf-toolchain-ssh-patch:
+  extends: .docker-deploy-patch
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
+  stage: deploy-patch
+
+docker-deploy-arm64-toolchain-patch:
+  extends: .docker-deploy-patch
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-arm64
+  stage: deploy-patch
+
+docker-deploy-arm64-toolchain-ssh-patch:
+  extends: .docker-deploy-patch
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"  
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
+  stage: deploy-patch
+
+.docker-deploy-patch-date:
+  when: manual
+  script:
+  - *do_docker_experimental
+  - export DATE=$(date +%Y%m%d)
+  - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE} > /dev/null && true; RESULT=$?
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
+  - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+  - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME} ; else echo Image with this tag already exists. ; fi)
+
+docker-deploy-armhf-toolchain-patch-date:
+  extends: .docker-deploy-patch-date
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-armhf
+  stage: deploy-patch-date
+
+docker-deploy-armhf-toolchain-ssh-patch-date:
+  extends: .docker-deploy-patch-date
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
+  stage: deploy-patch-date
+
+docker-deploy-arm64-toolchain-patch-date:
+  extends: .docker-deploy-patch-date
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-arm64
+  stage: deploy-patch-date
+
+docker-deploy-arm64-toolchain-ssh-patch-date:
+  extends: .docker-deploy-patch-date
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
+  stage: deploy-patch-date
