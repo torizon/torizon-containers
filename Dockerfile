@@ -5,6 +5,8 @@ FROM $IMAGE_ARCH/debian:$IMAGE_TAG
 
 ARG DEBIAN_SNAPSHOT
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Debian Bullseye is not yet a stable distribution at the moment of this writing;
 # therefore its package list may change in incompatible ways with Torizon software.
 # Let's lock Torizon containers to a known snapshot of the Bullseye package list as a workaround.
