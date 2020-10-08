@@ -1,7 +1,7 @@
 ARG ARCH_ARG=armhf
 # For arm64 use:
 # ARG ARCH_ARG=arm64
-ARG IMAGE_TAG=2
+ARG IMAGE_TAG=2-bullseye
 
 FROM torizon/debian-cross-toolchain-$ARCH_ARG:$IMAGE_TAG
 

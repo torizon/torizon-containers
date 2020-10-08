@@ -1,4 +1,8 @@
-FROM debian:bullseye-slim
+ARG DEBIAN_BASE_IMAGE=bullseye-20200908-slim
+
+FROM debian:$DEBIAN_BASE_IMAGE
+
+ARG DEBIAN_SNAPSHOT=20200908T070000Z
 
 ARG ARCH_ARG=armhf
 # For arm64 use:
@@ -13,6 +17,14 @@ ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILE_ARG}/pkgconfig
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
 
+# Debian Bullseye is not yet a stable distribution at the moment of this writing;
+# therefore its package list may change in incompatible ways with Torizon software.
+# Let's lock Torizon containers to a known snapshot of the Bullseye package list as a workaround.
+ARG DEBIAN_SNAPSHOT
+RUN echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n\
+    deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
+    deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main" >/etc/apt/sources.list
+
 # Enable multiarch
 RUN dpkg --add-architecture ${ARCH_ARG}
 
@@ -21,7 +33,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 # if you change the key or feed configuration, please check the other repo!)
 RUN apt-get -q -y update \
     && apt-get -q -y install \
-        ca-certificates \
+    ca-certificates \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
