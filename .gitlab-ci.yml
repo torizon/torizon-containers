@@ -220,7 +220,7 @@ docker-deploy-arm64-toolchain-ssh-minor:
   when: manual
   script:
     - *do_docker_experimental
-    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH} > /dev/null && true; RESULT=$?
+    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}:${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DEBIAN_RELEASE}
@@ -272,7 +272,7 @@ docker-deploy-arm64-toolchain-ssh-patch:
   script:
     - *do_docker_experimental
     - export DATE=$(date +%Y%m%d)
-    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE} > /dev/null && true; RESULT=$?
+    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}:${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DEBIAN_RELEASE}
