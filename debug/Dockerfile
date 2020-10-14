@@ -1,11 +1,12 @@
 ARG BASE_NAME=
+ARG BASE_TAG=
 
-FROM debian:buster-slim AS build
+FROM debian:bullseye-slim AS build
 
 RUN apt-get update && apt-get install -y \
     --no-install-recommends --no-install-suggests \
     ca-certificates \
-    wget \
+    curl \
     unzip \
     && apt-get clean && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -13,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 ARG DEBUGGER_RELEASE=
 ARG DEBUGGER_ARCH=
 
-RUN wget -O /vsdbg.zip https://vsdebugger.azureedge.net/vsdbg-$DEBUGGER_RELEASE/vsdbg-$DEBUGGER_ARCH.zip
+RUN curl -L -o /vsdbg.zip https://vsdebugger.azureedge.net/vsdbg-$DEBUGGER_RELEASE/vsdbg-$DEBUGGER_ARCH.zip
 
 RUN mkdir /vsdbg
 
@@ -24,6 +25,6 @@ RUN unzip /vsdbg.zip
 RUN chmod a+x /vsdbg/vsdbg
 
 
-FROM torizon/$BASE_NAME:buster
+FROM torizon/$BASE_NAME:$BASE_TAG
 
 COPY --from=build /vsdbg /vsdbg
