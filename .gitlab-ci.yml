@@ -1,4 +1,4 @@
-image: docker:latest
+image: artifactory-horw.int.toradex.com/dockerhub-proxy-horw/docker:latest
 
 variables:
   # This should be set by docker image already, just to be sure...
@@ -13,11 +13,12 @@ variables:
   DOTNET_3_TAG: "3.1"
   DOTNET_3_VERSION: "3.1.9"
   DOTNET_5_TAG: "5.0"
-  DOTNET_5_VERSION: "5.0.100-rc.2"
+  DOTNET_5_VERSION: "5.0.2"
   DEBUGGER_RELEASE: 16-8-11005-1
 
 services:
-  - name: docker:dind
+  - name: artifactory-horw.int.toradex.com/dockerhub-proxy-horw/docker:dind
+    alias: docker
 
 before_script:
   - docker info
@@ -149,7 +150,8 @@ docker-build-5-arm32:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/91f51f33-238d-46bd-9d28-4d07667c49fb/693e99d7e048f96ba1237b19a9c848a9/dotnet-runtime-5.0.0-rc.2.20475.5-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/4e24057a-80d3-4de8-bbab-f337f8cdf56f/6c4775b4dee44be13355ca74b86797cf/dotnet-runtime-5.0.2-linux-arm.tar.gz
+
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
@@ -160,7 +162,7 @@ docker-build-5-arm32-asp:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/d28b2c72-92f7-44fd-b673-f7c24275f513/694228a9541d905bda4417156a9617df/aspnetcore-runtime-5.0.0-rc.2.20475.17-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/7aa18d1a-1c9a-4571-9668-3d76b5cda367/41a75d18282fa815c548be4dbc9dd55f/aspnetcore-runtime-5.0.2-linux-arm.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
@@ -171,7 +173,7 @@ docker-build-5-arm64:
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/f765599d-3130-4825-acc5-92c717a06013/22fcf79920ad59b0cce1653a1171a80e/dotnet-runtime-5.0.0-rc.2.20475.5-linux-arm64.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/f77f99f3-ee58-421a-bf4d-75155e361b9b/ea196b00d51607ad1796aa82697ee8da/aspnetcore-runtime-5.0.2-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
@@ -343,11 +345,11 @@ docker-build-aspnet-5-debug-multiarch:
     # new date tags when pushing the same container again.
     - export TIMESTAMP=$(docker inspect -f '{{ .Created }}' ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX})
     - export DATE_TAG=$(date '+%Y%m%d' -d ${TIMESTAMP} -D '%Y-%m-%dT%H:%M:%S')
-    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG};
-    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DATE_TAG}-${DOTNET_TAG};
-    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_VERSION};
-    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DATE_TAG}-${DOTNET_VERSION};
-    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}
+    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DATE_TAG}-${DOTNET_TAG}
+    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_VERSION}
+    - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DATE_TAG}-${DOTNET_VERSION}
+    - docker push --all-tags ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
 
 docker-deploy-3-arm32:
   extends: .docker-deploy

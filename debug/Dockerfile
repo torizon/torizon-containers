@@ -1,7 +1,7 @@
 ARG BASE_NAME=
 ARG BASE_TAG=
 
-FROM debian:bullseye-slim AS build
+FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/debian:bullseye-slim AS build
 
 RUN apt-get update && apt-get install -y \
     --no-install-recommends --no-install-suggests \
@@ -25,6 +25,6 @@ RUN unzip /vsdbg.zip
 RUN chmod a+x /vsdbg/vsdbg
 
 
-FROM torizon/$BASE_NAME:$BASE_TAG
+FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/$BASE_NAME:$BASE_TAG
 
 COPY --from=build /vsdbg /vsdbg

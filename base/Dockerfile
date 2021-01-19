@@ -1,6 +1,6 @@
 ARG IMAGE_ARCH=
 
-FROM debian:bullseye-slim AS build
+FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/debian:bullseye-slim AS build
 
 ARG DOWNLOAD_URL=
 
@@ -22,7 +22,7 @@ WORKDIR /dotnet
 
 RUN tar -xvzf ../dotnet-runtime.tar.gz
 
-FROM --platform=$IMAGE_ARCH torizon/debian:2-bullseye
+FROM --platform=$IMAGE_ARCH artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/debian:2-bullseye
 
 ENV DOTNET_ROOT=/dotnet
 ENV PATH=$PATH:/dotnet
