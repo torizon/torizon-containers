@@ -43,6 +43,8 @@ stages:
       --build-arg DOWNLOAD_URL=${DOWNLOAD_URL}
       --build-arg DEBUGGER_RELEASE=${DEBUGGER_RELEASE}
       --build-arg DEBUGGER_ARCH=${DEBUGGER_ARCH}
+      --build-arg BASE_TAG_WAYLAND=${DEBIAN-TAG}
+      --build-arg BASE_NAME_WAYLAND=${BASE_NAME_WAYLAND}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
       --cache-from ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest
       ${DOCKER_NO_CACHE:+--no-cache}
@@ -214,6 +216,19 @@ docker-build-5-debug-arm32-asp:
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build-debug
 
+docker-build-5-debug-arm32-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm
+    BASE_NAME: arm32v7-dotnet-debug
+    BASE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: arm32v7-dotnet-uno-debug
+    DEBUGGER_ARCH: linux-arm
+    DOCKERFILE_FOLDER: uno-debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build-debug
+
 docker-build-5-debug-arm64:
   extends: .docker-build
   variables:
@@ -234,6 +249,19 @@ docker-build-5-debug-arm64-asp:
     IMAGE_NAME: arm64v8-aspdotnet-debug
     DEBUGGER_ARCH: linux-arm64
     DOCKERFILE_FOLDER: debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build-debug
+
+docker-build-5-debug-arm64-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm64
+    BASE_NAME: arm64v8-dotnet-debug
+    BASE_NAME_WAYLAND: wayland-base-vivante
+    IMAGE_NAME: arm64v8-dotnet-uno-debug
+    DEBUGGER_ARCH: linux-arm64
+    DOCKERFILE_FOLDER: uno-debug
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build-debug
@@ -571,6 +599,14 @@ docker-deploy-aspnet-debug-5.multiarch:
     IMAGE_NAME: aspdotnet-debug
     IMAGE_NAME_32: arm32v7-aspdotnet-debug
     IMAGE_NAME_64: arm64v8-aspdotnet-debug
+    DOTNET_TAG: ${DOTNET_5_TAG}
+
+docker-deploy-dotnet-uno-debug-5.multiarch:
+  extends: .docker-deploy-multiarch
+  variables:
+    IMAGE_NAME: dotnet-uno-debug
+    IMAGE_NAME_32: arm32v7-dotnet-uno-debug
+    IMAGE_NAME_64: arm64v8-dotnet-uno-debug
     DOTNET_TAG: ${DOTNET_5_TAG}
 
 docker-deploy-dotnet-5-version.multiarch:
