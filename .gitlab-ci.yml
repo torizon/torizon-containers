@@ -170,6 +170,18 @@ docker-build-5-arm32-asp:
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build
 
+docker-build-5-arm32-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm
+    BASE_NAME: arm32v7-dotnet
+    BASE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: arm32v7-dotnet-uno
+    DOCKERFILE_FOLDER: uno-base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build
+
 docker-build-5-arm64:
   extends: .docker-build
   variables:
@@ -188,6 +200,18 @@ docker-build-5-arm64-asp:
     IMAGE_NAME: arm64v8-aspdotnet
     DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/565b6b58-e67d-4572-b376-574634730f7d/46cd04ba8e137ad20fd0e97814350ff3/aspnetcore-runtime-5.0.0-rc.2.20475.17-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build
+
+docker-build-5-arm64-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm64
+    BASE_NAME: arm64v8-dotnet
+    BASE_NAME_WAYLAND: wayland-base-vivante
+    IMAGE_NAME: arm64v8-dotnet-uno
+    DOCKERFILE_FOLDER: uno-base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build
@@ -583,6 +607,14 @@ docker-deploy-aspnet-5.multiarch:
     IMAGE_NAME: aspdotnet
     IMAGE_NAME_32: arm32v7-aspdotnet
     IMAGE_NAME_64: arm64v8-aspdotnet
+    DOTNET_TAG: ${DOTNET_5_TAG}
+
+docker-deploy-dotnet-uno-5.multiarch:
+  extends: .docker-deploy-multiarch
+  variables:
+    IMAGE_NAME: dotnet-uno
+    IMAGE_NAME_32: arm32v7-dotnet-uno
+    IMAGE_NAME_64: arm64v8-dotnet-uno
     DOTNET_TAG: ${DOTNET_5_TAG}
 
 docker-deploy-dotnet-debug-5.multiarch:
