@@ -25,7 +25,9 @@ before_script:
 
 stages:
   - build
+  - build-uno
   - build-debug
+  - build-uno-debug
   - build-multiarch
   - deploy
   - deploy-multiarch
@@ -202,7 +204,7 @@ docker-build-5-arm32-uno:
     DOCKERFILE_FOLDER: uno-base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
-  stage: build
+  stage: build-uno
 
 docker-build-5-arm64-uno:
   extends: .docker-build
@@ -214,7 +216,7 @@ docker-build-5-arm64-uno:
     DOCKERFILE_FOLDER: uno-base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
-  stage: build
+  stage: build-uno
 
 docker-build-5-debug-arm32:
   extends: .docker-build
@@ -236,19 +238,6 @@ docker-build-5-debug-arm32-asp:
     IMAGE_NAME: arm32v7-aspdotnet-debug
     DEBUGGER_ARCH: linux-arm
     DOCKERFILE_FOLDER: debug
-    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
-    DOTNET_TAG: ${DOTNET_5_TAG}
-  stage: build-debug
-
-docker-build-5-debug-arm32-uno:
-  extends: .docker-build
-  variables:
-    IMAGE_ARCH: linux/arm
-    BASE_NAME: arm32v7-dotnet-debug
-    BASE_NAME_WAYLAND: wayland-base
-    IMAGE_NAME: arm32v7-dotnet-uno-debug
-    DEBUGGER_ARCH: linux-arm
-    DOCKERFILE_FOLDER: uno-debug
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build-debug
@@ -277,6 +266,19 @@ docker-build-5-debug-arm64-asp:
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build-debug
 
+docker-build-5-debug-arm32-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm
+    BASE_NAME: arm32v7-dotnet-debug
+    BASE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: arm32v7-dotnet-uno-debug
+    DEBUGGER_ARCH: linux-arm
+    DOCKERFILE_FOLDER: uno-debug
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build-uno-debug
+
 docker-build-5-debug-arm64-uno:
   extends: .docker-build
   variables:
@@ -288,7 +290,7 @@ docker-build-5-debug-arm64-uno:
     DOCKERFILE_FOLDER: uno-debug
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
-  stage: build-debug
+  stage: build-uno-debug
 
   # Enable experimental features in Docker client (experimental feature are needed for manifest)
 .do_docker_experimental: &do_docker_experimental
