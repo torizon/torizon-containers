@@ -43,7 +43,7 @@ stages:
       --build-arg DOWNLOAD_URL=${DOWNLOAD_URL}
       --build-arg DEBUGGER_RELEASE=${DEBUGGER_RELEASE}
       --build-arg DEBUGGER_ARCH=${DEBUGGER_ARCH}
-      --build-arg BASE_TAG_WAYLAND=${DEBIAN-TAG}
+      --build-arg BASE_TAG_WAYLAND=${DEBIAN_TAG}
       --build-arg BASE_NAME_WAYLAND=${BASE_NAME_WAYLAND}
       --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST}
       --cache-from ${CI_REGISTRY}/rd/torizon-core-containers/debian-docker-images/${IMAGE_NAME}:buster-latest
@@ -170,18 +170,6 @@ docker-build-5-arm32-asp:
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build
 
-docker-build-5-arm32-uno:
-  extends: .docker-build
-  variables:
-    IMAGE_ARCH: linux/arm
-    BASE_NAME: arm32v7-dotnet
-    BASE_NAME_WAYLAND: wayland-base
-    IMAGE_NAME: arm32v7-dotnet-uno
-    DOCKERFILE_FOLDER: uno-base
-    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
-    DOTNET_TAG: ${DOTNET_5_TAG}
-  stage: build
-
 docker-build-5-arm64:
   extends: .docker-build
   variables:
@@ -200,6 +188,18 @@ docker-build-5-arm64-asp:
     IMAGE_NAME: arm64v8-aspdotnet
     DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/565b6b58-e67d-4572-b376-574634730f7d/46cd04ba8e137ad20fd0e97814350ff3/aspnetcore-runtime-5.0.0-rc.2.20475.17-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
+    DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build
+
+docker-build-5-arm32-uno:
+  extends: .docker-build
+  variables:
+    IMAGE_ARCH: linux/arm
+    BASE_NAME: arm32v7-dotnet
+    BASE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: arm32v7-dotnet-uno
+    DOCKERFILE_FOLDER: uno-base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build
