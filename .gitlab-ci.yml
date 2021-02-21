@@ -384,6 +384,24 @@ docker-build-aspnet-5-debug-multiarch:
     DOTNET_TAG: ${DOTNET_5_TAG}
   stage: build-multiarch
 
+docker-build-dotnet-uno-5-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_NAME: dotnet-uno
+    IMAGE_NAME_32: arm32v7-dotnet-uno
+    IMAGE_NAME_64: arm64v8-dotnet-uno
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build-multiarch
+
+docker-build-dotnet-uno-5-debug-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_NAME: dotnet-uno-debug
+    IMAGE_NAME_32: arm32v7-dotnet-uno-debug
+    IMAGE_NAME_64: arm64v8-dotnet-uno-debug
+    DOTNET_TAG: ${DOTNET_5_TAG}
+  stage: build-multiarch
+
 # Docker deploy jobs
 #
 # Make sure DOCKER_HUB_USER/DOCKER_HUB_PW is properly set in the project
@@ -475,6 +493,20 @@ docker-deploy-5-arm64:
     DOTNET_TAG: ${DOTNET_5_TAG}
     DOTNET_VERSION: ${DOTNET_5_VERSION}
 
+docker-deploy-5-arm32-uno:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-dotnet-uno
+    DOTNET_TAG: ${DOTNET_5_TAG}
+    DOTNET_VERSION: ${DOTNET_5_VERSION}
+
+docker-deploy-5-arm64-uno:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-dotnet-uno
+    DOTNET_TAG: ${DOTNET_5_TAG}
+    DOTNET_VERSION: ${DOTNET_5_VERSION}
+
 docker-deploy-5-arm32-asp:
   extends: .docker-deploy
   variables:
@@ -514,6 +546,20 @@ docker-deploy-5-debug-arm64-asp:
   extends: .docker-deploy
   variables:
     IMAGE_NAME: arm64v8-aspdotnet-debug
+    DOTNET_TAG: ${DOTNET_5_TAG}
+    DOTNET_VERSION: ${DOTNET_5_VERSION}
+
+docker-deploy-5-debug-arm32-uno:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm32v7-dotnet-uno-debug
+    DOTNET_TAG: ${DOTNET_5_TAG}
+    DOTNET_VERSION: ${DOTNET_5_VERSION}
+
+docker-deploy-5-debug-arm64-uno:
+  extends: .docker-deploy
+  variables:
+    IMAGE_NAME: arm64v8-dotnet-uno-debug
     DOTNET_TAG: ${DOTNET_5_TAG}
     DOTNET_VERSION: ${DOTNET_5_VERSION}
 
