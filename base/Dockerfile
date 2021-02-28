@@ -3,6 +3,7 @@ ARG DEBIAN_BASE_IMAGE=bullseye-20200908-slim
 FROM debian:$DEBIAN_BASE_IMAGE
 
 ARG DEBIAN_SNAPSHOT=20200908T070000Z
+ARG TORADEX_SNAPSHOT=20210228T115326Z
 
 ARG ARCH_ARG=armhf
 # For arm64 use:
@@ -21,6 +22,7 @@ ENV DEBIAN_FRONTEND="noninteractive"
 # therefore its package list may change in incompatible ways with Torizon software.
 # Let's lock Torizon containers to a known snapshot of the Bullseye package list as a workaround.
 ARG DEBIAN_SNAPSHOT
+ARG TORADEX_SNAPSHOT
 RUN echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n\
     deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
     deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main" >/etc/apt/sources.list
@@ -39,7 +41,7 @@ RUN apt-get -q -y update \
     && rm -rf /var/lib/apt/lists/*
 ADD https://feeds.toradex.com/debian/toradex-debian-repo.gpg /etc/apt/trusted.gpg.d/
 RUN chmod 0644 /etc/apt/trusted.gpg.d/toradex-debian-repo.gpg \
-    && echo 'deb https://feeds.toradex.com/debian/ testing main non-free' >>/etc/apt/sources.list \
+    && echo "deb https://feeds.toradex.com/debian/$TORADEX_SNAPSHOT testing main non-free" >>/etc/apt/sources.list \
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 # Upgrade & install required packages
