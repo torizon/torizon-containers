@@ -8,7 +8,11 @@ FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/$BASE_NAME:$B
 
 FROM --platform=$IMAGE_ARCH torizon/$BASE_NAME_WAYLAND:$BASE_TAG_WAYLAND AS base
 
+ENV DOTNET_ROOT=/dotnet
+ENV PATH=$PATH:/dotnet
+
 COPY --from=dotnet /vsdbg /vsdbg
+COPY --from=dotnet /dotnet /dotnet
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     apt-utils \
