@@ -1,9 +1,6 @@
-ARG DEBIAN_BASE_IMAGE=bullseye-20200908-slim
+ARG DEBIAN_BASE_IMAGE=bullseye-20210408-slim
 
 FROM debian:$DEBIAN_BASE_IMAGE
-
-ARG DEBIAN_SNAPSHOT=20200908T070000Z
-ARG TORADEX_SNAPSHOT=20210228T115326Z
 
 ARG ARCH_ARG=armhf
 # For arm64 use:
@@ -11,6 +8,10 @@ ARG ARCH_ARG=armhf
 ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf"
 # For arm64 use:
 # ARG CROSS_COMPILE_ARG="aarch64-linux-gnu"
+ARG DEBIAN_SNAPSHOT=20210408T000000Z
+ARG TORADEX_SNAPSHOT=20210525T091852Z
+ARG USE_TORADEX_SNAPSHOT=1
+ARG TORADEX_FEED_BASE_URL="https://feeds.toradex.com/debian"
 
 ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}-
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILE_ARG}/pkgconfig
@@ -39,15 +40,20 @@ RUN apt-get -q -y update \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
-ADD https://feeds.toradex.com/debian/toradex-debian-repo.gpg /etc/apt/trusted.gpg.d/
+ADD ${TORADEX_FEED_BASE_URL}/toradex-debian-repo.gpg /etc/apt/trusted.gpg.d/
 RUN chmod 0644 /etc/apt/trusted.gpg.d/toradex-debian-repo.gpg \
-    && echo "deb https://feeds.toradex.com/debian/$TORADEX_SNAPSHOT testing main non-free" >>/etc/apt/sources.list \
+    && if [ "${USE_TORADEX_SNAPSHOT}" = 1 ]; then \
+           TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}/snapshots/${TORADEX_SNAPSHOT}"; \
+       else \
+           TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}"; \
+       fi \
+    && echo "deb ${TORADEX_FEED_URL} testing main non-free" >>/etc/apt/sources.list \
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 # Upgrade & install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y upgrade \
-    && apt-get -q -y install \
+    && apt-get -q -y -o Acquire::Http::Dl-limit=100 install \
     git \
     openssl \
     crossbuild-essential-${ARCH_ARG} \
