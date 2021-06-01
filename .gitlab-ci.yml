@@ -11,10 +11,10 @@ variables:
   GITLAB_DOCKERREGISTRY_SUFFIX_LATEST: ${CI_COMMIT_REF_SLUG}-latest
   DEBIAN_TAG: "2"
   DOTNET_3_TAG: "3.1"
-  DOTNET_3_VERSION: "3.1.9"
+  DOTNET_3_VERSION: "3.1.15"
   DOTNET_5_TAG: "5.0"
-  DOTNET_5_VERSION: "5.0.2"
-  DEBUGGER_RELEASE: 16-8-11005-1
+  DOTNET_5_VERSION: "5.0.6"
+  DEBUGGER_RELEASE: "17-0-10413-12"
 
 services:
   - name: artifactory-horw.int.toradex.com/dockerhub-proxy-horw/docker:dind
@@ -62,7 +62,7 @@ docker-build-3-arm32:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/7c1177f6-feb9-4404-a795-adb77e78b9ab/d3ca4e135e1af71bea28623774f8df27/dotnet-runtime-3.1.9-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/8e22adf9-3d0c-4d05-98c2-418af9f75b07/92ae7cb0014cdafd6e6bb1ba30344d0f/dotnet-runtime-3.1.15-linux-arm.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_3_TAG}
@@ -73,7 +73,7 @@ docker-build-3-arm32-asp:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/c8cd43dd-e9de-4ff9-9cea-2f02fba6869c/d5c653c12ec93cb71e30b21856acea66/aspnetcore-runtime-3.1.9-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/000183b9-3d77-4e03-902e-7debe460497d/dcd6400fe1f28baba8624d3242f820a7/aspnetcore-runtime-3.1.15-linux-arm.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_3_TAG}
@@ -84,7 +84,7 @@ docker-build-3-arm64:
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/f6ca8333-82a2-4380-9d47-e152f47e85b8/1e3f6e0149761e884f63b14fa9d921f3/dotnet-runtime-3.1.9-linux-arm64.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/63d88492-c14a-48ac-bc16-0e8a20adcb81/56cdb7f10b6c4340a16565867b37056d/dotnet-runtime-3.1.15-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_3_TAG}
@@ -95,7 +95,7 @@ docker-build-3-arm64-asp:
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-aspdotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/251cd0f7-2655-4f04-940d-6fb852c4389d/65f8897905e79ee9306be9428dad88fe/aspnetcore-runtime-3.1.8-linux-arm64.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/dccfa850-fe07-4444-8af1-5ec25cf177f2/e2625f76e9fc4748e956a4e7d449d34c/aspnetcore-runtime-3.1.15-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_3_TAG}
@@ -154,7 +154,7 @@ docker-build-5-arm32:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/4e24057a-80d3-4de8-bbab-f337f8cdf56f/6c4775b4dee44be13355ca74b86797cf/dotnet-runtime-5.0.2-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/97301aed-7094-4bc6-9264-ff63b974a353/e5040909f601aa8c6ddaf14c06dbe8d1/dotnet-runtime-5.0.6-linux-arm.tar.gz
 
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
@@ -166,7 +166,7 @@ docker-build-5-arm32-asp:
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/7aa18d1a-1c9a-4571-9668-3d76b5cda367/41a75d18282fa815c548be4dbc9dd55f/aspnetcore-runtime-5.0.2-linux-arm.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/9d2abf34-b484-46ab-8e3b-504b0057827b/7266d743d6441c1f80510a50c17491dc/aspnetcore-runtime-5.0.6-linux-arm.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
@@ -177,7 +177,7 @@ docker-build-5-arm64:
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/f77f99f3-ee58-421a-bf4d-75155e361b9b/ea196b00d51607ad1796aa82697ee8da/aspnetcore-runtime-5.0.2-linux-arm64.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/0ad82603-bebf-4d28-8bc8-cfc826ad7893/ca22f36c4752f579c13e0414ec804c15/dotnet-runtime-5.0.6-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
@@ -188,7 +188,7 @@ docker-build-5-arm64-asp:
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-aspdotnet
-    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/565b6b58-e67d-4572-b376-574634730f7d/46cd04ba8e137ad20fd0e97814350ff3/aspnetcore-runtime-5.0.0-rc.2.20475.17-linux-arm64.tar.gz
+    DOWNLOAD_URL: https://download.visualstudio.microsoft.com/download/pr/6b735496-0974-4873-ab92-edc2caa05f99/7fecb279d8abbb8f78bff5474cb2a32c/aspnetcore-runtime-5.0.6-linux-arm64.tar.gz
     DOCKERFILE_FOLDER: base
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_5_TAG}
