@@ -37,6 +37,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 RUN apt-get -q -y update \
     && apt-get -q -y install \
     ca-certificates \
+    wget \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -51,15 +52,20 @@ RUN chmod 0644 /etc/apt/trusted.gpg.d/toradex-debian-repo.gpg \
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 # Upgrade & install required packages
-RUN apt-get -q -y update \
+
+RUN wget http://snapshot.debian.org/archive/debian/20210408T000000Z/pool/main/g/gcc-10-cross/cpp-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb && \
+    wget http://snapshot.debian.org/archive/debian/20210408T000000Z/pool/main/g/gcc-10-cross/gcc-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb && \
+    wget http://snapshot.debian.org/archive/debian/20210408T000000Z/pool/main/g/gcc-10-cross/g++-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb && \
+    apt-get -q -y update \
     && apt-get -q -y upgrade \
-    && apt-get -q -y -o Acquire::Http::Dl-limit=100 install \
+    && apt-get -q -y -o Acquire::Http::Dl-limit=1000 install -f ./cpp-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb ./gcc-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb ./g++-10-${CROSS_COMPILE_ARG}_10.2.1-6cross1_amd64.deb \
     git \
     openssl \
     crossbuild-essential-${ARCH_ARG} \
     && apt-get clean \
     && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm *.deb
 
 # Add torizon user to the container
 RUN mkdir /home/torizon
