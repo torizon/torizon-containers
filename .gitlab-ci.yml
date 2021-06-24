@@ -139,7 +139,7 @@ docker-build-arm64-toolchain-ssh:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}-${DEBIAN_RELEASE}
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
-    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}-${DEBIAN_RELEASE}
 
 docker-deploy-armhf-toolchain-major:
   extends: .docker-deploy-major
@@ -180,7 +180,7 @@ docker-deploy-arm64-toolchain-ssh-major:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}-${DEBIAN_RELEASE}
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
-    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}
+    - docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}-${DEBIAN_RELEASE}
 
 docker-deploy-armhf-toolchain-minor:
   extends: .docker-deploy-minor
@@ -227,7 +227,7 @@ docker-deploy-arm64-toolchain-ssh-minor:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DEBIAN_RELEASE}
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
-    - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME} ; else echo Image with this tag already exists. ; fi)
+    - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DEBIAN_RELEASE} ; else echo Image with this tag already exists. ; fi)
 
 docker-deploy-armhf-toolchain-patch:
   extends: .docker-deploy-patch
@@ -279,7 +279,7 @@ docker-deploy-arm64-toolchain-ssh-patch:
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DEBIAN_RELEASE}
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
-    - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME} ; else echo Image with this tag already exists. ; fi)
+    - (if [ ${RESULT} == 1 ] ; then docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DEBIAN_RELEASE} ; else echo Image with this tag already exists. ; fi)
 
 docker-deploy-armhf-toolchain-patch-date:
   extends: .docker-deploy-patch-date
