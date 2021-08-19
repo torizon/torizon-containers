@@ -1,16 +1,16 @@
 ARG IMAGE_ARCH=arm64v8
-ARG IMAGE_TAG=bullseye-20210408-slim
-ARG DEBIAN_SNAPSHOT=20210408T000000Z
+ARG IMAGE_TAG=bullseye-slim
+# ARG DEBIAN_SNAPSHOT=20210408T000000Z
 FROM $IMAGE_ARCH/debian:$IMAGE_TAG
 
-ARG DEBIAN_SNAPSHOT
+# ARG DEBIAN_SNAPSHOT
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Debian Bullseye is not yet a stable distribution at the moment of this writing;
 # therefore its package list may change in incompatible ways with Torizon software.
 # Let's lock Torizon containers to a known snapshot of the Bullseye package list as a workaround.
-RUN echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n" >/etc/apt/sources.list
+# RUN echo "deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n" >/etc/apt/sources.list
 
 # Install a base set of build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -54,13 +54,18 @@ RUN useradd debian -u 1000 -m -G tty,sudo,dialout,users,plugdev
 RUN sed -i '/^%sudo\>/s/) *ALL$/) NOPASSWD: ALL/' /etc/sudoers && visudo -c
 
 # Setup access to Debian official package sources and updates
-RUN echo "\
-deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n\
-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
-deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main\n\
-deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main" >>/etc/apt/sources.list
+# RUN echo "\
+# deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye main\n\
+# deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
+# deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian/$DEBIAN_SNAPSHOT bullseye-updates main\n\
+# deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main\n\
+# deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$DEBIAN_SNAPSHOT bullseye-security main" >>/etc/apt/sources.list
 
+# Setup access to Debian official package sources and updates
+RUN echo "\
+deb-src http://deb.debian.org/debian bullseye main\n\
+deb-src http://deb.debian.org/debian bullseye-updates main\n\
+deb-src http://security.debian.org/debian-security bullseye-security main" >>/etc/apt/sources.list
 
 # Setup access to the Toradex package feed
 RUN echo "deb https://feeds.toradex.com/debian/ testing main non-free" >> /etc/apt/sources.list
