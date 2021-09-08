@@ -2,7 +2,12 @@ ARG IMAGE_ARCH=
 
 FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/debian:bullseye-slim AS build
 
-ARG DOWNLOAD_URL=
+# define specific .NET version you want to use or "latest"
+ARG DOTNET_VERSION=latest
+# can be arm or arm64
+ARG DOTNET_ARCHITECTURE=
+# can be dotnet or aspnetcore
+ARG DOTNET_RUNTIME=dotnet
 
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -14,13 +19,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -L -o dotnet-runtime.tar.gz $DOWNLOAD_URL
+RUN curl -L -o /dotnet-install.sh https://dot.net/v1/dotnet-install.sh
+RUN chmod a+x /dotnet-install.sh
 
 RUN mkdir dotnet
 
 WORKDIR /dotnet
 
-RUN tar -xvzf ../dotnet-runtime.tar.gz
+RUN /dotnet-install.sh --install-dir /dotnet --runtime ${DOTNET_RUNTIME} --version ${DOTNET_VERSION} --os linux --architecture ${DOTNET_ARCHITECTURE} --no-path
 
 FROM --platform=$IMAGE_ARCH artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/debian:2-bullseye
 
