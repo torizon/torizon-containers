@@ -47,6 +47,8 @@ RUN apt-get -q -y update \
     && apt-get -q -y -o Acquire::Http::Dl-limit=1000 install \
     git \
     openssl \
+    wget \
+    curl \
     crossbuild-essential-${ARCH_ARG} \
     && apt-get clean \
     && apt-get autoremove \
