@@ -31,6 +31,7 @@ before_script:
 stages:
   - build-base
   - build-ssh
+  - build-samples-bridge
   - deploy-major
   - deploy-minor
   - deploy-patch
@@ -119,6 +120,20 @@ docker-build-arm64-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
     DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
+
+# Bridge
+#
+# Trigger pipelines on other projects, for example, the Torizon samples
+
+build-torizon-samples:
+  when: manual
+  stage: build-samples-bridge
+  trigger:
+    project: rd/torizon-core/samples
+    branch: ${DEBIAN_RELEASE}
+    strategy: depend
+  # Don't fail a pipeline on the current project if the samples pipeline fail
+  allow_failure: true
 
 # Enable experimental features in Docker client (experimental feature are needed for manifest)
 .do_docker_experimental: &do_docker_experimental
