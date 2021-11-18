@@ -6,12 +6,12 @@ variables:
 
   # container version
   DEBIAN_CROSS_TOOLCHAINS_MAJOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_MINOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_PATCH: "1"
+  DEBIAN_CROSS_TOOLCHAINS_MINOR: "3"
+  DEBIAN_CROSS_TOOLCHAINS_PATCH: "0"
 
   DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH: "1"
+  DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR: "3"
+  DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH: "0"
 
   # This should be set by docker image already, just to be sure...
   DOCKER_HOST: tcp://docker:2375
@@ -235,7 +235,7 @@ docker-deploy-arm64-toolchain-ssh-minor:
   when: manual
   script:
     - *do_docker_experimental
-    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}:${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
+    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DEBIAN_RELEASE}
@@ -287,7 +287,7 @@ docker-deploy-arm64-toolchain-ssh-patch:
   script:
     - *do_docker_experimental
     - export DATE=$(date +%Y%m%d)
-    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}:${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
+    - docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DEBIAN_RELEASE} > /dev/null && true; RESULT=$?
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX}
     - docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DEBIAN_RELEASE}
