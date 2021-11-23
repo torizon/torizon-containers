@@ -25,6 +25,6 @@ RUN unzip /vsdbg.zip
 RUN chmod a+x /vsdbg/vsdbg
 
 
-FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/$BASE_NAME:$BASE_TAG
+FROM torizon/$BASE_NAME:$BASE_TAG
 
 COPY --from=build /vsdbg /vsdbg

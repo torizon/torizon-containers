@@ -4,7 +4,7 @@ ARG BASE_TAG=
 ARG BASE_TAG_WAYLAND=
 ARG BASE_NAME_WAYLAND=
 
-FROM artifactory-horw.int.toradex.com/dockerhub-proxy-horw/torizon/$BASE_NAME:$BASE_TAG AS dotnet
+FROM torizon/$BASE_NAME:$BASE_TAG AS dotnet
 
 FROM --platform=$IMAGE_ARCH torizon/$BASE_NAME_WAYLAND:$BASE_TAG_WAYLAND AS base
 
