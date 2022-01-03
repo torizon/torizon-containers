@@ -421,11 +421,11 @@ docker-build-dotnet-uno-5-debug-multiarch:
 
 # Docker deploy jobs
 #
-# Make sure DOCKER_HUB_USER/DOCKER_HUB_PW is properly set in the project
+# Make sure DOCKER_HUB_USER/DOCKER_HUB_TOKEN is properly set in the project
 # specific Gitlab CI settings.
 .docker-deploy:
   before_script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
   stage: deploy
   when: manual
   script:
@@ -585,7 +585,7 @@ docker-deploy-5-debug-arm64-uno:
     - *do_docker_experimental
     - rm -rf ~/.docker/manifests/*
   script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PW
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
     - docker manifest create ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_32}:${DEBIAN_TAG}-${DOTNET_TAG} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_64}:${DEBIAN_TAG}-${DOTNET_TAG}
     - docker manifest annotate ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_32}:${DEBIAN_TAG}-${DOTNET_TAG}  --os linux --arch arm
     - docker manifest annotate ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_64}:${DEBIAN_TAG}-${DOTNET_TAG}  --os linux --arch arm64
