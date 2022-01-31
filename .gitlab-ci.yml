@@ -22,10 +22,8 @@ services:
   - name: artifactory-horw.int.toradex.com/dockerhub-proxy-horw/docker:dind
     alias: docker
 
-before_script:
-  - docker info
-
 stages:
+  - lint
   - build
   - build-uno
   - build-debug
@@ -39,6 +37,7 @@ stages:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - if test -n "${BASE_NAME}"; then docker pull ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} && docker tag ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX} torizon/${BASE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG} ; fi || exit 1
+    - docker info
     # Try to download latest image for cache, but don't fail if it does not exist
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${DEBIAN_TAG}-${DOTNET_TAG}-${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
     - docker build --build-arg IMAGE_ARCH=${IMAGE_ARCH}
@@ -63,6 +62,7 @@ stages:
 
 docker-build-3-arm32:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
@@ -76,6 +76,7 @@ docker-build-3-arm32:
 
 docker-build-3-arm32-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
@@ -89,6 +90,7 @@ docker-build-3-arm32-asp:
 
 docker-build-3-arm64:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
@@ -102,6 +104,7 @@ docker-build-3-arm64:
 
 docker-build-3-arm64-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-aspdotnet
@@ -163,6 +166,7 @@ docker-build-3-debug-arm64-asp:
 
 docker-build-5-arm32:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
@@ -176,6 +180,7 @@ docker-build-5-arm32:
 
 docker-build-5-arm32-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
@@ -189,6 +194,7 @@ docker-build-5-arm32-asp:
 
 docker-build-5-arm64:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
@@ -202,6 +208,7 @@ docker-build-5-arm64:
 
 docker-build-5-arm64-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-aspdotnet
@@ -313,6 +320,7 @@ docker-build-5-debug-arm64-uno:
 
 docker-build-6-arm32:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-dotnet
@@ -326,6 +334,7 @@ docker-build-6-arm32:
 
 docker-build-6-arm32-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm
     IMAGE_NAME: arm32v7-aspdotnet
@@ -339,6 +348,7 @@ docker-build-6-arm32-asp:
 
 docker-build-6-arm64:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-dotnet
@@ -352,6 +362,7 @@ docker-build-6-arm64:
 
 docker-build-6-arm64-asp:
   extends: .docker-build
+  needs: []
   variables:
     IMAGE_ARCH: linux/arm64
     IMAGE_NAME: arm64v8-aspdotnet
@@ -460,6 +471,18 @@ docker-build-6-debug-arm64-uno:
     DOCKER_NO_CACHE: ${DOCKER_NO_CACHE_FEEDS}
     DOTNET_TAG: ${DOTNET_6_TAG}
   stage: build-uno-debug
+
+lint_dockerfile:
+  stage: lint
+  image: hadolint/hadolint:latest-debian
+  script:
+    # Some rules cannot be applied in our specific cases.
+    # However, since we don't want to completely ignore these rules,
+    # we are changing the following rules to have the level "info":
+    #- DL3008 warning: Pin versions in apt get install. Instead of `apt-get install <package>` use `apt-get install <package>=<version>`
+    #- DL3029 warning: Do not use --platform flag with FROM
+    #- DL4006 warning: Set the SHELL option -o pipefail before RUN with a pipe in it. If you are using /bin/sh in an alpine image or if your shell is symlinked to busybox then consider explicitly setting your SHELL to /bin/ash, or disable this check
+    - hadolint */Dockerfile --failure-threshold warning --info DL3008 --info DL3029 --info DL4006
 
   # Enable experimental features in Docker client (experimental feature are needed for manifest)
 .do_docker_experimental: &do_docker_experimental
