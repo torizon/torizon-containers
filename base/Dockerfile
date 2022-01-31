@@ -25,7 +25,7 @@ RUN dpkg --add-architecture ${ARCH_ARG}
 # (same key is used in https://gitlab.int.toradex.com/rd/torizon-core-containers/debian-docker-image
 # if you change the key or feed configuration, please check the other repo!)
 RUN apt-get -q -y update \
-    && apt-get -q -y install \
+    && apt-get -q -y install --no-install-recommends \
     ca-certificates \
     && apt-get clean \
     && apt-get autoremove \
@@ -44,7 +44,7 @@ RUN chmod 0644 /etc/apt/trusted.gpg.d/toradex-debian-repo.gpg \
 
 RUN apt-get -q -y update \
     && apt-get -q -y upgrade \
-    && apt-get -q -y -o Acquire::Http::Dl-limit=1000 install \
+    && apt-get -q -y -o Acquire::Http::Dl-limit=1000 install --no-install-recommends \
     git \
     openssl \
     wget \
@@ -55,7 +55,7 @@ RUN apt-get -q -y update \
     && rm -rf /var/lib/apt/lists/*
 
 # Add torizon user to the container
-RUN mkdir /home/torizon
-RUN addgroup torizon
-RUN useradd -s /bin/bash -d /home/torizon -g torizon -G sudo -p $(echo "torizon" | openssl passwd -1 -stdin) torizon
-RUN chown -R torizon /home/torizon
+RUN mkdir /home/torizon \
+    && addgroup torizon \
+    && useradd -s /bin/bash -d /home/torizon -g torizon -G sudo -p $(echo "torizon" | openssl passwd -1 -stdin) torizon \
+    && chown -R torizon /home/torizon
