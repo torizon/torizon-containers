@@ -25,10 +25,8 @@ variables:
 services:
   - name: docker:dind
 
-before_script:
-  - docker info
-
 stages:
+  - lint
   - build-base
   - build-ssh
   - build-samples-bridge
@@ -41,6 +39,7 @@ stages:
 .docker-build:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker info
     - if test -n "${BASE_NAME}"; then docker pull ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} && docker tag ${CI_REGISTRY_IMAGE}/${BASE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX} torizon/${BASE_NAME}:${MAJOR} ; fi || exit 1
     # Try to download latest image for cache, but don't fail if it does not exist
     - docker pull ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${GITLAB_DOCKERREGISTRY_SUFFIX_LATEST} || true
@@ -68,6 +67,7 @@ stages:
 
 docker-build-armhf-toolchain:
   extends: .docker-build
+  needs: []
   before_script:
     - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
     - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
@@ -94,6 +94,7 @@ docker-build-armhf-toolchain-ssh:
 
 docker-build-arm64-toolchain:
   extends: .docker-build
+  needs: []
   before_script:
     - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
     - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
@@ -117,6 +118,19 @@ docker-build-arm64-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
     DOCKERFILE_FOLDER: "ssh/"
   stage: build-ssh
+
+lint_dockerfile:
+  stage: lint
+  image: hadolint/hadolint:latest-debian
+  script:
+    # Some rules cannot be applied in our specific cases.
+    # However, since we don't want to completely ignore these rules,
+    # we are changing the following rules to have the level "info":
+    #- DL3008 (pin versions in apt-get install)
+    #- DL3020 (use COPY instead of ADD for files and folders)
+    #- DL4006 (set the SHELL option -o pipefail before RUN with a pipe in it)
+    #- SC2046 (quote this to prevent word splitting)
+    - hadolint */Dockerfile --failure-threshold warning --info DL3008 --info DL3020 --info DL4006 --info SC2046
 
 # Bridge
 #
