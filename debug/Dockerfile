@@ -14,16 +14,13 @@ RUN apt-get update && apt-get install -y \
 ARG DEBUGGER_RELEASE=
 ARG DEBUGGER_ARCH=
 
-RUN curl -L -o /vsdbg.zip https://vsdebugger.azureedge.net/vsdbg-$DEBUGGER_RELEASE/vsdbg-$DEBUGGER_ARCH.zip
-
-RUN mkdir /vsdbg
+RUN curl -L -o /vsdbg.zip https://vsdebugger.azureedge.net/vsdbg-$DEBUGGER_RELEASE/vsdbg-$DEBUGGER_ARCH.zip \
+    && mkdir /vsdbg
 
 WORKDIR /vsdbg
 
-RUN unzip /vsdbg.zip
-
-RUN chmod a+x /vsdbg/vsdbg
-
+RUN unzip /vsdbg.zip \
+    && chmod a+x /vsdbg/vsdbg
 
 FROM torizon/$BASE_NAME:$BASE_TAG
 

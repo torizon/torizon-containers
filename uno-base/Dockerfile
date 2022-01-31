@@ -44,9 +44,10 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # fix mime types
-RUN apt-get -y update && apt-get --reinstall install shared-mime-info \
+RUN apt-get -y update && apt-get --reinstall install -y --no-install-recommends \
+    shared-mime-info \
 	&& apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-RUN printf "{\n  \"device\": \"/dev/dri/card1\",\n  \"outputs\": [ { \"name\": \"HDMI1\" } ],\n  \"hwcursor\": false\n}" > /etc/kms-imx6.conf
-RUN printf "{\n  \"hwcursor\": false\n}" > /etc/kms-imx8.conf
-RUN ln -s /etc/kms-imx8.conf /etc/kms-imx7.conf
+RUN printf "{\n  \"device\": \"/dev/dri/card1\",\n  \"outputs\": [ { \"name\": \"HDMI1\" } ],\n  \"hwcursor\": false\n}" > /etc/kms-imx6.conf \
+    && printf "{\n  \"hwcursor\": false\n}" > /etc/kms-imx8.conf \
+    && ln -s /etc/kms-imx8.conf /etc/kms-imx7.conf

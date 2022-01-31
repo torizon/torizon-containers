@@ -19,10 +19,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -L -o /dotnet-install.sh https://dot.net/v1/dotnet-install.sh
-RUN chmod a+x /dotnet-install.sh
-
-RUN mkdir dotnet
+RUN curl -L -o /dotnet-install.sh https://dot.net/v1/dotnet-install.sh \
+    && chmod a+x /dotnet-install.sh \
+    && mkdir dotnet
 
 WORKDIR /dotnet
 
