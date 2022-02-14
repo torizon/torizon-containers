@@ -24,6 +24,7 @@ services:
 
 stages:
   - lint
+  - repository-tagging
   - build
   - build-uno
   - build-debug
@@ -483,6 +484,31 @@ lint_dockerfile:
     #- DL3029 warning: Do not use --platform flag with FROM
     #- DL4006 warning: Set the SHELL option -o pipefail before RUN with a pipe in it. If you are using /bin/sh in an alpine image or if your shell is symlinked to busybox then consider explicitly setting your SHELL to /bin/ash, or disable this check
     - hadolint */Dockerfile --failure-threshold warning --info DL3008 --info DL3029 --info DL4006
+
+# Make sure to create access token in "Settings/Access Tokens" section with "write_repository" scope selected.
+# Then in "Settings/CI/CD/" section add a variable with key "GIT_TOKEN" and a value of the access token. Also mask the variable.
+tag:
+  stage: repository-tagging
+  needs: []
+  before_script:
+    - if [ -z ${GIT_TOKEN} ]; then echo "Missing variable GIT_TOKEN." && exit 1; fi
+    - TAGS="debian-dotnet-${DOTNET_3_VERSION}
+            debian-dotnet-${DOTNET_5_VERSION}
+            debian-dotnet-${DOTNET_6_VERSION}"
+  script:
+    - apk update && apk add git
+    - git remote set-url origin https://gitlab-ci-token:${GIT_TOKEN}@${CI_REPOSITORY_URL#*@}
+    - for TAG in ${TAGS};
+        do
+          if git ls-remote --tags origin  | grep ${TAG} > /dev/null; then
+            echo "${TAG} tag already exists.";
+          else
+            echo "Tagging repository with ${TAG} tag.";
+            git tag --delete ${TAG} > /dev/null 2>&1 || true;
+            git tag ${TAG};
+            git push -o ci.skip origin ${TAG};
+          fi
+        done
 
   # Enable experimental features in Docker client (experimental feature are needed for manifest)
 .do_docker_experimental: &do_docker_experimental
