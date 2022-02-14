@@ -27,6 +27,7 @@ services:
 
 stages:
   - lint
+  - repository-tagging
   - build-base
   - build-ssh
   - build-samples-bridge
@@ -131,6 +132,30 @@ lint_dockerfile:
     #- DL4006 (set the SHELL option -o pipefail before RUN with a pipe in it)
     #- SC2046 (quote this to prevent word splitting)
     - hadolint */Dockerfile --failure-threshold warning --info DL3008 --info DL3020 --info DL4006 --info SC2046
+
+# Make sure to create access token in "Settings/Access Tokens" section with "write_repository" scope selected.
+# Then in "Settings/CI/CD/" section add a variable with key "GIT_TOKEN" and a value of the access token. Also mask the variable.
+tag:
+  stage: repository-tagging
+  needs: []
+  before_script:
+    - if [ -z ${GIT_TOKEN} ]; then echo "Missing variable GIT_TOKEN." && exit 1; fi
+    - TAGS="debian-cross-toolchains-${DEBIAN_CROSS_TOOLCHAINS_MAJOR}.${DEBIAN_CROSS_TOOLCHAINS_MINOR}.${DEBIAN_CROSS_TOOLCHAINS_PATCH}
+            debian-cross-toolchains-ssh-${DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR}.${DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR}.${DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH}"
+  script:
+    - apk update && apk add git
+    - git remote set-url origin https://gitlab-ci-token:${GIT_TOKEN}@${CI_REPOSITORY_URL#*@}
+    - for TAG in ${TAGS};
+        do
+          if git ls-remote --tags origin  | grep ${TAG} > /dev/null; then
+            echo "${TAG} tag already exists.";
+          else
+            echo "Tagging repository with ${TAG} tag.";
+            git tag --delete ${TAG} > /dev/null 2>&1 || true;
+            git tag ${TAG};
+            git push -o ci.skip origin ${TAG};
+          fi
+        done
 
 # Bridge
 #
