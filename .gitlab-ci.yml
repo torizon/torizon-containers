@@ -6,11 +6,11 @@ variables:
 
   # container version
   DEBIAN_CROSS_TOOLCHAINS_MAJOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_MINOR: "5"
+  DEBIAN_CROSS_TOOLCHAINS_MINOR: "6"
   DEBIAN_CROSS_TOOLCHAINS_PATCH: "0"
 
   DEBIAN_CROSS_TOOLCHAINS_SSH_MAJOR: "2"
-  DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR: "5"
+  DEBIAN_CROSS_TOOLCHAINS_SSH_MINOR: "6"
   DEBIAN_CROSS_TOOLCHAINS_SSH_PATCH: "0"
 
   # This should be set by docker image already, just to be sure...
@@ -77,6 +77,20 @@ docker-build-armhf-toolchain:
     ARCH_ARG: armhf
     CROSS_COMPILE_ARG: arm-linux-gnueabihf
     IMAGE_NAME: debian-cross-toolchain-armhf
+    DOCKERFILE_FOLDER: "base/"
+  stage: build-base
+
+docker-build-arm-toolchain:
+  extends: .docker-build
+  needs: []
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+  variables:
+    ARCH_ARG: armhf
+    CROSS_COMPILE_ARG: arm-linux-gnueabihf
+    IMAGE_NAME: debian-cross-toolchain-arm
     DOCKERFILE_FOLDER: "base/"
   stage: build-base
 
@@ -209,6 +223,19 @@ docker-deploy-armhf-toolchain:
     - export DOCKER_TAGS="${MAJOR} ${MAJOR}.${MINOR}"
   variables:
     IMAGE_NAME: debian-cross-toolchain-armhf
+  stage: deploy
+
+docker-deploy-arm-toolchain:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DEBIAN_CROSS_TOOLCHAINS_MAJOR}"
+    - export MINOR="${DEBIAN_CROSS_TOOLCHAINS_MINOR}"
+    - export PATCH="${DEBIAN_CROSS_TOOLCHAINS_PATCH}"
+    - export DATE=$(date +%Y%m%d)
+    - export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH} ${MAJOR}.${MINOR}.${PATCH}-${DATE}"
+    - export DOCKER_TAGS="${MAJOR} ${MAJOR}.${MINOR}"
+  variables:
+    IMAGE_NAME: debian-cross-toolchain-arm
   stage: deploy
 
 docker-deploy-armhf-toolchain-ssh:
