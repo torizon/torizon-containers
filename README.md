@@ -76,7 +76,7 @@ from another container (so you can test it),
 you can run the test container using the `--link` option:
 
 ```
-$ docker run -it --link=<ID> arm64v8/debian:bullseye /bin/bash
+$ docker run -it --link=<ID> arm64v8/debian:bookworm /bin/bash
 ```
 where `<ID>` is the id of the debian-package-devel container that is serving the feed locally.
 The test feed can then be accessed by `http://<ID>:8080` in the test container.
