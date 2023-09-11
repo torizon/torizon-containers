@@ -1,7 +1,3 @@
----
-include:
-  - https://gitlab.int.toradex.com/rd/torizon-core/debian/debian-pipeline/-/raw/tdx-feed/torizon-core.yml
-
 image: docker:latest
 
 variables:
@@ -225,8 +221,11 @@ pull-tag-and-push-debian-image:
 .docker-build:
   variables:
     ADD_TORADEX_REPOSITORY: 1
+  before_script: apk update && apk add curl
   script:
+  - apk update && apk add curl
   - *do_print_environment_variables
+  - export TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/debian/snapshots/latest-snapshot)
   - export IMAGE_TAG="${MAJOR}${RELEASE_APPEND}"
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - docker info
