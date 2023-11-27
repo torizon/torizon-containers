@@ -114,10 +114,10 @@ variables:
   DOTNET_UNO_DEBUG_MINOR: "1"
   DOTNET_UNO_DEBUG_PATCH: "1"
 
-  DOTNET_SEMANTIC_VERSION: "6.0.16"
+  DOTNET_SEMANTIC_VERSION: "6.0.25"
   # The latest version of vsdbg can be obtained by running the follow command:
   #curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  DOTNET_DEBUGGER_RELEASE: "17.6.10208.1"
+  DOTNET_DEBUGGER_RELEASE: "17.7.10808.2"
 
   # This should be set by docker image already, just to be sure...
   DOCKER_HOST: tcp://docker:2375
