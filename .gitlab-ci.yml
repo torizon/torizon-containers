@@ -88,33 +88,33 @@ variables:
 
   ## debian-dotnet-development-images
 
-  DOTNET_RELEASE: "6.0"
+  DOTNET_6_RELEASE: "6.0"
 
-  DOTNET_MAJOR: "3"
-  DOTNET_MINOR: "1"
-  DOTNET_PATCH: "1"
+  DOTNET_6_MAJOR: "3"
+  DOTNET_6_MINOR: "1"
+  DOTNET_6_PATCH: "1"
 
-  ASPDOTNET_MAJOR: "3"
-  ASPDOTNET_MINOR: "1"
-  ASPDOTNET_PATCH: "1"
+  ASPDOTNET_6_MAJOR: "3"
+  ASPDOTNET_6_MINOR: "1"
+  ASPDOTNET_6_PATCH: "1"
 
-  DOTNET_DEBUG_MAJOR: "3"
-  DOTNET_DEBUG_MINOR: "1"
-  DOTNET_DEBUG_PATCH: "1"
+  DOTNET_6_DEBUG_MAJOR: "3"
+  DOTNET_6_DEBUG_MINOR: "1"
+  DOTNET_6_DEBUG_PATCH: "1"
 
-  ASPDOTNET_DEBUG_MAJOR: "3"
-  ASPDOTNET_DEBUG_MINOR: "1"
-  ASPDOTNET_DEBUG_PATCH: "1"
+  ASPDOTNET_6_DEBUG_MAJOR: "3"
+  ASPDOTNET_6_DEBUG_MINOR: "1"
+  ASPDOTNET_6_DEBUG_PATCH: "1"
 
-  DOTNET_UNO_MAJOR: "3"
-  DOTNET_UNO_MINOR: "1"
-  DOTNET_UNO_PATCH: "1"
+  DOTNET_6_UNO_MAJOR: "3"
+  DOTNET_6_UNO_MINOR: "1"
+  DOTNET_6_UNO_PATCH: "1"
 
-  DOTNET_UNO_DEBUG_MAJOR: "3"
-  DOTNET_UNO_DEBUG_MINOR: "1"
-  DOTNET_UNO_DEBUG_PATCH: "1"
+  DOTNET_6_UNO_DEBUG_MAJOR: "3"
+  DOTNET_6_UNO_DEBUG_MINOR: "1"
+  DOTNET_6_UNO_DEBUG_PATCH: "1"
 
-  DOTNET_SEMANTIC_VERSION: "6.0.25"
+  DOTNET_6_SEMANTIC_VERSION: "6.0.25"
   # The latest version of vsdbg can be obtained by running the follow command:
   #curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   DOTNET_DEBUGGER_RELEASE: "17.7.10808.2"
@@ -788,14 +788,14 @@ docker-build-x86-toolchain-ssh:
 
 ## debian-dotnet-development-images
 
-docker-build-dotnet-arm32:
+docker-build-dotnet-6-arm32:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm/v7
@@ -806,14 +806,14 @@ docker-build-dotnet-arm32:
   stage: build-stage2
   needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
 
-docker-build-dotnet-arm32-asp:
+docker-build-dotnet-6-arm32-asp:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm/v7
@@ -824,14 +824,14 @@ docker-build-dotnet-arm32-asp:
   stage: build-stage2
   needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
 
-docker-build-dotnet-arm64:
+docker-build-dotnet-6-arm64:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm64/v8
@@ -842,14 +842,14 @@ docker-build-dotnet-arm64:
   stage: build-stage2
   needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
 
-docker-build-dotnet-arm64-asp:
+docker-build-dotnet-6-arm64-asp:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm64/v8
@@ -860,14 +860,14 @@ docker-build-dotnet-arm64-asp:
   stage: build-stage2
   needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
 
-docker-build-dotnet-arm32-uno:
+docker-build-dotnet-6-arm32-uno:
   retry: 2
   extends: .docker-build
   before_script:
-    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_RELEASE}"
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export BASE_TAG_WAYLAND="${DEBIAN_MAJOR}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
@@ -877,16 +877,16 @@ docker-build-dotnet-arm32-uno:
     IMAGE_NAME: arm32v7-dotnet-uno
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm32", "docker-build-wayland-base-multiarch"]
+  needs: ["docker-build-dotnet-6-arm32", "docker-build-wayland-base-multiarch"]
 
-docker-build-dotnet-arm64-uno:
+docker-build-dotnet-6-arm64-uno:
   retry: 2
   extends: .docker-build
   before_script:
-    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_RELEASE}"
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export BASE_TAG_WAYLAND="${DEBIAN_MAJOR}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
@@ -896,15 +896,15 @@ docker-build-dotnet-arm64-uno:
     IMAGE_NAME: arm64v8-dotnet-uno
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm64", "docker-build-wayland-base-vivante"]
+  needs: ["docker-build-dotnet-6-arm64", "docker-build-wayland-base-vivante"]
 
-docker-build-dotnet-debug-arm32:
+docker-build-dotnet-6-debug-arm32:
   retry: 2
   extends: .docker-build
   before_script:
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
   variables:
@@ -913,15 +913,15 @@ docker-build-dotnet-debug-arm32:
     IMAGE_NAME: arm32v7-dotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm32"]
+  needs: ["docker-build-dotnet-6-arm32"]
 
-docker-build-dotnet-debug-arm32-asp:
+docker-build-dotnet-6-debug-arm32-asp:
   retry: 2
   extends: .docker-build
   before_script:
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
   variables:
@@ -930,15 +930,15 @@ docker-build-dotnet-debug-arm32-asp:
     IMAGE_NAME: arm32v7-aspdotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm32-asp"]
+  needs: ["docker-build-dotnet-6-arm32-asp"]
 
-docker-build-dotnet-debug-arm64:
+docker-build-dotnet-6-debug-arm64:
   retry: 2
   extends: .docker-build
   before_script:
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
   variables:
@@ -947,15 +947,15 @@ docker-build-dotnet-debug-arm64:
     IMAGE_NAME: arm64v8-dotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm64"]
+  needs: ["docker-build-dotnet-6-arm64"]
 
-docker-build-dotnet-debug-arm64-asp:
+docker-build-dotnet-6-debug-arm64-asp:
   retry: 2
   extends: .docker-build
   before_script:
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
   variables:
@@ -964,16 +964,16 @@ docker-build-dotnet-debug-arm64-asp:
     IMAGE_NAME: arm64v8-aspdotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   stage: build-stage3
-  needs: ["docker-build-dotnet-arm64-asp"]
+  needs: ["docker-build-dotnet-6-arm64-asp"]
 
-docker-build-dotnet-debug-arm32-uno:
+docker-build-dotnet-6-debug-arm32-uno:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm/v7
@@ -982,16 +982,16 @@ docker-build-dotnet-debug-arm32-uno:
     IMAGE_NAME: arm32v7-dotnet-uno-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
   stage: build-stage4
-  needs: ["docker-build-dotnet-arm32-uno"]
+  needs: ["docker-build-dotnet-6-arm32-uno"]
 
-docker-build-dotnet-debug-arm64-uno:
+docker-build-dotnet-6-debug-arm64-uno:
   retry: 2
   extends: .docker-build
   before_script:
     - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}"
     - export MAJOR="${DEBIAN_MAJOR}"
-    - export RELEASE_APPEND="-${DOTNET_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
     - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
   variables:
     IMAGE_ARCH: linux/arm64/v8
@@ -1000,7 +1000,7 @@ docker-build-dotnet-debug-arm64-uno:
     IMAGE_NAME: arm64v8-dotnet-uno-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
   stage: build-stage4
-  needs: ["docker-build-dotnet-arm64-uno"]
+  needs: ["docker-build-dotnet-6-arm64-uno"]
 
 ## rt-validation
 
@@ -1265,65 +1265,65 @@ docker-build-stress-tests-multiarch:
 
 ## debian-dotnet-development-images
 
-docker-build-dotnet-multiarch:
+docker-build-dotnet-6-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: dotnet
     IMAGE_NAME_32: arm32v7-dotnet
     IMAGE_NAME_64: arm64v8-dotnet
   stage: build-stage2-multiarch
-  needs: ["docker-build-dotnet-arm32", "docker-build-dotnet-arm64"]
+  needs: ["docker-build-dotnet-6-arm32", "docker-build-dotnet-6-arm64"]
 
-docker-build-aspnet-multiarch:
+docker-build-aspnet-6-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: aspdotnet
     IMAGE_NAME_32: arm32v7-aspdotnet
     IMAGE_NAME_64: arm64v8-aspdotnet
   stage: build-stage2-multiarch
-  needs: ["docker-build-dotnet-arm32-asp", "docker-build-dotnet-arm64-asp"]
+  needs: ["docker-build-dotnet-6-arm32-asp", "docker-build-dotnet-6-arm64-asp"]
 
-docker-build-dotnet-debug-multiarch:
+docker-build-dotnet-6-debug-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: dotnet-debug
     IMAGE_NAME_32: arm32v7-dotnet-debug
     IMAGE_NAME_64: arm64v8-dotnet-debug
   stage: build-stage3-multiarch
-  needs: ["docker-build-dotnet-debug-arm32", "docker-build-dotnet-debug-arm64"]
+  needs: ["docker-build-dotnet-6-debug-arm32", "docker-build-dotnet-6-debug-arm64"]
 
-docker-build-aspnet-debug-multiarch:
+docker-build-aspnet-6-debug-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: aspdotnet-debug
     IMAGE_NAME_32: arm32v7-aspdotnet-debug
     IMAGE_NAME_64: arm64v8-aspdotnet-debug
   stage: build-stage3-multiarch
-  needs: ["docker-build-dotnet-debug-arm32-asp", "docker-build-dotnet-debug-arm64-asp"]
+  needs: ["docker-build-dotnet-6-debug-arm32-asp", "docker-build-dotnet-6-debug-arm64-asp"]
 
-docker-build-dotnet-uno-multiarch:
+docker-build-dotnet-6-uno-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: dotnet-uno
     IMAGE_NAME_32: arm32v7-dotnet-uno
     IMAGE_NAME_64: arm64v8-dotnet-uno
   stage: build-stage3-multiarch
-  needs: ["docker-build-dotnet-arm32-uno", "docker-build-dotnet-arm64-uno"]
+  needs: ["docker-build-dotnet-6-arm32-uno", "docker-build-dotnet-6-arm64-uno"]
 
-docker-build-dotnet-uno-debug-multiarch:
+docker-build-dotnet-6-uno-debug-multiarch:
   extends: .docker-build-multiarch
   variables:
-    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_RELEASE}
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_6_RELEASE}
     IMAGE_NAME: dotnet-uno-debug
     IMAGE_NAME_32: arm32v7-dotnet-uno-debug
     IMAGE_NAME_64: arm64v8-dotnet-uno-debug
   stage: build-stage4-multiarch
-  needs: ["docker-build-dotnet-debug-arm32-uno", "docker-build-dotnet-debug-arm64-uno"]
+  needs: ["docker-build-dotnet-6-debug-arm32-uno", "docker-build-dotnet-6-debug-arm64-uno"]
 
 # Bridge
 #
@@ -1357,7 +1357,7 @@ build-torizon-samples:
         export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH}${RELEASE_APPEND} ${MAJOR}.${MINOR}.${PATCH}-${DATE}${RELEASE_APPEND}"
         export DOCKER_TAGS="${MAJOR}${RELEASE_APPEND} ${MAJOR}.${MINOR}${RELEASE_APPEND}"
       else
-        export DOCKER_TAGS_CHECK="${MAJOR}-${DOTNET_RELEASE} ${MAJOR}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_RELEASE} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_RELEASE}"
+        export DOCKER_TAGS_CHECK="${MAJOR}-${DOTNET_6_RELEASE} ${MAJOR}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_6_RELEASE} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_6_RELEASE}"
       fi
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN;
     - for tag in ${DOCKER_TAGS_CHECK};
@@ -1772,161 +1772,161 @@ docker-deploy-stress-tests-arm64:
 
 ## debian-dotnet-development
 
-docker-deploy-dotnet-arm32:
+docker-deploy-dotnet-6-arm32:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_MAJOR}"
-    - export MINOR="${DOTNET_MINOR}"
-    - export PATCH="${DOTNET_PATCH}"
+    - export MAJOR="${DOTNET_6_MAJOR}"
+    - export MINOR="${DOTNET_6_MINOR}"
+    - export PATCH="${DOTNET_6_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-dotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm32"]
+  needs: ["docker-build-dotnet-6-arm32"]
 
-docker-deploy-dotnet-arm64:
+docker-deploy-dotnet-6-arm64:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_MAJOR}"
-    - export MINOR="${DOTNET_MINOR}"
-    - export PATCH="${DOTNET_PATCH}"
+    - export MAJOR="${DOTNET_6_MAJOR}"
+    - export MINOR="${DOTNET_6_MINOR}"
+    - export PATCH="${DOTNET_6_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-dotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm64"]
+  needs: ["docker-build-dotnet-6-arm64"]
 
-docker-deploy-dotnet-arm32-asp:
+docker-deploy-dotnet-6-arm32-asp:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${ASPDOTNET_MAJOR}"
-    - export MINOR="${ASPDOTNET_MINOR}"
-    - export PATCH="${ASPDOTNET_PATCH}"
+    - export MAJOR="${ASPDOTNET_6_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_MINOR}"
+    - export PATCH="${ASPDOTNET_6_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-aspdotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm32-asp"]
+  needs: ["docker-build-dotnet-6-arm32-asp"]
 
-docker-deploy-dotnet-arm64-asp:
+docker-deploy-dotnet-6-arm64-asp:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${ASPDOTNET_MAJOR}"
-    - export MINOR="${ASPDOTNET_MINOR}"
-    - export PATCH="${ASPDOTNET_PATCH}"
+    - export MAJOR="${ASPDOTNET_6_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_MINOR}"
+    - export PATCH="${ASPDOTNET_6_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-aspdotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm64-asp"]
+  needs: ["docker-build-dotnet-6-arm64-asp"]
 
-docker-deploy-dotnet-debug-arm32:
+docker-deploy-dotnet-6-debug-arm32:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_DEBUG_PATCH}"
+    - export MAJOR="${DOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-dotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm32"]
+  needs: ["docker-build-dotnet-6-debug-arm32"]
 
-docker-deploy-dotnet-debug-arm64:
+docker-deploy-dotnet-6-debug-arm64:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_DEBUG_PATCH}"
+    - export MAJOR="${DOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-dotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm64"]
+  needs: ["docker-build-dotnet-6-debug-arm64"]
 
-docker-deploy-dotnet-debug-arm32-asp:
+docker-deploy-dotnet-6-debug-arm32-asp:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
-    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
-    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
+    - export MAJOR="${ASPDOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_6_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-aspdotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm32-asp"]
+  needs: ["docker-build-dotnet-6-debug-arm32-asp"]
 
-docker-deploy-dotnet-debug-arm64-asp:
+docker-deploy-dotnet-6-debug-arm64-asp:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
-    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
-    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
+    - export MAJOR="${ASPDOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_6_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-aspdotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm64-asp"]
+  needs: ["docker-build-dotnet-6-debug-arm64-asp"]
 
-docker-deploy-dotnet-arm32-uno:
+docker-deploy-dotnet-6-arm32-uno:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_UNO_MAJOR}"
-    - export MINOR="${DOTNET_UNO_MINOR}"
-    - export PATCH="${DOTNET_UNO_PATCH}"
+    - export MAJOR="${DOTNET_6_UNO_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-dotnet-uno
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm32-uno"]
+  needs: ["docker-build-dotnet-6-arm32-uno"]
 
-docker-deploy-dotnet-arm64-uno:
+docker-deploy-dotnet-6-arm64-uno:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_UNO_MAJOR}"
-    - export MINOR="${DOTNET_UNO_MINOR}"
-    - export PATCH="${DOTNET_UNO_PATCH}"
+    - export MAJOR="${DOTNET_6_UNO_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-dotnet-uno
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-arm64-uno"]
+  needs: ["docker-build-dotnet-6-arm64-uno"]
 
-docker-deploy-dotnet-debug-arm32-uno:
+docker-deploy-dotnet-6-debug-arm32-uno:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
+    - export MAJOR="${DOTNET_6_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm32v7-dotnet-uno-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm32-uno"]
+  needs: ["docker-build-dotnet-6-debug-arm32-uno"]
 
-docker-deploy-dotnet-debug-arm64-uno:
+docker-deploy-dotnet-6-debug-arm64-uno:
   extends: .docker-deploy
   before_script:
-    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
+    - export MAJOR="${DOTNET_6_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_DEBUG_PATCH}"
   variables:
     IMAGE_NAME: arm64v8-dotnet-uno-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
-    DOTNET_VERSION: ${DOTNET_SEMANTIC_VERSION}
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_6_SEMANTIC_VERSION}
   stage: deploy
-  needs: ["docker-build-dotnet-debug-arm64-uno"]
+  needs: ["docker-build-dotnet-6-debug-arm64-uno"]
 
 .docker-deploy-multiarch:
   when: manual
@@ -1938,7 +1938,7 @@ docker-deploy-dotnet-debug-arm64-uno:
       export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH}${RELEASE_APPEND} ${MAJOR}.${MINOR}.${PATCH}-${DATE}${RELEASE_APPEND}"
       export DOCKER_TAGS="${MAJOR}${RELEASE_APPEND} ${MAJOR}.${MINOR}${RELEASE_APPEND}"
     else
-      export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_RELEASE} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_RELEASE}"
+      export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DOTNET_6_RELEASE} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_6_RELEASE}"
     fi
   - *do_print_environment_variables
   - rm -rf ~/.docker/manifests/*
@@ -2081,93 +2081,93 @@ docker-deploy-stress-tests-multiarch:
 
 # dotnet-development-images
 
-docker-deploy-dotnet-multiarch:
+docker-deploy-dotnet-6-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${DOTNET_MAJOR}"
-    - export MINOR="${DOTNET_MINOR}"
-    - export PATCH="${DOTNET_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${DOTNET_6_MAJOR}"
+    - export MINOR="${DOTNET_6_MINOR}"
+    - export PATCH="${DOTNET_6_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: dotnet
     IMAGE_NAME_32: arm32v7-dotnet
     IMAGE_NAME_64: arm64v8-dotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-dotnet-multiarch"]
+  needs: ["docker-build-dotnet-6-multiarch"]
 
-docker-deploy-aspnet-multiarch:
+docker-deploy-aspnet-6-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${ASPDOTNET_MAJOR}"
-    - export MINOR="${ASPDOTNET_MINOR}"
-    - export PATCH="${ASPDOTNET_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${ASPDOTNET_6_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_MINOR}"
+    - export PATCH="${ASPDOTNET_6_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: aspdotnet
     IMAGE_NAME_32: arm32v7-aspdotnet
     IMAGE_NAME_64: arm64v8-aspdotnet
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-aspnet-multiarch"]
+  needs: ["docker-build-aspnet-6-multiarch"]
 
-docker-deploy-dotnet-debug-multiarch:
+docker-deploy-dotnet-6-debug-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_DEBUG_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${DOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: dotnet-debug
     IMAGE_NAME_32: arm32v7-dotnet-debug
     IMAGE_NAME_64: arm64v8-dotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-dotnet-debug-multiarch"]
+  needs: ["docker-build-dotnet-6-debug-multiarch"]
 
-docker-deploy-aspnet-debug-multiarch:
+docker-deploy-aspnet-6-debug-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
-    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
-    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${ASPDOTNET_6_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_6_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_6_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: aspdotnet-debug
     IMAGE_NAME_32: arm32v7-aspdotnet-debug
     IMAGE_NAME_64: arm64v8-aspdotnet-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-aspnet-debug-multiarch"]
+  needs: ["docker-build-aspnet-6-debug-multiarch"]
 
-docker-deploy-dotnet-uno-multiarch:
+docker-deploy-dotnet-6-uno-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${DOTNET_UNO_MAJOR}"
-    - export MINOR="${DOTNET_UNO_MINOR}"
-    - export PATCH="${DOTNET_UNO_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${DOTNET_6_UNO_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: dotnet-uno
     IMAGE_NAME_32: arm32v7-dotnet-uno
     IMAGE_NAME_64: arm64v8-dotnet-uno
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-dotnet-uno-multiarch"]
+  needs: ["docker-build-dotnet-6-uno-multiarch"]
 
-docker-deploy-dotnet-uno-debug-multiarch:
+docker-deploy-dotnet-6-uno-debug-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
-    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
-    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
-    - export DOTNET_VERSION="${DOTNET_SEMANTIC_VERSION}"
+    - export MAJOR="${DOTNET_6_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_6_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_6_UNO_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
   variables:
     IMAGE_NAME: dotnet-uno-debug
     IMAGE_NAME_32: arm32v7-dotnet-uno-debug
     IMAGE_NAME_64: arm64v8-dotnet-uno-debug
-    RELEASE_APPEND: "-${DOTNET_RELEASE}"
+    RELEASE_APPEND: "-${DOTNET_6_RELEASE}"
   stage: deploy-multiarch
-  needs: ["docker-build-dotnet-uno-debug-multiarch"]
+  needs: ["docker-build-dotnet-6-uno-debug-multiarch"]
 
