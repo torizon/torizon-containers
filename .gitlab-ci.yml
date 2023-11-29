@@ -88,6 +88,8 @@ variables:
 
   ## debian-dotnet-development-images
 
+  ### Dotnet 6
+
   DOTNET_6_RELEASE: "6.0"
 
   DOTNET_6_MAJOR: "3"
@@ -115,6 +117,37 @@ variables:
   DOTNET_6_UNO_DEBUG_PATCH: "1"
 
   DOTNET_6_SEMANTIC_VERSION: "6.0.25"
+
+  ### Dotnet 8
+
+  DOTNET_8_RELEASE: "8.0"
+
+  DOTNET_8_MAJOR: "3"
+  DOTNET_8_MINOR: "0"
+  DOTNET_8_PATCH: "0"
+
+  ASPDOTNET_8_MAJOR: "3"
+  ASPDOTNET_8_MINOR: "0"
+  ASPDOTNET_8_PATCH: "0"
+
+  DOTNET_8_DEBUG_MAJOR: "3"
+  DOTNET_8_DEBUG_MINOR: "0"
+  DOTNET_8_DEBUG_PATCH: "0"
+
+  ASPDOTNET_8_DEBUG_MAJOR: "3"
+  ASPDOTNET_8_DEBUG_MINOR: "0"
+  ASPDOTNET_8_DEBUG_PATCH: "0"
+
+  DOTNET_8_UNO_MAJOR: "3"
+  DOTNET_8_UNO_MINOR: "0"
+  DOTNET_8_UNO_PATCH: "0"
+
+  DOTNET_8_UNO_DEBUG_MAJOR: "3"
+  DOTNET_8_UNO_DEBUG_MINOR: "0"
+  DOTNET_8_UNO_DEBUG_PATCH: "0"
+
+  DOTNET_8_SEMANTIC_VERSION: "8.0.0"
+
   # The latest version of vsdbg can be obtained by running the follow command:
   #curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   DOTNET_DEBUGGER_RELEASE: "17.7.10808.2"
@@ -788,6 +821,8 @@ docker-build-x86-toolchain-ssh:
 
 ## debian-dotnet-development-images
 
+### Dotnet 6
+
 docker-build-dotnet-6-arm32:
   retry: 2
   extends: .docker-build
@@ -1001,6 +1036,222 @@ docker-build-dotnet-6-debug-arm64-uno:
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
   stage: build-stage4
   needs: ["docker-build-dotnet-6-arm64-uno"]
+
+### Dotnet 8
+
+docker-build-dotnet-8-arm32:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    IMAGE_NAME: arm32v7-dotnet
+    DOTNET_RUNTIME: dotnet
+    DOTNET_ARCHITECTURE: arm
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+  stage: build-stage2
+  needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
+
+docker-build-dotnet-8-arm32-asp:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    IMAGE_NAME: arm32v7-aspdotnet
+    DOTNET_RUNTIME: aspnetcore
+    DOTNET_ARCHITECTURE: arm
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+  stage: build-stage2
+  needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
+
+docker-build-dotnet-8-arm64:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    IMAGE_NAME: arm64v8-dotnet
+    DOTNET_RUNTIME: dotnet
+    DOTNET_ARCHITECTURE: arm64
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+  stage: build-stage2
+  needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
+
+docker-build-dotnet-8-arm64-asp:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DEBIAN_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    IMAGE_NAME: arm64v8-aspdotnet
+    DOTNET_RUNTIME: aspnetcore
+    DOTNET_ARCHITECTURE: arm64
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+  stage: build-stage2
+  needs: ["pull-tag-and-push-debian-image", "docker-build-base"]
+
+docker-build-dotnet-8-arm32-uno:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export BASE_TAG_WAYLAND="${DEBIAN_MAJOR}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    BASE_NAME: arm32v7-dotnet
+    BASE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: arm32v7-dotnet-uno
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm32", "docker-build-wayland-base-multiarch"]
+
+docker-build-dotnet-8-arm64-uno:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export BASE_TAG_WAYLAND="${DEBIAN_MAJOR}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    BASE_NAME: arm64v8-dotnet
+    BASE_NAME_WAYLAND: wayland-base-vivante
+    IMAGE_NAME: arm64v8-dotnet-uno
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm64", "docker-build-wayland-base-vivante"]
+
+docker-build-dotnet-8-debug-arm32:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    BASE_NAME: arm32v7-dotnet
+    IMAGE_NAME: arm32v7-dotnet-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm32"]
+
+docker-build-dotnet-8-debug-arm32-asp:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    BASE_NAME: arm32v7-aspdotnet
+    IMAGE_NAME: arm32v7-aspdotnet-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm32-asp"]
+
+docker-build-dotnet-8-debug-arm64:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    BASE_NAME: arm64v8-dotnet
+    IMAGE_NAME: arm64v8-dotnet-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm64"]
+
+docker-build-dotnet-8-debug-arm64-asp:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    BASE_NAME: arm64v8-aspdotnet
+    IMAGE_NAME: arm64v8-aspdotnet-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+  stage: build-stage3
+  needs: ["docker-build-dotnet-8-arm64-asp"]
+
+docker-build-dotnet-8-debug-arm32-uno:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm/v7
+    BASE_NAME_DEBUG: arm32v7-dotnet-debug
+    BASE_NAME: arm32v7-dotnet-uno
+    IMAGE_NAME: arm32v7-dotnet-uno-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
+  stage: build-stage4
+  needs: ["docker-build-dotnet-8-arm32-uno"]
+
+docker-build-dotnet-8-debug-arm64-uno:
+  retry: 2
+  extends: .docker-build
+  before_script:
+    - export DOCKER_BASE_TAG="${DEBIAN_MAJOR}"
+    - export MAJOR="${DEBIAN_MAJOR}"
+    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - export DOCKER_NO_CACHE="${DOCKER_NO_CACHE}"
+  variables:
+    IMAGE_ARCH: linux/arm64/v8
+    BASE_NAME_DEBUG: arm64v8-dotnet-debug
+    BASE_NAME: arm64v8-dotnet-uno
+    IMAGE_NAME: arm64v8-dotnet-uno-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
+  stage: build-stage4
+  needs: ["docker-build-dotnet-8-arm64-uno"]
 
 ## rt-validation
 
@@ -1265,6 +1516,8 @@ docker-build-stress-tests-multiarch:
 
 ## debian-dotnet-development-images
 
+### Dotnet 6
+
 docker-build-dotnet-6-multiarch:
   extends: .docker-build-multiarch
   variables:
@@ -1324,6 +1577,68 @@ docker-build-dotnet-6-uno-debug-multiarch:
     IMAGE_NAME_64: arm64v8-dotnet-uno-debug
   stage: build-stage4-multiarch
   needs: ["docker-build-dotnet-6-debug-arm32-uno", "docker-build-dotnet-6-debug-arm64-uno"]
+
+### Dotnet 8
+
+docker-build-dotnet-8-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: dotnet
+    IMAGE_NAME_32: arm32v7-dotnet
+    IMAGE_NAME_64: arm64v8-dotnet
+  stage: build-stage2-multiarch
+  needs: ["docker-build-dotnet-8-arm32", "docker-build-dotnet-8-arm64"]
+
+docker-build-aspnet-8-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: aspdotnet
+    IMAGE_NAME_32: arm32v7-aspdotnet
+    IMAGE_NAME_64: arm64v8-aspdotnet
+  stage: build-stage2-multiarch
+  needs: ["docker-build-dotnet-8-arm32-asp", "docker-build-dotnet-8-arm64-asp"]
+
+docker-build-dotnet-8-debug-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: dotnet-debug
+    IMAGE_NAME_32: arm32v7-dotnet-debug
+    IMAGE_NAME_64: arm64v8-dotnet-debug
+  stage: build-stage3-multiarch
+  needs: ["docker-build-dotnet-8-debug-arm32", "docker-build-dotnet-8-debug-arm64"]
+
+docker-build-aspnet-8-debug-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: aspdotnet-debug
+    IMAGE_NAME_32: arm32v7-aspdotnet-debug
+    IMAGE_NAME_64: arm64v8-aspdotnet-debug
+  stage: build-stage3-multiarch
+  needs: ["docker-build-dotnet-8-debug-arm32-asp", "docker-build-dotnet-8-debug-arm64-asp"]
+
+docker-build-dotnet-8-uno-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: dotnet-uno
+    IMAGE_NAME_32: arm32v7-dotnet-uno
+    IMAGE_NAME_64: arm64v8-dotnet-uno
+  stage: build-stage3-multiarch
+  needs: ["docker-build-dotnet-8-arm32-uno", "docker-build-dotnet-8-arm64-uno"]
+
+docker-build-dotnet-8-uno-debug-multiarch:
+  extends: .docker-build-multiarch
+  variables:
+    IMAGE_TAG: ${DEBIAN_MAJOR}-${DOTNET_8_RELEASE}
+    IMAGE_NAME: dotnet-uno-debug
+    IMAGE_NAME_32: arm32v7-dotnet-uno-debug
+    IMAGE_NAME_64: arm64v8-dotnet-uno-debug
+  stage: build-stage4-multiarch
+  needs: ["docker-build-dotnet-8-debug-arm32-uno", "docker-build-dotnet-8-debug-arm64-uno"]
 
 # Bridge
 #
@@ -1772,6 +2087,8 @@ docker-deploy-stress-tests-arm64:
 
 ## debian-dotnet-development
 
+### Dotnet 6
+
 docker-deploy-dotnet-6-arm32:
   extends: .docker-deploy
   before_script:
@@ -1928,6 +2245,164 @@ docker-deploy-dotnet-6-debug-arm64-uno:
   stage: deploy
   needs: ["docker-build-dotnet-6-debug-arm64-uno"]
 
+### Dotnet 8
+
+docker-deploy-dotnet-8-arm32:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_8_MAJOR}"
+    - export MINOR="${DOTNET_8_MINOR}"
+    - export PATCH="${DOTNET_8_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-dotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm32"]
+
+docker-deploy-dotnet-8-arm64:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_8_MAJOR}"
+    - export MINOR="${DOTNET_8_MINOR}"
+    - export PATCH="${DOTNET_8_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-dotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm64"]
+
+docker-deploy-dotnet-8-arm32-asp:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${ASPDOTNET_8_MAJOR}"
+    - export MINOR="${ASPDOTNET_8_MINOR}"
+    - export PATCH="${ASPDOTNET_8_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-aspdotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm32-asp"]
+
+docker-deploy-dotnet-8-arm64-asp:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${ASPDOTNET_8_MAJOR}"
+    - export MINOR="${ASPDOTNET_8_MINOR}"
+    - export PATCH="${ASPDOTNET_8_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-aspdotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm64-asp"]
+
+docker-deploy-dotnet-8-debug-arm32:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-dotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm32"]
+
+docker-deploy-dotnet-8-debug-arm64:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-dotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm64"]
+
+docker-deploy-dotnet-8-debug-arm32-asp:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-aspdotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm32-asp"]
+
+docker-deploy-dotnet-8-debug-arm64-asp:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-aspdotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm64-asp"]
+
+docker-deploy-dotnet-8-arm32-uno:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_UNO_MAJOR}"
+    - export MINOR="${DOTNET_UNO_MINOR}"
+    - export PATCH="${DOTNET_UNO_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-dotnet-uno
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm32-uno"]
+
+docker-deploy-dotnet-8-arm64-uno:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_UNO_MAJOR}"
+    - export MINOR="${DOTNET_UNO_MINOR}"
+    - export PATCH="${DOTNET_UNO_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-dotnet-uno
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-arm64-uno"]
+
+docker-deploy-dotnet-8-debug-arm32-uno:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm32v7-dotnet-uno-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm32-uno"]
+
+docker-deploy-dotnet-8-debug-arm64-uno:
+  extends: .docker-deploy
+  before_script:
+    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
+  variables:
+    IMAGE_NAME: arm64v8-dotnet-uno-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+    DOTNET_VERSION: ${DOTNET_8_SEMANTIC_VERSION}
+  stage: deploy
+  needs: ["docker-build-dotnet-8-debug-arm64-uno"]
+
 .docker-deploy-multiarch:
   when: manual
   script:
@@ -2081,6 +2556,8 @@ docker-deploy-stress-tests-multiarch:
 
 # dotnet-development-images
 
+## Dotnet 6
+
 docker-deploy-dotnet-6-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
@@ -2171,3 +2648,94 @@ docker-deploy-dotnet-6-uno-debug-multiarch:
   stage: deploy-multiarch
   needs: ["docker-build-dotnet-6-uno-debug-multiarch"]
 
+## Dotnet 8
+
+docker-deploy-dotnet-8-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${DOTNET_8_MAJOR}"
+    - export MINOR="${DOTNET_8_MINOR}"
+    - export PATCH="${DOTNET_8_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: dotnet
+    IMAGE_NAME_32: arm32v7-dotnet
+    IMAGE_NAME_64: arm64v8-dotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-dotnet-8-multiarch"]
+
+docker-deploy-aspnet-8-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${ASPDOTNET_8_MAJOR}"
+    - export MINOR="${ASPDOTNET_8_MINOR}"
+    - export PATCH="${ASPDOTNET_8_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: aspdotnet
+    IMAGE_NAME_32: arm32v7-aspdotnet
+    IMAGE_NAME_64: arm64v8-aspdotnet
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-aspnet-8-multiarch"]
+
+docker-deploy-dotnet-8-debug-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${DOTNET_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: dotnet-debug
+    IMAGE_NAME_32: arm32v7-dotnet-debug
+    IMAGE_NAME_64: arm64v8-dotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-dotnet-8-debug-multiarch"]
+
+docker-deploy-aspnet-8-debug-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${ASPDOTNET_DEBUG_MAJOR}"
+    - export MINOR="${ASPDOTNET_DEBUG_MINOR}"
+    - export PATCH="${ASPDOTNET_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: aspdotnet-debug
+    IMAGE_NAME_32: arm32v7-aspdotnet-debug
+    IMAGE_NAME_64: arm64v8-aspdotnet-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-aspnet-8-debug-multiarch"]
+
+docker-deploy-dotnet-8-uno-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${DOTNET_UNO_MAJOR}"
+    - export MINOR="${DOTNET_UNO_MINOR}"
+    - export PATCH="${DOTNET_UNO_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: dotnet-uno
+    IMAGE_NAME_32: arm32v7-dotnet-uno
+    IMAGE_NAME_64: arm64v8-dotnet-uno
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-dotnet-8-uno-multiarch"]
+
+docker-deploy-dotnet-8-uno-debug-multiarch:
+  extends: .docker-deploy-multiarch
+  before_script:
+    - export MAJOR="${DOTNET_UNO_DEBUG_MAJOR}"
+    - export MINOR="${DOTNET_UNO_DEBUG_MINOR}"
+    - export PATCH="${DOTNET_UNO_DEBUG_PATCH}"
+    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+  variables:
+    IMAGE_NAME: dotnet-uno-debug
+    IMAGE_NAME_32: arm32v7-dotnet-uno-debug
+    IMAGE_NAME_64: arm64v8-dotnet-uno-debug
+    RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
+  stage: deploy-multiarch
+  needs: ["docker-build-dotnet-8-uno-debug-multiarch"]
