@@ -2414,6 +2414,7 @@ docker-deploy-dotnet-8-debug-arm64-uno:
       export DOCKER_TAGS="${MAJOR}${RELEASE_APPEND} ${MAJOR}.${MINOR}${RELEASE_APPEND}"
     else
       export DOCKER_TAGS_CHECK="${MAJOR}.${MINOR}.${PATCH}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}${RELEASE_APPEND} ${MAJOR}.${MINOR}.${PATCH}-${DATE}-${DOTNET_VERSION} ${MAJOR}.${MINOR}.${PATCH}-${DATE}${RELEASE_APPEND}"
+      export DOCKER_TAGS="${MAJOR}${RELEASE_APPEND}"
     fi
   - *do_print_environment_variables
   - rm -rf ~/.docker/manifests/*
