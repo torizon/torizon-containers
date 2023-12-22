@@ -46,6 +46,7 @@ RUN ./users-groups.sh \
 FROM base as add_toradex-repository-0
 
 FROM base as add_toradex-repository-1
+ARG IMAGE_ARCH
 ARG TORADEX_SNAPSHOT
 ARG USE_TORADEX_SNAPSHOT
 ARG TORADEX_FEED_BASE_URL="https://feeds.toradex.com/debian"
@@ -66,6 +67,15 @@ Suites: testing\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+
+RUN if [ "${IMAGE_ARCH}" != "linux/arm64/v8" ]; then \
+        echo "\
+# For armhf, install libdrm-common from Debian stable\n\
+Package: libdrm-common\n\
+Pin: release a=stable\n\
+Pin-Priority: 969"\
+       >> /etc/apt/preferences.d/pinned-packages; \
+       fi
 
 FROM add_toradex-repository-${ADD_TORADEX_REPOSITORY}
 
