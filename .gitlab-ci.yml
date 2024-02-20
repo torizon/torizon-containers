@@ -2631,9 +2631,9 @@ docker-deploy-qt5-wayland-examples-multiarch:
 docker-deploy-qt6-wayland-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${QT5_WAYLAND_MAJOR}"
-    - export MINOR="${QT5_WAYLAND_MINOR}"
-    - export PATCH="${QT5_WAYLAND_PATCH}"
+    - export MAJOR="${QT6_WAYLAND_MAJOR}"
+    - export MINOR="${QT6_WAYLAND_MINOR}"
+    - export PATCH="${QT6_WAYLAND_PATCH}"
   variables:
     IMAGE_NAME: qt6-wayland
     IMAGE_NAME_32: arm32v7-debian-qt6-wayland
@@ -2644,9 +2644,9 @@ docker-deploy-qt6-wayland-multiarch:
 docker-deploy-qt6-wayland-examples-multiarch:
   extends: .docker-deploy-multiarch
   before_script:
-    - export MAJOR="${QT5_WAYLAND_EXAMPLES_MAJOR}"
-    - export MINOR="${QT5_WAYLAND_EXAMPLES_MINOR}"
-    - export PATCH="${QT5_WAYLAND_EXAMPLES_PATCH}"
+    - export MAJOR="${QT6_WAYLAND_EXAMPLES_MAJOR}"
+    - export MINOR="${QT6_WAYLAND_EXAMPLES_MINOR}"
+    - export PATCH="${QT6_WAYLAND_EXAMPLES_PATCH}"
   variables:
     IMAGE_NAME: qt6-wayland-examples
     IMAGE_NAME_32: arm32v7-debian-qt6-wayland-examples
