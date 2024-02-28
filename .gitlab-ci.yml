@@ -77,11 +77,11 @@ variables:
   GRAPHICS_TESTS_VIVANTE_PATCH: "0"
 
   CHROMIUM_MAJOR: "3"
-  CHROMIUM_MINOR: "1"
+  CHROMIUM_MINOR: "2"
   CHROMIUM_PATCH: "0"
 
   COG_MAJOR: "3"
-  COG_MINOR: "1"
+  COG_MINOR: "2"
   COG_PATCH: "0"
 
   ## debian-cross-toolchains

@@ -2,13 +2,13 @@ ARG IMAGE_ARCH=linux/arm
 # For iMX8 use:
 # ARG IMAGE_ARCH=linux/arm64
 
-ARG BASE_IMAGE=wayland-base
+ARG BASE_NAME=wayland-base
 # For iMX8 with Vivante support (required to run Cog with hardware acceleration support) use:
-# ARG BASE_IMAGE=wayland-base-vivante
+# ARG BASE_NAME=wayland-base-vivante
 
 ARG IMAGE_TAG=3
 
-FROM --platform=$IMAGE_ARCH torizon/$BASE_IMAGE:$IMAGE_TAG
+FROM --platform=$IMAGE_ARCH torizon/$BASE_NAME:$IMAGE_TAG
 
 # Install Cog
 RUN apt-get -y update && \
