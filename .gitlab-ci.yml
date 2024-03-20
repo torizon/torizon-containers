@@ -1,5 +1,10 @@
 image: docker:latest
 
+# Make sure to create an access token in "Settings/Access Tokens" section with
+# "write_repository" scope selected. Then in "Settings/CI/CD/" section add a
+# variable with key "GIT_TOKEN" and a value of the access token. Also mask the
+# variable.
+
 variables:
   # DEBIAN_* variables are overwritten for jobs outside the branch of the current Debian stable
   DEBIAN_RELEASE: "bookworm"
@@ -1429,8 +1434,6 @@ shell-format:
   script:
     - git ls-files --exclude='*.sh' --ignored -c -z | xargs -0r shfmt -i 2 -ci -d
 
-# Make sure to create access token in "Settings/Access Tokens" section with "write_repository" scope selected.
-# Then in "Settings/CI/CD/" section add a variable with key "GIT_TOKEN" and a value of the access token. Also mask the variable.
 tag:
   stage: chores before building
   before_script:
