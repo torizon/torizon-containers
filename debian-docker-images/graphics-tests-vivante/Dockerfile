@@ -15,6 +15,7 @@ RUN apt-get -y update &&  apt-get install -y --no-install-recommends \
         imx-gpu-viv-demos \
         kmscube \
         libdrm-tests \
+        mesa-utils \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/torizon
