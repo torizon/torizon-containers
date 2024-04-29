@@ -84,6 +84,48 @@ variables:
   COG_MINOR: "2"
   COG_PATCH: "0"
 
+  ## AM62 containers
+
+  DEBIAN_AM62_MAJOR: "3"
+  DEBIAN_AM62_MINOR: "0"
+  DEBIAN_AM62_PATCH: "0"
+
+  WAYLAND_BASE_AM62_MAJOR: "3"
+  WAYLAND_BASE_AM62_MINOR: "0"
+  WAYLAND_BASE_AM62_PATCH: "0"
+
+  WESTON_AM62_MAJOR: "3"
+  WESTON_AM62_MINOR: "0"
+  WESTON_AM62_PATCH: "0"
+
+  QT5_WAYLAND_AM62_MAJOR: "3"
+  QT5_WAYLAND_AM62_MINOR: "0"
+  QT5_WAYLAND_AM62_PATCH: "0"
+
+  QT5_WAYLAND_EXAMPLES_AM62_MAJOR: "3"
+  QT5_WAYLAND_EXAMPLES_AM62_MINOR: "0"
+  QT5_WAYLAND_EXAMPLES_AM62_PATCH: "0"
+
+  QT6_WAYLAND_AM62_MAJOR: "3"
+  QT6_WAYLAND_AM62_MINOR: "0"
+  QT6_WAYLAND_AM62_PATCH: "0"
+
+  QT6_WAYLAND_EXAMPLES_AM62_MAJOR: "3"
+  QT6_WAYLAND_EXAMPLES_AM62_MINOR: "0"
+  QT6_WAYLAND_EXAMPLES_AM62_PATCH: "0"
+
+  GRAPHICS_TESTS_AM62_MAJOR: "3"
+  GRAPHICS_TESTS_AM62_MINOR: "0"
+  GRAPHICS_TESTS_AM62_PATCH: "0"
+
+  CHROMIUM_AM62_MAJOR: "3"
+  CHROMIUM_AM62_MINOR: "0"
+  CHROMIUM_AM62_PATCH: "0"
+
+  COG_AM62_MAJOR: "3"
+  COG_AM62_MINOR: "0"
+  COG_AM62_PATCH: "0"
+
   ## debian-cross-toolchains
 
   DEBIAN_CROSS_TOOLCHAINS_MAJOR: "3"
@@ -207,6 +249,17 @@ variables:
 services:
   - name: docker:dind
 
+.include-regctl:
+  before_script:
+    - apk update && apk add curl
+    - curl -L https://github.com/regclient/regclient/releases/download/v0.6.0/regctl-linux-amd64 > /usr/bin/regctl
+    # to update the hash: download the metadata the regctl repo, verify the signatures, generate the SHA256SUMS file
+    # with `sha256sum -b regctl > SHA256SUMS` and update it here.
+    - echo "44216c0ab3bd41ae30b07392d6cdab6971f48ab3f72400e617f5f0ded4d70742 /usr/bin/regctl" > SHA256SUMS
+    - if ! sha256sum -c SHA256SUMS; then echo "Checksum for regctl has failed"; fi
+    - chmod 755 /usr/bin/regctl
+    - regctl registry login docker.io -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
+
 .do_print_environment_variables: &do_print_environment_variables
   - echo "GitLab CI/CD environment variables:"
   - env
@@ -217,6 +270,7 @@ services:
 # are nothing more than a way to visually arrange jobs. They are *not*
 # used to order jobs.
 stages:
+  - regctl-deploy-am62
   - lint
   - repository tagging
   - chores before building
@@ -2906,3 +2960,111 @@ docker-deploy-dotnet-8-uno-debug-multiarch:
     RELEASE_APPEND: "-${DOTNET_8_RELEASE}"
   stage: deploy-multiarch
   needs: ["docker-build-dotnet-8-uno-debug-multiarch"]
+
+# Deploy AM62 containers from next branch
+# This is done as a bootstraping deployment as we'll only do it once before
+# re-tagging the from the `stable-rc` branch instead of `next`
+.deploy-if-not-exist:
+  when: manual
+  extends: .include-regctl
+  script:
+    - chmod +x ./ci-scripts/cp-registry-image.sh
+    - ./ci-scripts/cp-registry-image.sh
+       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR.$PATCH
+    - ./ci-scripts/cp-registry-image.sh
+       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR
+    - ./ci-scripts/cp-registry-image.sh
+       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR
+    - export DATE=$(date +%Y%m%d)
+    - ./ci-scripts/cp-registry-image.sh
+       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR.$PATCH-$DATE
+
+regctl-deploy-debian-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: debian-am62
+    MAJOR: $DEBIAN_AM62_MAJOR
+    MINOR: $DEBIAN_AM62_MINOR
+    PATCH: $DEBIAN_AM62_PATCH
+
+regctl-deploy-wayland-base-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: wayland-base-am62
+    MAJOR: "$WAYLAND_BASE_AM62_MAJOR"
+    MINOR: "$WAYLAND_BASE_AM62_MINOR"
+    PATCH: "$WAYLAND_BASE_AM62_PATCH"
+
+regctl-deploy-weston-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: weston-am62
+    MAJOR: "$WESTON_AM62_MAJOR"
+    MINOR: "$WESTON_AM62_MINOR"
+    PATCH: "$WESTON_AM62_PATCH"
+
+regctl-deploy-qt5-wayland-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: qt5-wayland
+    MAJOR: "$QT5_WAYLAND_AM62_MAJOR"
+    MINOR: "$QT5_WAYLAND_AM62_MINOR"
+    PATCH: "$QT5_WAYLAND_AM62_PATCH"
+
+regctl-deploy-qt5-wayland-examples-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: qt5-wayland-examples-am62
+    MAJOR: "$QT5_WAYLAND_EXAMPLES_AM62_MAJOR"
+    MINOR: "$QT5_WAYLAND_EXAMPLES_AM62_MINOR"
+    PATCH: "$QT5_WAYLAND_EXAMPLES_AM62_PATCH"
+
+regctl-deploy-qt6-wayland-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: qt6-wayland-am62
+    MAJOR: "$QT6_WAYLAND_AM62_MAJOR"
+    MINOR: "$QT6_WAYLAND_AM62_MINOR"
+    PATCH: "$QT6_WAYLAND_AM62_PATCH"
+
+regctl-deploy-qt6-wayland-examples-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: qt6-wayland-examples-am62
+    MAJOR: "$QT6_WAYLAND_EXAMPLES_AM62_MAJOR"
+    MINOR: "$QT6_WAYLAND_EXAMPLES_AM62_MINOR"
+    PATCH: "$QT6_WAYLAND_EXAMPLES_AM62_PATCH"
+
+regctl-deploy-graphics-tests-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: graphics-tests-am62
+    MAJOR: "$GRAPHICS_TESTS_AM62_MAJOR"
+    MINOR: "$GRAPHICS_TESTS_AM62_MINOR"
+    PATCH: "$GRAPHICS_TESTS_AM62_PATCH"
+
+regctl-deploy-chromium-tests-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: chromium-am62
+    MAJOR: "$CHROMIUM_AM62_MAJOR"
+    MINOR: "$CHROMIUM_AM62_MINOR"
+    PATCH: "$CHROMIUM_AM62_PATCH"
+
+regctl-deploy-cog-tests-am62:
+  extends: .deploy-if-not-exist
+  stage: regctl-deploy-am62
+  variables:
+    IMAGE_NAME: cog-am62
+    MAJOR: "$COG_AM62_MAJOR"
+    MINOR: "$COG_AM62_MINOR"
+    PATCH: "$COG_AM62_PATCH"
