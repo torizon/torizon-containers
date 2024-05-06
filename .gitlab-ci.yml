@@ -1827,13 +1827,13 @@ build-torizon-samples:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN;
     - for tag in ${DOCKER_TAGS_CHECK};
         do
-          docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag} > /dev/null && true; RESULT=$?;
+          docker manifest inspect ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag} > /dev/null && true; RESULT=$?;
           (if [ $RESULT == 0 ] && [ "${DEPLOY_CONDITIONALLY}" == "true" ]; then echo "Image with ${tag} tag already exists." && exit 1 ; fi);
         done
     - for tag in ${DOCKER_TAGS} ${DOCKER_TAGS_CHECK};
         do
-          docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
-          docker push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
+          docker tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag};
+          docker push ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag};
         done
 
 docker-deploy-base:
@@ -2615,16 +2615,16 @@ docker-deploy-cog-arm64:
   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
   - for tag in ${DOCKER_TAGS_CHECK};
       do
-        docker manifest inspect ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag} > /dev/null && true; RESULT=$?;
+        docker manifest inspect ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag} > /dev/null && true; RESULT=$?;
         (if [ $RESULT == 0 ] && [ "${DEPLOY_CONDITIONALLY}" == "true" ]; then echo "Image with ${tag} tag already exists." && exit 1 ; fi);
       done
   - for tag in ${DOCKER_TAGS} ${DOCKER_TAGS_CHECK};
       do
-        docker manifest create ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_32}:${tag} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_64}:${tag};
-        docker manifest annotate ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_32}:${tag} --os linux --arch arm;
-        docker manifest annotate ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag} ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME_64}:${tag} --os linux --arch arm64;
-        docker manifest inspect -v ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
-        docker manifest push ${DOCKER_HUB_REPOSITORY}/${IMAGE_NAME}:${tag};
+        docker manifest create ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag} ${REGISTRY_NAMESPACE}/${IMAGE_NAME_32}:${tag} ${REGISTRY_NAMESPACE}/${IMAGE_NAME_64}:${tag};
+        docker manifest annotate ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag} ${REGISTRY_NAMESPACE}/${IMAGE_NAME_32}:${tag} --os linux --arch arm;
+        docker manifest annotate ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag} ${REGISTRY_NAMESPACE}/${IMAGE_NAME_64}:${tag} --os linux --arch arm64;
+        docker manifest inspect -v ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag};
+        docker manifest push ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${tag};
       done
 
 ## debian-docker-images
@@ -2970,14 +2970,14 @@ docker-deploy-dotnet-8-uno-debug-multiarch:
   script:
     - chmod +x ./ci-scripts/cp-registry-image.sh
     - ./ci-scripts/cp-registry-image.sh
-       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR.$PATCH
+       docker.io $REGISTRY_NAMESPACE $IMAGE_NAME next $MAJOR.$MINOR.$PATCH
     - ./ci-scripts/cp-registry-image.sh
-       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR
+       docker.io $REGISTRY_NAMESPACE $IMAGE_NAME next $MAJOR.$MINOR
     - ./ci-scripts/cp-registry-image.sh
-       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR
+       docker.io $REGISTRY_NAMESPACE $IMAGE_NAME next $MAJOR
     - export DATE=$(date +%Y%m%d)
     - ./ci-scripts/cp-registry-image.sh
-       docker.io $DOCKERHUB_USER $IMAGE_NAME next $MAJOR.$MINOR.$PATCH-$DATE
+       docker.io $REGISTRY_NAMESPACE $IMAGE_NAME next $MAJOR.$MINOR.$PATCH-$DATE
 
 regctl-deploy-debian-am62:
   extends: .deploy-if-not-exist
