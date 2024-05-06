@@ -1,15 +1,13 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG IMAGE_ARCH=linux/arm/v7
-# For arm64v8 use:
-# ARG IMAGE_ARCH=linux/arm64/v8
-ARG IMAGE_TAG=12.5-slim
+ARG DEBIAN_POINT_RELEASE=12.5-slim
 ARG TORADEX_SNAPSHOT
 ARG USE_TORADEX_SNAPSHOT=1
 ARG ADD_TORADEX_REPOSITORY=1
-ARG DOCKER_REGISTRY
-FROM --platform=$IMAGE_ARCH ${DOCKER_REGISTRY}/debian:$IMAGE_TAG AS base
+ARG REGISTRY
+
+FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ONBUILD ARG DEBIAN_FRONTEND=noninteractive
@@ -46,10 +44,9 @@ RUN ./users-groups.sh \
 FROM base as add_toradex-repository-0
 
 FROM base as add_toradex-repository-1
-ARG IMAGE_ARCH
 ARG TORADEX_SNAPSHOT
 ARG USE_TORADEX_SNAPSHOT
-ARG TORADEX_FEED_BASE_URL="https://feeds.toradex.com/debian"
+ARG TORADEX_FEED_BASE_URL="https://feeds1.toradex.com/debian"
 
 # Add toradex key and package feed
 RUN wget -O- ${TORADEX_FEED_BASE_URL}/toradex-debian-repo-19092023.gpg \
@@ -62,13 +59,13 @@ RUN if [ "${USE_TORADEX_SNAPSHOT}" = 1 ]; then \
            TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}"; \
        fi \
     && echo "Types: deb\n\
-URIs: https://feeds.toradex.com/debian/snapshots/$TORADEX_SNAPSHOT\n\
+URIs: https://feeds1.toradex.com/debian/snapshots/$TORADEX_SNAPSHOT\n\
 Suites: testing\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
-    && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+    && echo "Package: *\nPin: origin feeds1.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
-RUN if [ "${IMAGE_ARCH}" != "linux/arm64/v8" ]; then \
+RUN if [ "${TARGETARCH}" != "arm64" ]; then \
         echo "\
 # For armhf, install libdrm-common from Debian stable\n\
 Package: libdrm-common\n\

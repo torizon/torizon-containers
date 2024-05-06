@@ -1,29 +1,29 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG DEBIAN_BASE_IMAGE=12.5-slim
-ARG DOCKER_REGISTRY
+ARG DEBIAN_POINT_RELEASE
+ARG REGISTRY
 
-FROM ${DOCKER_REGISTRY}/debian:$DEBIAN_BASE_IMAGE
+FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE
 
-ARG IMAGE_ARCH=armhf
+ARG CROSS_TARGET_ARCH=armhf
 # For arm64 use:
-# ARG IMAGE_ARCH=arm64
-ARG CROSS_COMPILE_ARG="arm-linux-gnueabihf"
+# ARG CROSS_TARGET_ARCH=arm64
+ARG CROSS_COMPILER="arm-linux-gnueabihf"
 # For arm64 use:
-# ARG CROSS_COMPILE_ARG="aarch64-linux-gnu"
+# ARG CROSS_COMPILER="aarch64-linux-gnu"
 ARG TORADEX_SNAPSHOT
 ARG USE_TORADEX_SNAPSHOT=1
-ARG TORADEX_FEED_BASE_URL="https://feeds.toradex.com/debian"
+ARG TORADEX_FEED_BASE_URL="https://feeds1.toradex.com/debian"
 
-ENV CROSS_COMPILE=${CROSS_COMPILE_ARG}-
-ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILE_ARG}/pkgconfig
+ENV CROSS_COMPILE=${CROSS_COMPILER}-
+ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILER}/pkgconfig
 
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # Enable multiarch
-RUN dpkg --add-architecture ${IMAGE_ARCH}
+RUN dpkg --add-architecture ${CROSS_TARGET_ARCH}
 
 # Install required packages
 RUN apt-get -q -y update \
@@ -46,11 +46,11 @@ RUN if [ "${USE_TORADEX_SNAPSHOT}" = 1 ]; then \
             TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}"; \
         fi \
     && echo "Types: deb\n\
-URIs: https://feeds.toradex.com/debian/snapshots/$TORADEX_SNAPSHOT\n\
+URIs: https://feeds1.toradex.com/debian/snapshots/$TORADEX_SNAPSHOT\n\
 Suites: testing\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
-    && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
+    && echo "Package: *\nPin: origin feeds1.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 
 # Debian Bookworm has higher versions of some same packages than the Toradex feed.
@@ -74,7 +74,7 @@ RUN apt-get -q -y update \
         openssl \
         wget \
         curl \
-        crossbuild-essential-${IMAGE_ARCH} \
+        crossbuild-essential-${CROSS_TARGET_ARCH} \
     && apt-get clean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*

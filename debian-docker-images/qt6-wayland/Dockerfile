@@ -1,12 +1,10 @@
-# ARG IMAGE_ARCH=linux/arm
-# For arm64v8 use:
-ARG IMAGE_ARCH=linux/arm64
-# ARG BASE_NAME=wayland-base
+# ARG BASE_IMAGE_NAME=wayland-base
 # For arm64v8 with Vivante use:
-ARG BASE_NAME=wayland-base-vivante
+ARG BASE_IMAGE_NAME=wayland-base-vivante
 ARG IMAGE_TAG=3
-ARG DOCKER_REGISTRY=torizon
-FROM --platform=$IMAGE_ARCH $DOCKER_REGISTRY/$BASE_NAME:$IMAGE_TAG AS base
+ARG REGISTRY
+ARG REGISTRY_NAMESPACE
+FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 COPY kms-setup.sh /usr/bin/kms-setup.sh
 

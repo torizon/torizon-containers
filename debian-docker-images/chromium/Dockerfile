@@ -1,14 +1,12 @@
-ARG IMAGE_ARCH=linux/arm
-# For arm64 use:
-# ARG IMAGE_ARCH=linux/arm64
-
-ARG BASE_NAME=wayland-base
+ARG BASE_IMAGE_NAME=wayland-base
 # For iMX8 use:
-# ARG BASE_NAME=wayland-base-vivante
+# ARG BASE_IMAGE_NAME=wayland-base-vivante
 
-ARG IMAGE_TAG=3
+ARG IMAGE_TAG
 
-FROM --platform=$IMAGE_ARCH torizon/$BASE_NAME:$IMAGE_TAG
+ARG REGISTRY
+ARG REGISTRY_NAMESPACE
+FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 # Install Chromium
 RUN apt-get -y update && \

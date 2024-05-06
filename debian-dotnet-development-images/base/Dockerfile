@@ -1,18 +1,16 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG IMAGE_ARCH
-ARG DOCKER_REGISTRY=torizon
-ARG IMAGE_TAG=12.5-slim
+ARG REGISTRY
+ARG DEBIAN_POINT_RELEASE
 
-FROM --platform=${IMAGE_ARCH} ${DOCKER_REGISTRY}/debian:${IMAGE_TAG} AS build
+FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE AS build
 
 # define specific .NET version you want to use or "latest"
 ARG DOTNET_VERSION=latest
-# can be arm or arm64
-ARG DOTNET_ARCHITECTURE
 # can be dotnet or aspnetcore
 ARG DOTNET_RUNTIME=dotnet
+ARG TARGETARCH
 
 # Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -30,10 +28,12 @@ RUN curl -L -o /dotnet-install.sh https://dot.net/v1/dotnet-install.sh \
 
 WORKDIR /dotnet
 
-RUN /dotnet-install.sh --install-dir /dotnet --runtime ${DOTNET_RUNTIME} --version ${DOTNET_VERSION} --os linux --architecture ${DOTNET_ARCHITECTURE} --no-path
+RUN /dotnet-install.sh --install-dir /dotnet --runtime ${DOTNET_RUNTIME} --version ${DOTNET_VERSION} --os linux --architecture ${TARGETARCH} --no-path
 
-FROM --platform=$IMAGE_ARCH ${DOCKER_REGISTRY}/debian:${IMAGE_TAG}
+ARG REGISTRY
+ARG DEBIAN_POINT_RELEASE
 
+FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE
 ENV DOTNET_ROOT=/dotnet
 ENV PATH=$PATH:/dotnet
 

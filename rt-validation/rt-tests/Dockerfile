@@ -1,12 +1,10 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG IMAGE_ARCH=linux/arm/v7
-# For IMX8 use IMAGE_ARCH=linux/arm64/v8
-ARG IMAGE_TAG=3-bookworm
-ARG DOCKER_REGISTRY=torizon
+ARG DEBIAN_POINT_RELEASE
+ARG REGISTRY
 
-FROM --platform=$IMAGE_ARCH $DOCKER_REGISTRY/debian:$IMAGE_TAG
+FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE
 
 RUN apt update \
     && apt install -y --no-install-recommends \
