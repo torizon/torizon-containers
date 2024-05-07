@@ -1,10 +1,10 @@
 # Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_NAME=wayland-base
+ARG BASE_IMAGE_NAME=wayland-base
 ARG IMAGE_TAG=3
 ARG DOCKER_REGISTRY=docker.io
-FROM $DOCKER_REGISTRY/torizon/$BASE_NAME:$IMAGE_TAG AS base
+FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 # Install the weston compositor.
 RUN apt-get -y update && apt-get install -y --no-install-recommends \

@@ -28,6 +28,9 @@ variables:
 
   DEBIAN_DOCKER_IMAGES_FOLDER: "debian-docker-images"
   IMX_FOLDER: "imx"
+  AM62_FOLDER: "am62"
+  TESTS_AM62_FOLDER: "tests"
+  CHROMIUM_TESTS_FOLDER: "chromium-tests"
   DEBIAN_CROSS_TOOLCHAINS_FOLDER: "debian-cross-toolchains"
   DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER: "debian-dotnet-development-images"
   SSH_FOLDER: "ssh"
@@ -597,6 +600,130 @@ docker-build-stress-tests:
     IMAGE_NAME: stress-tests
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
   needs: []
+
+## am62
+
+docker-build-base-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    IMAGE_NAME: debian-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/"
+
+docker-build-wayland-base-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: wayland-base-am62
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+  needs: ["docker-build-base-am62"]
+
+docker-build-weston-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: weston-am62
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
+
+docker-build-graphics-tests-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: graphics-tests-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
+
+docker-build-weston-touch-calibrator-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-am62
+    IMAGE_NAME: weston-touch-calibrator-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+  needs: ["docker-build-weston-am62"]
+
+docker-build-qt5-wayland-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: qt5-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
+
+docker-build-qt5-wayland-am62-examples:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: qt5-wayland-am62
+    IMAGE_NAME: qt5-wayland-examples-am62
+    QT5_EXAMPLES_DEBIAN: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+  needs: ["docker-build-qt5-wayland-am62"]
+
+docker-build-qt6-wayland-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: qt6-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
+
+docker-build-qt6-wayland-am62-examples:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: qt6-wayland-am62
+    IMAGE_NAME: qt6-wayland-examples-am62
+    QT6_EXAMPLES_DEBIAN: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+  needs: ["docker-build-qt6-wayland-am62"]
+
+docker-build-chromium-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: chromium-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
+
+docker-build-chromium-tests-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: chromium-am62
+    IMAGE_NAME: chromium-tests-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+  needs: ["docker-build-chromium-am62"]
+
+docker-build-cog-am62:
+  retry: 2
+  extends: .docker-build
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: cog-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/"
+  needs: ["docker-build-wayland-base-am62"]
 
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest

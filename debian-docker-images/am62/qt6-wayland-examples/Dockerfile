@@ -1,11 +1,11 @@
 # Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_NAME=qt5-wayland
+ARG BASE_IMAGE_NAME=qt5-wayland
 ARG IMAGE_TAG=3
 ARG DOCKER_REGISTRY
 
-FROM $DOCKER_REGISTRY/torizon/$BASE_NAME:$IMAGE_TAG AS base
+FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     qt6-base-examples \

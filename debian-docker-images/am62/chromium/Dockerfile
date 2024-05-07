@@ -1,11 +1,11 @@
 # Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_NAME=wayland-base
+ARG BASE_IMAGE_NAME=wayland-base
 ARG DOCKER_REGISTRY=docker.io
 ARG IMAGE_TAG=4-rc
 
-FROM $DOCKER_REGISTRY/torizon/$BASE_NAME:$IMAGE_TAG
+FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG
 
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends chromium chromium-sandbox && \
