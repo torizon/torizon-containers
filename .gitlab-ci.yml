@@ -1,11 +1,8 @@
 image: docker:latest
 
 variables:
-  # DEBIAN_* variables are overwritten for jobs outside the branch of the current Debian stable
   DEBIAN_POINT_RELEASE: "12.5-slim"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-horw"
-
-  ### Dotnet 6
 
   DOTNET_6_RELEASE: "6.0"
   DOTNET_6_SEMANTIC_VERSION: "6.0.27"
@@ -22,9 +19,6 @@ variables:
   # Use overlayfs driver for better performance
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
-
-# extract the folder names as variables so we can easily change/introduce
-# jobs and as to not replicate the folder names in `changes:` tags as well
 
   DEBIAN_DOCKER_IMAGES_FOLDER: "debian-docker-images"
   IMX_FOLDER: "imx"
@@ -129,7 +123,7 @@ services:
 
 ## debian-docker-images
 
-docker-build-base:
+build-base:
   retry: 2
   extends: .docker-build
   before_script:
@@ -141,7 +135,7 @@ docker-build-base:
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
-docker-build-wayland-base:
+build-wayland-base:
   retry: 2
   extends: .docker-build
   variables:
@@ -150,9 +144,9 @@ docker-build-wayland-base:
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-weston:
+build-weston:
   retry: 2
   extends: .docker-build
   before_script:
@@ -163,9 +157,9 @@ docker-build-weston:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
-docker-build-graphics-tests:
+build-graphics-tests:
   retry: 2
   extends: .docker-build
   variables:
@@ -174,9 +168,9 @@ docker-build-graphics-tests:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
-docker-build-weston-touch-calibrator:
+build-weston-touch-calibrator:
   retry: 2
   extends: .docker-build
   variables:
@@ -185,9 +179,9 @@ docker-build-weston-touch-calibrator:
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: ["docker-build-weston"]
+  needs: ["build-weston"]
 
-docker-build-qt5-wayland:
+build-qt5-wayland:
   retry: 2
   extends: .docker-build
   variables:
@@ -196,9 +190,9 @@ docker-build-qt5-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
-docker-build-qt5-wayland-examples:
+build-qt5-wayland-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -207,9 +201,9 @@ docker-build-qt5-wayland-examples:
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt5-wayland"]
+  needs: ["build-qt5-wayland"]
 
-docker-build-qt6-wayland:
+build-qt6-wayland:
   retry: 2
   extends: .docker-build
   variables:
@@ -218,9 +212,9 @@ docker-build-qt6-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
-docker-build-qt6-wayland-examples:
+build-qt6-wayland-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -229,9 +223,9 @@ docker-build-qt6-wayland-examples:
     BASE_IMAGE_NAME: qt6-wayland
     IMAGE_NAME: qt6-wayland-examples
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt6-wayland"]
+  needs: ["build-qt6-wayland"]
 
-docker-build-wayland-base-vivante:
+build-wayland-base-vivante:
   retry: 2
   extends: .docker-build
   variables:
@@ -240,9 +234,9 @@ docker-build-wayland-base-vivante:
     IMAGE_NAME: wayland-base-vivante
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-weston-vivante:
+build-weston-vivante:
   retry: 2
   extends: .docker-build
   before_script:
@@ -253,9 +247,9 @@ docker-build-weston-vivante:
     IMAGE_NAME: weston-vivante
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/"
-  needs: ["docker-build-wayland-base-vivante"]
+  needs: ["build-wayland-base-vivante"]
 
-docker-build-graphics-tests-vivante:
+build-graphics-tests-vivante:
   retry: 2
   extends: .docker-build
   variables:
@@ -263,9 +257,9 @@ docker-build-graphics-tests-vivante:
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: graphics-tests-vivante
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/"
-  needs: ["docker-build-wayland-base-vivante"]
+  needs: ["build-wayland-base-vivante"]
 
-docker-build-qt5-wayland-vivante:
+build-qt5-wayland-vivante:
   retry: 2
   extends: .docker-build
   variables:
@@ -273,9 +267,9 @@ docker-build-qt5-wayland-vivante:
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: qt5-wayland-vivante
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base-vivante"]
+  needs: ["build-wayland-base-vivante"]
 
-docker-build-qt5-wayland-vivante-examples:
+build-qt5-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -283,9 +277,9 @@ docker-build-qt5-wayland-vivante-examples:
     BASE_IMAGE_NAME: qt5-wayland-vivante
     IMAGE_NAME: qt5-wayland-examples-vivante
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt5-wayland-vivante"]
+  needs: ["build-qt5-wayland-vivante"]
 
-docker-build-qt6-wayland-vivante:
+build-qt6-wayland-vivante:
   retry: 2
   extends: .docker-build
   variables:
@@ -293,9 +287,9 @@ docker-build-qt6-wayland-vivante:
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: qt6-wayland-vivante
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base-vivante"]
+  needs: ["build-wayland-base-vivante"]
 
-docker-build-qt6-wayland-vivante-examples:
+build-qt6-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -303,9 +297,9 @@ docker-build-qt6-wayland-vivante-examples:
     BASE_IMAGE_NAME: qt6-wayland-vivante
     IMAGE_NAME: qt6-wayland-examples-vivante
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt6-wayland-vivante"]
+  needs: ["build-qt6-wayland-vivante"]
 
-docker-build-chromium:
+build-chromium:
   retry: 2
   extends: .docker-build
   variables:
@@ -314,9 +308,9 @@ docker-build-chromium:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
-docker-build-cog:
+build-cog:
   retry: 2
   extends: .docker-build
   variables:
@@ -325,11 +319,11 @@ docker-build-cog:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/"
-  needs: ["docker-build-wayland-base"]
+  needs: ["build-wayland-base"]
 
 ## ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}
 
-docker-build-armhf-toolchain:
+build-armhf-toolchain:
   retry: 2
   extends: .docker-build
   before_script:
@@ -342,7 +336,7 @@ docker-build-armhf-toolchain:
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
   needs: []
   
-docker-build-armhf-toolchain-ssh:
+build-armhf-toolchain-ssh:
   retry: 2
   extends: .docker-build
   variables:
@@ -350,9 +344,9 @@ docker-build-armhf-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
     CROSS_TARGET_ARCH: armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
-  needs: ["docker-build-armhf-toolchain"]
+  needs: ["build-armhf-toolchain"]
 
-docker-build-arm64-toolchain:
+build-arm64-toolchain:
   retry: 2
   extends: .docker-build
   before_script:
@@ -365,7 +359,7 @@ docker-build-arm64-toolchain:
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
-docker-build-arm64-toolchain-vivante:
+build-arm64-toolchain-vivante:
   retry: 2
   extends: .docker-build
   before_script:
@@ -379,7 +373,7 @@ docker-build-arm64-toolchain-vivante:
     ACCEPT_FSL_EULA: 1
   needs: []
 
-docker-build-arm64-toolchain-ssh:
+build-arm64-toolchain-ssh:
   retry: 2
   extends: .docker-build
   variables:
@@ -387,13 +381,13 @@ docker-build-arm64-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
-  needs: [docker-build-arm64-toolchain]
+  needs: [build-arm64-toolchain]
 
 ## debian-dotnet-development-images
 
-### Dotnet 6
+### dotnet 6
 
-docker-build-dotnet-6:
+build-dotnet-6:
   retry: 2
   extends: .docker-build
   before_script:
@@ -406,9 +400,9 @@ docker-build-dotnet-6:
     IMAGE_NAME: dotnet
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-dotnet-6-asp:
+build-dotnet-6-asp:
   retry: 2
   extends: .docker-build
   before_script:
@@ -421,9 +415,9 @@ docker-build-dotnet-6-asp:
     IMAGE_NAME: aspdotnet
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-dotnet-6-uno:
+build-dotnet-6-uno:
   retry: 2
   extends: .docker-build
   before_script:
@@ -437,9 +431,9 @@ docker-build-dotnet-6-uno:
     BASE_IMAGE_NAME_WAYLAND: wayland-base
     IMAGE_NAME: dotnet-uno
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
-  needs: ["docker-build-dotnet-6", "docker-build-wayland-base"]
+  needs: ["build-dotnet-6", "build-wayland-base"]
 
-docker-build-dotnet-6-debug:
+build-dotnet-6-debug:
   retry: 2
   extends: .docker-build
   before_script:
@@ -452,9 +446,9 @@ docker-build-dotnet-6-debug:
     BASE_IMAGE_NAME: dotnet
     IMAGE_NAME: dotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-6"]
+  needs: ["build-dotnet-6"]
 
-docker-build-dotnet-6-debug-asp:
+build-dotnet-6-debug-asp:
   retry: 2
   extends: .docker-build
   before_script:
@@ -467,9 +461,9 @@ docker-build-dotnet-6-debug-asp:
     BASE_IMAGE_NAME: aspdotnet
     IMAGE_NAME: aspdotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-6-asp"]
+  needs: ["build-dotnet-6-asp"]
 
-docker-build-dotnet-6-debug-uno:
+build-dotnet-6-debug-uno:
   retry: 2
   extends: .docker-build
   before_script:
@@ -482,11 +476,11 @@ docker-build-dotnet-6-debug-uno:
     BASE_IMAGE_NAME: dotnet-uno
     IMAGE_NAME: dotnet-uno-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-6-uno"]
+  needs: ["build-dotnet-6-uno"]
 
-### Dotnet 8
+### dotnet 8
 
-docker-build-dotnet-8:
+build-dotnet-8:
   retry: 2
   extends: .docker-build
   before_script:
@@ -499,9 +493,9 @@ docker-build-dotnet-8:
     IMAGE_NAME: dotnet
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-dotnet-8-asp:
+build-dotnet-8-asp:
   retry: 2
   extends: .docker-build
   before_script:
@@ -514,9 +508,9 @@ docker-build-dotnet-8-asp:
     IMAGE_NAME: aspdotnet
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["docker-build-base"]
+  needs: ["build-base"]
 
-docker-build-dotnet-8-uno:
+build-dotnet-8-uno:
   retry: 2
   extends: .docker-build
   before_script:
@@ -530,9 +524,9 @@ docker-build-dotnet-8-uno:
     BASE_IMAGE_NAME_WAYLAND: wayland-base
     IMAGE_NAME: dotnet-uno
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
-  needs: ["docker-build-dotnet-8", "docker-build-wayland-base"]
+  needs: ["build-dotnet-8", "build-wayland-base"]
 
-docker-build-dotnet-8-debug:
+build-dotnet-8-debug:
   retry: 2
   extends: .docker-build
   before_script:
@@ -544,9 +538,9 @@ docker-build-dotnet-8-debug:
     BASE_IMAGE_NAME: dotnet
     IMAGE_NAME: dotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-8"]
+  needs: ["build-dotnet-8"]
 
-docker-build-dotnet-8-debug-asp:
+build-dotnet-8-debug-asp:
   retry: 2
   extends: .docker-build
   before_script:
@@ -558,9 +552,9 @@ docker-build-dotnet-8-debug-asp:
     BASE_IMAGE_NAME: aspdotnet
     IMAGE_NAME: aspdotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-8-asp"]
+  needs: ["build-dotnet-8-asp"]
 
-docker-build-dotnet-8-debug-uno:
+build-dotnet-8-debug-uno:
   retry: 2
   extends: .docker-build
   before_script:
@@ -573,11 +567,11 @@ docker-build-dotnet-8-debug-uno:
     BASE_IMAGE_NAME: dotnet-uno
     IMAGE_NAME: dotnet-uno-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
-  needs: ["docker-build-dotnet-8-uno"]
+  needs: ["build-dotnet-8-uno"]
 
 ## rt-validation
 
-docker-build-rt-tests:
+build-rt-tests:
   retry: 2
   extends: .docker-build
   before_script:
@@ -589,7 +583,7 @@ docker-build-rt-tests:
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
   needs: []
 
-docker-build-stress-tests:
+build-stress-tests:
   retry: 2
   extends: .docker-build
   before_script:
@@ -603,7 +597,7 @@ docker-build-stress-tests:
 
 ## am62
 
-docker-build-base-am62:
+build-base-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -611,7 +605,7 @@ docker-build-base-am62:
     IMAGE_NAME: debian-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/"
 
-docker-build-wayland-base-am62:
+build-wayland-base-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -620,9 +614,9 @@ docker-build-wayland-base-am62:
     IMAGE_NAME: wayland-base-am62
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs: ["docker-build-base-am62"]
+  needs: ["build-base-am62"]
 
-docker-build-weston-am62:
+build-weston-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -631,9 +625,9 @@ docker-build-weston-am62:
     IMAGE_NAME: weston-am62
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
-docker-build-graphics-tests-am62:
+build-graphics-tests-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -641,9 +635,9 @@ docker-build-graphics-tests-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: graphics-tests-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
-docker-build-weston-touch-calibrator-am62:
+build-weston-touch-calibrator-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -651,9 +645,9 @@ docker-build-weston-touch-calibrator-am62:
     BASE_IMAGE_NAME: weston-am62
     IMAGE_NAME: weston-touch-calibrator-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: ["docker-build-weston-am62"]
+  needs: ["build-weston-am62"]
 
-docker-build-qt5-wayland-am62:
+build-qt5-wayland-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -661,9 +655,9 @@ docker-build-qt5-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt5-wayland-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
-docker-build-qt5-wayland-am62-examples:
+build-qt5-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -672,9 +666,9 @@ docker-build-qt5-wayland-am62-examples:
     IMAGE_NAME: qt5-wayland-examples-am62
     QT5_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt5-wayland-am62"]
+  needs: ["build-qt5-wayland-am62"]
 
-docker-build-qt6-wayland-am62:
+build-qt6-wayland-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -682,9 +676,9 @@ docker-build-qt6-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt6-wayland-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
-docker-build-qt6-wayland-am62-examples:
+build-qt6-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   variables:
@@ -693,9 +687,9 @@ docker-build-qt6-wayland-am62-examples:
     IMAGE_NAME: qt6-wayland-examples-am62
     QT6_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-  needs: ["docker-build-qt6-wayland-am62"]
+  needs: ["build-qt6-wayland-am62"]
 
-docker-build-chromium-am62:
+build-chromium-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -703,9 +697,9 @@ docker-build-chromium-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: chromium-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
-docker-build-chromium-tests-am62:
+build-chromium-tests-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -713,9 +707,9 @@ docker-build-chromium-tests-am62:
     BASE_IMAGE_NAME: chromium-am62
     IMAGE_NAME: chromium-tests-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
-  needs: ["docker-build-chromium-am62"]
+  needs: ["build-chromium-am62"]
 
-docker-build-cog-am62:
+build-cog-am62:
   retry: 2
   extends: .docker-build
   variables:
@@ -723,7 +717,7 @@ docker-build-cog-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: cog-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/"
-  needs: ["docker-build-wayland-base-am62"]
+  needs: ["build-wayland-base-am62"]
 
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest
