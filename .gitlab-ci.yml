@@ -27,6 +27,7 @@ variables:
 # jobs and as to not replicate the folder names in `changes:` tags as well
 
   DEBIAN_DOCKER_IMAGES_FOLDER: "debian-docker-images"
+  IMX_FOLDER: "imx"
   DEBIAN_CROSS_TOOLCHAINS_FOLDER: "debian-cross-toolchains"
   DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER: "debian-dotnet-development-images"
   SSH_FOLDER: "ssh"
@@ -134,7 +135,7 @@ docker-build-base:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 docker-build-wayland-base:
@@ -145,7 +146,7 @@ docker-build-wayland-base:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: ["docker-build-base"]
 
 docker-build-weston:
@@ -158,7 +159,7 @@ docker-build-weston:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 docker-build-graphics-tests:
@@ -169,7 +170,7 @@ docker-build-graphics-tests:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 docker-build-weston-touch-calibrator:
@@ -180,7 +181,7 @@ docker-build-weston-touch-calibrator:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs: ["docker-build-weston"]
 
 docker-build-qt5-wayland:
@@ -191,7 +192,7 @@ docker-build-qt5-wayland:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 docker-build-qt5-wayland-examples:
@@ -202,7 +203,7 @@ docker-build-qt5-wayland-examples:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
   needs: ["docker-build-qt5-wayland"]
 
 docker-build-qt6-wayland:
@@ -213,7 +214,7 @@ docker-build-qt6-wayland:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 docker-build-qt6-wayland-examples:
@@ -224,7 +225,7 @@ docker-build-qt6-wayland-examples:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland
     IMAGE_NAME: qt6-wayland-examples
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
   needs: ["docker-build-qt6-wayland"]
 
 docker-build-wayland-base-vivante:
@@ -235,7 +236,7 @@ docker-build-wayland-base-vivante:
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base-vivante
     ACCEPT_FSL_EULA: 1
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/"
   needs: ["docker-build-base"]
 
 docker-build-weston-vivante:
@@ -248,7 +249,7 @@ docker-build-weston-vivante:
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: weston-vivante
     ACCEPT_FSL_EULA: 1
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/"
   needs: ["docker-build-wayland-base-vivante"]
 
 docker-build-graphics-tests-vivante:
@@ -258,7 +259,7 @@ docker-build-graphics-tests-vivante:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: graphics-tests-vivante
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/"
   needs: ["docker-build-wayland-base-vivante"]
 
 docker-build-qt5-wayland-vivante:
@@ -268,7 +269,7 @@ docker-build-qt5-wayland-vivante:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: qt5-wayland-vivante
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/"
   needs: ["docker-build-wayland-base-vivante"]
 
 docker-build-qt5-wayland-vivante-examples:
@@ -278,7 +279,7 @@ docker-build-qt5-wayland-vivante-examples:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt5-wayland-vivante
     IMAGE_NAME: qt5-wayland-examples-vivante
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
   needs: ["docker-build-qt5-wayland-vivante"]
 
 docker-build-qt6-wayland-vivante:
@@ -288,7 +289,7 @@ docker-build-qt6-wayland-vivante:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: qt6-wayland-vivante
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/"
   needs: ["docker-build-wayland-base-vivante"]
 
 docker-build-qt6-wayland-vivante-examples:
@@ -298,7 +299,7 @@ docker-build-qt6-wayland-vivante-examples:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-vivante
     IMAGE_NAME: qt6-wayland-examples-vivante
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
   needs: ["docker-build-qt6-wayland-vivante"]
 
 docker-build-chromium:
@@ -309,7 +310,7 @@ docker-build-chromium:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 docker-build-cog:
@@ -320,7 +321,7 @@ docker-build-cog:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/"
   needs: ["docker-build-wayland-base"]
 
 ## ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}
