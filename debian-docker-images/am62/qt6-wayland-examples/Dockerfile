@@ -3,9 +3,9 @@
 
 ARG BASE_IMAGE_NAME=qt5-wayland
 ARG IMAGE_TAG=3
-ARG DOCKER_REGISTRY
+ARG REGISTRY
 
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     qt6-base-examples \

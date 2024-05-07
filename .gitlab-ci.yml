@@ -106,7 +106,7 @@ services:
                   --build-arg DOTNET_VERSION=${DOTNET_VERSION}
                   --build-arg IMAGE_TAG=${IMAGE_TAG}
                   --build-arg REGISTRY_PROXY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
-                  --build-arg REGISTRY=${REGISTRY}
+                  --build-arg REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}/${REGISTRY}
                   --build-arg REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}
                   --build-arg TORADEX_SNAPSHOT=${TORADEX_SNAPSHOT}                  
                   --label container.name=${IMAGE_NAME}

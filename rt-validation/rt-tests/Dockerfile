@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 ARG DEBIAN_POINT_RELEASE
-ARG REGISTRY
+ARG REGISTRY_PROXY
 
-FROM $REGISTRY/debian:$DEBIAN_POINT_RELEASE
+FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE
 
 RUN apt update \
     && apt install -y --no-install-recommends \

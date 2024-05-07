@@ -3,8 +3,8 @@
 
 ARG BASE_IMAGE_NAME=weston
 ARG IMAGE_TAG=3
-ARG DOCKER_REGISTRY=torizon
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+ARG REGISTRY=torizon
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 COPY entry.sh /usr/bin/
 RUN mkdir -p /etc/xdg/weston/

@@ -3,9 +3,9 @@
 
 ARG BASE_IMAGE_NAME=wayland-base-am62
 ARG IMAGE_TAG=rc
-ARG DOCKER_REGISTRY=torizon
+ARG REGISTRY=torizon
 
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
         clinfo \

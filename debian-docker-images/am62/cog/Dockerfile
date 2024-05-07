@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 ARG BASE_IMAGE_NAME=wayland-base
-ARG DOCKER_REGISTRY
+ARG REGISTRY
 ARG IMAGE_TAG=3
 
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG
 
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends cog && \

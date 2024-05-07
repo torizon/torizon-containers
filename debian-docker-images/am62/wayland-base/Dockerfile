@@ -3,8 +3,8 @@
 
 ARG BASE_IMAGE_NAME=debian
 ARG IMAGE_TAG=3-bookworm
-ARG DOCKER_REGISTRY=torizon
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+ARG REGISTRY=torizon
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && apt-get install -y \
     libd3dadapter9-mesa \

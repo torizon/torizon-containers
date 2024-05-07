@@ -3,8 +3,8 @@
 
 ARG BASE_IMAGE_NAME=wayland-base
 ARG IMAGE_TAG=3
-ARG DOCKER_REGISTRY=torizon
-FROM $DOCKER_REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+ARG REGISTRY=torizon
+FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 COPY kms-setup.sh /usr/bin/kms-setup.sh
 
