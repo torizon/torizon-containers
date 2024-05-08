@@ -1,3 +1,5 @@
+include: '/ci-scripts/release/release.yml'
+
 image: docker:latest
 
 variables:
@@ -127,7 +129,11 @@ build-base:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -158,7 +164,11 @@ build-wayland-base:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
@@ -183,7 +193,11 @@ build-weston:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   before_script:
@@ -200,7 +214,11 @@ build-graphics-tests:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -214,7 +232,11 @@ build-weston-touch-calibrator:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -228,7 +250,11 @@ build-qt5-wayland:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -243,7 +269,11 @@ build-qt5-wayland-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -257,7 +287,11 @@ build-qt6-wayland:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -272,7 +306,11 @@ build-qt6-wayland-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -286,7 +324,11 @@ build-wayland-base-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
@@ -311,7 +353,11 @@ build-weston-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   before_script:
@@ -328,7 +374,11 @@ build-graphics-tests-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -341,7 +391,11 @@ build-qt5-wayland-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -355,7 +409,11 @@ build-qt5-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -368,7 +426,11 @@ build-qt6-wayland-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -382,7 +444,11 @@ build-qt6-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -395,7 +461,11 @@ build-chromium:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -409,7 +479,11 @@ build-cog:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -425,9 +499,13 @@ build-armhf-toolchain:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -442,8 +520,12 @@ build-armhf-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   variables:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
@@ -455,9 +537,13 @@ build-arm64-toolchain:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -472,8 +558,12 @@ build-arm64-toolchain-vivante:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -489,8 +579,12 @@ build-arm64-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   variables:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
@@ -506,9 +600,13 @@ build-dotnet-6:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -525,9 +623,13 @@ build-dotnet-6-asp:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -544,9 +646,13 @@ build-dotnet-6-uno:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -564,8 +670,12 @@ build-dotnet-6-debug:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -582,8 +692,12 @@ build-dotnet-6-debug-asp:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -600,8 +714,12 @@ build-dotnet-6-debug-uno:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -620,9 +738,13 @@ build-dotnet-8:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -639,9 +761,13 @@ build-dotnet-8-asp:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -658,9 +784,13 @@ build-dotnet-8-uno:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -678,8 +808,12 @@ build-dotnet-8-debug:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
@@ -695,8 +829,12 @@ build-dotnet-8-debug-asp:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
@@ -712,8 +850,12 @@ build-dotnet-8-debug-uno:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -732,8 +874,12 @@ build-rt-tests:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -747,8 +893,12 @@ build-stress-tests:
   retry: 2
   extends: .docker-build
   rules:
-    - changes:
-      - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
+  - changes:
+    - gitlab-ci.yml
+    - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -764,7 +914,11 @@ build-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
@@ -785,7 +939,11 @@ build-wayland-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
@@ -808,7 +966,11 @@ build-weston-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   variables:
@@ -823,7 +985,11 @@ build-graphics-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -836,7 +1002,11 @@ build-weston-touch-calibrator-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   variables:
@@ -850,7 +1020,11 @@ build-qt5-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -864,7 +1038,11 @@ build-qt5-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -878,7 +1056,11 @@ build-qt6-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -892,7 +1074,11 @@ build-qt6-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -906,7 +1092,11 @@ build-chromium-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -919,7 +1109,11 @@ build-chromium-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -932,7 +1126,11 @@ build-cog-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_COMMIT_REF_PROTECTED == "true"
+  - if: $CI_COMMIT_TAG
+    when: never
   - changes:
+    - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
