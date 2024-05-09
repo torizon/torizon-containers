@@ -73,11 +73,6 @@ services:
   variables:
     ADD_TORADEX_REPOSITORY: 1
     IMAGE_TAG: "stable-rc"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      variables:
-        REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-        IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
   script:
   - *do_print_environment_variables
   - apk add curl
@@ -136,27 +131,31 @@ build-base:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
+      - gitlab-ci.yml
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -171,9 +170,13 @@ build-wayland-base:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -200,9 +203,13 @@ build-weston:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -221,9 +228,13 @@ build-graphics-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   variables:
@@ -239,9 +250,13 @@ build-weston-touch-calibrator:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   variables:
@@ -257,9 +272,13 @@ build-qt5-wayland:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -276,9 +295,13 @@ build-qt5-wayland-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -294,9 +317,13 @@ build-qt6-wayland:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -313,9 +340,13 @@ build-qt6-wayland-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -331,9 +362,13 @@ build-wayland-base-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -360,9 +395,13 @@ build-weston-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -381,9 +420,13 @@ build-graphics-tests-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   variables:
@@ -398,9 +441,13 @@ build-qt5-wayland-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -416,9 +463,13 @@ build-qt5-wayland-vivante-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -433,9 +484,13 @@ build-qt6-wayland-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -451,9 +506,13 @@ build-qt6-wayland-vivante-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -468,9 +527,13 @@ build-chromium:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
   variables:
@@ -486,9 +549,13 @@ build-cog:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   variables:
@@ -506,9 +573,13 @@ build-armhf-toolchain:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -521,15 +592,19 @@ build-armhf-toolchain:
     IMAGE_NAME: debian-cross-toolchain-armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
   needs: []
-  
+
 build-armhf-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   variables:
@@ -544,9 +619,13 @@ build-arm64-toolchain:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -565,9 +644,13 @@ build-arm64-toolchain-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
   before_script:
@@ -586,9 +669,13 @@ build-arm64-toolchain-ssh:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   variables:
@@ -607,9 +694,13 @@ build-dotnet-6:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -630,9 +721,13 @@ build-dotnet-6-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -653,9 +748,13 @@ build-dotnet-6-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
@@ -677,9 +776,13 @@ build-dotnet-6-debug:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
@@ -699,9 +802,13 @@ build-dotnet-6-debug-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
@@ -721,9 +828,13 @@ build-dotnet-6-debug-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
@@ -745,9 +856,13 @@ build-dotnet-8:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -768,9 +883,13 @@ build-dotnet-8-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -791,9 +910,13 @@ build-dotnet-8-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
@@ -815,9 +938,13 @@ build-dotnet-8-debug:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
@@ -836,9 +963,13 @@ build-dotnet-8-debug-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   before_script:
@@ -857,9 +988,13 @@ build-dotnet-8-debug-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   before_script:
@@ -881,9 +1016,13 @@ build-rt-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
   before_script:
@@ -900,9 +1039,13 @@ build-stress-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
   before_script:
@@ -921,9 +1064,13 @@ build-base-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
@@ -946,9 +1093,13 @@ build-wayland-base-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
@@ -973,9 +1124,13 @@ build-weston-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -992,9 +1147,13 @@ build-graphics-tests-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
   variables:
@@ -1009,9 +1168,13 @@ build-weston-touch-calibrator-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -1027,9 +1190,13 @@ build-qt5-wayland-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1045,9 +1212,13 @@ build-qt5-wayland-am62-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -1063,9 +1234,13 @@ build-qt6-wayland-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1081,9 +1256,13 @@ build-qt6-wayland-am62-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   variables:
@@ -1099,9 +1278,13 @@ build-chromium-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
   variables:
@@ -1116,9 +1299,13 @@ build-chromium-tests-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
   variables:
@@ -1133,9 +1320,13 @@ build-cog-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
-  - if: $CI_COMMIT_TAG
+  - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
-  - changes:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    variables:
+      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
+      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
   variables:
