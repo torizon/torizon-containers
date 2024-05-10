@@ -128,6 +128,25 @@ build-base:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+      - gitlab-ci.yml
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
+      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -167,6 +186,20 @@ build-wayland-base:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -200,6 +233,10 @@ build-weston:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -225,6 +262,9 @@ build-graphics-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -247,6 +287,9 @@ build-weston-touch-calibrator:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -269,6 +312,10 @@ build-qt5-wayland:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -292,6 +339,9 @@ build-qt5-wayland-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -314,6 +364,10 @@ build-qt6-wayland:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -337,6 +391,9 @@ build-qt6-wayland-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -359,6 +416,20 @@ build-wayland-base-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -392,6 +463,10 @@ build-weston-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -417,6 +492,9 @@ build-graphics-tests-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -438,6 +516,10 @@ build-qt5-wayland-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -460,6 +542,9 @@ build-qt5-wayland-vivante-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -481,6 +566,10 @@ build-qt6-wayland-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -503,6 +592,9 @@ build-qt6-wayland-vivante-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -524,6 +616,9 @@ build-chromium:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -546,6 +641,9 @@ build-cog:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -570,6 +668,10 @@ build-armhf-toolchain:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -595,6 +697,9 @@ build-armhf-toolchain-ssh:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -616,6 +721,10 @@ build-arm64-toolchain:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -641,6 +750,9 @@ build-arm64-toolchain-vivante:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -666,6 +778,9 @@ build-arm64-toolchain-ssh:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -691,6 +806,10 @@ build-dotnet-6:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -718,6 +837,10 @@ build-dotnet-6-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -745,6 +868,10 @@ build-dotnet-6-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -773,6 +900,9 @@ build-dotnet-6-debug:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -799,6 +929,9 @@ build-dotnet-6-debug-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -825,6 +958,9 @@ build-dotnet-6-debug-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -853,6 +989,10 @@ build-dotnet-8:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -880,6 +1020,10 @@ build-dotnet-8-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -907,6 +1051,10 @@ build-dotnet-8-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -935,6 +1083,9 @@ build-dotnet-8-debug:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -960,6 +1111,9 @@ build-dotnet-8-debug-asp:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -985,6 +1139,9 @@ build-dotnet-8-debug-uno:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1013,6 +1170,9 @@ build-rt-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1036,6 +1196,9 @@ build-stress-tests:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1061,6 +1224,19 @@ build-base-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1090,6 +1266,18 @@ build-wayland-base-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1106,7 +1294,7 @@ build-wayland-base-am62:
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/* 
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -1121,6 +1309,10 @@ build-weston-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1144,6 +1336,9 @@ build-graphics-tests-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1165,6 +1360,10 @@ build-weston-touch-calibrator-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1187,6 +1386,10 @@ build-qt5-wayland-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1209,6 +1412,9 @@ build-qt5-wayland-am62-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1231,6 +1437,10 @@ build-qt6-wayland-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1253,6 +1463,9 @@ build-qt6-wayland-am62-examples:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1275,6 +1488,9 @@ build-chromium-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1296,6 +1512,9 @@ build-chromium-tests-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1317,6 +1536,9 @@ build-cog-am62:
   extends: .docker-build
   rules:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    changes:
+    - gitlab-ci.yml
+    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
