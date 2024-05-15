@@ -1,3 +1,4 @@
+# AM62
 debian-am62:
   major: 3
   minor: 0
@@ -38,3 +39,161 @@ cog-am62:
   major: 3
   minor: 0
   patch: 0
+
+# iMX
+debian:
+  major: 3
+  minor: 3
+  patch: 0
+wayland-base:
+  major: 3
+  minor: 3
+  patch: 0
+weston:
+  major: 3
+  minor: 3
+  patch: 0
+qt5-wayland:
+  major: 3
+  minor: 3
+  patch: 0
+qt5-wayland-examples:
+  major: 3
+  minor: 0
+  patch: 0
+qt6-wayland:
+  major: 3
+  minor: 2
+  patch: 0
+qt6-wayland-examples:
+  major: 3
+  minor: 2
+  patch: 0
+wayland-base-vivante:
+  major: 3
+  minor: 3
+  patch: 0
+weston-vivante:
+  major: 3
+  minor: 3
+  patch: 0  
+qt5-wayland-vivante:
+  major: 3
+  minor: 3
+  patch: 0
+qt5-wayland-examples-vivante:
+  major: 3
+  minor: 3
+  patch: 0
+qt6-wayland-vivante:
+  major: 3
+  minor: 2
+  patch: 0
+qt6-wayland-examples-vivante:
+  major: 3
+  minor: 2
+  patch: 0
+weston-touch-calibrator:
+  major: 3
+  minor: 3
+  patch: 0
+graphics-tests:
+  major: 3
+  minor: 3
+  patch: 1
+graphics-tests-vivante:
+  major: 3
+  minor: 3
+  patch: 1
+chromium:
+  major: 3
+  minor: 2
+  patch: 0
+cog:
+  major: 3
+  minor: 2
+  patch: 0
+
+# Debian Cross Toolchains
+debian-cross-toolchain-armhf:
+  major: 3
+  minor: 3
+  patch: 0
+debian-cross-toolchain-ssh-armhf:
+  major: 3
+  minor: 0
+  patch: 0
+debian-cross-toolchain-arm64:
+  major: 3
+  minor: 0
+  patch: 0
+debian-cross-toolchain-ssh-arm64:
+  major: 3
+  minor: 0
+  patch: 0
+debian-cross-toolchain-arm64-vivante:
+  major: 3
+  minor: 0
+  patch: 0
+
+# .NET
+dotnet-6:
+  release: 6.0
+  major: 3
+  minor: 1
+  patch: 1
+aspdotnet-6:
+  major: 3
+  minor: 1
+  patch: 1
+dotnet-6-debug:
+  major: 3
+  minor: 1
+  patch: 1
+aspdotnet-6-debug:
+  major: 3
+  minor: 1
+  patch: 1
+dotnet-6-uno:
+  major: 3
+  minor: 1
+  patch: 1
+dotnet-6-uno-debug:
+  major: 3
+  minor: 1
+  patch: 1
+dotnet-8:
+  release: 8.0
+  major: 3
+  minor: 0
+  patch: 0
+aspdotnet-8:
+  major: 3
+  minor: 0
+  patch: 0
+dotnet-8-debug:
+  major: 3
+  minor: 0
+  patch: 0
+aspdotnet-8-debug:
+  major: 3
+  minor: 0
+  patch: 0
+dotnet-8-uno:
+  major: 3
+  minor: 0
+  patch: 0
+dotnet-8-uno-debug:
+  major: 3
+  minor: 0
+  patch: 0
+
+# Real-time tests
+rt-tests:
+  major: 3
+  minor: 2
+  patch: 1
+stress-tests:
+  major: 3
+  minor: 2
+  patch: 1
