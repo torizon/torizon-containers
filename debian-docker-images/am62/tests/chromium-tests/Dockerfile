@@ -1,10 +1,11 @@
 # Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_IMAGE_NAME=chromium-am62
-ARG IMAGE_TAG=4-rc
-ARG REGISTRY=torizon
-FROM $REGISTRY/torizon/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
+ARG BASE_IMAGE_NAME
+ARG IMAGE_TAG
+ARG REGISTRY
+ARG REGISTRY_NAMESPACE
+FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 ## Un-comment if you want to run it with the
 # integrated puppeteer chromium distribution
