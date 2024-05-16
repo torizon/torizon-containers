@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ $# -ne 3 ]; then
     echo "Usage: $0 <channel_id> <slack_token> <message>"
