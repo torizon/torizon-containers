@@ -127,6 +127,8 @@ build-base:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
       - gitlab-ci.yml
@@ -185,6 +187,8 @@ build-wayland-base:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -232,6 +236,8 @@ build-weston:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -261,6 +267,8 @@ build-graphics-tests:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -286,6 +294,8 @@ build-weston-touch-calibrator:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -311,6 +321,8 @@ build-qt5-wayland:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -338,6 +350,8 @@ build-qt5-wayland-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -363,6 +377,8 @@ build-qt6-wayland:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -390,6 +406,8 @@ build-qt6-wayland-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -415,6 +433,8 @@ build-wayland-base-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -462,6 +482,8 @@ build-weston-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -491,6 +513,8 @@ build-graphics-tests-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -515,6 +539,8 @@ build-qt5-wayland-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -541,6 +567,8 @@ build-qt5-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -565,6 +593,8 @@ build-qt6-wayland-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -591,6 +621,8 @@ build-qt6-wayland-vivante-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -615,6 +647,8 @@ build-chromium:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -640,6 +674,8 @@ build-cog:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -667,6 +703,8 @@ build-armhf-toolchain:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -696,6 +734,8 @@ build-armhf-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -720,6 +760,8 @@ build-arm64-toolchain:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -749,6 +791,8 @@ build-arm64-toolchain-vivante:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -777,6 +821,8 @@ build-arm64-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -805,6 +851,8 @@ build-dotnet-6:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -836,6 +884,8 @@ build-dotnet-6-asp:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -867,6 +917,8 @@ build-dotnet-6-uno:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -899,6 +951,8 @@ build-dotnet-6-debug:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -928,6 +982,8 @@ build-dotnet-6-debug-asp:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -957,6 +1013,8 @@ build-dotnet-6-debug-uno:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -988,6 +1046,8 @@ build-dotnet-8:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1019,6 +1079,8 @@ build-dotnet-8-asp:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1050,6 +1112,8 @@ build-dotnet-8-uno:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1082,6 +1146,8 @@ build-dotnet-8-debug:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1110,6 +1176,8 @@ build-dotnet-8-debug-asp:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1138,6 +1206,8 @@ build-dotnet-8-debug-uno:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1169,6 +1239,8 @@ build-rt-tests:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1195,6 +1267,8 @@ build-stress-tests:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1223,6 +1297,8 @@ build-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1265,6 +1341,8 @@ build-wayland-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1308,6 +1386,8 @@ build-weston-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1335,6 +1415,8 @@ build-graphics-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1359,6 +1441,8 @@ build-weston-touch-calibrator-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1385,6 +1469,8 @@ build-qt5-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1411,6 +1497,8 @@ build-qt5-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1436,6 +1524,8 @@ build-qt6-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1462,6 +1552,8 @@ build-qt6-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1487,6 +1579,8 @@ build-chromium-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1511,6 +1605,8 @@ build-chromium-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
@@ -1535,6 +1631,8 @@ build-cog-am62:
   retry: 2
   extends: .docker-build
   rules:
+  - if: $CI_WORLD_REBUILD == "true"
+    when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     changes:
     - gitlab-ci.yml
