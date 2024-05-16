@@ -1,0 +1,8 @@
+rt-tests:
+  major: 3
+  minor: 2
+  patch: 1
+stress-tests:
+  major: 3
+  minor: 2
+  patch: 1

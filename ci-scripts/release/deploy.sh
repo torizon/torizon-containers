@@ -43,11 +43,28 @@ while IFS=: read -r image_name rest; do
     minor=$(yq e ".$image_name.minor" "$yaml_file")
     patch=$(yq e ".$image_name.patch" "$yaml_file")
     append=$(yq e ".$image_name.append" "$yaml_file")
+    release=$(yq e "explode(.).$image_name.release" "$yaml_file")
+    semver=$(yq e "explode(.).$image_name.semver" "$yaml_file")
 
-    if [[ "$append" ]]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch""$append"
+    if [[ "$append" != "null" ]]; then
+      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$append"
+      echo "$image_name: $major.$minor.$patch-$append" >> release_notes.md
+      echo "" >> release_notes.md
     fi
 
+    if [[ "$release" != "null" ]]; then
+      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$release"
+      echo "$image_name: $major.$minor.$patch-$release" >> release_notes.md
+      echo "" >> release_notes.md
+    fi
+
+    if [[ "$semver" != "null" ]]; then
+      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$semver"
+      echo "$image_name: $major.$minor.$patch-$semver" >> release_notes.md
+      echo "" >> release_notes.md
+    fi
+
+  if [ "$release" == "null" ] && [ "$semver" == "null" ]; then
     re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"."$patch"
     re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"
     re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"
@@ -56,4 +73,5 @@ while IFS=: read -r image_name rest; do
 
     echo "$image_name: $major.$minor.$patch" >> release_notes.md
     echo "" >> release_notes.md
+  fi
 done < <(yq e 'keys | .[]' "$yaml_file")

@@ -1,0 +1,28 @@
+dotnet:
+  release: &dotnet-release 6.0
+  semver: &dotnet-semver "6.0.25"
+  major: 3
+  minor: 1
+  patch: 1
+aspdotnet:
+  <<: *dotnet
+dotnet-debug:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 3
+  minor: 1
+  patch: 1
+aspdotnet-debug:
+  <<: *dotnet-debug
+dotnet-uno:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 3
+  minor: 1
+  patch: 1
+dotnet-uno-debug:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 3
+  minor: 1
+  patch: 1
