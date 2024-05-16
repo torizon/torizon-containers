@@ -17,7 +17,7 @@ re_tag_image() {
     else
       echo "Tag $new_image_path does not exist"
       echo "Re-tagging from $old_image_path"
-      # has a next image been pushed yet?
+      # has a stable-rc image been pushed yet?
       if regctl image digest "$old_image_path" >/dev/null 2>&1; then
         # it has been pushed, re-tag from $old_image_tag to $new_image_tag
         regctl image copy "$old_image_path" "$new_image_path"
@@ -43,11 +43,11 @@ while IFS=: read -r image_name rest; do
     minor=$(yq e ".$image_name.minor" "$yaml_file")
     patch=$(yq e ".$image_name.patch" "$yaml_file")
 
-    re_tag_image docker.io $registry_namespace $image_name next $major.$minor.$patch
-    re_tag_image docker.io $registry_namespace $image_name next $major.$minor
-    re_tag_image docker.io $registry_namespace $image_name next $major
+    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor.$patch
+    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor
+    re_tag_image docker.io $registry_namespace $image_name stable-rc $major
     date=$(date +%Y%m%d)
-    re_tag_image docker.io $registry_namespace $image_name next $major.$minor.$patch-$date
+    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor.$patch-$date
 
     echo "$image_name: $major.$minor.$patch" >> release_notes.md
     echo "" >> release_notes.md
