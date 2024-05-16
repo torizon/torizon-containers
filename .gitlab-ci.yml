@@ -254,7 +254,7 @@ build-weston:
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   before_script:
-    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -500,7 +500,7 @@ build-weston-vivante:
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   before_script:
-    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
