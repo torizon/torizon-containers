@@ -42,12 +42,17 @@ while IFS=: read -r image_name rest; do
     major=$(yq e ".$image_name.major" "$yaml_file")
     minor=$(yq e ".$image_name.minor" "$yaml_file")
     patch=$(yq e ".$image_name.patch" "$yaml_file")
+    append=$(yq e ".$image_name.append" "$yaml_file")
 
-    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor.$patch
-    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor
-    re_tag_image docker.io $registry_namespace $image_name stable-rc $major
+    if [[ "$append" ]]; then
+      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch""$append"
+    fi
+
+    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"."$patch"
+    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"
+    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"
     date=$(date +%Y%m%d)
-    re_tag_image docker.io $registry_namespace $image_name stable-rc $major.$minor.$patch-$date
+    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"."$patch"-"$date"
 
     echo "$image_name: $major.$minor.$patch" >> release_notes.md
     echo "" >> release_notes.md

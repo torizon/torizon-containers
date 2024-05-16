@@ -45,6 +45,7 @@ debian:
   major: 3
   minor: 3
   patch: 0
+  append: "-bookworm"
 wayland-base:
   major: 3
   minor: 3
