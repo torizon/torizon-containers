@@ -130,6 +130,8 @@ build-base:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
       - gitlab-ci.yml
       - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
@@ -190,6 +192,8 @@ build-wayland-base:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
@@ -239,6 +243,8 @@ build-weston:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -270,6 +276,8 @@ build-graphics-tests:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
@@ -297,6 +305,8 @@ build-weston-touch-calibrator:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -324,6 +334,8 @@ build-qt5-wayland:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
@@ -353,6 +365,8 @@ build-qt5-wayland-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -380,6 +394,8 @@ build-qt6-wayland:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
@@ -409,6 +425,8 @@ build-qt6-wayland-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -436,6 +454,8 @@ build-wayland-base-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
@@ -485,6 +505,8 @@ build-weston-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -516,6 +538,8 @@ build-graphics-tests-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
@@ -542,6 +566,8 @@ build-qt5-wayland-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
@@ -570,6 +596,8 @@ build-qt5-wayland-vivante-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -596,6 +624,8 @@ build-qt6-wayland-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
@@ -624,6 +654,8 @@ build-qt6-wayland-vivante-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -650,6 +682,8 @@ build-chromium:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
@@ -677,6 +711,8 @@ build-cog:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
@@ -706,6 +742,8 @@ build-armhf-toolchain:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
@@ -737,6 +775,8 @@ build-armhf-toolchain-ssh:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -763,6 +803,8 @@ build-arm64-toolchain:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
@@ -794,6 +836,8 @@ build-arm64-toolchain-vivante:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
@@ -824,6 +868,8 @@ build-arm64-toolchain-ssh:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -854,6 +900,8 @@ build-dotnet-6:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
@@ -887,6 +935,8 @@ build-dotnet-6-asp:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
@@ -920,6 +970,8 @@ build-dotnet-6-uno:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
@@ -954,6 +1006,8 @@ build-dotnet-6-debug:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -985,6 +1039,8 @@ build-dotnet-6-debug-asp:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -1016,6 +1072,8 @@ build-dotnet-6-debug-uno:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
@@ -1049,6 +1107,8 @@ build-dotnet-8:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
@@ -1082,6 +1142,8 @@ build-dotnet-8-asp:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
@@ -1115,6 +1177,8 @@ build-dotnet-8-uno:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
@@ -1149,6 +1213,8 @@ build-dotnet-8-debug:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -1179,6 +1245,8 @@ build-dotnet-8-debug-asp:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -1209,6 +1277,8 @@ build-dotnet-8-debug-uno:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
@@ -1242,6 +1312,8 @@ build-rt-tests:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
@@ -1270,6 +1342,8 @@ build-stress-tests:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
@@ -1300,6 +1374,8 @@ build-base-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
@@ -1344,6 +1420,8 @@ build-wayland-base-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
@@ -1389,6 +1467,8 @@ build-weston-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
@@ -1418,6 +1498,8 @@ build-graphics-tests-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
@@ -1444,6 +1526,8 @@ build-weston-touch-calibrator-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
@@ -1472,6 +1556,8 @@ build-qt5-wayland-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
@@ -1500,6 +1586,8 @@ build-qt5-wayland-am62-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1527,6 +1615,8 @@ build-qt6-wayland-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
@@ -1555,6 +1645,8 @@ build-qt6-wayland-am62-examples:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1582,6 +1674,8 @@ build-chromium-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
@@ -1608,6 +1702,8 @@ build-chromium-tests-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
@@ -1634,6 +1730,8 @@ build-cog-am62:
   - if: $CI_WORLD_REBUILD == "true"
     when: always
   - if: $CI_COMMIT_REF_PROTECTED == "true"
+    variables:
+      REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
