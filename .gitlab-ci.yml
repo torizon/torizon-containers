@@ -132,7 +132,7 @@ build-base:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &base-changes
       - gitlab-ci.yml
       - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
       - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
@@ -158,24 +158,7 @@ build-base:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-      - gitlab-ci.yml
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
-      - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-      - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *base-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -194,7 +177,7 @@ build-wayland-base:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &wayland-base-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -215,19 +198,7 @@ build-wayland-base:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+      *wayland-base-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -245,7 +216,7 @@ build-weston:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &weston-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -256,9 +227,7 @@ build-weston:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      *weston-changes
   before_script:
     - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
@@ -278,7 +247,7 @@ build-graphics-tests:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &graphics-tests-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -288,8 +257,7 @@ build-graphics-tests:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+      *graphics-tests-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -307,7 +275,7 @@ build-weston-touch-calibrator:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &weston-touch-calibrator-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -317,8 +285,7 @@ build-weston-touch-calibrator:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      *weston-touch-calibrator-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -336,7 +303,7 @@ build-qt5-wayland:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -347,9 +314,7 @@ build-qt5-wayland:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -367,7 +332,7 @@ build-qt5-wayland-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -377,8 +342,7 @@ build-qt5-wayland-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-examples-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -396,7 +360,7 @@ build-qt6-wayland:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -407,9 +371,7 @@ build-qt6-wayland:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -427,7 +389,7 @@ build-qt6-wayland-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -437,8 +399,7 @@ build-qt6-wayland-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-examples-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -456,7 +417,7 @@ build-wayland-base-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &wayland-base-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
@@ -477,19 +438,7 @@ build-wayland-base-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WAYLAND_BASE_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+      *wayland-base-vivante-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
@@ -507,7 +456,7 @@ build-weston-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &weston-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -518,9 +467,7 @@ build-weston-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      *weston-vivante-changes
   before_script:
     - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
@@ -540,7 +487,7 @@ build-graphics-tests-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &graphics-tests-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -550,8 +497,7 @@ build-graphics-tests-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+      *graphics-tests-vivante-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
@@ -568,7 +514,7 @@ build-qt5-wayland-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -579,9 +525,7 @@ build-qt5-wayland-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-vivante-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
@@ -598,7 +542,7 @@ build-qt5-wayland-vivante-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-vivante-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -608,8 +552,7 @@ build-qt5-wayland-vivante-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-vivante-examples-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt5-wayland-vivante
@@ -626,7 +569,7 @@ build-qt6-wayland-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
@@ -637,9 +580,7 @@ build-qt6-wayland-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-vivante-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-vivante
@@ -656,7 +597,7 @@ build-qt6-wayland-vivante-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-vivante-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -666,8 +607,7 @@ build-qt6-wayland-vivante-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-vivante-examples-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-vivante
@@ -684,7 +624,7 @@ build-chromium:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &chromium-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -694,8 +634,7 @@ build-chromium:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
+      *chromium-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -713,7 +652,7 @@ build-cog:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &cog-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -723,8 +662,7 @@ build-cog:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+      *cog-changes
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -744,7 +682,7 @@ build-armhf-toolchain:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &armhf-toolchain-changes
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -755,9 +693,7 @@ build-armhf-toolchain:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+      *armhf-toolchain-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -777,7 +713,7 @@ build-armhf-toolchain-ssh:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &armhf-toolchain-ssh-changes
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -787,8 +723,7 @@ build-armhf-toolchain-ssh:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+      *armhf-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
@@ -805,7 +740,7 @@ build-arm64-toolchain:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &arm64-toolchain-changes
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
@@ -816,9 +751,7 @@ build-arm64-toolchain:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+      *arm64-toolchain-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -838,7 +771,7 @@ build-arm64-toolchain-vivante:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &arm64-toolchain-vivante-changes
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -848,8 +781,7 @@ build-arm64-toolchain-vivante:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_VIVANTE_FOLDER}/*
+      *arm64-toolchain-vivante-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -870,7 +802,7 @@ build-arm64-toolchain-ssh:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &arm64-toolchain-ssh-changes
     - gitlab-ci.yml
     - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -880,8 +812,7 @@ build-arm64-toolchain-ssh:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+      *arm64-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
@@ -902,7 +833,7 @@ build-dotnet-6:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &dotnet-6-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
@@ -913,9 +844,7 @@ build-dotnet-6:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -938,9 +867,7 @@ build-dotnet-6-asp:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -948,9 +875,7 @@ build-dotnet-6-asp:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -972,7 +897,7 @@ build-dotnet-6-uno:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &dotnet-6-uno-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
@@ -983,9 +908,7 @@ build-dotnet-6-uno:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-uno-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -1008,7 +931,7 @@ build-dotnet-6-debug:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &dotnet-6-debug-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1018,8 +941,7 @@ build-dotnet-6-debug:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -1042,8 +964,7 @@ build-dotnet-6-debug-asp:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1051,8 +972,7 @@ build-dotnet-6-debug-asp:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -1074,7 +994,7 @@ build-dotnet-6-debug-uno:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &dotnet-6-debug-uno-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1084,8 +1004,7 @@ build-dotnet-6-debug-uno:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-debug-uno-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
@@ -1110,9 +1029,7 @@ build-dotnet-8:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1120,9 +1037,7 @@ build-dotnet-8:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -1145,9 +1060,7 @@ build-dotnet-8-asp:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1155,9 +1068,7 @@ build-dotnet-8-asp:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -1180,9 +1091,7 @@ build-dotnet-8-uno:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-uno-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1190,9 +1099,7 @@ build-dotnet-8-uno:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-uno-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -1216,8 +1123,7 @@ build-dotnet-8-debug:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1225,8 +1131,7 @@ build-dotnet-8-debug:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   before_script:
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
@@ -1248,8 +1153,7 @@ build-dotnet-8-debug-asp:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1257,8 +1161,7 @@ build-dotnet-8-debug-asp:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
+      *dotnet-6-debug-changes
   before_script:
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
     - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
@@ -1280,8 +1183,7 @@ build-dotnet-8-debug-uno:
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-debug-uno-changes
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -1289,8 +1191,7 @@ build-dotnet-8-debug-uno:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
+      *dotnet-6-debug-uno-changes
   before_script:
     - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
     - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
@@ -1314,7 +1215,7 @@ build-rt-tests:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &rt-tests-changes
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1324,8 +1225,7 @@ build-rt-tests:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
+      *rt-tests-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -1344,7 +1244,7 @@ build-stress-tests:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &stress-tests-changes
     - gitlab-ci.yml
     - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1354,8 +1254,7 @@ build-stress-tests:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
+      *stress-tests-changes
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -1376,7 +1275,7 @@ build-base-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &base-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
@@ -1396,18 +1295,7 @@ build-base-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
+      *base-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-am62
@@ -1422,7 +1310,7 @@ build-wayland-base-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &wayland-base-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
@@ -1441,17 +1329,7 @@ build-wayland-base-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
+      *wayland-base-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-am62
@@ -1469,7 +1347,7 @@ build-weston-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &weston-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -1480,9 +1358,7 @@ build-weston-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      *weston-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
@@ -1500,7 +1376,7 @@ build-graphics-tests-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &graphics-tests-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1510,8 +1386,7 @@ build-graphics-tests-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
+      *graphics-tests-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
@@ -1528,7 +1403,7 @@ build-weston-touch-calibrator-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &weston-touch-calibrator-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
@@ -1539,9 +1414,7 @@ build-weston-touch-calibrator-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+      *weston-touch-calibrator-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston-am62
@@ -1558,7 +1431,7 @@ build-qt5-wayland-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1569,9 +1442,7 @@ build-qt5-wayland-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
@@ -1588,7 +1459,7 @@ build-qt5-wayland-am62-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt5-wayland-am62-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1598,8 +1469,7 @@ build-qt5-wayland-am62-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt5-wayland-am62-examples-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt5-wayland-am62
@@ -1617,7 +1487,7 @@ build-qt6-wayland-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
@@ -1628,9 +1498,7 @@ build-qt6-wayland-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
@@ -1647,7 +1515,7 @@ build-qt6-wayland-am62-examples:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &qt6-wayland-am62-examples-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1657,8 +1525,7 @@ build-qt6-wayland-am62-examples:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      *qt6-wayland-am62-examples-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-am62
@@ -1676,7 +1543,7 @@ build-chromium-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &chromium-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1686,8 +1553,7 @@ build-chromium-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+      *chromium-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
@@ -1704,7 +1570,7 @@ build-chromium-tests-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &chromium-tests-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1714,8 +1580,7 @@ build-chromium-tests-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_AM62_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
+      *chromium-tests-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: chromium-am62
@@ -1732,7 +1597,7 @@ build-cog-am62:
   - if: $CI_COMMIT_REF_PROTECTED == "true"
     variables:
       REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    changes:
+    changes: &cog-am62-changes
     - gitlab-ci.yml
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1742,8 +1607,7 @@ build-cog-am62:
       REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
       IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
-    - gitlab-ci.yml
-    - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
+      *cog-am62-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
