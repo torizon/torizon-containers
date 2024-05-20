@@ -1,12 +1,11 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_IMAGE_NAME=wayland-base
-# For arm64v8 with Vivante use:
-# ARG BASE_IMAGE_NAME=wayland-base-vivante
-ARG IMAGE_TAG=3
+ARG BASE_IMAGE_NAME
+ARG IMAGE_TAG
 ARG REGISTRY
 ARG REGISTRY_NAMESPACE
+
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 COPY kms-setup.sh /usr/bin/kms-setup.sh

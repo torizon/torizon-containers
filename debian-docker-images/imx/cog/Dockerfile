@@ -1,11 +1,8 @@
-ARG BASE_IMAGE_NAME=wayland-base
-# For iMX8 with Vivante userspace drivers use:
-# ARG BASE_IMAGE_NAME=wayland-base-vivante
-
+ARG BASE_IMAGE_NAME
 ARG IMAGE_TAG
-
 ARG REGISTRY
 ARG REGISTRY_NAMESPACE
+
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && \

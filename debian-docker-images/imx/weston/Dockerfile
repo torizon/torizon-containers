@@ -1,12 +1,11 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_IMAGE_NAME=wayland-base
-# For vivante use: 
-# ARG BASE_IMAGE_NAME=wayland-base-vivante
-ARG IMAGE_TAG=3
+ARG BASE_IMAGE_NAME
+ARG IMAGE_TAG
 ARG REGISTRY
 ARG REGISTRY_NAMESPACE
+
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 # Install the weston compositor.

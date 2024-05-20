@@ -1,9 +1,7 @@
 # Copyright (c) 2019-2023 Toradex AG
 # SPDX-License-Identifier: MIT
 
-ARG BASE_IMAGE_NAME=qt6-wayland
-# For iMX8 devices with a Vivante GPU use:
-# ARG BASE_IMAGE_NAME=qt6-wayland-vivante
+ARG BASE_IMAGE_NAME
 ARG IMAGE_TAG
 ARG REGISTRY
 ARG REGISTRY_NAMESPACE
