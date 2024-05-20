@@ -72,7 +72,7 @@ services:
 .docker-build:
   variables:
     ADD_TORADEX_REPOSITORY: 1
-    IMAGE_TAG: "stable-rc"
+    IMAGE_TAG: $CI_COMMIT_BRANCH
   script:
   - *do_print_environment_variables
   - apk add curl

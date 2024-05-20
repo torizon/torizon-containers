@@ -17,7 +17,7 @@ re_tag_image() {
     else
       echo "Tag $new_image_path does not exist"
       echo "Re-tagging from $old_image_path"
-      # has a stable-rc image been pushed yet?
+      # has a "$staging_tag" image been pushed yet?
       if regctl image digest "$old_image_path" >/dev/null 2>&1; then
         # it has been pushed, re-tag from $old_image_tag to $new_image_tag
         regctl image copy "$old_image_path" "$new_image_path"
@@ -28,13 +28,14 @@ re_tag_image() {
     fi
 }
 
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <path_to_container_versions_yml> <registry_namespace>"
+if [ $# -ne 3 ]; then
+    echo "Usage: $0 <path_to_container_versions_yml> <registry_namespace> <staging_tag>"
     exit 1
 fi
 
 yaml_file="$1"
 registry_namespace="$2"
+staging_tag="$3"
 
 while IFS=: read -r image_name rest; do
     image_name=$(echo "$image_name" | xargs)
@@ -47,29 +48,29 @@ while IFS=: read -r image_name rest; do
     semver=$(yq e "explode(.).$image_name.semver" "$yaml_file")
 
     if [[ "$append" != "null" ]]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$append"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$append"
       echo "$image_name: $major.$minor.$patch-$append" >> release_notes.md
       echo "" >> release_notes.md
     fi
 
     if [[ "$release" != "null" ]]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$release"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$release"
       echo "$image_name: $major.$minor.$patch-$release" >> release_notes.md
       echo "" >> release_notes.md
     fi
 
     if [[ "$semver" != "null" ]]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "stable-rc" "$major"."$minor"."$patch"-"$semver"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$semver"
       echo "$image_name: $major.$minor.$patch-$semver" >> release_notes.md
       echo "" >> release_notes.md
     fi
 
   if [ "$release" == "null" ] && [ "$semver" == "null" ]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"."$patch"
-    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"
-    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"
     date=$(date +%Y%m%d)
-    re_tag_image docker.io "$registry_namespace" "$image_name" stable-rc "$major"."$minor"."$patch"-"$date"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$date"
 
     echo "$image_name: $major.$minor.$patch" >> release_notes.md
     echo "" >> release_notes.md
