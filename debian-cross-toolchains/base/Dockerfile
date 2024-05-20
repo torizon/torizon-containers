@@ -6,15 +6,17 @@ ARG REGISTRY_PROXY
 
 FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE
 
-ARG CROSS_TARGET_ARCH=armhf
-# For arm64 use:
-# ARG CROSS_TARGET_ARCH=arm64
-ARG CROSS_COMPILER="arm-linux-gnueabihf"
-# For arm64 use:
-# ARG CROSS_COMPILER="aarch64-linux-gnu"
+ARG CROSS_TARGET_ARCH
+ARG CROSS_COMPILER
 ARG TORADEX_SNAPSHOT
 ARG USE_TORADEX_SNAPSHOT=1
 ARG TORADEX_FEED_BASE_URL="https://feeds1.toradex.com/debian"
+
+RUN test -n "$CROSS_TARGET_ARCH" || (echo "CROSS_TARGET_ARCH  not set" && false)
+RUN test -n "$CROSS_COMPILER" || (echo "CROSS_COMPILER  not set" && false)
+RUN test -n "$TORADEX_SNAPSHOT" || (echo "TORADEX_SNAPSHOT  not set" && false)
+RUN test -n "$USE_TORADEX_SNAPSHOT" || (echo "USE_TORADEX_SNAPSHOT  not set" && false)
+RUN test -n "$TORADEX_FEED_BASE_URL" || (echo "TORADEX_FEED_BASE_URL  not set" && false)
 
 ENV CROSS_COMPILE=${CROSS_COMPILER}-
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILER}/pkgconfig

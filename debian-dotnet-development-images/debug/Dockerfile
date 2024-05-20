@@ -12,6 +12,8 @@ FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS build
 
 ARG DOTNET_DEBUGGER_VER
 
+RUN test -n "$DOTNET_DEBUGGER_VER" || (echo "DOTNET_DEBUGGER_VER  not set" && false)
+
 RUN apt-get update && apt-get install -y \
     --no-install-recommends --no-install-suggests \
     ca-certificates \

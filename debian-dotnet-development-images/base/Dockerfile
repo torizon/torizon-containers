@@ -7,13 +7,14 @@ ARG IMAGE_TAG
 
 FROM $REGISTRY_PROXY/$REGISTRY_NAMESPACE/debian:$IMAGE_TAG AS build
 
-# define specific .NET version you want to use or "latest"
-ARG DOTNET_SEMVER=latest
-# can be dotnet or aspnetcore
-ARG DOTNET_RUNTIME=dotnet
+ARG DOTNET_SEMVER
+ARG DOTNET_RUNTIME
 ARG TARGETARCH
 
-# Make sure we don't get notifications we can't answer during building.
+RUN test -n "$DOTNET_SEMVER" || (echo "DOTNET_SEMVER  not set" && false)
+RUN test -n "$DOTNET_RUNTIME" || (echo "DOTNET_RUNTIME  not set" && false)
+RUN test -n "$TARGETARCH" || (echo "TARGETARCH  not set" && false)
+
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update && apt-get install -y \
