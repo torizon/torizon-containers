@@ -8,7 +8,7 @@ ARG IMAGE_TAG
 FROM $REGISTRY_PROXY/$REGISTRY_NAMESPACE/debian:$IMAGE_TAG AS build
 
 # define specific .NET version you want to use or "latest"
-ARG DOTNET_VERSION=latest
+ARG DOTNET_SEMVER=latest
 # can be dotnet or aspnetcore
 ARG DOTNET_RUNTIME=dotnet
 ARG TARGETARCH
@@ -29,7 +29,7 @@ RUN curl -L -o /dotnet-install.sh https://dot.net/v1/dotnet-install.sh \
 
 WORKDIR /dotnet
 
-RUN /dotnet-install.sh --install-dir /dotnet --runtime ${DOTNET_RUNTIME} --version ${DOTNET_VERSION} --os linux --architecture ${TARGETARCH} --no-path
+RUN /dotnet-install.sh --install-dir /dotnet --runtime ${DOTNET_RUNTIME} --version ${DOTNET_SEMVER} --os linux --architecture ${TARGETARCH} --no-path
 
 ARG REGISTRY_PROXY
 ARG REGISTRY_NAMESPACE

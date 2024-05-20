@@ -6,8 +6,11 @@ ARG REGISTRY_PROXY
 ARG REGISTRY_NAMESPACE
 ARG DEBIAN_POINT_RELEASE
 ARG IMAGE_TAG
+ARG DOTNET_DEBUGGER_VER
 
 FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS build
+
+ARG DOTNET_DEBUGGER_VER
 
 RUN apt-get update && apt-get install -y \
     --no-install-recommends --no-install-suggests \
@@ -16,9 +19,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-ARG DOTNET_DEBUGGER_RELEASE
-
-RUN curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v ${DOTNET_DEBUGGER_RELEASE} -l /vsdbg
+RUN curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v ${DOTNET_DEBUGGER_VER} -l /vsdbg
 
 FROM $REGISTRY_PROXY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG
 

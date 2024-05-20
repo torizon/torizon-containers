@@ -6,16 +6,6 @@ variables:
   DEBIAN_POINT_RELEASE: "12.5-slim"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-horw"
 
-  DOTNET_6_RELEASE: "6.0"
-  DOTNET_6_SEMANTIC_VERSION: "6.0.27"
-
-  DOTNET_8_RELEASE: "8.0"
-  DOTNET_8_SEMANTIC_VERSION: "8.0.2"
-
-  # The latest version of vsdbg can be obtained by running the follow command:
-  #curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  DOTNET_DEBUGGER_RELEASE: "17.10.20209.7"
-
   # This should be set by docker image already, just to be sure...
   DOCKER_HOST: tcp://docker:2375
   # Use overlayfs driver for better performance
@@ -75,7 +65,7 @@ services:
     IMAGE_TAG: $CI_COMMIT_BRANCH
   script:
   - *do_print_environment_variables
-  - apk add curl
+  - apk add curl yq
   - export REGISTRY="docker.io"
   - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -104,9 +94,9 @@ services:
                   --build-arg BASE_IMAGE_NAME_WAYLAND=${BASE_IMAGE_NAME_WAYLAND}
                   --build-arg CROSS_TARGET_ARCH=${CROSS_TARGET_ARCH}
                   --build-arg DEBIAN_POINT_RELEASE=${DEBIAN_POINT_RELEASE}
-                  --build-arg DOTNET_DEBUGGER_RELEASE=${DOTNET_DEBUGGER_RELEASE}
+                  --build-arg DOTNET_DEBUGGER_VER=${DOTNET_DEBUGGER_VER}
                   --build-arg DOTNET_RUNTIME=${DOTNET_RUNTIME}
-                  --build-arg DOTNET_VERSION=${DOTNET_VERSION}
+                  --build-arg DOTNET_SEMVER=${DOTNET_SEMVER}
                   --build-arg IMAGE_TAG=${IMAGE_TAG}
                   --build-arg REGISTRY_PROXY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
                   --build-arg REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
@@ -846,8 +836,7 @@ build-dotnet-6:
     changes:
       *dotnet-6-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml dotnet
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -877,8 +866,7 @@ build-dotnet-6-asp:
     changes:
       *dotnet-6-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml aspdotnet
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -910,8 +898,7 @@ build-dotnet-6-uno:
     changes:
       *dotnet-6-uno-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml dotnet-uno
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -943,9 +930,7 @@ build-dotnet-6-debug:
     changes:
       *dotnet-6-debug-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
-    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml dotnet-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -974,9 +959,7 @@ build-dotnet-6-debug-asp:
     changes:
       *dotnet-6-debug-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
-    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml aspdotnet-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -1006,8 +989,7 @@ build-dotnet-6-debug-uno:
     changes:
       *dotnet-6-debug-uno-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_6_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_6_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-6.yml dotnet-uno-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -1039,8 +1021,7 @@ build-dotnet-8:
     changes:
       *dotnet-6-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -1070,8 +1051,7 @@ build-dotnet-8-asp:
     changes:
       *dotnet-6-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -1101,8 +1081,7 @@ build-dotnet-8-uno:
     changes:
       *dotnet-6-uno-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-uno
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -1133,8 +1112,7 @@ build-dotnet-8-debug:
     changes:
       *dotnet-6-debug-changes
   before_script:
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
-    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -1163,8 +1141,7 @@ build-dotnet-8-debug-asp:
     changes:
       *dotnet-6-debug-changes
   before_script:
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
-    - export DOTNET_DEBUGGER_RELEASE="${DOTNET_DEBUGGER_RELEASE}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -1193,8 +1170,7 @@ build-dotnet-8-debug-uno:
     changes:
       *dotnet-6-debug-uno-changes
   before_script:
-    - export RELEASE_APPEND="-${DOTNET_8_RELEASE}"
-    - export DOTNET_VERSION="${DOTNET_8_SEMANTIC_VERSION}"
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-uno-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"

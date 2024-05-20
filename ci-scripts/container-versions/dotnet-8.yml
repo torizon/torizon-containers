@@ -9,7 +9,9 @@ aspdotnet:
 dotnet-debug: &dotnet-debug
   release: *dotnet-release
   semver: *dotnet-semver
-  dotnet-debugger: &dotnet-debugger "17.10.20209.7"
+  # The latest version of vsdbg can be obtained by running the follow command:
+  # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
+  debugger-version: &debugger-version "17.10.20209.7"
   major: 3
   minor: 1
   patch: 1
@@ -24,7 +26,7 @@ dotnet-uno:
 dotnet-uno-debug:
   release: *dotnet-release
   semver: *dotnet-semver
-  dotnet-debugger: *dotnet-debugger
+  debugger-version: *debugger-version
   major: 3
   minor: 1
   patch: 1
