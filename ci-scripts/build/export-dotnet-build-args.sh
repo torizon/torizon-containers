@@ -2,6 +2,8 @@
 
 set -x
 
+apk update && apk add yq
+
 yaml_file="$1"
 key="$2"
 

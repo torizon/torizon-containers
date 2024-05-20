@@ -65,7 +65,7 @@ services:
     IMAGE_TAG: $CI_COMMIT_BRANCH
   script:
   - *do_print_environment_variables
-  - apk add curl yq
+  - apk add curl
   - export REGISTRY="docker.io"
   - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
