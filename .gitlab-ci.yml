@@ -92,6 +92,7 @@ services:
                   --build-arg BASE_IMAGE_NAME=${BASE_IMAGE_NAME}
                   --build-arg BASE_IMAGE_NAME_DEBUG=${BASE_IMAGE_NAME_DEBUG}
                   --build-arg BASE_IMAGE_NAME_WAYLAND=${BASE_IMAGE_NAME_WAYLAND}
+                  --build-arg CROSS_COMPILER=${CROSS_COMPILER}
                   --build-arg CROSS_TARGET_ARCH=${CROSS_TARGET_ARCH}
                   --build-arg DEBIAN_POINT_RELEASE=${DEBIAN_POINT_RELEASE}
                   --build-arg DOTNET_DEBUGGER_VER=${DOTNET_DEBUGGER_VER}
