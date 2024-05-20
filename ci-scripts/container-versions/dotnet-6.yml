@@ -1,14 +1,15 @@
-dotnet:
-  release: &dotnet-release 6.0
+dotnet: &dotnet
+  release: &dotnet-release "6.0"
   semver: &dotnet-semver "6.0.25"
   major: 3
   minor: 1
   patch: 1
 aspdotnet:
   <<: *dotnet
-dotnet-debug:
+dotnet-debug: &dotnet-debug
   release: *dotnet-release
   semver: *dotnet-semver
+  dotnet-debugger: &dotnet-debugger "17.10.20209.7"
   major: 3
   minor: 1
   patch: 1
@@ -23,6 +24,7 @@ dotnet-uno:
 dotnet-uno-debug:
   release: *dotnet-release
   semver: *dotnet-semver
+  dotnet-debugger: *dotnet-debugger
   major: 3
   minor: 1
   patch: 1
