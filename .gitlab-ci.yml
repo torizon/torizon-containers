@@ -62,7 +62,6 @@ services:
 .docker-build:
   variables:
     ADD_TORADEX_REPOSITORY: 1
-    IMAGE_TAG: $CI_COMMIT_BRANCH
   script:
   - *do_print_environment_variables
   - apk add curl
@@ -85,6 +84,22 @@ services:
   - if [ -n "$BUILD_FOR_ARM_V8" ]; then echo "Building for linux/arm64/v8" && PLATFORM_BUILD_ARM_V8="--platform linux/arm64/v8"; fi
   - if [ -n "$BUILD_FOR_AMD64" ]; then echo "Building for linux/amd64" && PLATFORM_BUILD_AMD64="--platform linux/amd64"; fi
 
+  # in merge request pipeline ~> push image to local registry
+  # in protected ref ~> push to DockerHub
+  - |
+    if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" ]]; then
+      export PULL_REGISTRY=${CI_REGISTRY}
+      export PUSH_REGISTRY=${CI_REGISTRY}
+      export REGISTRY_NAMESPACE=${CI_PROJECT_PATH}
+      export IMAGE_TAG=${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+    fi
+    if [[ "${CI_COMMIT_REF_PROTECTED}" == "true" ]]; then
+      export PULL_REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
+      export PUSH_REGISTRY="docker.io"
+      export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE}
+      export IMAGE_TAG=${CI_COMMIT_BRANCH}
+    fi
+
   - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
                   --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA}
                   --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY}
@@ -99,7 +114,7 @@ services:
                   --build-arg DOTNET_SEMVER=${DOTNET_SEMVER}
                   --build-arg IMAGE_TAG=${IMAGE_TAG}
                   --build-arg REGISTRY_PROXY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
-                  --build-arg REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
+                  --build-arg REGISTRY=${PULL_REGISTRY} 
                   --build-arg REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}
                   --build-arg TORADEX_SNAPSHOT=${TORADEX_SNAPSHOT}                  
                   --label container.name=${IMAGE_NAME}
@@ -108,7 +123,7 @@ services:
                   --label git.hash=${CI_COMMIT_SHA}
                   --label pipeline.id=${CI_PIPELINE_ID}
                   -f ${DOCKERFILE_FOLDER}Dockerfile
-                  -t ${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+                  -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
                   ${DOCKERFILE_FOLDER}
 
 ## debian-docker-images
@@ -144,9 +159,6 @@ build-base:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *base-changes
   before_script:
@@ -181,12 +193,11 @@ build-wayland-base:
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${GRAPHICS_TESTS_VIVANTE_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/*
     - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
+    - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *wayland-base-changes
   variables:
@@ -213,9 +224,6 @@ build-weston:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *weston-changes
   before_script:
@@ -243,9 +251,6 @@ build-graphics-tests:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *graphics-tests-changes
   variables:
@@ -271,9 +276,6 @@ build-weston-touch-calibrator:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *weston-touch-calibrator-changes
   variables:
@@ -300,9 +302,6 @@ build-qt5-wayland:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-changes
   variables:
@@ -328,9 +327,6 @@ build-qt5-wayland-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-examples-changes
   variables:
@@ -357,9 +353,6 @@ build-qt6-wayland:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-changes
   variables:
@@ -385,9 +378,6 @@ build-qt6-wayland-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-examples-changes
   variables:
@@ -424,9 +414,6 @@ build-wayland-base-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *wayland-base-vivante-changes
   variables:
@@ -453,9 +440,6 @@ build-weston-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *weston-vivante-changes
   before_script:
@@ -483,9 +467,6 @@ build-graphics-tests-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *graphics-tests-vivante-changes
   variables:
@@ -511,9 +492,6 @@ build-qt5-wayland-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-vivante-changes
   variables:
@@ -538,9 +516,6 @@ build-qt5-wayland-vivante-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-vivante-examples-changes
   variables:
@@ -566,9 +541,6 @@ build-qt6-wayland-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-vivante-changes
   variables:
@@ -593,9 +565,6 @@ build-qt6-wayland-vivante-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-vivante-examples-changes
   variables:
@@ -620,9 +589,6 @@ build-chromium:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *chromium-changes
   variables:
@@ -648,9 +614,6 @@ build-cog:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *cog-changes
   variables:
@@ -679,9 +642,6 @@ build-armhf-toolchain:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *armhf-toolchain-changes
   before_script:
@@ -709,9 +669,6 @@ build-armhf-toolchain-ssh:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *armhf-toolchain-ssh-changes
   variables:
@@ -737,9 +694,6 @@ build-arm64-toolchain:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *arm64-toolchain-changes
   before_script:
@@ -767,9 +721,6 @@ build-arm64-toolchain-vivante:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *arm64-toolchain-vivante-changes
   before_script:
@@ -798,9 +749,6 @@ build-arm64-toolchain-ssh:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *arm64-toolchain-ssh-changes
   variables:
@@ -830,9 +778,6 @@ build-dotnet-6:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-changes
   before_script:
@@ -860,9 +805,6 @@ build-dotnet-6-asp:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-changes
   before_script:
@@ -892,9 +834,6 @@ build-dotnet-6-uno:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-uno-changes
   before_script:
@@ -924,9 +863,6 @@ build-dotnet-6-debug:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-changes
   before_script:
@@ -953,9 +889,6 @@ build-dotnet-6-debug-asp:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-changes
   before_script:
@@ -983,9 +916,6 @@ build-dotnet-6-debug-uno:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-uno-changes
   before_script:
@@ -1015,9 +945,6 @@ build-dotnet-8:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-changes
   before_script:
@@ -1045,9 +972,6 @@ build-dotnet-8-asp:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-changes
   before_script:
@@ -1075,9 +999,6 @@ build-dotnet-8-uno:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-uno-changes
   before_script:
@@ -1106,9 +1027,6 @@ build-dotnet-8-debug:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-changes
   before_script:
@@ -1135,9 +1053,6 @@ build-dotnet-8-debug-asp:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-changes
   before_script:
@@ -1164,9 +1079,6 @@ build-dotnet-8-debug-uno:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *dotnet-6-debug-uno-changes
   before_script:
@@ -1197,9 +1109,6 @@ build-rt-tests:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *rt-tests-changes
   before_script:
@@ -1226,9 +1135,6 @@ build-stress-tests:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *stress-tests-changes
   before_script:
@@ -1267,9 +1173,6 @@ build-base-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *base-am62-changes
   variables:
@@ -1301,9 +1204,6 @@ build-wayland-base-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *wayland-base-am62-changes
   variables:
@@ -1330,9 +1230,6 @@ build-weston-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *weston-am62-changes
   variables:
@@ -1358,9 +1255,6 @@ build-graphics-tests-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *graphics-tests-am62-changes
   variables:
@@ -1386,9 +1280,6 @@ build-weston-touch-calibrator-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *weston-touch-calibrator-am62-changes
   variables:
@@ -1414,9 +1305,6 @@ build-qt5-wayland-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-am62-changes
   variables:
@@ -1441,9 +1329,6 @@ build-qt5-wayland-am62-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt5-wayland-am62-examples-changes
   variables:
@@ -1470,9 +1355,6 @@ build-qt6-wayland-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-am62-changes
   variables:
@@ -1497,9 +1379,6 @@ build-qt6-wayland-am62-examples:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *qt6-wayland-am62-examples-changes
   variables:
@@ -1525,9 +1404,6 @@ build-chromium-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *chromium-am62-changes
   variables:
@@ -1552,9 +1428,6 @@ build-chromium-tests-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *chromium-tests-am62-changes
   variables:
@@ -1579,9 +1452,6 @@ build-cog-am62:
   - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
     when: never
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    variables:
-      REGISTRY_NAMESPACE: $CI_REGISTRY_IMAGE
-      IMAGE_TAG: ${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
     changes:
       *cog-am62-changes
   variables:
