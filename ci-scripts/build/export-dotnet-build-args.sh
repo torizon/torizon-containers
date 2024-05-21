@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (c) 2019-2023 Toradex AG
+# SPDX-License-Identifier: MIT
+
 set -x
 
 apk update && apk add yq
