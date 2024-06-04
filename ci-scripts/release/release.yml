@@ -45,7 +45,9 @@ release:
     - export base_message="Torizon Containers release $CI_COMMIT_TAG!"
     - export link="https://gitlab.int.toradex.com/rd/torizon-core-containers/torizon-containers/-/releases/$CI_COMMIT_TAG"
     - export newline="\n" formatted_link="<${link}|Click here for the changelog>"
-    - ./ci-scripts/release/send-slack-message.sh $CHANNEL_ID $SLACK_TOKEN "$base_message$newline$formatted_link"
+    - ./ci-scripts/release/send-slack-message.sh $IDE_CHANNEL_ID $SLACK_TOKEN "$base_message$newline$formatted_link"
+    - ./ci-scripts/release/send-slack-message.sh $TECH_MKT_CHANNEL_ID $SLACK_TOKEN "$base_message$newline$formatted_link"
+
   release:
     name: 'Release $CI_COMMIT_TAG'
     description: release_notes.md
