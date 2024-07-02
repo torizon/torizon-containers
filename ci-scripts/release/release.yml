@@ -22,6 +22,7 @@ prepare:
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/cross-toolchains.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-am62.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
+    - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-upstream.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-6.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/rt-tests.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"

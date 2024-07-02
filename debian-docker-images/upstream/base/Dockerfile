@@ -1,0 +1,50 @@
+# Copyright (c) 2019-2024 Toradex AG
+# SPDX-License-Identifier: MIT
+
+ARG DEBIAN_POINT_RELEASE
+ARG TORADEX_SNAPSHOT
+ARG USE_TORADEX_SNAPSHOT=1
+ARG ADD_TORADEX_REPOSITORY=1
+ARG REGISTRY_PROXY
+
+FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS base
+
+ARG DEBIAN_FRONTEND=noninteractive
+ONBUILD ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        netbase \
+        sudo \
+        wget \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV LC_ALL C.UTF-8
+
+COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
+
+RUN echo 'APT::Get::Assume-Yes "true";\n\
+    APT::Install-Recommends "0";\n\
+    APT::Install-Suggests "0";\n\
+    quiet "true";' > /etc/apt/apt.conf.d/01_buildconfig \
+    && mkdir -p /usr/share/man/man1
+
+COPY users-groups.sh /users-groups.sh
+RUN ./users-groups.sh \
+    && rm users-groups.sh
+
+RUN apt-get -y update \
+    && apt-get install -y --no-install-recommends \
+        neofetch \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY neofetch.conf /root/.config/neofetch/config.conf
+
+CMD ["/bin/bash"]
+
