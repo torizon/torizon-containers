@@ -643,7 +643,7 @@ build-cog:
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/"
   needs: ["build-wayland-base"]
 
-## ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}
+## Debian Cross Toolchains
 
 build-armhf-toolchain:
   retry: 2
