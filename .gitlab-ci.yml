@@ -98,7 +98,7 @@ services:
       export PULL_REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
       export PUSH_REGISTRY="docker.io"
       export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE}
-      export IMAGE_TAG=${CI_COMMIT_BRANCH}
+      export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
     fi
 
   - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
