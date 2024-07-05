@@ -2,6 +2,7 @@ debian-am62:
   major: 3
   minor: 0
   patch: 0
+  append: "bookworm"
 wayland-base-am62:
   major: 3
   minor: 0
