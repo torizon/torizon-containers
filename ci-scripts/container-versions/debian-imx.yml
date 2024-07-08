@@ -1,73 +1,45 @@
 debian:
-  major: 3
-  minor: 4
+  major: 4
+  minor: 0
   patch: 0
   append: "bookworm"
 wayland-base:
-  major: 3
-  minor: 4
+  major: 4
+  minor: 0
   patch: 0
 weston:
-  major: 3
-  minor: 4
+  major: 4
+  minor: 0
   patch: 0
 qt5-wayland:
-  major: 3
-  minor: 4
+  major: 4
+  minor: 0
   patch: 0
 qt5-wayland-examples:
-  major: 3
-  minor: 1
+  major: 4
+  minor: 0
   patch: 0
 qt6-wayland:
-  major: 3
-  minor: 3
+  major: 4
+  minor: 0
   patch: 0
 qt6-wayland-examples:
-  major: 3
-  minor: 3
-  patch: 0
-wayland-base-vivante:
-  major: 3
-  minor: 4
-  patch: 0
-weston-vivante:
-  major: 3
-  minor: 4
-  patch: 0
-qt5-wayland-vivante:
-  major: 3
-  minor: 4
-  patch: 0
-qt5-wayland-examples-vivante:
-  major: 3
-  minor: 4
-  patch: 0
-qt6-wayland-vivante:
-  major: 3
-  minor: 3
-  patch: 0
-qt6-wayland-examples-vivante:
-  major: 3
-  minor: 3
+  major: 4
+  minor: 0
   patch: 0
 weston-touch-calibrator:
-  major: 3
-  minor: 4
+  major: 4
+  minor: 0
   patch: 0
 graphics-tests:
-  major: 3
-  minor: 4
-  patch: 1
-graphics-tests-vivante:
-  major: 3
-  minor: 4
-  patch: 1
+  major: 4
+  minor: 0
+  patch: 0
 chromium:
-  major: 3
-  minor: 3
+  major: 4
+  minor: 0
   patch: 0
 cog:
-  major: 3
-  minor: 3
+  major: 4
+  minor: 0
   patch: 0

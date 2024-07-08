@@ -21,13 +21,10 @@ RUN test -n "$TORADEX_FEED_BASE_URL" || (echo "TORADEX_FEED_BASE_URL  not set" &
 ENV CROSS_COMPILE=${CROSS_COMPILER}-
 ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILER}/pkgconfig
 
-# Make sure we don't get notifications we can't answer during building.
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# Enable multiarch
 RUN dpkg --add-architecture ${CROSS_TARGET_ARCH}
 
-# Install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y install --no-install-recommends \
         ca-certificates \
@@ -37,23 +34,9 @@ RUN apt-get -q -y update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-# Add toradex key and package feed
 RUN wget -O- ${TORADEX_FEED_BASE_URL}/toradex-debian-repo-19092023.gpg \
     | gpg --dearmor \
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
-
-RUN if [ "${USE_TORADEX_SNAPSHOT}" = 1 ]; then \
-            TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}/snapshots/${TORADEX_SNAPSHOT}"; \
-        else \
-            TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}"; \
-        fi \
-    && echo "Types: deb\n\
-URIs: https://feeds1.toradex.com/debian/snapshots/$TORADEX_SNAPSHOT\n\
-Suites: testing\n\
-Components: main non-free\n\
-Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
-    && echo "Package: *\nPin: origin feeds1.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
-
 
 # Debian Bookworm has higher versions of some same packages than the Toradex feed.
 # Force install Bookworm versions of these packages in order to keep the container equivalent for 32 and 64 bits architectures.
@@ -65,9 +48,6 @@ RUN HOLD_PKGS='libdrm-common libdrm-amdgpu1 libdrm2' \
     done | xargs -r apt-get install -y --no-install-recommends \
     && apt-mark hold $HOLD_PKGS \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
-
-
-# Upgrade & install required packages
 
 RUN apt-get -q -y update \
     && apt-get -q -y upgrade \

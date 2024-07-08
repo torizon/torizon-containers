@@ -48,14 +48,13 @@ RUN if [ "${ACCEPT_FSL_EULA}" != "1" ];then \
         echo "INFO: Vivante EULA has been accepted!"; \
     fi
 
-# Enable multiarch
 RUN dpkg --add-architecture ${CROSS_TARGET_ARCH}
 
-# Add toradex key and package feed
 RUN wget -O- ${TORADEX_FEED_BASE_URL}/toradex-debian-repo-19092023.gpg \
     | gpg --dearmor \
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
 
+# FIXME: use debian base and drop this
 RUN if [ "${USE_TORADEX_SNAPSHOT}" = 1 ]; then \
             TORADEX_FEED_URL="${TORADEX_FEED_BASE_URL}/snapshots/${TORADEX_SNAPSHOT}"; \
         else \
@@ -67,8 +66,6 @@ Suites: testing\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
     && echo "Package: *\nPin: origin feeds1.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
-
-# Upgrade & install required packages
 
 RUN apt-get -q -y update \
     && apt-get -q -y upgrade \

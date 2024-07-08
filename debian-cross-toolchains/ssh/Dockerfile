@@ -8,10 +8,8 @@ ARG CROSS_TARGET_ARCH
 
 FROM $REGISTRY/$REGISTRY_NAMESPACE/debian-cross-toolchain-$CROSS_TARGET_ARCH:$IMAGE_TAG
 
-# SSH
 EXPOSE 22
 
-# Install required packages
 RUN apt-get -q -y update \
     && apt-get -q -y install --no-install-recommends \
     openssh-server \
@@ -22,7 +20,6 @@ RUN apt-get -q -y update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-# create folders needed for the different components
 RUN mkdir /var/run/sshd && mkdir /home/build && mkdir /home/build/sysroot
 
 # configures SSH access to the container and sets environment by default
