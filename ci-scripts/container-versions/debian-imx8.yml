@@ -1,45 +1,45 @@
-debian:
+debian-imx8:
   major: 4
   minor: 0
   patch: 0
   append: "bookworm"
-wayland-base:
+wayland-base-imx8:
   major: 4
   minor: 0
   patch: 0
-weston:
+weston-imx8:
   major: 4
   minor: 0
   patch: 0
-qt5-wayland:
+qt5-wayland-imx8:
   major: 4
   minor: 0
   patch: 0
-qt5-wayland-examples:
+qt5-wayland-examples-imx8:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland:
+qt6-wayland-imx8:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland-examples:
+qt6-wayland-examples-imx8:
   major: 4
   minor: 0
   patch: 0
-weston-touch-calibrator:
+weston-touch-calibrator-imx8:
   major: 4
   minor: 0
   patch: 0
-graphics-tests:
+graphics-tests-imx8:
   major: 4
   minor: 0
   patch: 0
-chromium:
+chromium-imx8:
   major: 4
   minor: 0
   patch: 0
-cog:
+cog-imx8:
   major: 4
   minor: 0
   patch: 0

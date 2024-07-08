@@ -61,4 +61,3 @@ for extra_group in $EXTRA_GROUPS; do
   # add torizon user to group
   usermod -a -G "$gname" "$TORIZON_NAME"
 done
-

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This is a wrapper script for running Qt5 KMS applications on Toradex devices.
 # It writes kms configuration in /etc/kms.conf and then runs the specified
@@ -24,7 +24,7 @@ check_module() {
 }
 
 set_dri_device() {
-  DRI_DEVICE=$(find /run/udev/tags/seat/ -name '+drm*' -type f | sort -r | head -n1 | grep -o card.)
+  DRI_DEVICE=$(find /run/udev/tags/seat/ -name '+drm*' | tail -n1 | grep -o card.)
   echo "${DRI_DEVICE}"
 }
 
@@ -43,4 +43,4 @@ create_kms_conf() {
 }
 
 create_kms_conf
-echo "Now running $*" && "$@"
+echo "Now running \"$*\"" && "$@"

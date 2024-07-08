@@ -12,6 +12,7 @@ FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS base
 ARG DEBIAN_FRONTEND=noninteractive
 ONBUILD ARG DEBIAN_FRONTEND=noninteractive
 
+# Upgrade & install required packages
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
@@ -25,8 +26,10 @@ RUN apt-get update \
 
 ENV LC_ALL C.UTF-8
 
+# Create 01_nodoc
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
+# Create 01_buildconfig
 RUN echo 'APT::Get::Assume-Yes "true";\n\
     APT::Install-Recommends "0";\n\
     APT::Install-Suggests "0";\n\
@@ -47,4 +50,3 @@ RUN apt-get -y update \
 COPY neofetch.conf /root/.config/neofetch/config.conf
 
 CMD ["/bin/bash"]
-
