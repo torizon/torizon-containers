@@ -1,4 +1,6 @@
-include: "/ci-scripts/release/release.yml"
+include:
+  - "/ci-scripts/release/release.yml"
+  - "/ci-scripts/test/test.yml"
 
 image: docker:latest
 
@@ -139,6 +141,8 @@ build-base-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -178,6 +182,8 @@ build-wayland-base-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -215,6 +221,8 @@ build-weston-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -242,6 +250,8 @@ build-graphics-tests-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -266,6 +276,8 @@ build-weston-touch-calibrator-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -290,6 +302,8 @@ build-qt5-wayland-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -315,6 +329,8 @@ build-qt5-wayland-examples-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -339,6 +355,8 @@ build-qt6-wayland-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -364,6 +382,8 @@ build-qt6-wayland-examples-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -388,6 +408,8 @@ build-chromium-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -412,6 +434,8 @@ build-cog-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -438,6 +462,8 @@ build-base:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -479,6 +505,8 @@ build-wayland-base:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -518,6 +546,8 @@ build-weston:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -545,6 +575,8 @@ build-graphics-tests:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -571,6 +603,8 @@ build-weston-touch-calibrator:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -597,6 +631,8 @@ build-qt5-wayland:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -624,6 +660,8 @@ build-qt5-wayland-examples:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -650,6 +688,8 @@ build-qt6-wayland:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -677,6 +717,8 @@ build-chromium:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -703,6 +745,8 @@ build-cog:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -731,6 +775,8 @@ build-armhf-toolchain:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -759,6 +805,8 @@ build-armhf-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -783,6 +831,8 @@ build-arm64-toolchain:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -811,6 +861,8 @@ build-arm64-toolchain-imx8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -839,6 +891,8 @@ build-arm64-toolchain-ssh:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -867,6 +921,8 @@ build-dotnet-8:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -897,6 +953,8 @@ build-dotnet-8-asp:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -923,6 +981,8 @@ build-dotnet-8-uno:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -953,6 +1013,8 @@ build-dotnet-8-debug:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -980,6 +1042,8 @@ build-dotnet-8-debug-asp:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1004,6 +1068,8 @@ build-dotnet-8-debug-uno:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1034,6 +1100,8 @@ build-rt-tests:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1060,6 +1128,8 @@ build-stress-tests:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1088,6 +1158,8 @@ build-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1120,6 +1192,8 @@ build-wayland-base-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1154,6 +1228,8 @@ build-weston-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1180,6 +1256,8 @@ build-graphics-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1204,6 +1282,8 @@ build-weston-touch-calibrator-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1229,6 +1309,8 @@ build-qt5-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1254,6 +1336,8 @@ build-qt5-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1279,6 +1363,8 @@ build-qt6-wayland-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1304,6 +1390,8 @@ build-qt6-wayland-am62-examples:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1329,6 +1417,8 @@ build-chromium-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1353,6 +1443,8 @@ build-chromium-tests-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"
@@ -1377,6 +1469,8 @@ build-cog-am62:
   retry: 2
   extends: .docker-build
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
     - if: $CI_COMMIT_REF_PROTECTED == "true"

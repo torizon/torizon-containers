@@ -1,0 +1,66 @@
+build-tests-container:
+  image: docker:dind
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: always
+      changes:
+        - /ci-scripts/test/*
+        - tests/**/*
+  services:
+    - name: docker:dind
+  variables:
+    TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-horw"
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker buildx create --name multiarch-builder --driver docker-container --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --use
+    - docker buildx inspect --bootstrap
+    - docker run --privileged --rm ${TORADEX_INTERNAL_DOCKERHUB_CACHE}/tonistiigi/binfmt --install arm64,arm
+    - docker buildx build
+      --progress=plain
+      --file tests/Dockerfile
+      --push
+      --platform linux/arm/v7,linux/arm64/v8,linux/amd64
+      -t ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests .
+
+.e2e-test-template:
+  image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:dev
+  script:
+    - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT --privileged --pid host
+      -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
+      ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
+      --report /home/torizon/report.xml report.xml --before "docker system prune --force --all"
+  variables:
+    TARGET_BUILD_TYPE: "nightly"
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: always
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+  needs:
+    - build-tests-container
+
+e2e-test-imx8mp:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8mp"
+
+e2e-test-imx8mm:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8mm"
+
+e2e-test-am62:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "am62"
+
+e2e-test-imx8x:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8x"
