@@ -28,12 +28,12 @@ build-tests-container:
 
 .e2e-test-template:
   image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:dev
-  script:
+  before_script:
     - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
       --report /home/torizon/report.xml report.xml --before "docker system prune --force --all"
-  after_script:
+  script:
     - ./ci-scripts/test/fail-pipeline-if-tests-fail.sh report.xml
   variables:
     TARGET_BUILD_TYPE: "nightly"
