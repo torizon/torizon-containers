@@ -33,6 +33,8 @@ build-tests-container:
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
       --report /home/torizon/report.xml report.xml --before "docker system prune --force --all"
+  after_script:
+    - ./ci-scripts/test/fail-pipeline-if-tests-fail.sh report.xml
   variables:
     TARGET_BUILD_TYPE: "nightly"
   rules:
