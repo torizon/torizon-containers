@@ -1,7 +1,5 @@
 #!/bin/bash
 
-start=$(date +%s)
-
 BASE_DIR=/suites
 
 if [ "$SOC_UDT" == "am62" ]; then
@@ -14,11 +12,30 @@ fi
 
 FULL_PATH="$BASE_DIR/$TARGET_DIR"
 
-cd "$FULL_PATH" || { echo "Failed to change directory to $FULL_PATH"; exit 1; }
-bats --report-formatter junit --output /home/torizon --recursive .
+RESULT_DIR="/home/torizon"
+mkdir -p "$RESULT_DIR"
 
-echo "Executed bats command in $FULL_PATH"
+find "$FULL_PATH" -type f -name setup_suite.bash -exec dirname {} \; | while read -r DIR; do
+    echo "Running tests in $DIR"
 
-end=$(date +%s)
-runtime=$((end-start))
-echo "Total execution time: $runtime seconds"
+    cd "$DIR" || { echo "Failed to change directory to $DIR"; exit 1; }
+
+    bats --report-formatter junit --output "$RESULT_DIR" .
+    mv $RESULT_DIR/report.xml $RESULT_DIR/$(basename "$DIR").xml
+
+    echo "Executed bats command in $DIR"
+done
+
+echo "Merging test results..."
+
+MERGED_REPORT="$RESULT_DIR/report.xml"
+echo '<?xml version="1.0" encoding="UTF-8"?>' > "$MERGED_REPORT"
+echo '<testsuites>' >> "$MERGED_REPORT"
+
+find "$RESULT_DIR" -name '*.xml' | while read -r FILE; do
+    xmlstarlet sel -t -c "//testsuite" "$FILE" >> "$MERGED_REPORT"
+done
+
+echo '</testsuites>' >> "$MERGED_REPORT"
+
+echo "Merged JUnit report written to $MERGED_REPORT"

@@ -9,6 +9,7 @@ RUN apt-get update \
         bc \
         procps \
         imagemagick \
+        xmlstarlet \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

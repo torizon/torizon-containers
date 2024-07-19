@@ -18,7 +18,13 @@ setup_suite() {
 
 teardown_suite() {
     docker container stop qt5-wayland-examples
-    docker image rm -f $(docker container inspect -f '{{.Image}}' qt5-wayland-examples)
+
+    if [ -z "$DO_NOT_RM_ON_TEARDOWN" ]; then
+        docker image rm -f $(docker container inspect -f '{{.Image}}' qt5-wayland-examples)
+    else
+        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+    fi
+
     docker container rm qt5-wayland-examples
 
     for dir in /sys/class/drm/card*-HDMI-*; do

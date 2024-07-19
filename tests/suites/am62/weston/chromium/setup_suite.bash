@@ -11,7 +11,7 @@ setup_suite() {
 
     docker container run -d --name=weston --net=host \
     --cap-add CAP_SYS_TTY_CONFIG -v /dev:/dev -v /tmp:/tmp \
-    -v /run/udev/:/run/udev/ -v $(pwd)/xdg:/etc/xdg/weston \
+    -v /run/udev/:/run/udev/ \
     --device-cgroup-rule="c 4:* rmw" --device-cgroup-rule="c 13:* rmw" \
     --device-cgroup-rule="c 226:* rmw" --device-cgroup-rule="c 10:223 rmw" \
     torizon/weston-am62:next --developer --tty=/dev/tty7 -- --debug
@@ -35,11 +35,23 @@ setup_suite() {
 
 teardown_suite() {
     docker container stop weston
-    docker image rm -f $(docker container inspect -f '{{.Image}}' weston)
+
+    if [ -z "$DO_NOT_RM_ON_TEARDOWN" ]; then
+        docker image rm -f $(docker container inspect -f '{{.Image}}' weston)
+    else
+        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+    fi
+
     docker container rm weston
 
     docker container stop chromium
-    docker image rm -f $(docker container inspect -f '{{.Image}}' chromium)
+
+    if [ -z "$DO_NOT_RM_ON_TEARDOWN" ]; then
+        docker image rm -f $(docker container inspect -f '{{.Image}}' chromium)
+    else
+        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+    fi
+
     docker container rm chromium
 
     for dir in /sys/class/drm/card*-HDMI-*; do
