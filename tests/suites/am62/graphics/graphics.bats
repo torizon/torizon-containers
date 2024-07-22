@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-@test "Check if base container is ing" {
+@test "Check if base container is running" {
     status=$(docker container ls | grep -q graphics-tests)
     if [ "$status" -ne 0 ]; then
         echo "Base container is not ing"
