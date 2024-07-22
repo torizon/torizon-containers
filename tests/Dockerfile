@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} debian:bookworm-slim
+FROM debian:bookworm-slim
 ENV REGCTL_VERSION=v0.6.0
 ARG TARGETPLATFORM
 
