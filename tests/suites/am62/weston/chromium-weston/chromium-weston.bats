@@ -56,5 +56,5 @@ image_compare() {
 @test "Chromium Screenshot Comparison" {
     take_screenshot "weston"
     copy_screenshot "weston"
-    image_compare /suites/am62/weston/chromium/chromium-reference-screenshot.png /home/torizon/screenshot.png 100
+    image_compare /suites/am62/weston/chromium-weston/chromium-reference-screenshot.png /home/torizon/screenshot.png 100
 }
