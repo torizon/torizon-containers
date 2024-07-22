@@ -1,3 +1,6 @@
+image="torizon/qt5-wayland-examples-am62:next"
+container="qt5-wayland-examples"
+
 setup_suite() {
 
     for dir in /sys/class/drm/card*-HDMI-*; do
@@ -6,26 +9,28 @@ setup_suite() {
         fi
     done
 
-    docker container stop qt5-wayland-examples || true
-    docker container rm qt5-wayland-examples || true
+    docker container stop ${container} || true
+    docker container rm ${container} || true
 
-    docker container run -d -it --net=host --name=qt5-wayland-examples \
+    remove-docker-image-if-outdated.sh ${image}
+
+    docker container run -d -it --net=host --name=${container} \
              --cap-add CAP_SYS_TTY_CONFIG -v /dev:/dev -v /tmp:/tmp -v /run/udev/:/run/udev/ \
              --device-cgroup-rule="c 4:* rmw"  --device-cgroup-rule="c 13:* rmw" \
              --device-cgroup-rule="c 226:* rmw" --device-cgroup-rule="c 29:* rmw" \
-             torizon/qt5-wayland-examples-am62:next
+             ${image}
 }
 
 teardown_suite() {
-    docker container stop qt5-wayland-examples
+    docker container stop ${container}
 
-    if [ -z "$DO_NOT_RM_ON_TEARDOWN" ]; then
-        docker image rm -f $(docker container inspect -f '{{.Image}}' qt5-wayland-examples)
+    if [ "$DO_NOT_RM_ON_TEARDOWN" = "true" ]; then
+        docker image rm -f $(docker container inspect -f '{{.Image}}' ${container})
     else
         echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
     fi
 
-    docker container rm qt5-wayland-examples
+    docker container rm ${container}
 
     for dir in /sys/class/drm/card*-HDMI-*; do
         if [[ -d $dir ]]; then

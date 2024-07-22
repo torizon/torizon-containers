@@ -1,3 +1,6 @@
+image="torizon/graphics-tests-am62:next"
+container="graphics-tests"
+
 setup_suite() {
 
     for dir in /sys/class/drm/card*-HDMI-*; do
@@ -6,23 +9,28 @@ setup_suite() {
         fi
     done
 
+    docker container stop ${container} || true
+    docker container rm ${container} || true
+
+    remove-docker-image-if-outdated.sh ${image}
+
     docker container run -d -it \
-            --name=graphics-tests -v /dev:/dev --device-cgroup-rule="c 4:* rmw"  \
+            --name=${container} -v /dev:/dev --device-cgroup-rule="c 4:* rmw"  \
             --device-cgroup-rule="c 13:* rmw" --device-cgroup-rule="c 199:* rmw" \
             --device-cgroup-rule="c 226:* rmw" \
-            torizon/graphics-tests-am62:next
+            ${image}
 }
 
 teardown_suite() {
-    docker container stop graphics-tests
+    docker container stop ${container}
 
-    if [ -z "$DO_NOT_RM_ON_TEARDOWN" ]; then
-        docker image rm -f $(docker container inspect -f '{{.Image}}' graphics-tests)
+    if [ "$DO_NOT_RM_ON_TEARDOWN" = "true" ]; then
+        docker image rm -f $(docker container inspect -f '{{.Image}}' ${container})
     else
         echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
     fi
 
-    docker container rm graphics-tests
+    docker container rm ${container}
 
     for dir in /sys/class/drm/card*-HDMI-*; do
         if [[ -d $dir ]]; then
