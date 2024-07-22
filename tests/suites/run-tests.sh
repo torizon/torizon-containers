@@ -21,7 +21,7 @@ find "$FULL_PATH" -type f -name setup_suite.bash -exec dirname {} \; | while rea
     cd "$DIR" || { echo "Failed to change directory to $DIR"; exit 1; }
 
     bats --report-formatter junit --output "$RESULT_DIR" .
-    mv $RESULT_DIR/report.xml $RESULT_DIR/$(basename "$DIR").xml
+    mv $RESULT_DIR/report.xml $RESULT_DIR/"$(basename "$DIR")".xml
 
     echo "Executed bats command in $DIR"
 done
