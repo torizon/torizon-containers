@@ -44,20 +44,20 @@ setup_suite() {
 teardown_suite() {
     docker container stop ${weston_container}
 
-    if [ "$DO_NOT_RM_ON_TEARDOWN" = "true" ]; then
+    if [ "$RM_ON_TEARDOWN" = "true" ]; then
         docker image rm -f $(docker container inspect -f '{{.Image}}' ${weston_container})
     else
-        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+        echo "Skipping Docker image removal due to RM_ON_TEARDOWN environment variable."
     fi
 
     docker container rm ${weston_container}
 
     docker container stop ${chromium_container}
 
-    if [ "$DO_NOT_RM_ON_TEARDOWN" = "true" ]; then
+    if [ "$RM_ON_TEARDOWN" = "true" ]; then
         docker image rm -f $(docker container inspect -f '{{.Image}}' ${chromium_container})
     else
-        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+        echo "Skipping Docker image removal due to RM_ON_TEARDOWN environment variable."
     fi
 
     docker container rm ${chromium_container}

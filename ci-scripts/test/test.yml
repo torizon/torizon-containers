@@ -29,10 +29,10 @@ build-tests-container:
 .e2e-test-template:
   image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:dev
   before_script:
-    - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT -e DO_NOT_RM_ON_TEARDOWN=$DO_NOT_RM_ON_TEARDOWN --privileged --pid host
+    - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
-      --report /home/torizon/report.xml report.xml
+      --report /home/torizon/report.xml report.xml --before "docker image rm -f ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests"
   script:
     - ./ci-scripts/test/fail-pipeline-if-tests-fail.sh report.xml
   variables:
@@ -51,19 +51,22 @@ e2e-test-imx8mp:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8mp"
-    DO_NOT_RM_ON_TEARDOWN: "true"
+    RM_ON_TEARDOWN: "true"
 
 e2e-test-imx8mm:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8mm"
+    RM_ON_TEARDOWN: "true"
 
 e2e-test-am62:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "am62"
+    RM_ON_TEARDOWN: "false"
 
 e2e-test-imx8x:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8x"
+    RM_ON_TEARDOWN: "true"

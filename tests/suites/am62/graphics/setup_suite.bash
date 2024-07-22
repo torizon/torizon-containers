@@ -24,10 +24,10 @@ setup_suite() {
 teardown_suite() {
     docker container stop ${container}
 
-    if [ "$DO_NOT_RM_ON_TEARDOWN" = "true" ]; then
+    if [ "$RM_ON_TEARDOWN" = "true" ]; then
         docker image rm -f $(docker container inspect -f '{{.Image}}' ${container})
     else
-        echo "Skipping Docker image removal due to DO_NOT_RM_ON_TEARDOWN environment variable."
+        echo "Skipping Docker image removal due to RM_ON_TEARDOWN environment variable."
     fi
 
     docker container rm ${container}
