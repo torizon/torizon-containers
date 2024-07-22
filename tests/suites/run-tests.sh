@@ -42,3 +42,5 @@ done
 echo '</testsuites>' >>"$MERGED_REPORT"
 
 echo "Merged JUnit report written to $MERGED_REPORT"
+
+find /home/torizon \( -name '*.xml' -o -name '*.png' \) -not -name 'report.xml' -print0 | xargs -0 rm -f
