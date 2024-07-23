@@ -32,7 +32,7 @@ build-tests-container:
     - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
-      --report /home/torizon/report.xml report.xml --before "docker image rm -f ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests"
+      --report /home/torizon/report.xml report.xml --before "docker system prune --all --force"
   script:
     - ./ci-scripts/test/fail-pipeline-if-tests-fail.sh report.xml
   variables:
@@ -63,7 +63,7 @@ e2e-test-am62:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "am62"
-    RM_ON_TEARDOWN: "false"
+    RM_ON_TEARDOWN: "true"
 
 e2e-test-imx8x:
   extends: .e2e-test-template
