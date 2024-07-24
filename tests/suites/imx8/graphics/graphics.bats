@@ -21,3 +21,7 @@
        [ 1 -eq "$(echo "$FPS >= 55" | bc)" ] && [ 1 -eq "$(echo "$FPS < 100" | bc)" ]
     done
 }
+
+@test "Modetest" {
+    docker container exec graphics-tests modetest
+}
