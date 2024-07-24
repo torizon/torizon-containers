@@ -4,7 +4,7 @@ TORIZON_NAME="torizon"
 TORIZON_UID="1000"
 TORIZON_GID="1000"
 
-# list of extra groups to create (group IDs must match TorizonCore)
+# list of extra groups to create (group IDs must match Torizon OS)
 EXTRA_GROUPS="
 dialout:20
 audio:29

@@ -1,6 +1,6 @@
-Please check our Developer Article [Kiosk Mode Browser with TorizonCore] for more details.
+Please check our Developer Article [Kiosk Mode Browser with Torizon OS] for more details.
 
-[Kiosk Mode Browser with TorizonCore]: https://developer.toradex.com/knowledge-base/kiosk-mode-browser-with-torizon-core
+[Kiosk Mode Browser with Torizon OS]: https://developer.toradex.com/knowledge-base/kiosk-mode-browser-with-torizon-core
 
 And, for the impatient, you can see below some details on how to get this sample up and running in a Torizon compatible module.
 

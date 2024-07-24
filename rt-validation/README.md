@@ -1,6 +1,6 @@
 # rt-validation
 
-Containers to validate real-time (`PREEMPT_RT`) support in TorizonCore.
+Containers to validate real-time (`PREEMPT_RT`) support in Torizon OS.
 
 The `stress-tests` container will run stress tests (CPU, memory, I/O) in the device.
 
@@ -9,11 +9,11 @@ The `rt-tests` container will run `cyclictest` and generate a report of the meas
 
 # Prepare the device for the tests
 
-Make sure you are running a `PREEMPT_RT` version of TorizonCore:
+Make sure you are running a `PREEMPT_RT` version of Torizon OS:
 ```
 $ cat /etc/os-release | grep PREEMPT_RT
-NAME="Torizoncore Upstream with PREEMPT_RT"
-PRETTY_NAME="Torizoncore Upstream with PREEMPT_RT 5.1.0-devel-20201216+build.152 (dunfell)"
+NAME="Torizon OS Upstream with PREEMPT_RT"
+PRETTY_NAME="Torizon OS Upstream with PREEMPT_RT 5.1.0-devel-20201216+build.152 (dunfell)"
 ```
 
 Make sure the device is connected to the internet (needed to generate network load):
@@ -101,9 +101,9 @@ $ cat /tmp/latency-summary.log
 A latency plot from cyclictest histogram data will be available in `/tmp/latency-plot.png`.
 
 
-# Running rt-tests on a non-PREEMPT_RT version of TorizonCore
+# Running rt-tests on a non-PREEMPT_RT version of Torizon OS
 
-Running the `rt-tests` container on a non-PREEMPT_RT version of TorizonCore may be useful to compare the results with the PREEMPT_RT version. But if you try to run, the execution might fail:
+Running the `rt-tests` container on a non-PREEMPT_RT version of Torizon OS may be useful to compare the results with the PREEMPT_RT version. But if you try to run, the execution might fail:
 
 ```
 $ docker run --rm -it --name rt-tests --cap-add=sys_nice --cap-add=ipc_lock --cap-add=sys_rawio --ulimit rtprio=99 --device-cgroup-rule='c 10:* rmw' -v /dev:/dev -v /tmp:/tmp torizon/rt-tests:$CT_TAG_RT_TESTS
@@ -112,9 +112,9 @@ Probably missing capabilities, either run as root or increase RLIMIT_RTPRIO limi
 ERROR: cyclictest failed
 ```
 
-That is because `CONFIG_RT_GROUP_SCHED` may be enabled on non-PREEMPT_RT versions of TorizonCore, and a cgroups configuration is required to run real-time tasks.
+That is because `CONFIG_RT_GROUP_SCHED` may be enabled on non-PREEMPT_RT versions of Torizon OS, and a cgroups configuration is required to run real-time tasks.
 
-So if you want to run the `rt-tests` container on a non-PREEMPT_RT version of TorizonCore, run the following commands:
+So if you want to run the `rt-tests` container on a non-PREEMPT_RT version of Torizon OS, run the following commands:
 
 ```
 sudo sh -c "echo 950000 > /sys/fs/cgroup/cpu,cpuacct/docker/cpu.rt_runtime_us"
