@@ -24,7 +24,7 @@ RUN apt-get update \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
-ENV LC_ALL C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Create 01_nodoc
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
