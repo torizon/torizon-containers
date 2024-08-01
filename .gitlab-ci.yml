@@ -145,7 +145,7 @@ build-base-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &base-changes
@@ -186,7 +186,7 @@ build-wayland-base-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &wayland-base-changes
@@ -223,7 +223,7 @@ build-weston-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-changes
@@ -254,7 +254,7 @@ build-graphics-tests-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &graphics-tests-changes
@@ -282,7 +282,7 @@ build-weston-touch-calibrator-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-touch-calibrator-changes
@@ -311,7 +311,7 @@ build-qt5-wayland-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt5-wayland-changes
@@ -341,7 +341,7 @@ build-qt5-wayland-examples-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: *qt5-wayland-changes
@@ -364,7 +364,7 @@ build-qt6-wayland-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt6-wayland-changes
@@ -394,7 +394,7 @@ build-qt6-wayland-examples-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: *qt6-wayland-changes
@@ -417,7 +417,7 @@ build-chromium-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &chromium-changes
@@ -446,7 +446,7 @@ build-cog-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &cog-changes
@@ -477,7 +477,7 @@ build-base:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &base-changes
@@ -520,7 +520,7 @@ build-wayland-base:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &wayland-base-changes
@@ -561,7 +561,7 @@ build-weston:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-changes
@@ -590,7 +590,7 @@ build-graphics-tests:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &graphics-tests-changes
@@ -618,7 +618,7 @@ build-weston-touch-calibrator:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-touch-calibrator-changes
@@ -646,7 +646,7 @@ build-qt5-wayland:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt5-wayland-changes
@@ -675,7 +675,7 @@ build-qt5-wayland-examples:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt5-wayland-examples-changes
@@ -703,7 +703,7 @@ build-qt6-wayland:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt6-wayland-changes
@@ -732,7 +732,7 @@ build-chromium:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &chromium-changes
@@ -760,7 +760,7 @@ build-cog:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &cog-changes
@@ -790,7 +790,7 @@ build-armhf-toolchain:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &armhf-toolchain-changes
@@ -820,7 +820,7 @@ build-armhf-toolchain-ssh:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &armhf-toolchain-ssh-changes
@@ -846,7 +846,7 @@ build-arm64-toolchain:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &arm64-toolchain-changes
@@ -876,7 +876,7 @@ build-arm64-toolchain-imx8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &arm64-toolchain-changes
@@ -906,7 +906,7 @@ build-arm64-toolchain-ssh:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &arm64-toolchain-ssh-changes
@@ -936,7 +936,7 @@ build-dotnet-8:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &dotnet-8-changes
@@ -968,7 +968,7 @@ build-dotnet-8-asp:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: *dotnet-8-changes
@@ -996,7 +996,7 @@ build-dotnet-8-uno:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &dotnet-8-uno-changes
@@ -1028,7 +1028,7 @@ build-dotnet-8-debug:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &dotnet-8-debug-changes
@@ -1057,7 +1057,7 @@ build-dotnet-8-debug-asp:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: *dotnet-8-debug-changes
@@ -1083,7 +1083,7 @@ build-dotnet-8-debug-uno:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &dotnet-8-debug-uno-changes
@@ -1115,7 +1115,7 @@ build-rt-tests:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &rt-tests-changes
@@ -1143,7 +1143,7 @@ build-stress-tests:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &stress-tests-changes
@@ -1173,7 +1173,7 @@ build-base-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &base-am62-changes
@@ -1207,7 +1207,7 @@ build-wayland-base-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &wayland-base-am62-changes
@@ -1243,7 +1243,7 @@ build-weston-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-am62-changes
@@ -1271,7 +1271,7 @@ build-graphics-tests-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &graphics-tests-am62-changes
@@ -1297,7 +1297,7 @@ build-weston-touch-calibrator-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &weston-touch-calibrator-am62-changes
@@ -1324,7 +1324,7 @@ build-qt5-wayland-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt5-wayland-am62-changes
@@ -1351,7 +1351,7 @@ build-qt5-wayland-am62-examples:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt5-wayland-am62-examples-changes
@@ -1378,7 +1378,7 @@ build-qt6-wayland-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt6-wayland-am62-changes
@@ -1405,7 +1405,7 @@ build-qt6-wayland-am62-examples:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &qt6-wayland-am62-examples-changes
@@ -1432,7 +1432,7 @@ build-chromium-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &chromium-am62-changes
@@ -1458,7 +1458,7 @@ build-chromium-tests-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &chromium-tests-am62-changes
@@ -1484,7 +1484,7 @@ build-cog-am62:
       when: never
     - if: $CI_WORLD_REBUILD == "true"
       when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
       changes: &cog-am62-changes
