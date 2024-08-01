@@ -11,6 +11,7 @@ FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
         clinfo \
         glmark2-es2-wayland \
+        glmark2-es2-drm \
         imagemagick \
         kmscube \
         libdrm-tests \
