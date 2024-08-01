@@ -46,15 +46,6 @@ Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
-RUN if [ "${TARGETARCH}" != "arm64" ]; then \
-        echo "\
-# For armhf, install libdrm-common from Debian stable\n\
-Package: libdrm-common\n\
-Pin: release a=stable\n\
-Pin-Priority: 969"\
-       >> /etc/apt/preferences.d/pinned-packages; \
-       fi
-
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     neofetch \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
