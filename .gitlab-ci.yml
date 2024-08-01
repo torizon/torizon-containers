@@ -200,8 +200,6 @@ build-wayland-base-imx8:
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${CHROMIUM_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${COG_FOLDER}/*
         - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
@@ -233,6 +231,8 @@ build-weston-imx8:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -261,6 +261,8 @@ build-graphics-tests-imx8:
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -287,6 +289,9 @@ build-weston-touch-calibrator-imx8:
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -314,6 +319,9 @@ build-qt5-wayland-imx8:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -336,14 +344,11 @@ build-qt5-wayland-examples-imx8:
     - if: $CI_COMMIT_REF_PROTECTED == "true"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &qt5-wayland-examples-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+      changes: *qt5-wayland-changes
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *qt5-wayland-examples-changes
+      changes: *qt5-wayland-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt5-wayland-imx8
@@ -367,6 +372,9 @@ build-qt6-wayland-imx8:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -389,14 +397,11 @@ build-qt6-wayland-examples-imx8:
     - if: $CI_COMMIT_REF_PROTECTED == "true"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &qt6-wayland-examples-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+      changes: *qt6-wayland-changes
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *qt6-wayland-examples-changes
+      changes: *qt6-wayland-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-imx8
@@ -419,6 +424,9 @@ build-chromium-imx8:
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -445,6 +453,9 @@ build-cog-imx8:
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${COG_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
