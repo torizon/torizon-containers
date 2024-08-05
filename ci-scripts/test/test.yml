@@ -27,12 +27,13 @@ build-tests-container:
       -t ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests .
 
 .e2e-test-template:
-  image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:dev
+  image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:main
   before_script:
     - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
-      --report /home/torizon/report.xml report.xml --before "docker system prune --all --force"
+      --copy-artifact /home/torizon/report.xml report.xml --delegation-config ./ci-scripts/test/delegation_config.toml
+      --before "docker system prune --all --force"
   script:
     - ./ci-scripts/test/fail-pipeline-if-tests-fail.sh report.xml
   variables:
