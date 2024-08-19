@@ -5,7 +5,6 @@ URL="www.toradex.com"
 
 chromium_base_params="--allow-insecure-localhost \
                       --disable-notifications \
-                      --disable-gpu \
                       --disable-software-rasterizer \
                       --check-for-update-interval=315360000 \
                       --disable-seccomp-filter-sandbox \
