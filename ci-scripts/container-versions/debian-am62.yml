@@ -1,41 +1,41 @@
 debian-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 0
   append: "bookworm"
 wayland-base-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 weston-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 qt5-wayland-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 qt5-wayland-examples-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 qt6-wayland-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 qt6-wayland-examples-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 graphics-tests-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 chromium-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
 cog-am62:
   major: 3
-  minor: 0
+  minor: 1
   patch: 1
