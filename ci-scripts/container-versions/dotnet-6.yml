@@ -1,6 +1,6 @@
 dotnet: &dotnet
   release: &dotnet-release "6.0"
-  semver: &dotnet-semver "6.0.25"
+  semver: &dotnet-semver "6.0.33"
   major: 3
   minor: 1
   patch: 1
@@ -11,7 +11,7 @@ dotnet-debug: &dotnet-debug
   semver: *dotnet-semver
   # The latest version of vsdbg can be obtained by running the follow command:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  debugger-version: &debugger-version "17.10.20209.7"
+  debugger-version: &debugger-version "17.11.10506.2"
   major: 3
   minor: 1
   patch: 1
