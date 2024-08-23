@@ -1213,6 +1213,7 @@ build-wayland-base-am62:
       changes: &wayland-base-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
@@ -1249,6 +1250,7 @@ build-weston-am62:
       changes: &weston-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1277,6 +1279,7 @@ build-graphics-tests-am62:
       changes: &graphics-tests-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_AM62_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
@@ -1303,6 +1306,7 @@ build-weston-touch-calibrator-am62:
       changes: &weston-touch-calibrator-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1330,6 +1334,7 @@ build-qt5-wayland-am62:
       changes: &qt5-wayland-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1357,6 +1362,7 @@ build-qt5-wayland-am62-examples:
       changes: &qt5-wayland-am62-examples-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
@@ -1384,6 +1390,7 @@ build-qt6-wayland-am62:
       changes: &qt6-wayland-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -1411,6 +1418,7 @@ build-qt6-wayland-am62-examples:
       changes: &qt6-wayland-am62-examples-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
@@ -1438,6 +1446,7 @@ build-chromium-am62:
       changes: &chromium-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
@@ -1464,6 +1473,7 @@ build-chromium-tests-am62:
       changes: &chromium-tests-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
@@ -1490,6 +1500,7 @@ build-cog-am62:
       changes: &cog-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_AM62_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
