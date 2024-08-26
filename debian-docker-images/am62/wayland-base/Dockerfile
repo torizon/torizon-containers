@@ -25,7 +25,6 @@ RUN apt-get -y update && apt-get install -y \
     libglx-mesa0 \
     libosmesa6 \
     libosmesa6-dev \
-    libpru-pssp-dev \
     libwayland-egl1-mesa \
     libwayland-client0 \
     libwayland-server0 \
