@@ -12,6 +12,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
         clinfo \
         glmark2-es2-wayland \
         glmark2-es2-drm \
+        gputop \
         imagemagick \
         kmscube \
         libdrm-tests \

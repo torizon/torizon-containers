@@ -25,3 +25,7 @@
 @test "Modetest" {
     docker container exec graphics-tests modetest
 }
+
+@test "Test gputop" {
+    docker container exec graphics-tests gputop -b -f
+}
