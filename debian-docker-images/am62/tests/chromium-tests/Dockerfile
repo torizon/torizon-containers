@@ -19,13 +19,14 @@ USER root
 
 RUN apt-get update && apt-get install -y nodejs npm
 
-USER torizon
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+USER torizon
 
 ENTRYPOINT ["/usr/bin/npm"]
 CMD [ "test" ]
