@@ -84,10 +84,11 @@ services:
     - if [ -n "$BUILD_FOR_ARM_V8" ]; then echo "Building for linux/arm64/v8" && PLATFORM_BUILD_ARM_V8="--platform linux/arm64/v8"; fi
     - if [ -n "$BUILD_FOR_AMD64" ]; then echo "Building for linux/amd64" && PLATFORM_BUILD_AMD64="--platform linux/amd64"; fi
 
-    # in merge request pipeline ~> push image to local registry
+    # in MR pipelines, push or manual triggered pipelines on feature branch ~> push image to local registry
     # in protected ref ~> push to DockerHub
     - |
-      if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" ]]; then
+      if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" \
+          || "${CI_COMMIT_REF_PROTECTED}" == "false" ]]; then
         export PULL_REGISTRY=${CI_REGISTRY}
         export PUSH_REGISTRY=${CI_REGISTRY}
         export REGISTRY_NAMESPACE=${CI_PROJECT_PATH}
