@@ -38,6 +38,10 @@ if [ -n "$1" ]; then
   URL=$1
 fi
 
+# Right now, hw accel chromium is freezing and hanging when maximized, so
+# disable maximized in startup script while not fixed
+chromium_mode_params=" "
+
 # Don't double quote, otherwise expanded arguments end up with `'`
 # shellcheck disable=SC2086
 chromium $chromium_base_params $chromium_extended_params $chromium_mode_params$URL
