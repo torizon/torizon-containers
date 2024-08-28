@@ -1,7 +1,7 @@
 import { launch } from "puppeteer"
 
 async function parse_main_webgl_report() {
-  const browser = await launch({headless: "new", args:["--test-type --allow-insecure-localhost --disable-notifications --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --use-gl=egl --in-process-gpu --no-sandbox"], executablePath: '/usr/bin/chromium'});
+  const browser = await launch({headless: false, args:["--disable-gpu-memory-buffer-video-frames --allow-insecure-localhost --disable-notifications --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox  --ozone-platform=wayland --enable-features=UseOzonePlatform  --no-sandbox --disable-software-rasterizer"], executablePath: '/usr/bin/chromium'});
   const page = await browser.newPage();
   await page.goto('https://webglreport.com/?v=2');
     const scraped_data = await page.evaluate(() => {
@@ -17,14 +17,14 @@ async function parse_main_webgl_report() {
       // iterate through each tr inside tbody
       for (let i = 0; i < rows.length; i++) {
         const columns = rows[i].querySelectorAll('td');
-        
+
         const rowData = [];
         // for each column (there's only one, but columns is a NodeList)
         // get the text inside and append to rowData
         for (const column of columns) {
           rowData.push(column.textContent.trim());
         }
-          
+
         data.push(rowData);
       }
       return data;
@@ -49,7 +49,6 @@ export async function get_tidy_main_webgl_report() {
   info['ANGLE'] = report.at(10);
   info['Major Performance Caveat'] = report.at(11);
 
-  console.log(info);
   return info;
 }
 
