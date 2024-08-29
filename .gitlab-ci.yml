@@ -101,8 +101,13 @@ services:
       export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
     fi
 
-    if [[ "${CI_JOB_NAME}" == build-dotnet* && "${BASE_IMAGE_NAME}" != "debian" ]]; then
-      export IMAGE_TAG="${IMAGE_TAG}-${DOTNET_RELEASE}"
+    if [[ "${CI_JOB_NAME}" == build-dotnet* ]]; then
+      if [[ "${BASE_IMAGE_NAME}" != "debian" ]]; then
+        export IMAGE_TAG="${IMAGE_TAG}-${DOTNET_RELEASE}"
+        TAG_SUFFIX=""
+      else
+        TAG_SUFFIX="-${DOTNET_RELEASE}"
+      fi
     fi
 
   - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
@@ -128,7 +133,7 @@ services:
                   --label git.hash=${CI_COMMIT_SHA}
                   --label pipeline.id=${CI_PIPELINE_ID}
                   -f ${DOCKERFILE_FOLDER}Dockerfile
-                  -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+                  -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}${TAG_SUFFIX}
                   ${DOCKERFILE_FOLDER}
 
 ## debian-docker-images
