@@ -71,24 +71,24 @@ while IFS=: read -r image_name rest; do
   fi
 
   if [[ "$release" != "null" ]]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$release"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$release"
     re_tag_status=$?
     if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$date"-"$release" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"-"$release" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"-"$release" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$date"-"$release" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"-"$release" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"-"$release" "--force"
     fi
     echo "$image_name: $major.$minor.$patch-$release" >>release_notes.md
     echo "" >>release_notes.md
   fi
 
   if [[ "$semver" != "null" ]]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$semver"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$semver"
     re_tag_status=$?
     if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$date"-"$semver" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"-"$semver" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"-"$semver" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$date"-"$semver" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"-"$semver" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"-"$semver" "--force"
     fi
     echo "$image_name: $major.$minor.$patch-$semver" >>release_notes.md
     echo "" >>release_notes.md

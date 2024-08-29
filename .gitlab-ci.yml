@@ -101,6 +101,10 @@ services:
       export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
     fi
 
+    if [[ "${CI_JOB_NAME}" == build-dotnet* ]]; then
+      export IMAGE_TAG="${IMAGE_TAG}-${DOTNET_RELEASE}"
+    fi
+
   - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
                   --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA}
                   --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY}
