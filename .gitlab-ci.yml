@@ -101,7 +101,7 @@ services:
       export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
     fi
 
-    if [[ "${CI_JOB_NAME}" == build-dotnet* ]]; then
+    if [[ "${CI_JOB_NAME}" == build-dotnet* && "${BASE_IMAGE_NAME}" != "debian" ]]; then
       export IMAGE_TAG="${IMAGE_TAG}-${DOTNET_RELEASE}"
     fi
 
@@ -840,6 +840,7 @@ build-dotnet-6:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
     IMAGE_NAME: dotnet
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
@@ -867,6 +868,7 @@ build-dotnet-6-asp:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
     IMAGE_NAME: aspdotnet
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
@@ -1010,6 +1012,7 @@ build-dotnet-8:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
     IMAGE_NAME: dotnet
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
@@ -1037,6 +1040,7 @@ build-dotnet-8-asp:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
     IMAGE_NAME: aspdotnet
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
