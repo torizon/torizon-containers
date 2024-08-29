@@ -21,13 +21,13 @@ image_compare() {
         echo "Usage: image_compare image1 image2 threshold"
         exit 1
     fi
-    
+
     image1="$1"
     image2="$2"
     threshold="$3"
-    
+
     difference=$(compare -metric AE "$image1" "$image2" null: 2>&1)
-    
+
     if [ "$difference" -gt "$threshold" ]; then
         echo "Difference below threshold: $difference"
     else
@@ -41,7 +41,7 @@ image_compare() {
         echo "Container is not running"
     else
         echo "Container is running"
-    fi    
+    fi
 }
 
 @test "Is Chromium running?" {
@@ -50,11 +50,19 @@ image_compare() {
         echo "Container is not running"
     else
         echo "Container is running"
-    fi    
+    fi
 }
 
 @test "Chromium Screenshot Comparison" {
     take_screenshot "weston"
     copy_screenshot "weston"
     image_compare /suites/am62/weston/chromium-weston/chromium-reference-screenshot.png /home/torizon/screenshot.png 100
+}
+
+@test "Chromium webglreport test" {
+    docker container run --rm --name=webglreport \
+    -v /tmp:/tmp -v /var/run/dbus:/var/run/dbus \
+    -v /dev/dri:/dev/dri --device-cgroup-rule='c 226:* rmw' \
+    --security-opt seccomp=unconfined --shm-size 256mb \
+    torizon/chromium-tests-am62:next
 }
