@@ -4,6 +4,8 @@ weston_container="weston"
 chromium_image="torizon/chromium-am62:next"
 chromium_container="chromium"
 
+chromium_tests_image="torizon/chromium-tests-am62:next"
+
 setup_suite() {
 
     for dir in /sys/class/drm/card*-HDMI-*; do
@@ -39,6 +41,8 @@ setup_suite() {
 
     # chromium_container can take a while to fully load
     sleep 30
+
+    docker pull ${chromium_tests_image}
 }
 
 teardown_suite() {
@@ -61,6 +65,12 @@ teardown_suite() {
     fi
 
     docker container rm ${chromium_container}
+
+    if [ "$RM_ON_TEARDOWN" = "true" ]; then
+        docker image rm -f ${chromium_tests_image}
+    else
+        echo "Skipping Docker image removal due to RM_ON_TEARDOWN environment variable."
+    fi
 
     for dir in /sys/class/drm/card*-HDMI-*; do
         if [[ -d $dir ]]; then
