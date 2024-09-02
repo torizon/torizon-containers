@@ -16,7 +16,7 @@ declare -a WESTON_EXTRA_ARGS
 OPTIONS=developer,touch2pointer,no-change-tty,tty:
 
 WAYLAND_USER=${WAYLAND_USER:-torizon}
-WESTON_ARGS=${WESTON_ARGS:--Bdrm-backend.so --current-mode -S${WAYLAND_DISPLAY}}
+WESTON_ARGS=${WESTON_ARGS:--Bdrm-backend.so --use-g2d --current-mode -S${WAYLAND_DISPLAY}}
 ENABLE_VNC=${ENABLE_VNC:-0}
 ENABLE_RDP=${ENABLE_RDP:-0}
 IGNORE_X_LOCKS=${IGNORE_X_LOCKS:-0}
