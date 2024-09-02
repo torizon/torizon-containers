@@ -23,7 +23,7 @@ find "$FULL_PATH" -type f -name setup_suite.bash -exec dirname {} \; | while rea
     exit 1
   }
 
-  bats --report-formatter junit --output "$RESULT_DIR" .
+  bats --report-formatter junit --output "$RESULT_DIR" --verbose-run --show-output-of-passing-tests --trace .
   mv $RESULT_DIR/report.xml $RESULT_DIR/"$(basename "$DIR")".xml
 
   echo "Executed bats command in $DIR"
