@@ -30,7 +30,7 @@ build-tests-container:
   image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:main
   before_script:
     - /usr/local/bin/entrypoint.sh "docker run -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
-      -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon
+      -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests /suites/run-tests.sh"
       --copy-artifact /home/torizon/report.xml report.xml --delegation-config ./ci-scripts/test/delegation_config.toml
       --before "docker system prune --all --force"
