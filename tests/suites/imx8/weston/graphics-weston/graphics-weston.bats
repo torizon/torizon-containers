@@ -1,5 +1,13 @@
 #!/usr/bin/env bats
 
+@test "Is Weston running?" {
+    docker container ls | grep -q weston
+    status=$?
+
+    [[ "$status" -eq 0 ]]
+    echo "Weston container is running"
+}
+
 @test "es2_info" {
     expected_EGL_CLIENT_APIS="OpenGL_ES"
     expected_GL_VERSION="OpenGL ES"
@@ -13,23 +21,14 @@
     EGL_CLIENT_APIS=$(echo "$output" | grep "EGL_CLIENT_APIS" | cut -d ':' -f 2 | xargs)
     GL_VERSION=$(echo "$output" | grep -v "EGL_VERSION" | grep "GL_VERSION" | cut -d ':' -f 2 | xargs)
 
-    if [ "$GL_RENDERER" = "$expected_GL_RENDERER" ]; then
-        echo "GL_RENDERER: Actual - $GL_RENDERER vs Expected - $expected_GL_RENDERER"
-    else
-        echo "GL_RENDERER: Actual - $GL_RENDERER vs Expected - $expected_GL_RENDERER (Mismatch)"
-    fi
+    [[ "$GL_RENDERER" == "$expected_GL_RENDERER" ]]
+    echo "GL_RENDERER: Actual - $GL_RENDERER vs Expected - $expected_GL_RENDERER"
 
-    if [ "$EGL_CLIENT_APIS" = "$expected_EGL_CLIENT_APIS" ]; then
-        echo "EGL_CLIENT_APIS: Actual - $EGL_CLIENT_APIS vs Expected - $expected_EGL_CLIENT_APIS"
-    else
-        echo "EGL_CLIENT_APIS: Actual - $EGL_CLIENT_APIS vs Expected - $expected_EGL_CLIENT_APIS (Mismatch)"
-    fi
+    [[ "$EGL_CLIENT_APIS" == "$expected_EGL_CLIENT_APIS" ]]
+    echo "EGL_CLIENT_APIS: Actual - $EGL_CLIENT_APIS vs Expected - $expected_EGL_CLIENT_APIS"
 
-    if [ "$GL_VERSION" = "$expected_GL_VERSION" ]; then
-        echo "GL_VERSION: Actual - $GL_VERSION vs Expected - $expected_GL_VERSION"
-    else
-        echo "GL_VERSION: Actual - $GL_VERSION vs Expected - $expected_GL_VERSION (Mismatch)"
-    fi
+    [[ "$GL_VERSION" == "$expected_GL_VERSION" ]]
+    echo "GL_VERSION: Actual - $GL_VERSION vs Expected - $expected_GL_VERSION"
 }
 
 @test "GLMark2" {
@@ -39,9 +38,6 @@
 
     score=$(< /tmp/glmark2.log grep -i "score" | cut -d: -f2 | xargs)
 
-    if [ "$score" -ge "$SCORE_PASS_THRESHOLD" ]; then
-        echo "GLMark2 Score: Actual - $score vs Expected - $SCORE_PASS_THRESHOLD"
-    else
-        echo "GLMark2 Score: Actual - $score vs Expected - $SCORE_PASS_THRESHOLD (Mismatch)"
-    fi
+    [[ "$score" -ge "$SCORE_PASS_THRESHOLD" ]]
+    echo "GLMark2 Score: Actual - $score vs Expected - $SCORE_PASS_THRESHOLD"
 }

@@ -36,21 +36,19 @@ image_compare() {
 }
 
 @test "Is Weston running?" {
-    status=$(docker container ls | grep -q weston)
-    if [ "$status" -ne 0 ]; then
-        echo "Container is not running"
-    else
-        echo "Container is running"
-    fi    
+    docker container ls | grep -q weston
+    status=$?
+
+    [[ "$status" -eq 0 ]]
+    echo "Weston container is running"
 }
 
 @test "Is Chromium running?" {
-    status=$(docker container ls | grep -q chromium)
-    if [ "$status" -ne 0 ]; then
-        echo "Container is not running"
-    else
-        echo "Container is running"
-    fi    
+    docker container ls | grep -q chromium
+    status=$?
+
+    [[ "$status" -eq 0 ]]
+    echo "Chromium container is running"
 }
 
 @test "Chromium" {

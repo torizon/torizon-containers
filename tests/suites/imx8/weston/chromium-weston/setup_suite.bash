@@ -8,13 +8,13 @@ setup_suite() {
         fi
     done
 
-    docker container run -e ACCEPT_FSL_EULA=1 -d \
-    --name=weston --net=host --cap-add CAP_SYS_TTY_CONFIG \
-    -v /dev:/dev -v /tmp:/tmp -v /run/udev/:/run/udev/ \
-    -v /tests/imx/weston/chromium/weston.ini --device-cgroup-rule="c 4:* rmw" \
-    --device-cgroup-rule="c 13:* rmw" --device-cgroup-rule="c 199:* rmw" \
-    --device-cgroup-rule="c 226:* rmw" --device-cgroup-rule="c 10:223 rmw" \
-    torizon/weston-imx8:next --developer --tty=/dev/tty7 -- --debug
+    docker container run -d --name=weston --net=host \
+    --cap-add CAP_SYS_TTY_CONFIG -v /dev:/dev -v /tmp:/tmp \
+    -v /run/udev/:/run/udev/ --device-cgroup-rule="c 4:* rmw" \
+    --device-cgroup-rule="c 13:* rmw" --device-cgroup-rule="c 226:* rmw" \
+    --device-cgroup-rule="c 10:223 rmw" --device-cgroup-rule="c 199:0 rmw" \
+    torizon/weston-imx8:next \
+    --developer --tty=/dev/tty7 -- --debug
 
     sleep 10
 
