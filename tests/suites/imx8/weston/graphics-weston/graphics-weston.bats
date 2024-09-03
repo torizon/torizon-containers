@@ -8,6 +8,31 @@
     echo "Weston container is running"
 }
 
+# note that adding screenshot comparison tests here must be done carefully, as
+# we don't necessarily close the windows for the tests below.
+
+# using the built-in `timeout` as a pretty decent way to test non-returning commands.
+@test "Weston Simple EGL" {
+    run timeout 10s docker container exec weston weston-simple-egl
+    # Check if the command was terminated by timeout (exit code 124) or succeeded (exit code 0)
+    if [ "$status" -eq 124 ]; then
+        echo "Ran for 10 seconds without crashing, terminated by timeout."
+    else
+        [ "$status" -eq 0 ]
+    fi
+}
+
+@test "Weston Terminal" {
+    run timeout 5s docker container exec weston weston-terminal
+    # Check if the command was terminated by timeout (exit code 124) or succeeded (exit code 0)
+    if [ "$status" -eq 124 ]; then
+        echo "Ran for 5 seconds without crashing, terminated by timeout."
+    else
+        [ "$status" -eq 0 ]
+    fi
+}
+
+
 @test "es2_info" {
     expected_EGL_CLIENT_APIS="OpenGL_ES"
     expected_GL_VERSION="OpenGL ES"
