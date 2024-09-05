@@ -16,7 +16,7 @@ declare -a WESTON_EXTRA_ARGS
 OPTIONS=developer,touch2pointer,no-change-tty,tty:
 
 WAYLAND_USER=${WAYLAND_USER:-torizon}
-WESTON_ARGS=${WESTON_ARGS:--Bdrm-backend.so --use-g2d --current-mode -S${WAYLAND_DISPLAY}}
+WESTON_ARGS=${WESTON_ARGS:--Bdrm-backend.so --current-mode -S${WAYLAND_DISPLAY}}
 ENABLE_VNC=${ENABLE_VNC:-0}
 ENABLE_RDP=${ENABLE_RDP:-0}
 IGNORE_X_LOCKS=${IGNORE_X_LOCKS:-0}
@@ -131,14 +131,18 @@ test -n "$SOC_ID" && {
 echo "SoC has GPU: $HAS_GPU"
 echo "SoC has DPU: $HAS_DPU"
 
-#
-# Decide on what g2d implementation must be enabled for weston.
-#
+[[ "$SOC_ID" =~ "MX8" ]] && {
+  WESTON_ARGS="$WESTON_ARGS --use-g2d"
 
-G2D_IMPLEMENTATION='viv'
-$HAS_DPU && G2D_IMPLEMENTATION='dpu'
-echo "g2d implementation: $G2D_IMPLEMENTATION"
-test -e /etc/alternatives/libg2d.so.1.5 && update-alternatives --set libg2d.so.1.5 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so
+  #
+  # Decide on what g2d implementation must be enabled for weston.
+  #
+
+  G2D_IMPLEMENTATION='viv'
+  $HAS_DPU && G2D_IMPLEMENTATION='dpu'
+  echo "g2d implementation: $G2D_IMPLEMENTATION"
+  test -e /etc/alternatives/libg2d.so.1.5 && update-alternatives --set libg2d.so.1.5 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so
+}
 
 #
 # Set desktop defaults.
