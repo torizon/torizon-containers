@@ -1,20 +1,20 @@
 debian-cross-toolchain-armhf:
   major: 3
-  minor: 4
+  minor: 5
   patch: 0
 debian-cross-toolchain-ssh-armhf:
   major: 3
-  minor: 1
+  minor: 2
   patch: 0
 debian-cross-toolchain-arm64:
   major: 3
-  minor: 1
+  minor: 2
   patch: 0
 debian-cross-toolchain-ssh-arm64:
   major: 3
-  minor: 1
+  minor: 2
   patch: 0
 debian-cross-toolchain-arm64-vivante:
   major: 3
-  minor: 1
+  minor: 2
   patch: 0
