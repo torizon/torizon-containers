@@ -202,8 +202,15 @@ CONFIGURATION_FILE=/etc/xdg/weston/weston.ini
 CONFIGURATION_FILE_DEV=/etc/xdg/weston-dev/weston.ini
 
 if [ "$ENABLE_VNC" = "1" ]; then
-  MSG=$REMOTE_UI"\n$VNC_BACKEND\n"$START_ON_STARTUP_CONFIG
-  echo -e "$MSG" | tee -a $CONFIGURATION_FILE $CONFIGURATION_FILE_DEV 1>/dev/null
+  if [[ "$SOC_ID" =~ "MX8" ]]; then
+    MSG=$REMOTE_UI"\n$VNC_BACKEND\n"$START_ON_STARTUP_CONFIG
+    echo -e "$MSG" | tee -a $CONFIGURATION_FILE $CONFIGURATION_FILE_DEV 1>/dev/null
+  else
+    # Weston 10 doesn't have a VNC backend, this has been introduced in Weston 12
+    MSG="VNC is not supported, please use RDP instead."
+    echo -e "$MSG"
+    exit 1
+  fi
 fi
 
 if [ "$ENABLE_RDP" = "1" ]; then
