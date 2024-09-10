@@ -5,6 +5,7 @@ URL="www.toradex.com"
 
 chromium_base_params="--allow-insecure-localhost \
                       --disable-notifications \
+                      --disable-gpu \
                       --disable-software-rasterizer \
                       --check-for-update-interval=315360000 \
                       --disable-seccomp-filter-sandbox \
@@ -37,10 +38,6 @@ done
 if [ -n "$1" ]; then
   URL=$1
 fi
-
-# Right now, hw accel chromium is freezing and hanging when maximized, so
-# disable maximized in startup script while not fixed
-chromium_mode_params=" "
 
 # Don't double quote, otherwise expanded arguments end up with `'`
 # shellcheck disable=SC2086
