@@ -14,6 +14,7 @@ variables:
   DOCKER_DRIVER: overlay2
 
   DEBIAN_DOCKER_IMAGES_FOLDER: "debian-docker-images"
+  SUPPORT_FILES_FOLDER: "support-files"
   IMX8_FOLDER: "imx8"
   AM62_FOLDER: "am62"
   UPSTREAM_FOLDER: "upstream"
@@ -133,7 +134,7 @@ services:
       --label pipeline.id=${CI_PIPELINE_ID}
       -f ${DOCKERFILE_FOLDER}Dockerfile
       -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}${TAG_SUFFIX}
-      ${DOCKERFILE_FOLDER}
+      ${DOCKERFILE_BUILD_CONTEXT_FOLDER}
 
 ## debian-docker-images
 
@@ -176,6 +177,7 @@ build-base-imx8:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-wayland-base-imx8:
@@ -213,6 +215,7 @@ build-wayland-base-imx8:
     BASE_IMAGE_NAME: debian-imx8
     IMAGE_NAME: wayland-base-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: ["build-base-imx8"]
 
 build-weston-imx8:
@@ -238,12 +241,13 @@ build-weston-imx8:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *weston-changes
   before_script:
-    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: weston-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs: ["build-wayland-base-imx8"]
 
 build-graphics-tests-imx8:
@@ -260,7 +264,7 @@ build-graphics-tests-imx8:
       changes: &graphics-tests-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
@@ -271,7 +275,8 @@ build-graphics-tests-imx8:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: graphics-tests-imx8
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: ["build-wayland-base-imx8"]
 
 build-weston-touch-calibrator-imx8:
@@ -301,6 +306,7 @@ build-weston-touch-calibrator-imx8:
     BASE_IMAGE_NAME: weston-imx8
     IMAGE_NAME: weston-touch-calibrator-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs: ["build-weston-imx8"]
 
 build-qt5-wayland-imx8:
@@ -331,6 +337,7 @@ build-qt5-wayland-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: qt5-wayland-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base-imx8"]
 
 build-qt5-wayland-examples-imx8:
@@ -354,6 +361,7 @@ build-qt5-wayland-examples-imx8:
     BASE_IMAGE_NAME: qt5-wayland-imx8
     IMAGE_NAME: qt5-wayland-examples-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-qt5-wayland-imx8"]
 
 build-qt6-wayland-imx8:
@@ -384,6 +392,7 @@ build-qt6-wayland-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: qt6-wayland-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base-imx8"]
 
 build-qt6-wayland-examples-imx8:
@@ -407,6 +416,7 @@ build-qt6-wayland-examples-imx8:
     BASE_IMAGE_NAME: qt6-wayland-imx8
     IMAGE_NAME: qt6-wayland-examples-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-qt6-wayland-imx8"]
 
 build-chromium-imx8:
@@ -436,6 +446,7 @@ build-chromium-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: chromium-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: ["build-wayland-base-imx8"]
 
 build-cog-imx8:
@@ -465,6 +476,7 @@ build-cog-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: cog-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: ["build-wayland-base-imx8"]
 
 # upstream images
@@ -510,6 +522,7 @@ build-base:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-wayland-base:
@@ -551,6 +564,7 @@ build-wayland-base:
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: ["build-base"]
 
 build-weston:
@@ -573,6 +587,8 @@ build-weston:
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *weston-changes
+  before_script:
+    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -580,6 +596,7 @@ build-weston:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs: ["build-wayland-base"]
 
 build-graphics-tests:
@@ -608,6 +625,7 @@ build-graphics-tests:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: ["build-wayland-base"]
 
 build-weston-touch-calibrator:
@@ -636,6 +654,7 @@ build-weston-touch-calibrator:
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs: ["build-weston"]
 
 build-qt5-wayland:
@@ -665,6 +684,7 @@ build-qt5-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base"]
 
 build-qt5-wayland-examples:
@@ -693,6 +713,7 @@ build-qt5-wayland-examples:
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-qt5-wayland"]
 
 build-qt6-wayland:
@@ -722,6 +743,7 @@ build-qt6-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base"]
 
 build-chromium:
@@ -750,6 +772,7 @@ build-chromium:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: ["build-wayland-base"]
 
 build-cog:
@@ -778,6 +801,7 @@ build-cog:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: ["build-wayland-base"]
 
 ## Debian Cross Toolchains
@@ -810,6 +834,7 @@ build-armhf-toolchain:
     CROSS_TARGET_ARCH: armhf
     IMAGE_NAME: debian-cross-toolchain-armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-armhf-toolchain-ssh:
@@ -836,6 +861,7 @@ build-armhf-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-armhf
     CROSS_TARGET_ARCH: armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
   needs: ["build-armhf-toolchain"]
 
 build-arm64-toolchain:
@@ -866,6 +892,7 @@ build-arm64-toolchain:
     CROSS_TARGET_ARCH: arm64
     IMAGE_NAME: debian-cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-arm64-toolchain-imx8:
@@ -895,6 +922,7 @@ build-arm64-toolchain-imx8:
     CROSS_TARGET_ARCH: arm64
     IMAGE_NAME: debian-cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
     ACCEPT_FSL_EULA: 1
   needs: []
 
@@ -922,6 +950,7 @@ build-arm64-toolchain-ssh:
     IMAGE_NAME: debian-cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
   needs: [build-arm64-toolchain]
 
 ## debian-dotnet-development-images
@@ -958,6 +987,7 @@ build-dotnet-8:
     IMAGE_NAME: dotnet
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
   needs: ["build-base"]
 
 build-dotnet-8-asp:
@@ -986,6 +1016,7 @@ build-dotnet-8-asp:
     IMAGE_NAME: aspdotnet
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
   needs: ["build-base"]
 
 build-dotnet-8-uno:
@@ -1018,6 +1049,7 @@ build-dotnet-8-uno:
     BASE_IMAGE_NAME_WAYLAND: wayland-base
     IMAGE_NAME: dotnet-uno
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
   needs: ["build-dotnet-8", "build-wayland-base"]
 
 build-dotnet-8-debug:
@@ -1047,6 +1079,7 @@ build-dotnet-8-debug:
     BASE_IMAGE_NAME: dotnet
     IMAGE_NAME: dotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   needs: ["build-dotnet-8"]
 
 build-dotnet-8-debug-asp:
@@ -1073,6 +1106,7 @@ build-dotnet-8-debug-asp:
     BASE_IMAGE_NAME: aspdotnet
     IMAGE_NAME: aspdotnet-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
   needs: ["build-dotnet-8-asp"]
 
 build-dotnet-8-debug-uno:
@@ -1103,6 +1137,7 @@ build-dotnet-8-debug-uno:
     BASE_IMAGE_NAME: dotnet-uno
     IMAGE_NAME: dotnet-uno-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
   needs: ["build-dotnet-8-uno"]
 
 ## rt-validation
@@ -1133,6 +1168,7 @@ build-rt-tests:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: rt-tests
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
   needs: []
 
 build-stress-tests:
@@ -1161,6 +1197,7 @@ build-stress-tests:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: stress-tests
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
   needs: []
 
 ## am62
@@ -1198,6 +1235,7 @@ build-base-am62:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
 
 build-wayland-base-am62:
   retry: 2
@@ -1234,6 +1272,7 @@ build-wayland-base-am62:
     IMAGE_NAME: wayland-base-am62
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: ["build-base-am62"]
 
 build-weston-am62:
@@ -1263,6 +1302,7 @@ build-weston-am62:
     IMAGE_NAME: weston-am62
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs: ["build-wayland-base-am62"]
 
 build-graphics-tests-am62:
@@ -1290,6 +1330,7 @@ build-graphics-tests-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: graphics-tests-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: ["build-wayland-base-am62"]
 
 build-weston-touch-calibrator-am62:
@@ -1318,6 +1359,7 @@ build-weston-touch-calibrator-am62:
     BASE_IMAGE_NAME: weston-am62
     IMAGE_NAME: weston-touch-calibrator-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs: ["build-weston-am62"]
 
 build-qt5-wayland-am62:
@@ -1346,6 +1388,7 @@ build-qt5-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt5-wayland-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base-am62"]
 
 build-qt5-wayland-am62-examples:
@@ -1374,6 +1417,7 @@ build-qt5-wayland-am62-examples:
     IMAGE_NAME: qt5-wayland-examples-am62
     QT5_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-qt5-wayland-am62"]
 
 build-qt6-wayland-am62:
@@ -1402,6 +1446,7 @@ build-qt6-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt6-wayland-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-wayland-base-am62"]
 
 build-qt6-wayland-am62-examples:
@@ -1430,6 +1475,7 @@ build-qt6-wayland-am62-examples:
     IMAGE_NAME: qt6-wayland-examples-am62
     QT6_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: ["build-qt6-wayland-am62"]
 
 build-chromium-am62:
@@ -1457,6 +1503,7 @@ build-chromium-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: chromium-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: ["build-wayland-base-am62"]
 
 build-chromium-tests-am62:
@@ -1484,6 +1531,7 @@ build-chromium-tests-am62:
     BASE_IMAGE_NAME: chromium-am62
     IMAGE_NAME: chromium-tests-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
   needs: ["build-chromium-am62"]
 
 build-cog-am62:
@@ -1511,40 +1559,32 @@ build-cog-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: cog-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: ["build-wayland-base-am62"]
 
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest
-
-.shellcheck-git:
-  extends: .shellcheck
-  before_script:
-    - apk update
-    - apk add git
-  script: git ls-files --exclude='*.sh' --ignored -c -z | xargs -0r shellcheck
+  script: find . -type f -iname "*.sh" | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
 
 shell-errors:
-  extends: .shellcheck-git
+  extends: .shellcheck
   # Let's incrementally fix the errors and then disable the allow_failure property for this job.
   allow_failure: true
   variables:
     SHELLCHECK_SEVERITY: "error"
 
 shell-warnings:
-  extends: .shellcheck-git
+  extends: .shellcheck
   allow_failure: true
   variables:
     SHELLCHECK_SEVERITY: "warning"
 
 shell-format:
   image: mvdan/shfmt:v3.2.0-alpine
-  before_script:
-    - apk update
-    - apk add git
   # Let's incrementally fix the errors and then disable the allow_failure property for this job.
   allow_failure: true
   script:
-    - git ls-files --exclude='*.sh' --ignored -c -z | xargs -0r shfmt -i 2 -ci -d
+    - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
 
 check-line-breaks:
   image: alpine:latest
