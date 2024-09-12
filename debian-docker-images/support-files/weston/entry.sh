@@ -21,6 +21,8 @@ ENABLE_VNC=${ENABLE_VNC:-0}
 ENABLE_RDP=${ENABLE_RDP:-0}
 IGNORE_X_LOCKS=${IGNORE_X_LOCKS:-0}
 IGNORE_VT_SWITCH_BACK=${IGNORE_VT_SWITCH_BACK:-0}
+CONFIGURATION_FILE=/etc/xdg/weston/weston.ini
+CONFIGURATION_FILE_DEV=/etc/xdg/weston-dev/weston.ini
 
 #
 # Parse options.
@@ -201,8 +203,6 @@ REMOTE_UI="[screen-share]"
 VNC_BACKEND="command=/usr/bin/weston --backend=vnc-backend.so --shell=fullscreen-shell.so"
 RDP_BACKEND="command=/usr/bin/weston --backend=rdp-backend.so --shell=fullscreen-shell.so --no-clients-resize  --rdp-tls-key=/var/volatile/tls.key --rdp-tls-cert=/var/volatile/tls.crt --force-no-compression"
 START_ON_STARTUP_CONFIG="start-on-startup=true"
-CONFIGURATION_FILE=/etc/xdg/weston/weston.ini
-CONFIGURATION_FILE_DEV=/etc/xdg/weston-dev/weston.ini
 
 if [ "$ENABLE_VNC" = "1" ]; then
   if [[ "$SOC_ID" =~ "MX8" ]]; then
