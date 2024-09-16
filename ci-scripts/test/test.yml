@@ -71,3 +71,9 @@ e2e-test-imx8x:
   variables:
     SOC_UDT: "imx8x"
     RM_ON_TEARDOWN: "true"
+
+e2e-test-imx6:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx6"
+    RM_ON_TEARDOWN: "true"
