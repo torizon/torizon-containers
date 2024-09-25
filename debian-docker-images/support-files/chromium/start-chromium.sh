@@ -32,12 +32,16 @@ for arg in "$@"; do
       chromium_extended_params="$chromium_extended_params --load-extension=/chrome-extensions/chrome-virtual-keyboard-master"
       shift
       ;;
+    --*)
+      chromium_extended_params="$chromium_extended_params $1"
+      shift
+      ;;
+    *)
+      URL=$1
+      shift
+    ;;
   esac
 done
-
-if [ -n "$1" ]; then
-  URL=$1
-fi
 
 # Don't double quote, otherwise expanded arguments end up with `'`
 # shellcheck disable=SC2086
