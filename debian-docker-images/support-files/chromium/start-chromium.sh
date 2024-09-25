@@ -39,7 +39,7 @@ for arg in "$@"; do
     *)
       URL=$1
       shift
-    ;;
+      ;;
   esac
 done
 

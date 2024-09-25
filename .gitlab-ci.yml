@@ -154,7 +154,7 @@ build-base-imx8:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-    - if:  $CI_COMMIT_TAG
+    - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: &imx8-changes
@@ -1656,21 +1656,16 @@ build-cog-am62:
 
 shell-errors:
   extends: .shellcheck
-  # Let's incrementally fix the errors and then disable the allow_failure property for this job.
-  allow_failure: true
   variables:
     SHELLCHECK_SEVERITY: "error"
 
 shell-warnings:
   extends: .shellcheck
-  allow_failure: true
   variables:
     SHELLCHECK_SEVERITY: "warning"
 
 shell-format:
   image: mvdan/shfmt:v3.2.0-alpine
-  # Let's incrementally fix the errors and then disable the allow_failure property for this job.
-  allow_failure: true
   script:
     - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
 
