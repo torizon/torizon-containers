@@ -1,12 +1,12 @@
-dotnet: &dotnet
+dotnet8: &dotnet
   release: &dotnet-release "8.0"
   semver: &dotnet-semver "8.0.0"
   major: 4
   minor: 0
   patch: 0
-aspdotnet:
+aspdotnet8:
   <<: *dotnet
-dotnet-debug:
+dotnet8-debug:
   release: *dotnet-release
   semver: *dotnet-semver
   # The latest version of vsdbg can be obtained by running the follow command:
@@ -15,35 +15,35 @@ dotnet-debug:
   major: 4
   minor: 0
   patch: 0
-dotnet-wayland:
+dotnet8-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 0
   patch: 0
-dotnet-imx8: &dotnet-imx8
+dotnet8-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 0
   patch: 0
-aspdotnet-imx8:
+aspdotnet8-imx8:
   <<: *dotnet-imx8
-dotnet-wayland-imx8:
+dotnet8-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 0
   patch: 0
-dotnet-am62: &dotnet-am62
+dotnet8-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 0
   patch: 0
-aspdotnet-am62:
+aspdotnet8-am62:
   <<: *dotnet-am62
-dotnet-wayland-am62:
+dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4

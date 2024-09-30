@@ -516,12 +516,12 @@ build-dotnet-8-imx8:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *imx8-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-imx8
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-imx8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-imx8
-    IMAGE_NAME: dotnet-imx8
+    IMAGE_NAME: dotnet8-imx8
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -544,12 +544,12 @@ build-dotnet-8-asp-imx8:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *imx8-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-imx8
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-imx8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-imx8
-    IMAGE_NAME: aspdotnet-imx8
+    IMAGE_NAME: aspdotnet8-imx8
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -578,13 +578,13 @@ build-dotnet-8-wayland-imx8:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *imx8-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland-imx8
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-imx8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet-imx8
+    BASE_IMAGE_NAME: dotnet8-imx8
     BASE_IMAGE_NAME_WAYLAND: wayland-base-imx8
-    IMAGE_NAME: dotnet-wayland-imx8
+    IMAGE_NAME: dotnet8-wayland-imx8
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8-imx8", "build-wayland-base-imx8"]
@@ -964,13 +964,13 @@ build-dotnet-8:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *upstream-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
-    IMAGE_NAME: dotnet
+    IMAGE_NAME: dotnet8
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -993,13 +993,13 @@ build-dotnet-8-asp:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *upstream-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
-    IMAGE_NAME: aspdotnet
+    IMAGE_NAME: aspdotnet8
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -1028,14 +1028,14 @@ build-dotnet-8-wayland:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *upstream-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet
+    BASE_IMAGE_NAME: dotnet8
     BASE_IMAGE_NAME_WAYLAND: wayland-base
-    IMAGE_NAME: dotnet-wayland
+    IMAGE_NAME: dotnet8-wayland
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8", "build-wayland-base"]
@@ -1057,12 +1057,12 @@ build-dotnet-8-debug:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *upstream-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-debug
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-debug
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet
-    IMAGE_NAME: dotnet-debug
+    BASE_IMAGE_NAME: dotnet8
+    IMAGE_NAME: dotnet8-debug
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
   needs: ["build-dotnet-8"]
@@ -1699,12 +1699,12 @@ build-dotnet-8-am62:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *am62-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-am62
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-am62
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-am62
-    IMAGE_NAME: dotnet-am62
+    IMAGE_NAME: dotnet8-am62
     DOTNET_RUNTIME: dotnet
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -1727,12 +1727,12 @@ build-dotnet-8-asp-am62:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *am62-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-am62
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-am62
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-am62
-    IMAGE_NAME: aspdotnet-am62
+    IMAGE_NAME: aspdotnet8-am62
     DOTNET_RUNTIME: aspnetcore
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
@@ -1761,13 +1761,13 @@ build-dotnet-8-wayland-am62:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *am62-changes
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland-am62
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-am62
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet-am62
+    BASE_IMAGE_NAME: dotnet8-am62
     BASE_IMAGE_NAME_WAYLAND: wayland-base-am62
-    IMAGE_NAME: dotnet-wayland-am62
+    IMAGE_NAME: dotnet8-wayland-am62
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8-am62", "build-wayland-base-am62"]
