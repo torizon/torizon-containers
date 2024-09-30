@@ -32,9 +32,10 @@ variables:
   QT6_WAYLAND_FOLDER: "qt6-wayland"
   QT5_WAYLAND_EXAMPLES_FOLDER: "qt5-wayland-examples"
   QT6_WAYLAND_EXAMPLES_FOLDER: "qt6-wayland-examples"
-  DEBUG_FOLDER: "debug"
-  UNO_BASE_FOLDER: "uno-base"
-  UNO_DEBUG_FOLDER: "uno-debug"
+  DOTNET_BASE_FOLDER: "base"
+  DOTNET_DEBUG_FOLDER: "debug"
+  DOTNET_WAYLAND_BASE_FOLDER: "wayland-base"
+  DOTNET_WAYLAND_DEBUG_FOLDER: "wayland-debug"
   RT_VALIDATION_FOLDER: "rt-validation"
   RT_TESTS_FOLDER: "rt-tests"
   STRESS_TESTS_FOLDER: "stress-tests"
@@ -502,6 +503,102 @@ build-cog-imx8:
     - job: build-wayland-base-imx8
       optional: true
 
+build-dotnet-8-imx8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-imx8-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *imx8-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-imx8
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx8
+    IMAGE_NAME: dotnet-imx8
+    DOTNET_RUNTIME: dotnet
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-imx8"]
+
+build-dotnet-8-asp-imx8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: *dotnet-8-imx8-changes
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *imx8-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-imx8
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx8
+    IMAGE_NAME: aspdotnet-imx8
+    DOTNET_RUNTIME: aspnetcore
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-imx8"]
+
+build-dotnet-8-wayland-imx8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-wayland-imx8-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *imx8-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland-imx8
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet-imx8
+    BASE_IMAGE_NAME_WAYLAND: wayland-base-imx8
+    IMAGE_NAME: dotnet-wayland-imx8
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+  needs: ["build-dotnet-8-imx8", "build-wayland-base-imx8"]
+
 # upstream images
 
 build-base:
@@ -854,6 +951,132 @@ build-cog:
     - job: build-wayland-base
       optional: true
 
+build-dotnet-8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
+    IMAGE_NAME: dotnet
+    DOTNET_RUNTIME: dotnet
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base"]
+
+build-dotnet-8-asp:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: *dotnet-8-changes
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian
+    IMAGE_NAME: aspdotnet
+    DOTNET_RUNTIME: aspnetcore
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base"]
+
+build-dotnet-8-wayland:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-wayland-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet
+    BASE_IMAGE_NAME_WAYLAND: wayland-base
+    IMAGE_NAME: dotnet-wayland
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+  needs: ["build-dotnet-8", "build-wayland-base"]
+
+build-dotnet-8-debug:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: *dotnet-8-changes
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-debug
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet
+    IMAGE_NAME: dotnet-debug
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+  needs: ["build-dotnet-8"]
+
 ## Debian Cross Toolchains
 
 build-armhf-toolchain:
@@ -1002,193 +1225,6 @@ build-arm64-toolchain-ssh:
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
   needs: [build-arm64-toolchain]
-
-## debian-dotnet-development-images
-
-### dotnet 8
-
-build-dotnet-8:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: debian
-    IMAGE_NAME: dotnet
-    DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["build-base"]
-
-build-dotnet-8-asp:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: *dotnet-8-changes
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: debian
-    IMAGE_NAME: aspdotnet
-    DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${BASE_FOLDER}/"
-  needs: ["build-base"]
-
-build-dotnet-8-uno:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-uno-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-uno-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-uno
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet
-    BASE_IMAGE_NAME_WAYLAND: wayland-base
-    IMAGE_NAME: dotnet-uno
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_BASE_FOLDER}/"
-  needs: ["build-dotnet-8", "build-wayland-base"]
-
-build-dotnet-8-debug:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-debug-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-debug-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-debug
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: dotnet
-    IMAGE_NAME: dotnet-debug
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["build-dotnet-8"]
-
-build-dotnet-8-debug-asp:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: *dotnet-8-debug-changes
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-debug-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-debug
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: aspdotnet
-    IMAGE_NAME: aspdotnet-debug
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DEBUG_FOLDER}/"
-  needs: ["build-dotnet-8-asp"]
-
-build-dotnet-8-debug-uno:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-debug-uno-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *dotnet-8-debug-uno-changes
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-uno-debug
-  variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME_DEBUG: dotnet-debug
-    BASE_IMAGE_NAME: dotnet-uno
-    IMAGE_NAME: dotnet-uno-debug
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${UNO_DEBUG_FOLDER}/"
-  needs: ["build-dotnet-8-uno"]
 
 ## rt-validation
 
@@ -1649,6 +1685,102 @@ build-cog-am62:
   needs:
     - job: build-wayland-base-am62
       optional: true
+
+build-dotnet-8-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-am62-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: dotnet-am62
+    DOTNET_RUNTIME: dotnet
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am62"]
+
+build-dotnet-8-asp-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: *dotnet-8-am62-changes
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: aspdotnet-am62
+    DOTNET_RUNTIME: aspnetcore
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am62"]
+
+build-dotnet-8-wayland-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-wayland-am62-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet-wayland-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet-am62
+    BASE_IMAGE_NAME_WAYLAND: wayland-base-am62
+    IMAGE_NAME: dotnet-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+  needs: ["build-dotnet-8-am62", "build-wayland-base-am62"]
 
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest
