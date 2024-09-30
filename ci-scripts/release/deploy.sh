@@ -46,64 +46,20 @@ yaml_file="$1"
 registry_namespace="$2"
 staging_tag="$3"
 
-date=$(date +%Y%m%d)
-
 while IFS=: read -r image_name rest; do
   image_name=$(echo "$image_name" | xargs)
 
   major=$(yq e ".$image_name.major" "$yaml_file")
   minor=$(yq e ".$image_name.minor" "$yaml_file")
   patch=$(yq e ".$image_name.patch" "$yaml_file")
-  append=$(yq e ".$image_name.append" "$yaml_file")
-  release=$(yq e "explode(.).$image_name.release" "$yaml_file")
-  semver=$(yq e "explode(.).$image_name.semver" "$yaml_file")
 
-  if [[ "$append" != "null" ]]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$append"
-    re_tag_status=$?
-    if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$date"-"$append" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"-"$append" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"-"$append" "--force"
-    fi
-    echo "$image_name: $major.$minor.$patch-$append" >>release_notes.md
-    echo "" >>release_notes.md
+  re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
+  re_tag_status=$?
+  if [ $re_tag_status -eq 0 ]; then
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor" "--force"
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major" "--force"
   fi
-
-  if [[ "$release" != "null" ]]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$release"
-    re_tag_status=$?
-    if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$date"-"$release" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"-"$release" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"-"$release" "--force"
-    fi
-    echo "$image_name: $major.$minor.$patch-$release" >>release_notes.md
-    echo "" >>release_notes.md
-  fi
-
-  if [[ "$semver" != "null" ]]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$semver"
-    re_tag_status=$?
-    if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"."$patch"-"$date"-"$semver" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"."$minor"-"$semver" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag"-"$release" "$major"-"$semver" "--force"
-    fi
-    echo "$image_name: $major.$minor.$patch-$semver" >>release_notes.md
-    echo "" >>release_notes.md
-  fi
-
-  if [ "$release" == "null" ] && [ "$semver" == "null" ]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
-    re_tag_status=$?
-    if [ $re_tag_status -eq 0 ]; then
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"-"$date" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor" "--force"
-      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major" "--force"
-    fi
-    echo "$image_name: $major.$minor.$patch" >>release_notes.md
-    echo "" >>release_notes.md
-  fi
+  echo "$image_name: $major.$minor.$patch" >>release_notes.md
+  echo "" >>release_notes.md
 
 done < <(yq e 'keys | .[]' "$yaml_file")
