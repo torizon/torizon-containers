@@ -1,0 +1,546 @@
+build-base-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: &am62-changes
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/**/*
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    IMAGE_NAME: debian-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+
+build-wayland-base-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: wayland-base-am62
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+  needs:
+    - job: build-base-am62
+      optional: true
+
+build-weston-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: weston-am62
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-graphics-tests-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: graphics-tests-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-weston-touch-calibrator-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-am62
+    IMAGE_NAME: weston-touch-calibrator-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+  needs:
+    - job: build-weston-am62
+      optional: true
+
+build-qt5-wayland-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: qt5-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-qt5-wayland-am62-examples:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: qt5-wayland-am62
+    IMAGE_NAME: qt5-wayland-examples-am62
+    QT5_EXAMPLES_DEBIAN: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs:
+    - job: build-qt5-wayland-am62
+      optional: true
+
+build-qt6-wayland-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: qt6-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-qt6-wayland-am62-examples:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: qt6-wayland-am62
+    IMAGE_NAME: qt6-wayland-examples-am62
+    QT6_EXAMPLES_DEBIAN: 1
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs:
+    - job: build-qt6-wayland-am62
+      optional: true
+
+build-chromium-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: chromium-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-chromium-tests-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: chromium-am62
+    IMAGE_NAME: chromium-tests-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+  needs:
+    - job: build-chromium-am62
+      optional: true
+
+build-cog-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: cog-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-dotnet-8-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-am62-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: dotnet8-am62
+    DOTNET_RUNTIME: dotnet
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am62"]
+
+build-dotnet-8-asp-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: *dotnet-8-am62-changes
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-am62
+    IMAGE_NAME: aspdotnet8-am62
+    DOTNET_RUNTIME: aspnetcore
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am62"]
+
+build-dotnet-8-wayland-am62:
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes: &dotnet-8-wayland-am62-changes
+        - gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-am62
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet8-am62
+    BASE_IMAGE_NAME_WAYLAND: wayland-base-am62
+    IMAGE_NAME: dotnet8-wayland-am62
+    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+  needs: ["build-dotnet-8-am62", "build-wayland-base-am62"]
+
+
+build-wayland-gtk3-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: wayland-gtk3-am62
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
+      optional: true
+
+build-dotnet-8-gtk3-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet8-wayland-am62
+    IMAGE_NAME: dotnet8-gtk3-am62
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-dotnet-8-wayland-am62
+      optional: true

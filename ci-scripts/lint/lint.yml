@@ -1,0 +1,25 @@
+.shellcheck:
+  image: koalaman/shellcheck-alpine:latest
+  script: find . -type f -iname "*.sh" | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
+
+shell-errors:
+  extends: .shellcheck
+  variables:
+    SHELLCHECK_SEVERITY: "error"
+
+shell-warnings:
+  extends: .shellcheck
+  variables:
+    SHELLCHECK_SEVERITY: "warning"
+
+shell-format:
+  image: mvdan/shfmt:v3.2.0-alpine
+  script:
+    - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
+
+check-line-breaks:
+  image: alpine:latest
+  before_script:
+    - apk update
+    - apk add file
+  script: ./ci-scripts/lint/lint-line-breaks.sh
