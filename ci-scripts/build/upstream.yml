@@ -531,20 +531,22 @@ build-armhf-toolchain:
         - ci-scripts/**/*
         - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
+    - if: $CI_COMMIT_TAG
       when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *armhf-toolchain-changes
-  before_script:
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_AMD64: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_ARM_AMD64: "true"
+    BASE_IMAGE_NAME: debian
     CROSS_COMPILER: arm-linux-gnueabihf
     CROSS_TARGET_ARCH: armhf
-    IMAGE_NAME: debian-cross-toolchain-armhf
+    IMAGE_NAME: cross-toolchain-armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
-  needs: []
+  needs:
+    - job: build-base
+      optional: true
 
 build-armhf-toolchain-ssh:
   extends: .docker-build
@@ -565,9 +567,11 @@ build-armhf-toolchain-ssh:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *armhf-toolchain-ssh-changes
   variables:
+    BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_AMD64: "true"
-    IMAGE_NAME: debian-cross-toolchain-ssh-armhf
+    IMAGE_NAME: cross-toolchain-ssh-armhf
     CROSS_TARGET_ARCH: armhf
+    BASE_IMAGE_NAME: cross-toolchain-armhf
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
   needs: ["build-armhf-toolchain"]
@@ -587,20 +591,22 @@ build-arm64-toolchain:
         - ci-scripts/**/*
         - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
+    - if: $CI_COMMIT_TAG
       when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *arm64-toolchain-changes
-  before_script:
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
+    BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_AMD64: "true"
+    BASE_IMAGE_NAME: debian
     CROSS_COMPILER: aarch64-linux-gnu
     CROSS_TARGET_ARCH: arm64
-    IMAGE_NAME: debian-cross-toolchain-arm64
+    IMAGE_NAME: cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
-  needs: []
+  needs:
+    - job: build-base
+      optional: true
 
 build-arm64-toolchain-ssh:
   extends: .docker-build
@@ -621,9 +627,11 @@ build-arm64-toolchain-ssh:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *arm64-toolchain-ssh-changes
   variables:
+    BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_AMD64: "true"
-    IMAGE_NAME: debian-cross-toolchain-ssh-arm64
+    IMAGE_NAME: cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
+    BASE_IMAGE_NAME: cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
   needs: [build-arm64-toolchain]
