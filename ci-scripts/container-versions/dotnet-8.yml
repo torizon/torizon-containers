@@ -1,6 +1,6 @@
 dotnet8: &dotnet
   release: &dotnet-release "8.0"
-  semver: &dotnet-semver "8.0.0"
+  semver: &dotnet-semver "8.0.8"
   major: 4
   minor: 0
   patch: 0
@@ -11,7 +11,7 @@ dotnet8-debug:
   semver: *dotnet-semver
   # The latest version of vsdbg can be obtained by running the follow command:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  debugger-version: "17.10.20209.7"
+  debugger-version: "17.12.10904.2"
   major: 4
   minor: 0
   patch: 0
