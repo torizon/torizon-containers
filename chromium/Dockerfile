@@ -19,5 +19,6 @@ COPY start-chromium.sh /usr/bin/start-browser
 
 USER torizon
 
-ENTRYPOINT ["/usr/bin/start-browser"]
+ENV DISPLAY=:0
 
+ENTRYPOINT ["/usr/bin/start-browser"]

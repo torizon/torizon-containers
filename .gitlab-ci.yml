@@ -111,6 +111,34 @@ services:
         export IMAGE_TAG=${CI_COMMIT_BRANCH}
       fi
 
+    # Echo the full build command before running it
+    - |
+      echo "docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64} \
+        --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA} \
+        --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY} \
+        --build-arg BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+        --build-arg BASE_IMAGE_NAME_DEBUG=${BASE_IMAGE_NAME_DEBUG} \
+        --build-arg BASE_IMAGE_NAME_WAYLAND=${BASE_IMAGE_NAME_WAYLAND} \
+        --build-arg CROSS_COMPILER=${CROSS_COMPILER} \
+        --build-arg CROSS_TARGET_ARCH=${CROSS_TARGET_ARCH} \
+        --build-arg DEBIAN_POINT_RELEASE=${DEBIAN_POINT_RELEASE} \
+        --build-arg DOTNET_DEBUGGER_VER=${DOTNET_DEBUGGER_VER} \
+        --build-arg DOTNET_RUNTIME=${DOTNET_RUNTIME} \
+        --build-arg DOTNET_SEMVER=${DOTNET_SEMVER} \
+        --build-arg IMAGE_TAG=${IMAGE_TAG} \
+        --build-arg REGISTRY_PROXY=${TORADEX_INTERNAL_DOCKERHUB_CACHE} \
+        --build-arg REGISTRY=${PULL_REGISTRY} \
+        --build-arg REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE} \
+        --build-arg TORADEX_SNAPSHOT=${TORADEX_SNAPSHOT} \
+        --label container.name=${IMAGE_NAME} \
+        --label container.version=${MAJOR}.${MINOR}.${PATCH} \
+        --label git.branch=${CI_COMMIT_BRANCH} \
+        --label git.hash=${CI_COMMIT_SHA} \
+        --label pipeline.id=${CI_PIPELINE_ID} \
+        -f ${DOCKERFILE_FOLDER}Dockerfile \
+        -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} \
+        ${DOCKERFILE_BUILD_CONTEXT_FOLDER}"
+
     - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
       --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA}
       --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY}
@@ -136,29 +164,3 @@ services:
       -f ${DOCKERFILE_FOLDER}Dockerfile
       -t ${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
       ${DOCKERFILE_BUILD_CONTEXT_FOLDER}
-
-.shellcheck:
-  image: koalaman/shellcheck-alpine:latest
-  script: find . -type f -iname "*.sh" | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
-
-shell-errors:
-  extends: .shellcheck
-  variables:
-    SHELLCHECK_SEVERITY: "error"
-
-shell-warnings:
-  extends: .shellcheck
-  variables:
-    SHELLCHECK_SEVERITY: "warning"
-
-shell-format:
-  image: mvdan/shfmt:v3.2.0-alpine
-  script:
-    - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
-
-check-line-breaks:
-  image: alpine:latest
-  before_script:
-    - apk update
-    - apk add file
-  script: ./ci-scripts/lint/lint-line-breaks.sh

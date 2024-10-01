@@ -1,1 +1,0 @@
-support-files/cog/start-cog.sh

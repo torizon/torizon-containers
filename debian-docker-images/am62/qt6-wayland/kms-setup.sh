@@ -1,1 +1,0 @@
-support-files/qt-wayland/kms-setup.sh

@@ -1,1 +1,0 @@
-support-files/weston-touch-calibrator/entry.sh

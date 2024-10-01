@@ -1,4 +1,5 @@
 build-base-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -28,6 +29,7 @@ build-base-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
 
 build-wayland-base-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -59,6 +61,7 @@ build-wayland-base-am62:
       optional: true
 
 build-weston-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -73,7 +76,7 @@ build-weston-am62:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/*
+        - ${WESTON_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_COMMIT_TAG
@@ -85,13 +88,14 @@ build-weston-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: weston-am62
     ACCEPT_FSL_EULA: 1
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
 
 build-graphics-tests-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -123,6 +127,7 @@ build-graphics-tests-am62:
       optional: true
 
 build-weston-touch-calibrator-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -137,7 +142,7 @@ build-weston-touch-calibrator-am62:
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_COMMIT_TAG
@@ -148,13 +153,14 @@ build-weston-touch-calibrator-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston-am62
     IMAGE_NAME: weston-touch-calibrator-am62
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs:
     - job: build-weston-am62
       optional: true
 
 build-qt5-wayland-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -168,7 +174,7 @@ build-qt5-wayland-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+        - ${QT5_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
@@ -180,13 +186,14 @@ build-qt5-wayland-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt5-wayland-am62
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-am62
       optional: true
 
 build-qt5-wayland-am62-examples:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -200,8 +207,8 @@ build-qt5-wayland-am62-examples:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_FOLDER}/*
+        - ${QT5_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${QT5_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
@@ -214,13 +221,14 @@ build-qt5-wayland-am62-examples:
     BASE_IMAGE_NAME: qt5-wayland-am62
     IMAGE_NAME: qt5-wayland-examples-am62
     QT5_EXAMPLES_DEBIAN: 1
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt5-wayland-am62
       optional: true
 
 build-qt6-wayland-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -234,7 +242,7 @@ build-qt6-wayland-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+        - ${QT6_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
@@ -246,13 +254,14 @@ build-qt6-wayland-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt6-wayland-am62
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-am62
       optional: true
 
 build-qt6-wayland-am62-examples:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -266,8 +275,8 @@ build-qt6-wayland-am62-examples:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_FOLDER}/*
+        - ${QT6_WAYLAND_EXAMPLES_FOLDER}/*
+        - ${QT6_WAYLAND_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
@@ -280,13 +289,14 @@ build-qt6-wayland-am62-examples:
     BASE_IMAGE_NAME: qt6-wayland-am62
     IMAGE_NAME: qt6-wayland-examples-am62
     QT6_EXAMPLES_DEBIAN: 1
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt6-wayland-am62
       optional: true
 
 build-chromium-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -300,7 +310,7 @@ build-chromium-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${CHROMIUM_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
@@ -312,13 +322,14 @@ build-chromium-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: chromium-am62
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
 
 build-chromium-tests-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -332,7 +343,7 @@ build-chromium-tests-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${CHROMIUM_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
@@ -353,6 +364,7 @@ build-chromium-tests-am62:
       optional: true
 
 build-cog-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -366,7 +378,7 @@ build-cog-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/*
+        - ${COG_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
@@ -378,13 +390,14 @@ build-cog-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: cog-am62
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
 
 build-dotnet-8-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -418,6 +431,7 @@ build-dotnet-8-am62:
   needs: ["build-base-am62"]
 
 build-dotnet-8-asp-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -445,6 +459,7 @@ build-dotnet-8-asp-am62:
   needs: ["build-base-am62"]
 
 build-dotnet-8-wayland-am62:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
