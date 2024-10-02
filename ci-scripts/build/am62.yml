@@ -83,6 +83,8 @@ build-weston-am62:
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *am62-changes
+  before_script:
+    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
