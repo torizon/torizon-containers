@@ -1,1 +1,1 @@
-../debian-docker-images/support-files/chromium/start-chromium.sh
+../support-files/chromium/start-chromium.sh

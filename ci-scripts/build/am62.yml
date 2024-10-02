@@ -12,8 +12,8 @@ build-base-am62:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -21,12 +21,12 @@ build-base-am62:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/**/*
+        - ${SUPPORT_FILES_FOLDER}/**/*
   variables:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-am62
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
 
 build-wayland-base-am62:
   retry: 2
@@ -44,7 +44,7 @@ build-wayland-base-am62:
         - ci-scripts/**/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -77,21 +77,21 @@ build-weston-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${WESTON_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *am62-changes
   before_script:
-    - ./${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: weston-am62
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
@@ -113,7 +113,7 @@ build-graphics-tests-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -145,8 +145,8 @@ build-weston-touch-calibrator-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -156,7 +156,7 @@ build-weston-touch-calibrator-am62:
     BASE_IMAGE_NAME: weston-am62
     IMAGE_NAME: weston-touch-calibrator-am62
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs:
     - job: build-weston-am62
       optional: true
@@ -178,8 +178,8 @@ build-qt5-wayland-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -189,7 +189,7 @@ build-qt5-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt5-wayland-am62
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-am62
       optional: true
@@ -212,8 +212,8 @@ build-qt5-wayland-am62-examples:
         - ${QT5_WAYLAND_EXAMPLES_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -224,7 +224,7 @@ build-qt5-wayland-am62-examples:
     IMAGE_NAME: qt5-wayland-examples-am62
     QT5_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt5-wayland-am62
       optional: true
@@ -246,8 +246,8 @@ build-qt6-wayland-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${QT6_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -257,7 +257,7 @@ build-qt6-wayland-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: qt6-wayland-am62
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-am62
       optional: true
@@ -280,8 +280,8 @@ build-qt6-wayland-am62-examples:
         - ${QT6_WAYLAND_EXAMPLES_FOLDER}/*
         - ${QT6_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -292,7 +292,7 @@ build-qt6-wayland-am62-examples:
     IMAGE_NAME: qt6-wayland-examples-am62
     QT6_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt6-wayland-am62
       optional: true
@@ -314,8 +314,8 @@ build-chromium-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${CHROMIUM_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -325,7 +325,7 @@ build-chromium-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: chromium-am62
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
@@ -348,9 +348,9 @@ build-chromium-tests-am62:
         - ${CHROMIUM_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_AM62_TESTS_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -360,7 +360,7 @@ build-chromium-tests-am62:
     BASE_IMAGE_NAME: chromium-am62
     IMAGE_NAME: chromium-tests-am62
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
   needs:
     - job: build-chromium-am62
       optional: true
@@ -382,8 +382,8 @@ build-cog-am62:
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${COG_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -393,7 +393,7 @@ build-cog-am62:
     BASE_IMAGE_NAME: wayland-base-am62
     IMAGE_NAME: cog-am62
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs:
     - job: build-wayland-base-am62
       optional: true
@@ -412,7 +412,7 @@ build-dotnet-8-am62:
       changes: &dotnet-8-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
@@ -474,7 +474,7 @@ build-dotnet-8-wayland-am62:
       changes: &dotnet-8-wayland-am62-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/**/*

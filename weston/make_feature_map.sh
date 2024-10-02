@@ -1,1 +1,1 @@
-support-files/weston/make_feature_map.sh
+../support-files/weston/make_feature_map.sh

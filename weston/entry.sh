@@ -1,1 +1,1 @@
-support-files/weston/entry.sh
+../support-files/weston/entry.sh

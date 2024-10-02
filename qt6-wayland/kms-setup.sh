@@ -1,1 +1,1 @@
-support-files/qt-wayland/kms-setup.sh
+../support-files/qt-wayland/kms-setup.sh

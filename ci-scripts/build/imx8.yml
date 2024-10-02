@@ -11,8 +11,8 @@ build-base-imx8:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -20,14 +20,14 @@ build-base-imx8:
         - .gitlab-ci.yml
         - ci-scripts/**/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/**/*
+        - ${SUPPORT_FILES_FOLDER}/**/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-imx8
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-wayland-base-imx8:
@@ -45,7 +45,7 @@ build-wayland-base-imx8:
         - ci-scripts/**/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -76,20 +76,20 @@ build-weston-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${WESTON_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *imx8-changes
   before_script:
-    - ./${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: weston-imx8
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs:
     - job: build-wayland-base-imx8
       optional: true
@@ -110,7 +110,7 @@ build-graphics-tests-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -141,8 +141,8 @@ build-weston-touch-calibrator-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -152,7 +152,7 @@ build-weston-touch-calibrator-imx8:
     BASE_IMAGE_NAME: weston-imx8
     IMAGE_NAME: weston-touch-calibrator-imx8
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs:
     - job: build-weston-imx8
       optional: true
@@ -173,8 +173,8 @@ build-qt5-wayland-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -184,7 +184,7 @@ build-qt5-wayland-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: qt5-wayland-imx8
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-imx8
       optional: true
@@ -206,8 +206,8 @@ build-qt5-wayland-examples-imx8:
         - ${QT5_WAYLAND_EXAMPLES_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -217,7 +217,7 @@ build-qt5-wayland-examples-imx8:
     BASE_IMAGE_NAME: qt5-wayland-imx8
     IMAGE_NAME: qt5-wayland-examples-imx8
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt5-wayland-imx8
       optional: true
@@ -238,8 +238,8 @@ build-qt6-wayland-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${QT6_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -249,7 +249,7 @@ build-qt6-wayland-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: qt6-wayland-imx8
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base-imx8
       optional: true
@@ -271,8 +271,8 @@ build-qt6-wayland-examples-imx8:
         - ${QT6_WAYLAND_EXAMPLES_FOLDER}/*
         - ${QT6_WAYLAND_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -282,7 +282,7 @@ build-qt6-wayland-examples-imx8:
     BASE_IMAGE_NAME: qt6-wayland-imx8
     IMAGE_NAME: qt6-wayland-examples-imx8
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt6-wayland-imx8
       optional: true
@@ -303,8 +303,8 @@ build-chromium-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${CHROMIUM_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -314,7 +314,7 @@ build-chromium-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: chromium-imx8
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs:
     - job: build-wayland-base-imx8
       optional: true
@@ -335,8 +335,8 @@ build-cog-imx8:
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${COG_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -346,7 +346,7 @@ build-cog-imx8:
     BASE_IMAGE_NAME: wayland-base-imx8
     IMAGE_NAME: cog-imx8
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs:
     - job: build-wayland-base-imx8
       optional: true
@@ -364,7 +364,7 @@ build-dotnet-8-imx8:
       changes: &dotnet-8-imx8-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
@@ -424,7 +424,7 @@ build-dotnet-8-wayland-imx8:
       changes: &dotnet-8-wayland-imx8-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
         - ${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
         - ${DOTNET_FOLDER}/**/*

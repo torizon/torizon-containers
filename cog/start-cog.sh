@@ -1,1 +1,1 @@
-../debian-docker-images/support-files/cog/start-cog.sh
+../support-files/cog/start-cog.sh

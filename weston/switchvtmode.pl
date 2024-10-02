@@ -1,1 +1,1 @@
-support-files/weston/switchvtmode.pl
+../support-files/weston/switchvtmode.pl

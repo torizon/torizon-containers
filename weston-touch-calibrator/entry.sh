@@ -1,1 +1,1 @@
-support-files/weston-touch-calibrator/entry.sh
+../support-files/weston-touch-calibrator/entry.sh
