@@ -29,6 +29,7 @@ build-base:
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/upstream/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 

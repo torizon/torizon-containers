@@ -7,7 +7,7 @@ ARG REGISTRY_PROXY
 FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TORADEX_FEED_BASE_URL="https://feeds.toradex.com/stable/imx8"
+ARG TORADEX_FEED_URL
 
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -35,12 +35,12 @@ COPY users-groups.sh /users-groups.sh
 RUN ./users-groups.sh \
     && rm users-groups.sh
 
-RUN wget -O- ${TORADEX_FEED_BASE_URL}/toradex-debian-repo-19092023.gpg \
+RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-19092023.gpg \
     | gpg --dearmor \ 
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
 
 RUN echo "Types: deb\n\
-URIs: ${TORADEX_FEED_BASE_URL}\n\
+URIs: ${TORADEX_FEED_URL}\n\
 Suites: stable\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \

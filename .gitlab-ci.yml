@@ -115,7 +115,7 @@ services:
     - |
       echo "docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64} \
         --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA} \
-        --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY} \
+        --build-arg TORADEX_FEED_URL=${TORADEX_FEED_URL} \
         --build-arg BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
         --build-arg BASE_IMAGE_NAME_DEBUG=${BASE_IMAGE_NAME_DEBUG} \
         --build-arg BASE_IMAGE_NAME_WAYLAND=${BASE_IMAGE_NAME_WAYLAND} \
@@ -141,7 +141,7 @@ services:
 
     - docker buildx build --progress=plain --sbom=true --push ${PLATFORM_BUILD_ARM_V7} ${PLATFORM_BUILD_ARM_V8} ${PLATFORM_BUILD_AMD64}
       --build-arg ACCEPT_FSL_EULA=${ACCEPT_FSL_EULA}
-      --build-arg ADD_TORADEX_REPOSITORY=${ADD_TORADEX_REPOSITORY}
+      --build-arg TORADEX_FEED_URL=${TORADEX_FEED_URL}
       --build-arg BASE_IMAGE_NAME=${BASE_IMAGE_NAME}
       --build-arg BASE_IMAGE_NAME_DEBUG=${BASE_IMAGE_NAME_DEBUG}
       --build-arg BASE_IMAGE_NAME_WAYLAND=${BASE_IMAGE_NAME_WAYLAND}

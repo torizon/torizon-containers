@@ -27,6 +27,7 @@ build-base-imx8:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-imx8
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/imx8/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 

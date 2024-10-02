@@ -26,6 +26,7 @@ build-base-am62:
     BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: debian-am62
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am62/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
 
 build-wayland-base-am62:
