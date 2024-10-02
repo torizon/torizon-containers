@@ -11,16 +11,16 @@ build-base:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: &upstream-changes
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/**/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/**/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/**/*
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -28,8 +28,8 @@ build-base:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_AMD64: "true"
     IMAGE_NAME: debian
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
 build-wayland-base:
@@ -45,9 +45,9 @@ build-wayland-base:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -58,8 +58,8 @@ build-wayland-base:
     BUILD_FOR_ARM_AMD64: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs:
     - job: build-base
       optional: true
@@ -77,17 +77,17 @@ build-weston:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${WESTON_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes: *upstream-changes
   before_script:
-    - ./${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+    - ./${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
@@ -95,7 +95,7 @@ build-weston:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -113,10 +113,10 @@ build-graphics-tests:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -127,8 +127,8 @@ build-graphics-tests:
     BUILD_FOR_ARM_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
-    DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -146,11 +146,11 @@ build-weston-touch-calibrator:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -162,7 +162,7 @@ build-weston-touch-calibrator:
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
   needs:
     - job: build-weston
       optional: true
@@ -180,11 +180,11 @@ build-qt5-wayland:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -196,7 +196,7 @@ build-qt5-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -214,12 +214,12 @@ build-qt5-wayland-examples:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
         - ${QT5_WAYLAND_EXAMPLES_FOLDER}/*
         - ${QT5_WAYLAND_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -231,7 +231,7 @@ build-qt5-wayland-examples:
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-qt5-wayland
       optional: true
@@ -249,11 +249,11 @@ build-qt6-wayland:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
         - ${QT6_WAYLAND_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -265,7 +265,7 @@ build-qt6-wayland:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -283,11 +283,11 @@ build-chromium:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
         - ${CHROMIUM_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -299,7 +299,7 @@ build-chromium:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -317,11 +317,11 @@ build-cog:
       changes:
         - .gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
         - ${COG_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${COG_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${COG_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -333,7 +333,7 @@ build-cog:
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs:
     - job: build-wayland-base
       optional: true
@@ -351,10 +351,10 @@ build-dotnet-8:
       changes: &dotnet-8-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/*
+        - ${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -368,8 +368,8 @@ build-dotnet-8:
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: dotnet8
     DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base"]
 
 build-dotnet-8-asp:
@@ -396,8 +396,8 @@ build-dotnet-8-asp:
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: aspdotnet8
     DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base"]
 
 build-dotnet-8-wayland:
@@ -413,10 +413,10 @@ build-dotnet-8-wayland:
       changes: &dotnet-8-wayland-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DOTNET_FOLDER}/**/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -430,8 +430,8 @@ build-dotnet-8-wayland:
     BASE_IMAGE_NAME: dotnet8
     BASE_IMAGE_NAME_WAYLAND: wayland-base
     IMAGE_NAME: dotnet8-wayland
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8", "build-wayland-base"]
 
 build-dotnet-8-debug:
@@ -456,8 +456,8 @@ build-dotnet-8-debug:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: dotnet8
     IMAGE_NAME: dotnet8-debug
-    DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
   needs: ["build-dotnet-8"]
 
 build-rt-tests:
@@ -529,8 +529,8 @@ build-armhf-toolchain:
       changes: &armhf-toolchain-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -542,8 +542,8 @@ build-armhf-toolchain:
     CROSS_COMPILER: arm-linux-gnueabihf
     CROSS_TARGET_ARCH: armhf
     IMAGE_NAME: cross-toolchain-armhf
-    DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
   needs:
     - job: build-base
       optional: true
@@ -561,7 +561,7 @@ build-armhf-toolchain-ssh:
       changes: &armhf-toolchain-ssh-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -572,8 +572,8 @@ build-armhf-toolchain-ssh:
     IMAGE_NAME: cross-toolchain-ssh-armhf
     CROSS_TARGET_ARCH: armhf
     BASE_IMAGE_NAME: cross-toolchain-armhf
-    DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
   needs: ["build-armhf-toolchain"]
 
 build-arm64-toolchain:
@@ -589,8 +589,8 @@ build-arm64-toolchain:
       changes: &arm64-toolchain-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
@@ -602,8 +602,8 @@ build-arm64-toolchain:
     CROSS_COMPILER: aarch64-linux-gnu
     CROSS_TARGET_ARCH: arm64
     IMAGE_NAME: cross-toolchain-arm64
-    DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
   needs:
     - job: build-base
       optional: true
@@ -621,7 +621,7 @@ build-arm64-toolchain-ssh:
       changes: &arm64-toolchain-ssh-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
-        - ${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/*
+        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -632,8 +632,8 @@ build-arm64-toolchain-ssh:
     IMAGE_NAME: cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
     BASE_IMAGE_NAME: cross-toolchain-arm64
-    DOCKERFILE_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_CROSS_TOOLCHAINS_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
   needs: [build-arm64-toolchain]
 
 build-wayland-gtk3:

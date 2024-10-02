@@ -18,15 +18,15 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
-  DEBIAN_DOCKER_IMAGES_FOLDER: "debian-docker-images"
+  PLATFORM_SPECIFIC_FOLDER: "platform-specific"
   SUPPORT_FILES_FOLDER: "support-files"
   IMX8_FOLDER: "imx8"
   AM62_FOLDER: "am62"
   UPSTREAM_FOLDER: "upstream"
   TESTS_FOLDER: "tests"
   CHROMIUM_TESTS_FOLDER: "chromium-tests"
-  DEBIAN_CROSS_TOOLCHAINS_FOLDER: "debian-cross-toolchains"
-  DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER: "debian-dotnet-development-images"
+  CROSS_TOOLCHAIN_FOLDER: "cross-toolchain"
+  DOTNET_FOLDER: "dotnet"
   SSH_FOLDER: "ssh"
   BASE_FOLDER: "base"
   WAYLAND_BASE_FOLDER: "wayland-base"
