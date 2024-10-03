@@ -75,3 +75,30 @@ hardware using the Aval Framework and the Torizon Cloud API.
 - [Release Pipeline](ci-scripts/release/release.yml) which retags images from
 `<image-name>:<branch-name>-rc` to `<image-name>:<major>.<minor>.<patch>` using
 the [versioning metadata](ci-scripts/container-versions) tracked by the repo.
+
+## Developing
+
+Users are not expected to build their own images from this repository, as it's
+fairly optimized may be too complicated to build from the CLI. Nonetheless, one
+must be able to do this when developing for `torizon-containers` itself.
+
+Each directory (ignoring `platform-specific`) symlinks files that are to be
+included in the image to `support-files`, so multiple builds can use the same
+Dockerfile defition, though installing different packages because of the
+different package feeds.
+
+To build an image, one can use the 
+[phemmer trick](https://github.com/moby/moby/issues/6094#issuecomment-54556720)
+to resolve the symlinks with tar and pipe everything as the build context to
+`docker build`.
+
+For example, if I wish to build the base Docker for the iMX8 platform, from the
+`base` folder run:
+
+```
+tar -ch . | docker buildx build \
+--build-arg DEBIAN_POINT_RELEASE="12.6" \
+--build-arg REGISTRY_PROXY="docker.io" \
+--build-arg TORADEX_FEED_URL="https://feeds.toradex.com/stable/imx8/" \
+-t base -
+```
