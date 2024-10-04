@@ -34,6 +34,10 @@ do
         chromium_parms_extended="$chromium_parms_extended --disable-gpu-compositing"
         shift
         ;;
+    --enable-vpu)
+        chromium_parms_extended="$chromium_parms_extended --enable-features=VaapiVideoDecoder --enable-accelerated-video-decoder"
+        shift
+        ;;
     esac
 done
 
