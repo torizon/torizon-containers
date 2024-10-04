@@ -23,3 +23,19 @@ check-line-breaks:
     - apk update
     - apk add file
   script: ./ci-scripts/lint/lint-line-breaks.sh
+
+lint-dependencies:
+  image: alpine:latest
+  before_script:
+    - apk update
+    - apk add yq bash
+  script:
+    - ERROR_FOUND=0
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am62.yml "-am62" || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx8.yml "-imx8" || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/upstream.yml "" || ERROR_FOUND=1
+    - |
+      if [ "$ERROR_FOUND" -eq 1 ]; then
+        echo "One or more linting checks failed."
+        exit 1
+      fi
