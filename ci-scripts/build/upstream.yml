@@ -26,7 +26,7 @@ build-base:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/upstream/"
@@ -56,7 +56,7 @@ build-wayland-base:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
@@ -92,7 +92,7 @@ build-weston:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
@@ -125,7 +125,7 @@ build-graphics-tests:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
@@ -159,7 +159,7 @@ build-weston-touch-calibrator:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
@@ -193,7 +193,7 @@ build-qt5-wayland:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
@@ -228,7 +228,7 @@ build-qt5-wayland-examples:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
@@ -262,7 +262,7 @@ build-qt6-wayland:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
@@ -296,7 +296,7 @@ build-chromium:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
@@ -330,7 +330,7 @@ build-cog:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
@@ -538,7 +538,7 @@ build-armhf-toolchain:
       changes: *armhf-toolchain-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     CROSS_COMPILER: arm-linux-gnueabihf
     CROSS_TARGET_ARCH: armhf
@@ -569,7 +569,7 @@ build-armhf-toolchain-ssh:
       changes: *armhf-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: cross-toolchain-ssh-armhf
     CROSS_TARGET_ARCH: armhf
     BASE_IMAGE_NAME: cross-toolchain-armhf
@@ -598,7 +598,7 @@ build-arm64-toolchain:
       changes: *arm64-toolchain-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     CROSS_COMPILER: aarch64-linux-gnu
     CROSS_TARGET_ARCH: arm64
@@ -629,7 +629,7 @@ build-arm64-toolchain-ssh:
       changes: *arm64-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
     BASE_IMAGE_NAME: cross-toolchain-arm64

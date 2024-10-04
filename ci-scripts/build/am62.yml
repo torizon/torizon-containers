@@ -516,7 +516,7 @@ build-arm64-toolchain-am62:
       changes: *arm64-toolchain-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian-am62
     CROSS_COMPILER: aarch64-linux-gnu
     CROSS_TARGET_ARCH: arm64
@@ -545,7 +545,7 @@ build-arm64-toolchain-ssh-am62:
       changes: *arm64-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: cross-toolchain-ssh-arm64-am62
     CROSS_TARGET_ARCH: arm64
     BASE_IMAGE_NAME: cross-toolchain-arm64-am62
