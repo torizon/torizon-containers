@@ -1,6 +1,8 @@
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest
   script: find . -type f -iname "*.sh" | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
+  rules:
+    - when: always
 
 shell-errors:
   extends: .shellcheck
@@ -23,9 +25,13 @@ check-line-breaks:
     - apk update
     - apk add file
   script: ./ci-scripts/lint/lint-line-breaks.sh
+  rules:
+    - when: always
 
 lint-dependencies:
   image: alpine:latest
+  rules:
+    - when: always
   before_script:
     - apk update
     - apk add yq bash
