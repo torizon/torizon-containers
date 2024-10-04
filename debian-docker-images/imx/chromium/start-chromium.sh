@@ -3,9 +3,6 @@
 # default URL
 URL="www.toradex.com"
 
-# Enable GPU support by default
-ENABLE_GPU=1
-
 # default parms for kiosk mode
 chromium_parms_base="--test-type --allow-insecure-localhost --disable-notifications --check-for-update-interval=315360000 "
 chromium_parms="--kiosk "
@@ -30,11 +27,6 @@ do
     --virtual-keyboard)
         # Load the virtual keyboard
         chromium_parms_extended="$chromium_parms_extended --load-extension=/chrome-extensions/chrome-virtual-keyboard-master"
-        shift
-        ;;
-    --disable-gpu)
-        # Disable GPU support completely
-        ENABLE_GPU=0
         shift
         ;;
     --disable-gpu-compositing)
