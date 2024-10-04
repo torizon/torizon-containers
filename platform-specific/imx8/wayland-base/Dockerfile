@@ -9,11 +9,6 @@ ARG REGISTRY_NAMESPACE
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
-    apt-utils \
-    && apt-get -y upgrade \
-    && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get -y update && apt-get install -y --no-install-recommends \
     libdrm-common \
     libdrm2 \
     libwayland-client0 \
