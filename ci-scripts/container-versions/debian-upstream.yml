@@ -6,6 +6,10 @@ wayland-base:
   major: 4
   minor: 0
   patch: 0
+wayland-gtk3:
+  major: 4
+  minor: 0
+  patch: 0
 weston:
   major: 4
   minor: 0

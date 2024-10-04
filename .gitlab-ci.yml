@@ -26,6 +26,7 @@ variables:
   SSH_FOLDER: "ssh"
   BASE_FOLDER: "base"
   WAYLAND_BASE_FOLDER: "wayland-base"
+  GTK_3_FOLDER: "gtk3"
   WESTON_FOLDER: "weston"
   GRAPHICS_TESTS_FOLDER: "graphics-tests"
   WESTON_TOUCH_CALIBRATOR_FOLDER: "weston-touch-calibrator"
@@ -192,6 +193,38 @@ build-wayland-base-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs:
     - job: build-base-imx8
+      optional: true
+
+build-wayland-gtk3-imx8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *imx8-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-imx8
+    IMAGE_NAME: wayland-gtk3-imx8
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-wayland-base-imx8
       optional: true
 
 build-weston-imx8:
@@ -590,6 +623,42 @@ build-dotnet-8-wayland-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8-imx8", "build-wayland-base-imx8"]
 
+build-dotnet-8-gtk3-imx8:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX8_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *imx8-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet8-wayland-imx8
+    IMAGE_NAME: dotnet8-gtk3-imx8
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-dotnet-8-wayland-imx8
+      optional: true
+
 # upstream images
 
 build-base:
@@ -658,6 +727,40 @@ build-wayland-base:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs:
     - job: build-base
+      optional: true
+
+build-wayland-gtk3:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_ARM_AMD64: "true"
+    BASE_IMAGE_NAME: wayland-base
+    IMAGE_NAME: wayland-gtk3
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-wayland-base
       optional: true
 
 build-weston:
@@ -1041,6 +1144,43 @@ build-dotnet-8-wayland:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8", "build-wayland-base"]
 
+build-dotnet-8-gtk3:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *upstream-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet8-wayland
+    IMAGE_NAME: dotnet8-gtk3
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-dotnet-8-wayland
+      optional: true
+
 build-dotnet-8-debug:
   retry: 2
   extends: .docker-build
@@ -1339,6 +1479,38 @@ build-wayland-base-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs:
     - job: build-base-am62
+      optional: true
+
+build-wayland-gtk3-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: wayland-gtk3-am62
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-wayland-base-am62
       optional: true
 
 build-weston-am62:
@@ -1772,6 +1944,41 @@ build-dotnet-8-wayland-am62:
     DOCKERFILE_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
   needs: ["build-dotnet-8-am62", "build-wayland-base-am62"]
+
+build-dotnet-8-gtk3-am62:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+      changes:
+        - .gitlab-ci.yml
+        - ci-scripts/**/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${BASE_FOLDER}/*
+        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/*
+        - ${GTK_3_FOLDER}/*
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+      changes: *am62-changes
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: dotnet8-wayland-am62
+    IMAGE_NAME: dotnet8-gtk3-am62
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs:
+    - job: build-dotnet-8-wayland-am62
+      optional: true
 
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest

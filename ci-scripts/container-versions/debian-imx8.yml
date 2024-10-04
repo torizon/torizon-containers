@@ -6,6 +6,10 @@ wayland-base-imx8:
   major: 4
   minor: 0
   patch: 0
+wayland-gtk3-imx8:
+  major: 4
+  minor: 0
+  patch: 0
 weston-imx8:
   major: 4
   minor: 0

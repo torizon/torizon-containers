@@ -6,6 +6,10 @@ wayland-base-am62:
   major: 4
   minor: 0
   patch: 0
+wayland-gtk3-am62:
+  major: 4
+  minor: 0
+  patch: 0
 weston-am62:
   major: 4
   minor: 0

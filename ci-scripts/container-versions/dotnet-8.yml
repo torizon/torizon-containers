@@ -21,6 +21,10 @@ dotnet8-wayland:
   major: 4
   minor: 0
   patch: 0
+dotnet8-gtk3:
+  major: 4
+  minor: 0
+  patch: 0
 dotnet8-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
@@ -35,6 +39,10 @@ dotnet8-wayland-imx8:
   major: 4
   minor: 0
   patch: 0
+dotnet8-gtk3-imx8:
+  major: 4
+  minor: 0
+  patch: 0
 dotnet8-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
@@ -46,6 +54,10 @@ aspdotnet8-am62:
 dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+dotnet8-gtk3-am62:
   major: 4
   minor: 0
   patch: 0
