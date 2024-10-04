@@ -1,0 +1,103 @@
+.test-dotnet:
+  before_script:
+    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker info
+    - |
+      if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" \
+          || "${CI_COMMIT_REF_PROTECTED}" == "false" ]]; then
+        export PULL_REGISTRY=${CI_REGISTRY}
+        export REGISTRY_NAMESPACE=${CI_PROJECT_PATH}
+        export IMAGE_TAG=${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+      fi
+      if [[ "${CI_COMMIT_REF_PROTECTED}" == "true" ]]; then
+        export PULL_REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
+        export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE}
+        export IMAGE_TAG=${CI_COMMIT_BRANCH}
+      fi
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${DOTNET_IMAGE}
+  script:
+    - docker run --platform linux/${ARCH} ${PULL_REGISTRY}/${REGISTRY_NAMESPACE}/${DOTNET_IMAGE}:${IMAGE_TAG} dotnet --info | tee /tmp/dotnet_output
+    - |
+      DOTNET_VER=$(cat /tmp/dotnet_output | grep Version | awk '{ print $2 }')
+      [[ $DOTNET_VER = $DOTNET_SEMVER ]]
+
+test-armhf-dotnet8:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: dotnet8
+    ARCH: arm
+  rules: !reference [build-dotnet-8, rules]
+  needs:
+    - job: build-dotnet-8
+      optional: true
+
+test-arm64-dotnet8:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: dotnet8
+    ARCH: arm64
+  rules: !reference [build-dotnet-8, rules]
+  needs:
+    - job: build-dotnet-8
+      optional: true
+
+test-armhf-dotnet8-asp:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: aspdotnet8
+    ARCH: arm
+  rules: !reference [build-dotnet-8-asp, rules]
+  needs:
+    - job: build-dotnet-8-asp
+      optional: true
+
+test-arm64-dotnet8-asp:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: aspdotnet8
+    ARCH: arm64
+  rules: !reference [build-dotnet-8-asp, rules]
+  needs:
+    - job: build-dotnet-8-asp
+      optional: true
+
+test-arm64-dotnet8-imx8:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: dotnet8-imx8
+    ARCH: arm64
+  rules: !reference [build-dotnet-8-imx8, rules]
+  needs:
+    - job: build-dotnet-8-imx8
+      optional: true
+
+test-arm64-dotnet8-asp-imx8:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: aspdotnet8-imx8
+    ARCH: arm64
+  rules: !reference [build-dotnet-8-asp-imx8, rules]
+  needs:
+    - job: build-dotnet-8-asp-imx8
+      optional: true
+
+test-arm64-dotnet8-am62:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: dotnet8-am62
+    ARCH: arm64
+  rules: !reference [build-dotnet-8-am62, rules]
+  needs:
+    - job: build-dotnet-8-am62
+      optional: true
+
+test-arm64-dotnet8-asp-am62:
+  extends: .test-dotnet
+  variables:
+    DOTNET_IMAGE: aspdotnet8-am62
+    ARCH: arm64
+  rules: !reference [build-dotnet-8-asp-am62, rules]
+  needs:
+    - job: build-dotnet-8-asp-am62
+      optional: true

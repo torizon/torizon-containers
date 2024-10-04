@@ -1,6 +1,7 @@
 include:
   - "/ci-scripts/release/release.yml"
-  - "/ci-scripts/test/test.yml"
+  - "/ci-scripts/test/aval-tests.yml"
+  - "/ci-scripts/test/dotnet-tests.yml"
 
 image: docker:latest
 
@@ -496,7 +497,7 @@ build-cog-imx8:
 build-dotnet-8-imx8:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-imx8-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
@@ -530,7 +531,7 @@ build-dotnet-8-imx8:
 build-dotnet-8-asp-imx8:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-asp-imx8-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
@@ -944,7 +945,7 @@ build-cog:
 build-dotnet-8:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
@@ -979,7 +980,7 @@ build-dotnet-8:
 build-dotnet-8-asp:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-asp-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
@@ -1679,7 +1680,7 @@ build-cog-am62:
 build-dotnet-8-am62:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-am62-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
@@ -1713,7 +1714,7 @@ build-dotnet-8-am62:
 build-dotnet-8-asp-am62:
   retry: 2
   extends: .docker-build
-  rules:
+  rules: &dotnet-8-asp-am62-rules
     - if: $CI_WORLD_TEST == "true"
       when: never
     - if: $CI_WORLD_REBUILD == "true"
