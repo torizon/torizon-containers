@@ -102,3 +102,33 @@ tar -ch . | docker buildx build \
 --build-arg TORADEX_FEED_URL="https://feeds.toradex.com/stable/imx8/" \
 -t base -
 ```
+
+## Testing
+
+Torizon Containers are tested in two levels:
+
+- [Integration tests](ci-scripts/test/aval-tests.yml) using the
+[Aval Framework](https://github.com/torizon/aval), which is our own orchestrator
+built on top of Torizon Cloud. These tests run from a board farm maintained by
+Toradex.
+
+Integration tests are written in bash using bats and are
+[divided in suites](tests/suites/) corresponding each of the SoC platforms we
+support. We package everything in a Docker image and tell Aval to run this
+image to a board that matches our configuration. Within the `docker run...`
+statement we tell Aval to execute we mount the docker socket of the daemon
+running on the host Torizon OS which enables the subsequent `docker pulls` from
+the various `setup_suite.bash` to pull the image currently being tested.
+
+A helper [`run-tests.sh`](tests/suites/run-tests.sh) script is used to crawl
+through each of the tests inside a given suite, sequencially run each bats test
+and report a JUnit.xml `report.xml` file that is picked up by Aval via ssh over
+to the `report: junit:` field in
+[`aval-tests.yml`](ci-scripts/test/aval-tests.yml), providing a visual
+representation of which tests passed/failed from the GitLab UI.
+
+- Functional tests: these are for testing things like "is the correct version of
+dotnet installed?" or other basic checks for versions etc. Anything that can be
+easily tested on common runners (amd64, generally) and is not hardware-dependent
+is a functional test. Test pipelines are any `*-tests.yml`
+[here](ci-scripts/test/) that are not the the Aval tests.
