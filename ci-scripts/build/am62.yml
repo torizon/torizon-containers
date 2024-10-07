@@ -24,6 +24,7 @@ build-base-am62:
         - ${SUPPORT_FILES_FOLDER}/**/*
   variables:
     BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-am62
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am62/"

@@ -25,6 +25,7 @@ build-base-imx8:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-imx8
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/imx8/"
