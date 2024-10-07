@@ -1,8 +1,8 @@
-debian-cross-toolchain-armhf:
+debian-cross-toolchain-arm:
   major: 4
   minor: 0
   patch: 0
-debian-cross-toolchain-ssh-armhf:
+debian-cross-toolchain-ssh-arm:
   major: 4
   minor: 0
   patch: 0

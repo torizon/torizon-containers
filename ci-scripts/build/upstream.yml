@@ -517,7 +517,7 @@ build-stress-tests:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
   needs: []
 
-build-armhf-toolchain:
+build-arm-toolchain:
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -527,7 +527,7 @@ build-armhf-toolchain:
     - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &armhf-toolchain-changes
+      changes: &arm-toolchain-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/*
@@ -535,21 +535,21 @@ build-armhf-toolchain:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *armhf-toolchain-changes
+      changes: *arm-toolchain-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     CROSS_COMPILER: arm-linux-gnueabihf
     CROSS_TARGET_ARCH: armhf
-    IMAGE_NAME: cross-toolchain-armhf
+    IMAGE_NAME: cross-toolchain-arm
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
   needs:
     - job: build-base
       optional: true
 
-build-armhf-toolchain-ssh:
+build-arm-toolchain-ssh:
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -559,23 +559,23 @@ build-armhf-toolchain-ssh:
     - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &armhf-toolchain-ssh-changes
+      changes: &arm-toolchain-ssh-changes
         - gitlab-ci.yml
         - ci-scripts/**/*
         - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
     - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *armhf-toolchain-ssh-changes
+      changes: *arm-toolchain-ssh-changes
   variables:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
-    IMAGE_NAME: cross-toolchain-ssh-armhf
+    IMAGE_NAME: cross-toolchain-ssh-arm
     CROSS_TARGET_ARCH: armhf
-    BASE_IMAGE_NAME: cross-toolchain-armhf
+    BASE_IMAGE_NAME: cross-toolchain-arm
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: ["build-armhf-toolchain"]
+  needs: ["build-arm-toolchain"]
 
 build-arm64-toolchain:
   extends: .docker-build

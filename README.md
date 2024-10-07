@@ -132,3 +132,22 @@ dotnet installed?" or other basic checks for versions etc. Anything that can be
 easily tested on common runners (amd64, generally) and is not hardware-dependent
 is a functional test. Test pipelines are any `*-tests.yml`
 [here](ci-scripts/test/) that are not the the Aval tests.
+
+## Architecture Glossary
+
+In the context of the [cross-toolchain images](cross-toolchain), we use the
+following definitions:
+
+| Architecture        | Equivalent Cross Toolchain Container |
+|---------------------|--------------------------------------|
+| ARMv7 with VFP3-D16 | cross-toolchain-arm                  |
+| ARMv8-A             | cross-toolchain-arm64{-imx8, -am62}  |
+
+In the context of the architecture for all Container Images, we use the
+following definitions:
+
+| Architecture               | Container Image Architecture |
+|----------------------------|------------------------------|
+| ARMv7 with VFP3-D16        | linux/arm/v7                 |
+| ARMv8-A                    | linux/arm64/v8               |
+| x86_64 (also called amd64) | linux/amd64                  |

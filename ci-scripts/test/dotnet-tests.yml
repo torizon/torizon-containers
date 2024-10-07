@@ -22,7 +22,7 @@
       DOTNET_VER=$(cat /tmp/dotnet_output | grep Version | awk '{ print $2 }')
       [[ $DOTNET_VER = $DOTNET_SEMVER ]]
 
-test-armhf-dotnet8:
+test-arm-dotnet8:
   extends: .test-dotnet
   variables:
     DOTNET_IMAGE: dotnet8
@@ -42,7 +42,7 @@ test-arm64-dotnet8:
     - job: build-dotnet-8
       optional: true
 
-test-armhf-dotnet8-asp:
+test-arm-dotnet8-asp:
   extends: .test-dotnet
   variables:
     DOTNET_IMAGE: aspdotnet8
