@@ -103,6 +103,16 @@ tar -ch . | docker buildx build \
 -t base -
 ```
 
+### Linting
+
+Inside the [lint](ci-scripts/lint/) directory you'll find several small scripts
+that are meta-build checks, meaning they check the files for the build of the
+images themselves, such as the YAML files for GitLab CI or the Dockerfiles.
+
+The rule of thumb is that every time you encounter a bug that could have been
+caught with a meta-linting test, you fix that bug and write the test. Preventing
+regressions during build time is imperative for the well-being of this project.
+
 ## Testing
 
 Torizon Containers are tested in two levels:

@@ -45,3 +45,21 @@ lint-dependencies:
         echo "One or more linting checks failed."
         exit 1
       fi
+
+lint-templates:
+  image: alpine:latest
+  rules:
+    - when: always
+  before_script:
+    - apk update
+    - apk add yq bash
+  script:
+    - ERROR_FOUND=0
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am62.yml || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx8.yml || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/upstream.yml || ERROR_FOUND=1
+    - |
+      if [ "$ERROR_FOUND" -eq 1 ]; then
+        echo "One or more linting checks failed."
+        exit 1
+      fi
