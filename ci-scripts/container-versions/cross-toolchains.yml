@@ -1,20 +1,20 @@
-debian-cross-toolchain-arm:
+cross-toolchain-arm:
   major: 4
   minor: 0
   patch: 0
-debian-cross-toolchain-ssh-arm:
+cross-toolchain-ssh-arm:
   major: 4
   minor: 0
   patch: 0
-debian-cross-toolchain-arm64:
+cross-toolchain-arm64:
   major: 4
   minor: 0
   patch: 0
-debian-cross-toolchain-ssh-arm64:
+cross-toolchain-ssh-arm64:
   major: 4
   minor: 0
   patch: 0
-debian-cross-toolchain-arm64-imx8:
+cross-toolchain-arm64-imx8:
   major: 4
   minor: 0
   patch: 0
