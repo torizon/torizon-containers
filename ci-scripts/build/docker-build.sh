@@ -10,14 +10,16 @@ docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
 docker info
 
-# # FIXME: Uncomment during TCCP-809
-# if [[ "${IMAGE_NAME}" == *am62 ]]; then
-#   export TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/am62/snapshots/latest-snapshot)
-# elif [[ "${IMAGE_NAME}" == *imx8 ]]; then
-#   export TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/imx8/snapshots/latest-snapshot)
-# else
-#   export TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/upstream/snapshots/latest-snapshot)
-# fi
+if [[ "${IMAGE_NAME}" == *am62 ]]; then
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/am62/snapshots/latest-snapshot)
+  export TORADEX_SNAPSHOT
+elif [[ "${IMAGE_NAME}" == *imx8 ]]; then
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/imx8/snapshots/latest-snapshot)
+  export TORADEX_SNAPSHOT
+else
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/upstream/snapshots/latest-snapshot)
+  export TORADEX_SNAPSHOT
+fi
 
 docker buildx create --name multiarch-builder --driver docker-container --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --use
 docker buildx inspect --bootstrap

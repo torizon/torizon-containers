@@ -8,6 +8,7 @@ FROM $REGISTRY_PROXY/debian:$DEBIAN_POINT_RELEASE AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TORADEX_FEED_URL
+ARG TORADEX_SNAPSHOT
 
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -40,7 +41,7 @@ RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-07102024.gpg \
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
 
 RUN echo "Types: deb\n\
-URIs: ${TORADEX_FEED_URL}\n\
+URIs: ${TORADEX_FEED_URL}/snapshots/${TORADEX_SNAPSHOT}\n\
 Suites: stable\n\
 Components: main non-free\n\
 Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
