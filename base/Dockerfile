@@ -48,9 +48,9 @@ Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.
     && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
-    neofetch \
+    fastfetch \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
-COPY neofetch.conf /root/.config/neofetch/config.conf
+RUN ln -s $(which fastfetch) /usr/local/bin/neofetch
 
 CMD ["/bin/bash"]
