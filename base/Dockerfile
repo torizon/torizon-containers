@@ -35,7 +35,7 @@ COPY users-groups.sh /users-groups.sh
 RUN ./users-groups.sh \
     && rm users-groups.sh
 
-RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-19092023.gpg \
+RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-07102024.gpg \
     | gpg --dearmor \ 
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
 
