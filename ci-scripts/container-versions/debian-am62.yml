@@ -26,10 +26,6 @@ qt6-wayland-am62:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland-examples-am62:
-  major: 4
-  minor: 0
-  patch: 0
 graphics-tests-am62:
   major: 4
   minor: 0

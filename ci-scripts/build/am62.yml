@@ -96,16 +96,6 @@ build-qt6-wayland-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: [build-wayland-base-am62]
 
-build-qt6-wayland-am62-examples:
-  extends: .build-am62-template
-  variables:
-    BASE_IMAGE_NAME: qt6-wayland-am62
-    IMAGE_NAME: qt6-wayland-examples-am62
-    QT6_EXAMPLES_DEBIAN: 1
-    DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt6-wayland-am62]
-
 build-chromium-am62:
   extends: .build-am62-template
   variables:

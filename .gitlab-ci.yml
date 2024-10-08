@@ -37,7 +37,6 @@ variables:
   QT5_WAYLAND_FOLDER: "qt5-wayland"
   QT6_WAYLAND_FOLDER: "qt6-wayland"
   QT5_WAYLAND_EXAMPLES_FOLDER: "qt5-wayland-examples"
-  QT6_WAYLAND_EXAMPLES_FOLDER: "qt6-wayland-examples"
   DOTNET_BASE_FOLDER: "base"
   DOTNET_DEBUG_FOLDER: "debug"
   DOTNET_WAYLAND_BASE_FOLDER: "wayland-base"

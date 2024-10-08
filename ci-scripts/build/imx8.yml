@@ -104,16 +104,6 @@ build-qt6-wayland-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
   needs: [build-wayland-base-imx8]
 
-build-qt6-wayland-examples-imx8:
-  extends: .build-imx8-template
-  variables:
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: qt6-wayland-imx8
-    IMAGE_NAME: qt6-wayland-examples-imx8
-    DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt6-wayland-imx8]
-
 build-chromium-imx8:
   extends: .build-imx8-template
   variables:
