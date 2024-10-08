@@ -13,7 +13,7 @@
       if [[ "${CI_COMMIT_REF_PROTECTED}" == "true" ]]; then
         export PULL_REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
         export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE}
-        export IMAGE_TAG=${CI_COMMIT_BRANCH}
+        export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
       fi
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${DOTNET_IMAGE}
   script:

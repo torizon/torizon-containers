@@ -1,7 +1,7 @@
-graphics_tests_image="torizon/graphics-tests-am62:next"
+graphics_tests_image="torizon/graphics-tests-am62:stable-rc"
 graphics_tests_container="graphics-tests"
 
-weston_image="torizon/weston-am62:next"
+weston_image="torizon/weston-am62:stable-rc"
 weston_container="weston"
 
 setup_suite() {

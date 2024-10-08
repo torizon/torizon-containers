@@ -1,4 +1,4 @@
-image="torizon/qt5-wayland-examples-am62:next"
+image="torizon/qt5-wayland-examples-am62:stable-rc"
 container="qt5-wayland-examples"
 
 setup_suite() {

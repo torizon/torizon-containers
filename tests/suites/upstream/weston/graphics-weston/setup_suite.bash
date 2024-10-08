@@ -13,7 +13,7 @@ setup_suite() {
     -v /run/udev/:/run/udev/ --device-cgroup-rule="c 4:* rmw" \
     --device-cgroup-rule="c 13:* rmw" --device-cgroup-rule="c 226:* rmw" \
     --device-cgroup-rule="c 10:223 rmw" \
-    torizon/weston:next \
+    torizon/weston:stable-rc \
     --developer --tty=/dev/tty7 -- --debug
 
     sleep 10
@@ -25,7 +25,7 @@ setup_suite() {
     --name=graphics-tests -v /dev:/dev -v /tmp:/tmp --device-cgroup-rule="c 4:* rmw"  \
     --device-cgroup-rule="c 13:* rmw" \
     --device-cgroup-rule="c 226:* rmw" \
-    torizon/graphics-tests:next
+    torizon/graphics-tests:stable-rc
 }
 
 teardown_suite() {

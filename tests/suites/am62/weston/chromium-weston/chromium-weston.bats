@@ -64,5 +64,5 @@ image_compare() {
     -v /tmp:/tmp -v /var/run/dbus:/var/run/dbus \
     -v /dev/dri:/dev/dri --device-cgroup-rule='c 226:* rmw' \
     --security-opt seccomp=unconfined --shm-size 256mb \
-    torizon/chromium-tests-am62:next
+    torizon/chromium-tests-am62:stable-rc
 }

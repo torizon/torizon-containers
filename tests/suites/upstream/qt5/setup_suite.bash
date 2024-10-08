@@ -6,7 +6,7 @@ setup_suite() {
              --cap-add CAP_SYS_TTY_CONFIG -v /dev:/dev -v /tmp:/tmp -v /run/udev/:/run/udev/ \
              --device-cgroup-rule="c 4:* rmw"  --device-cgroup-rule="c 13:* rmw" \
              --device-cgroup-rule="c 226:* rmw" --device-cgroup-rule="c 29:* rmw" \
-             torizon/qt5-wayland-examples:next
+             torizon/qt5-wayland-examples:stable-rc
 
     for dir in /sys/class/drm/card*-HDMI-*; do
         if [[ -d $dir ]]; then
