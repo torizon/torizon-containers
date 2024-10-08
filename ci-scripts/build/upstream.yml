@@ -1,4 +1,5 @@
-build-base:
+.build-upstream-template:
+  retry: 2
   extends: .docker-build
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -8,19 +9,20 @@ build-base:
     - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
+      changes: &upstream-changes
         - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${BASE_FOLDER}/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
+        - ./**/*
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: &upstream-changes
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/**/*
-        - ${SUPPORT_FILES_FOLDER}/**/*
+      changes: *upstream-changes
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
+
+build-base:
+  extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
@@ -34,338 +36,94 @@ build-base:
   needs: []
 
 build-wayland-base:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: wayland-base
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs:
-    - job: build-base
-      optional: true
+  needs: [build-base]
 
 build-weston:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${WESTON_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-graphics-tests:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: graphics-tests
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-weston-touch-calibrator:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: weston
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs:
-    - job: build-weston
-      optional: true
+  needs: [build-weston]
 
 build-qt5-wayland:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${QT5_WAYLAND_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-qt5-wayland-examples:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${QT5_WAYLAND_EXAMPLES_FOLDER}/*
-        - ${QT5_WAYLAND_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: qt5-wayland
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs:
-    - job: build-qt5-wayland
-      optional: true
+  needs: [build-qt5-wayland]
 
 build-qt6-wayland:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${SUPPORT_FILES_FOLDER}/qt-wayland/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${QT6_WAYLAND_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-chromium:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${CHROMIUM_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-cog:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${COG_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${COG_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-dotnet-8:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/*
-        - ${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: dotnet8
     DOTNET_RUNTIME: dotnet
@@ -374,26 +132,11 @@ build-dotnet-8:
   needs: ["build-base"]
 
 build-dotnet-8-asp:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: *dotnet-8-changes
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian
     IMAGE_NAME: aspdotnet8
     DOTNET_RUNTIME: aspnetcore
@@ -402,32 +145,11 @@ build-dotnet-8-asp:
   needs: ["build-base"]
 
 build-dotnet-8-wayland:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &dotnet-8-wayland-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${PLATFORM_SPECIFIC_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DOTNET_FOLDER}/**/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: dotnet8
     BASE_IMAGE_NAME_WAYLAND: wayland-base
     IMAGE_NAME: dotnet8-wayland
@@ -436,25 +158,10 @@ build-dotnet-8-wayland:
   needs: ["build-dotnet-8", "build-wayland-base"]
 
 build-dotnet-8-debug:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: *dotnet-8-changes
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-debug
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: dotnet8
     IMAGE_NAME: dotnet8-debug
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
@@ -462,114 +169,39 @@ build-dotnet-8-debug:
   needs: ["build-dotnet-8"]
 
 build-rt-tests:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &rt-tests-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *rt-tests-changes
+  extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: rt-tests
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
   needs: []
 
 build-stress-tests:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &stress-tests-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *stress-tests-changes
+  extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     IMAGE_NAME: stress-tests
     DOCKERFILE_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
   needs: []
 
 build-arm-toolchain:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &arm-toolchain-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *arm-toolchain-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     CROSS_COMPILER: arm-linux-gnueabihf
     CROSS_TARGET_ARCH: armhf
     IMAGE_NAME: cross-toolchain-arm
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs:
-    - job: build-base
-      optional: true
+  needs: [build-base]
 
 build-arm-toolchain-ssh:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &arm-toolchain-ssh-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *arm-toolchain-ssh-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: cross-toolchain-ssh-arm
     CROSS_TARGET_ARCH: armhf
     BASE_IMAGE_NAME: cross-toolchain-arm
@@ -578,58 +210,19 @@ build-arm-toolchain-ssh:
   needs: ["build-arm-toolchain"]
 
 build-arm64-toolchain:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &arm64-toolchain-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *arm64-toolchain-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     BASE_IMAGE_NAME: debian
     CROSS_COMPILER: aarch64-linux-gnu
     CROSS_TARGET_ARCH: arm64
     IMAGE_NAME: cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs:
-    - job: build-base
-      optional: true
+  needs: [build-base]
 
 build-arm64-toolchain-ssh:
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes: &arm64-toolchain-ssh-changes
-        - gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/*
-    - if: $CI_PIPELINE_SOURCE == "push" || $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: *arm64-toolchain-ssh-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_AMD64: "true"
     IMAGE_NAME: cross-toolchain-ssh-arm64
     CROSS_TARGET_ARCH: arm64
     BASE_IMAGE_NAME: cross-toolchain-arm64
@@ -638,31 +231,8 @@ build-arm64-toolchain-ssh:
   needs: [build-arm64-toolchain]
 
 build-wayland-gtk3:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${GTK_3_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_FOR_ARM_AMD64: "true"
     BASE_IMAGE_NAME: wayland-base
     IMAGE_NAME: wayland-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
@@ -672,34 +242,11 @@ build-wayland-gtk3:
       optional: true
 
 build-dotnet-8-gtk3:
-  retry: 2
-  extends: .docker-build
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true" && $CI_PIPELINE_SOURCE == "push"
-      variables:
-        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-      changes:
-        - .gitlab-ci.yml
-        - ci-scripts/**/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${BASE_FOLDER}/*
-        - ${DEBIAN_DOCKER_IMAGES_FOLDER}/${UPSTREAM_FOLDER}/${WAYLAND_BASE_FOLDER}/*
-        - ${DEBIAN_DOTNET_DEVELOPMENT_IMAGES_FOLDER}/**/*
-        - ${GTK_3_FOLDER}/*
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-      changes: *upstream-changes
+  extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: dotnet8-wayland
     IMAGE_NAME: dotnet8-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
