@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2019-2023 Toradex AG
+# Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
 set -x

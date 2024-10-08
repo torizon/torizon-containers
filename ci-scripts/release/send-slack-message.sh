@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2019-2023 Toradex AG
+# Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
 if [ $# -ne 3 ]; then
