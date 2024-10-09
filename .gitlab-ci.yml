@@ -618,9 +618,8 @@ build-chromium:
     changes:
       *chromium-changes
   variables:
-    BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base
+    BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: ["build-wayland-base"]
@@ -646,7 +645,7 @@ build-cog:
   variables:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base
+    BASE_IMAGE_NAME: wayland-base-vivante
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/"
   needs: ["build-wayland-base"]
