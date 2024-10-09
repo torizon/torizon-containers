@@ -268,3 +268,12 @@ build-dotnet-8-gtk3:
   needs:
     - job: build-dotnet-8-wayland
       optional: true
+
+build-gtk3-tests:
+  extends: .build-upstream-template
+  variables:
+    BASE_IMAGE_NAME: wayland-gtk3
+    IMAGE_NAME: gtk3-tests
+    DOCKERFILE_FOLDER: "${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+  needs: [build-wayland-gtk3]

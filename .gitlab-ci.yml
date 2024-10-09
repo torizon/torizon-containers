@@ -31,6 +31,7 @@ variables:
   BASE_FOLDER: "base"
   WAYLAND_BASE_FOLDER: "wayland-base"
   GTK_3_FOLDER: "gtk3"
+  GTK_3_TESTS_FOLDER: "gtk3-tests"
   WESTON_FOLDER: "weston"
   GRAPHICS_TESTS_FOLDER: "graphics-tests"
   WESTON_TOUCH_CALIBRATOR_FOLDER: "weston-touch-calibrator"

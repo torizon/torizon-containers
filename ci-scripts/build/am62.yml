@@ -37,7 +37,7 @@ build-wayland-base-am62:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: [build-base-am62]
-      
+
 build-weston-am62:
   extends: .build-am62-template
   before_script:
@@ -122,7 +122,7 @@ build-cog-am62:
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-am62]
-      
+
 build-dotnet-8-am62:
   extends: .build-am62-template
   before_script:
@@ -135,7 +135,7 @@ build-dotnet-8-am62:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-am62"]
-  
+
 build-dotnet-8-asp-am62:
   extends: .build-am62-template
   before_script:
@@ -207,3 +207,12 @@ build-dotnet-8-gtk3-am62:
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
   needs: [build-dotnet-8-wayland-am62]
+
+build-gtk3-tests-am62:
+  extends: .build-am62-template
+  variables:
+    BASE_IMAGE_NAME: wayland-gtk3-am62
+    IMAGE_NAME: gtk3-tests-am62
+    DOCKERFILE_FOLDER: "${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+  needs: [build-wayland-gtk3-am62]
