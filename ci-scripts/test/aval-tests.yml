@@ -40,7 +40,7 @@ build-tests-container:
     TARGET_BUILD_TYPE: "nightly"
   rules:
     - if: $CI_WORLD_TEST == "true"
-      when: always
+      when: on_success
   artifacts:
     when: always
     reports:
