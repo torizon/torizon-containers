@@ -48,32 +48,69 @@ build-tests-container:
   needs:
     - build-tests-container
 
-e2e-test-imx8mp:
+e2e-test-imx8mp-nightly:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8mp"
     RM_ON_TEARDOWN: "true"
 
-e2e-test-imx8mm:
+e2e-test-imx8mm-nightly:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8mm"
     RM_ON_TEARDOWN: "true"
 
-e2e-test-am62:
+e2e-test-am62-nightly:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "am62"
     RM_ON_TEARDOWN: "true"
 
-e2e-test-imx8x:
+e2e-test-imx8x-nightly:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx8x"
     RM_ON_TEARDOWN: "true"
 
-e2e-test-imx6:
+e2e-test-imx6-nightly:
   extends: .e2e-test-template
   variables:
     SOC_UDT: "imx6"
     RM_ON_TEARDOWN: "true"
+
+# same as above, but targetting release (ie, latest quarterly)
+
+e2e-test-imx8mp-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8mp"
+    RM_ON_TEARDOWN: "true"
+    TARGET_BUILD_TYPE: "release"
+
+e2e-test-imx8mm-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8mm"
+    RM_ON_TEARDOWN: "true"
+    TARGET_BUILD_TYPE: "release"
+
+e2e-test-am62-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "am62"
+    RM_ON_TEARDOWN: "true"
+    TARGET_BUILD_TYPE: "release"
+
+e2e-test-imx8x-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx8x"
+    RM_ON_TEARDOWN: "true"
+    TARGET_BUILD_TYPE: "release"
+
+e2e-test-imx6-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "imx6"
+    RM_ON_TEARDOWN: "true"
+    TARGET_BUILD_TYPE: "release"
