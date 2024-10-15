@@ -32,6 +32,10 @@ COPY --from=build /src/simple-gtk3-test /usr/local/bin/
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        # Note that gtk-3-examples is not necessary to compile
+        # gtk3 applications. This package is solely used
+        # for testing. Remove the installation of this package
+        # if you're using this Dockerfile as a starting point.
         gtk-3-examples \
         libgtk-3-0 \
     && apt-get clean \
