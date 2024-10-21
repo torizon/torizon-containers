@@ -19,7 +19,7 @@ Learn how to [start a Wayland server container on Debian Containers] for Torizon
 
 ## Running Chromium
 
-The Chromium container needs visibility to some host resources (for accessing the accelerated graphical environment, buffer sharing, and inter-process communication), and the URL of the web UI as a command-line parameter. It also recognizes some optional command-line flags (explained ahead).
+The Chromium container needs visibility to some host resources (for accessing the accelerated graphical environment, buffer sharing, and inter-process communication), and the URL of the web UI as a command-line parameter. It also recognizes optional command-line flags (explained ahead).
 You can run the following command to start the Chromium container on iMX6 devices:
 
 ```bash
@@ -46,6 +46,17 @@ It's possibile to start Chromium in less-secure ways (secure from the point of v
 - --window-mode : runs the browser inside a maximized window without navigation bar
 - --browser-mode : runs the browser in a standard window with navigation bars and all user menus enabled
 - --virtual-keyboard : enables a virtual keyboard for text entry
+
+Additionally, it is possible to pass flag or options directly to Chromium binary when invoking Chromium container, for example:
+
+```bash
+$> docker run -eMACHINE -d --rm --name=chromium \
+    -v /tmp:/tmp -v /dev/dri:/dev/dri \
+    -v /var/run/dbus:/var/run/dbus --device-cgroup-rule='c 226:* rmw' \
+    --security-opt seccomp=unconfined --shm-size 256mb  \
+    torizon/chromium:$CT_TAG_CHROMIUM --disable-pinch \
+    --virtual-keyboard --user-data-dir=/tmp
+```
 
 #### GPU Hardware Acceleration flags
 
