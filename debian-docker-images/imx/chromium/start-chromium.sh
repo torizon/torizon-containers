@@ -38,6 +38,14 @@ do
         chromium_parms_extended="$chromium_parms_extended --enable-features=VaapiVideoDecoder --enable-accelerated-video-decoder"
         shift
         ;;
+    --*)
+      chromium_extended_params="$chromium_extended_params $1"
+      shift
+      ;;
+    *)
+      URL=$1
+      shift
+    ;;
     esac
 done
 
@@ -52,9 +60,5 @@ chromium_parms_extended="$chromium_parms_extended --enable-features=UseOzonePlat
 # This is required to use Wayland EGL path
 # See: https://github.com/OSSystems/meta-browser/issues/510#issuecomment-854653930
 chromium_parms_extended="$chromium_parms_extended --in-process-gpu"
-
-if [ ! -z "$1" ]; then
-    URL=$1
-fi
 
 exec chromium $chromium_parms_base $chromium_parms_extended $chromium_parms$URL
