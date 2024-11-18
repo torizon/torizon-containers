@@ -123,7 +123,7 @@ services:
                   --build-arg DOTNET_DEBUGGER_VER=${DOTNET_DEBUGGER_VER}
                   --build-arg DOTNET_RUNTIME=${DOTNET_RUNTIME}
                   --build-arg DOTNET_SEMVER=${DOTNET_SEMVER}
-                  --build-arg IMAGE_TAG=${IMAGE_TAG}
+                  --build-arg IMAGE_TAG=${IMAGE_TAG}${TAG_SUFFIX}
                   --build-arg REGISTRY_PROXY=${TORADEX_INTERNAL_DOCKERHUB_CACHE}
                   --build-arg REGISTRY=${PULL_REGISTRY} 
                   --build-arg REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}
