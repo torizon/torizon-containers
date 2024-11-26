@@ -738,7 +738,7 @@ build-chromium:
     BASE_IMAGE_NAME_ARMV7: wayland-base
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: ["build-wayland-base, build-wayland-base-vivante"]
+  needs: ["build-wayland-base", "build-wayland-base-vivante"]
 
 build-cog:
   retry: 2
@@ -765,7 +765,7 @@ build-cog:
     BASE_IMAGE_NAME_ARMV7: wayland-base
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${DEBIAN_DOCKER_IMAGES_FOLDER}/${IMX_FOLDER}/${COG_FOLDER}/"
-  needs: ["build-wayland-base, build-wayland-base-vivante"]
+  needs: ["build-wayland-base", "build-wayland-base-vivante"]
 
 ## Debian Cross Toolchains
 
