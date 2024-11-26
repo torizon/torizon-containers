@@ -65,8 +65,8 @@ graphics-tests-vivante:
   patch: 0
 chromium:
   major: 3
-  minor: 6
-  patch: 1
+  minor: 7
+  patch: 0
 cog:
   major: 3
   minor: 4
