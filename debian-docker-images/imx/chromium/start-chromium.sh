@@ -39,7 +39,7 @@ do
         shift
         ;;
     --*)
-      chromium_extended_params="$chromium_extended_params $1"
+      chromium_parms_extended="$chromium_parms_extended $1"
       shift
       ;;
     *)
