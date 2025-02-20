@@ -32,6 +32,15 @@ build-wayland-base-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: [build-base-am62]
 
+build-wayland-base-dev-am62:
+  extends: .build-am62-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am62
+    IMAGE_NAME: wayland-base-dev-am62
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+  needs: [build-wayland-base-am62]
+
 build-weston-am62:
   extends: .build-am62-template
   before_script:
@@ -102,12 +111,12 @@ build-qt6-wayland-examples-am62:
 build-qt6-wayland-tests-am62:
   extends: .build-am62-template
   variables:
-    BUILD_BASE_IMAGE_NAME: wayland-base-am62
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-am62
     BASE_IMAGE_NAME: qt6-wayland-am62
     IMAGE_NAME: qt6-wayland-tests-am62
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-am62, build-qt6-wayland-am62]
+  needs: [build-wayland-base-dev-am62, build-qt6-wayland-am62]
 
 build-chromium-am62:
   extends: .build-am62-template
@@ -215,8 +224,9 @@ build-dotnet-8-gtk3-am62:
 build-gtk3-tests-am62:
   extends: .build-am62-template
   variables:
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-am62
     BASE_IMAGE_NAME: wayland-gtk3-am62
     IMAGE_NAME: gtk3-tests-am62
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
-  needs: [build-wayland-gtk3-am62]
+  needs: [build-wayland-base-dev-am62, build-wayland-gtk3-am62]

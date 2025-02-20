@@ -2,17 +2,16 @@
 # SPDX-License-Identifier: MIT
 
 ARG BASE_IMAGE_NAME
+ARG BUILD_BASE_IMAGE_NAME
 ARG IMAGE_TAG
 ARG REGISTRY
 ARG REGISTRY_NAMESPACE
 
-FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG as build
+FROM $REGISTRY/$REGISTRY_NAMESPACE/$BUILD_BASE_IMAGE_NAME:$IMAGE_TAG as build
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential \
         libgtk-3-dev \
-        pkgconf \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

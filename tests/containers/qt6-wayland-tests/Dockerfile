@@ -11,9 +11,6 @@ FROM $REGISTRY/$REGISTRY_NAMESPACE/$BUILD_BASE_IMAGE_NAME:$IMAGE_TAG as build
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential \
-        cmake \
-        libgles-dev \
         libqt6opengl6-dev \
         qt6-base-dev \
     && apt-get clean \

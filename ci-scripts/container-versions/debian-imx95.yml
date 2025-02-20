@@ -6,6 +6,10 @@ wayland-base-imx95:
   major: 4
   minor: 0
   patch: 0
+wayland-base-dev-imx95:
+  major: 4
+  minor: 0
+  patch: 0
 wayland-gtk3-imx95:
   major: 4
   minor: 0

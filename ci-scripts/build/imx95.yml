@@ -36,6 +36,16 @@ build-wayland-base-imx95:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_FOLDER}/"
   needs: [build-base-imx95]
 
+build-wayland-base-dev-imx95:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-imx95
+    IMAGE_NAME: wayland-base-dev-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+  needs: [build-wayland-base-imx95]
+
 build-weston-imx95:
   extends: .build-imx95-template
   before_script:
@@ -111,12 +121,12 @@ build-qt6-wayland-examples-imx95:
 build-qt6-wayland-tests-imx95:
   extends: .build-imx95-template
   variables:
-    BUILD_BASE_IMAGE_NAME: wayland-base-imx95
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx95
     BASE_IMAGE_NAME: qt6-wayland-imx95
     IMAGE_NAME: qt6-wayland-tests-imx95
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${QT6_TESTS_FOLDER}/"
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-imx95, build-qt6-wayland-imx95]
+  needs: [build-wayland-base-dev-imx95, build-qt6-wayland-imx95]
 
 build-chromium-imx95:
   extends: .build-imx95-template
@@ -242,8 +252,9 @@ build-dotnet-8-gtk3-imx95:
 build-gtk3-tests-imx95:
   extends: .build-imx95-template
   variables:
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx95
     BASE_IMAGE_NAME: wayland-gtk3-imx95
     IMAGE_NAME: gtk3-tests-imx95
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
-  needs: [build-wayland-gtk3-imx95]
+  needs: [build-wayland-base-dev-imx95, build-wayland-gtk3-imx95]
