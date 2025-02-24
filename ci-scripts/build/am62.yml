@@ -112,11 +112,11 @@ build-qt6-wayland-tests-am62:
   extends: .build-am62-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-am62
-    BASE_IMAGE_NAME: qt6-wayland-am62
+    BASE_IMAGE_NAME: qt6-wayland-examples-am62
     IMAGE_NAME: qt6-wayland-tests-am62
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-am62, build-qt6-wayland-am62]
+  needs: [build-wayland-base-dev-am62, build-qt6-wayland-examples-am62]
 
 build-chromium-am62:
   extends: .build-am62-template

@@ -122,11 +122,11 @@ build-qt6-wayland-tests-imx95:
   extends: .build-imx95-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx95
-    BASE_IMAGE_NAME: qt6-wayland-imx95
+    BASE_IMAGE_NAME: qt6-wayland-examples-imx95
     IMAGE_NAME: qt6-wayland-tests-imx95
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-imx95, build-qt6-wayland-imx95]
+  needs: [build-wayland-base-dev-imx95, build-qt6-wayland-examples-imx95]
 
 build-chromium-imx95:
   extends: .build-imx95-template

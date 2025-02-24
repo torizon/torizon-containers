@@ -34,6 +34,10 @@ qt6-wayland-examples-imx8:
   major: 4
   minor: 2
   patch: 0
+qt6-wayland-tests-imx8:
+  major: 4
+  minor: 0
+  patch: 0
 weston-touch-calibrator-imx8:
   major: 4
   minor: 4
