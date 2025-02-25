@@ -231,9 +231,7 @@ build-wayland-gtk3-imx95:
     IMAGE_NAME: wayland-gtk3-imx95
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-wayland-base-imx95
-      optional: true
+  needs: [build-wayland-base-imx95]
 
 build-dotnet-8-gtk3-imx95:
   extends: .build-imx95-template
@@ -245,9 +243,7 @@ build-dotnet-8-gtk3-imx95:
     IMAGE_NAME: dotnet8-gtk3-imx95
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-dotnet-8-wayland-imx95
-      optional: true
+  needs: [build-dotnet-8-wayland-imx95]
 
 build-gtk3-tests-imx95:
   extends: .build-imx95-template

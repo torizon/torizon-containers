@@ -275,9 +275,7 @@ build-wayland-gtk3:
     IMAGE_NAME: wayland-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-wayland-base
-      optional: true
+  needs: [build-wayland-base]
 
 build-dotnet-8-gtk3:
   extends: .build-upstream-template
@@ -290,9 +288,7 @@ build-dotnet-8-gtk3:
     IMAGE_NAME: dotnet8-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-dotnet-8-wayland
-      optional: true
+  needs: [build-dotnet-8-wayland]
 
 build-gtk3-tests:
   extends: .build-upstream-template

@@ -21,6 +21,7 @@ build-base-am62:
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am6x/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+  needs: []
 
 build-wayland-base-am62:
   extends: .build-am62-template

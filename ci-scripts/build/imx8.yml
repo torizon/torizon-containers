@@ -231,9 +231,7 @@ build-wayland-gtk3-imx8:
     IMAGE_NAME: wayland-gtk3-imx8
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-wayland-base-imx8
-      optional: true
+  needs: [build-wayland-base-imx8]
 
 build-dotnet-8-gtk3-imx8:
   extends: .build-imx8-template
@@ -245,9 +243,7 @@ build-dotnet-8-gtk3-imx8:
     IMAGE_NAME: dotnet8-gtk3-imx8
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs:
-    - job: build-dotnet-8-wayland-imx8
-      optional: true
+  needs: [build-dotnet-8-wayland-imx8]
 
 build-gtk3-tests-imx8:
   extends: .build-imx8-template
