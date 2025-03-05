@@ -1,0 +1,222 @@
+.build-am69-template:
+  retry: 2
+  extends: .docker-build
+  rules:
+    - if: $CI_WORLD_TEST == "true" || $CI_COMMIT_TAG == "true"
+      when: never
+    - if: $CI_WORLD_REBUILD == "true" || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - if: $CI_COMMIT_REF_PROTECTED == "true"
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+
+build-base-am69:
+  extends: .build-am69-template
+  variables:
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: debian-am69
+    DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am6x/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+
+build-wayland-base-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: debian-am69
+    IMAGE_NAME: wayland-base-am69
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+  needs: [build-base-am69]
+
+build-weston-am69:
+  extends: .build-am69-template
+  before_script:
+    - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: weston-am69
+    ACCEPT_FSL_EULA: 1
+    DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+  needs: [build-wayland-base-am69]
+
+build-graphics-tests-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: graphics-tests-am69
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs: [build-wayland-base-am69]
+
+build-weston-touch-calibrator-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: weston-am69
+    IMAGE_NAME: weston-touch-calibrator-am69
+    DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+  needs: [build-weston-am69]
+
+build-qt5-wayland-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: qt5-wayland-am69
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: [build-wayland-base-am69]
+
+build-qt5-wayland-am69-examples:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: qt5-wayland-am69
+    IMAGE_NAME: qt5-wayland-examples-am69
+    QT5_EXAMPLES_DEBIAN: 1
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: [build-qt5-wayland-am69]
+
+build-qt6-wayland-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: qt6-wayland-am69
+    DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: [build-wayland-base-am69]
+
+build-qt6-wayland-examples-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: qt6-wayland-am69
+    IMAGE_NAME: qt6-wayland-examples-am69
+    DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: [build-qt6-wayland-am69]
+
+build-qt6-wayland-tests-am69:
+  extends: .build-am69-template
+  variables:
+    BUILD_BASE_IMAGE_NAME: wayland-base-am69
+    BASE_IMAGE_NAME: qt6-wayland-am69
+    IMAGE_NAME: qt6-wayland-tests-am69
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
+  needs: [build-wayland-base-am69, build-qt6-wayland-am69]
+
+build-chromium-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: chromium-am69
+    DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+  needs: [build-wayland-base-am69]
+
+build-cog-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: cog-am69
+    DOCKERFILE_FOLDER: "${COG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
+  needs: [build-wayland-base-am69]
+
+build-dotnet-8-am69:
+  extends: .build-am69-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-am69
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: debian-am69
+    IMAGE_NAME: dotnet8-am69
+    DOTNET_RUNTIME: dotnet
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am69"]
+
+build-dotnet-8-asp-am69:
+  extends: .build-am69-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-am69
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: debian-am69
+    IMAGE_NAME: aspdotnet8-am69
+    DOTNET_RUNTIME: aspnetcore
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+  needs: ["build-base-am69"]
+
+build-dotnet-8-wayland-am69:
+  extends: .build-am69-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-am69
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_BASE_IMAGE_NAME: dotnet8-am69
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: dotnet8-wayland-am69
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+  needs: ["build-dotnet-8-am69", "build-wayland-base-am69"]
+
+build-arm64-toolchain-am69:
+  extends: .build-am69-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
+    BASE_IMAGE_NAME: debian-am69
+    CROSS_COMPILER: aarch64-linux-gnu
+    CROSS_TARGET_ARCH: arm64
+    IMAGE_NAME: cross-toolchain-arm64-am69
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+  needs: ["build-base-am69"]
+
+build-arm64-toolchain-ssh-am69:
+  extends: .build-am69-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: cross-toolchain-ssh-arm64-am69
+    CROSS_TARGET_ARCH: arm64
+    BASE_IMAGE_NAME: cross-toolchain-arm64-am69
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+  needs: ["build-arm64-toolchain-am69"]
+
+build-wayland-gtk3-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-am69
+    IMAGE_NAME: wayland-gtk3-am69
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-wayland-base-am69]
+
+build-dotnet-8-gtk3-am69:
+  extends: .build-am69-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet8-wayland-am69
+    IMAGE_NAME: dotnet8-gtk3-am69
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-dotnet-8-wayland-am69]
+
+build-gtk3-tests-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: wayland-gtk3-am69
+    IMAGE_NAME: gtk3-tests-am69
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+  needs: [build-wayland-gtk3-am69]
