@@ -7,6 +7,7 @@ include:
   - "/ci-scripts/build/imx8.yml"
   - "/ci-scripts/build/imx95.yml"
   - "/ci-scripts/build/am62.yml"
+  - "/ci-scripts/build/am69.yml"
   - "/ci-scripts/lint/lint.yml"
 
 image: docker:latest

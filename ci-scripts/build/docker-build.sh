@@ -5,7 +5,7 @@ set -x
 # Copyright (c) 2019-2025 Toradex AG
 # SPDX-License-Identifier: MIT
 
-if [[ "${IMAGE_NAME}" == *am62 ]]; then
+if [[ "${IMAGE_NAME}" == *am6* ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/am6x/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME}" == *imx8 ]]; then
