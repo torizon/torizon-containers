@@ -95,6 +95,28 @@ dotnet8-gtk3-am62p:
   minor: 2
   patch: 0
 
+# am69
+dotnet8-am69: &dotnet-am69
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+aspdotnet8-am69:
+  <<: *dotnet-am69
+  minor: 0
+  patch: 0
+dotnet8-wayland-am69:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+dotnet8-gtk3-am69:
+  major: 4
+  minor: 0
+  patch: 0
+
 # imx95
 dotnet8-imx95: &dotnet-imx95
   release: *dotnet-release
