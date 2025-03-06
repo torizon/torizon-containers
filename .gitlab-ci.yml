@@ -26,6 +26,7 @@ variables:
   IMX8_FOLDER: "imx8"
   IMX95_FOLDER: "imx95"
   AM62_FOLDER: "am62"
+  AM69_FOLDER: "am69"
   UPSTREAM_FOLDER: "upstream"
   TESTS_FOLDER: "tests"
   TESTS_CONTAINERS_FOLDER: "containers"
