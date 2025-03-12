@@ -165,3 +165,12 @@ following definitions:
 | ARMv7 with VFP3-D16        | linux/arm/v7                 |
 | ARMv8-A                    | linux/arm64/v8               |
 | x86_64 (also called amd64) | linux/amd64                  |
+
+## License
+
+This project is licensed under the terms of MIT license (see LICENSE) unless
+specified otherwise in the source file.
+
+The screenshots under support-files/qt6-enterprise are licensed under the terms
+of LicenseRef-Qt-Commercial
+([www.qt.io/terms-conditions](https://www.qt.io/terms-conditions) and LICENSE).

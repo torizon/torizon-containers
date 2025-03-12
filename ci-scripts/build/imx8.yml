@@ -128,6 +128,20 @@ build-qt6-wayland-tests-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
   needs: [build-wayland-base-dev-imx8, build-qt6-wayland-examples-imx8]
 
+build-qt6-enterprise-demo-imx8:
+  extends: .build-imx8-template
+  before_script:
+    - . ./ci-scripts/build/generate-auth-conf-file.sh
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-imx8
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx8
+    IMAGE_NAME: qt6-enterprise-demo-imx8
+    ADDITIONAL_DOCKER_BUILD_OPTIONS: "--secret id=qt-feed-auth,src=./support-files/qt6-enterprise/qt-feed-auth.conf"
+    DOCKERFILE_FOLDER: "${QT6_ENTERPRISE_DEMO_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${QT6_ENTERPRISE_DEMO_FOLDER}/"
+  needs: [build-wayland-base-imx8, build-wayland-base-dev-imx8]
+
 build-chromium-imx8:
   extends: .build-imx8-template
   variables:

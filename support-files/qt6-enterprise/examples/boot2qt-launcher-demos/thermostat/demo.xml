@@ -1,0 +1,5 @@
+<application title="Thermostat Demo" priority="9" scalable="0" icon="thermostat.png" binary="/usr/local/bin/ThermostatApp">
+    <description>
+        Interactive demo showing a Thermostat UI
+    </description>
+</application>

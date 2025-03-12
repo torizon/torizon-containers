@@ -101,4 +101,5 @@ docker buildx build --progress=plain --sbom=true ${BUILD_PLATFORMS} \
   --label torizon.debian.snapshot="${TORADEX_SNAPSHOT}" \
   -f "${DOCKERFILE_FOLDER}Dockerfile" \
   --output type=registry,name="${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",compression=zstd \
+  ${ADDITIONAL_DOCKER_BUILD_OPTIONS} \
   "${DOCKERFILE_BUILD_CONTEXT_FOLDER}"

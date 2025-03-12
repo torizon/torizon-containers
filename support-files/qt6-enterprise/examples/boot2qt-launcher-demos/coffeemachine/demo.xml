@@ -1,0 +1,5 @@
+<application title="Coffe Machine Demo" priority="9" scalable="1" icon="coffeemachine.png" binary="/usr/local/bin/coffeemachine">
+    <description>
+        Interactive demo showing a Coffee Machine UI
+    </description>
+</application>

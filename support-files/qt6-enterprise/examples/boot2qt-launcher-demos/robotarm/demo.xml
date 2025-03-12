@@ -1,0 +1,5 @@
+<application title="Robot Arm Demo" priority="9" scalable="0" icon="robotarm.png" binary="/usr/local/bin/RobotArmApp">
+    <description>
+        Interactive demo showing a Robot Arm UI for its manipulation
+    </description>
+</application>
