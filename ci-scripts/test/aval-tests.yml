@@ -161,6 +161,14 @@ e2e-test-sk-am62-nightly:
     SOC_UDT: "sk-am62"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
 
+e2e-test-sk-am62p-nightly:
+  extends: .e2e-test-template
+  allow_failure: true
+  variables:
+    TARGET_BUILD_TYPE: "nightly"
+    SOC_UDT: "sk-am62p"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
+
 aggregate-reports:
   stage: report
   image: homebrew/brew
