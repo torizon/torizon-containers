@@ -27,12 +27,13 @@ build-tests-container:
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} /cases/run-tests.sh"
       --copy-artifact /home/torizon/report.xml report.xml --delegation-config ./ci-scripts/test/delegation_config.toml
-      --before "docker kill $(docker ps -q) || true && docker system prune --all --force" --ignore-different-secondaries-between-updates
+      --before "docker kill $(docker ps -q) || true && docker system prune --all --force" --ignore-different-secondaries-between-updates ${AVAL_EXTRA_OPTIONS}
   allow_failure: true
   script:
     - mv report.xml report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "release"
+    AVAL_EXTRA_OPTIONS: ""
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -153,31 +154,12 @@ e2e-test-colibri-imx6ull-emmc-nightly:
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-sk-am62-nightly:
-  stage: test
-  image: gitlab.int.toradex.com:4567/rd/torizon-core-containers/aval/aval:main
-  before_script:
-    - /usr/local/bin/entrypoint.sh "docker run -e REGISTRY=$TORADEX_INTERNAL_DOCKERHUB_CACHE -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
-      -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
-      ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} /cases/run-tests.sh"
-      --copy-artifact /home/torizon/report.xml report.xml --delegation-config ./ci-scripts/test/delegation_config.toml
-      --before "docker kill $(docker ps -q) || true && docker system prune --all --force" --ignore-different-secondaries-between-updates --do-not-update
+  extends: .e2e-test-template
   allow_failure: true
-  script:
-    - mv report.xml report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "sk-am62"
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-  artifacts:
-    when: always
-    reports:
-      junit: report-${CI_JOB_NAME}.xml
-    paths:
-      - ./report-${CI_JOB_NAME}.xml
-  needs:
-    - build-tests-container
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 aggregate-reports:
   stage: report
