@@ -16,7 +16,7 @@ async function parse_main_webgl_report() {
 
   const browser = await launch({ headless: false, args: vivanteArgs, executablePath: '/usr/bin/chromium' });
   const page = await browser.newPage();
-  await page.goto('https://webglreport.com/?v=2');
+  await page.goto('https://webglreport.com/?v=1');
   const scraped_data = await page.evaluate(() => {
 
     // get to the tr which is the father tag of the td elements
