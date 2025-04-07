@@ -8,6 +8,14 @@ ARG REGISTRY_NAMESPACE
 
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
+RUN apt-get -y update \
+    && apt-get install -y \
+        libdrm2/bookworm-backports \
+        libdrm-dev/bookworm-backports \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN apt-get -y update && apt-get install -y \
     libd3dadapter9-mesa \
     libd3dadapter9-mesa-dev \

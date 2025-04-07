@@ -12,7 +12,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
         clinfo \
         glmark2-es2-wayland \
         kmscube \
-        libdrm-tests \
+        libdrm-tests/bookworm-backports \
         imagemagick \
         libgstreamer1.0-dev \
         libgstreamer-plugins-base1.0-dev \
