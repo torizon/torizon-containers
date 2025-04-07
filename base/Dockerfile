@@ -26,6 +26,13 @@ ENV LC_ALL C.UTF-8
 
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
+RUN bash -c "if [[ ${TORADEX_FEED_URL} =~ 'am6x' ]]; then printf 'Types: deb\n\
+URIs: http://deb.debian.org/debian\n\
+Suites: bookworm-backports\n\
+Components: main\n\
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' >/etc/apt/sources.list.d/bookworm-backports.sources; \
+fi"
+
 RUN echo 'APT::Get::Assume-Yes "true";\n\
     APT::Install-Recommends "0";\n\
     APT::Install-Suggests "0";\n\
