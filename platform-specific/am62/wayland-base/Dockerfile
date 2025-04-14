@@ -36,6 +36,7 @@ RUN apt-get -y update && apt-get install -y \
     libwayland-egl1-mesa \
     libwayland-client0 \
     libwayland-server0 \
+    libwayland-cursor0 \
     mesa-utils-extra \
     mesa-common-dev \
     mesa-opencl-icd \
