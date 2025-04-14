@@ -79,7 +79,8 @@ services:
 
 .docker-configure:
   script:
-    - apk add bash
+    - apk add bash curl
+    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.57.1
     - ./ci-scripts/configure/docker-buildx-configure.sh
 
 .docker-build:

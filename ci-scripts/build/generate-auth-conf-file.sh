@@ -5,10 +5,10 @@
 
 set -e
 
-if [ -z $QT_IO_USERNAME ]; then
+if [ -z "$QT_IO_USERNAME" ]; then
   echo "QT_IO_USERNAME not defined"
   exit 1
-elif [ -z $QT_IO_PASSWORD ]; then
+elif [ -z "$QT_IO_PASSWORD" ]; then
   echo "QT_IO_PASSWORD not defined"
   exit 1
 fi

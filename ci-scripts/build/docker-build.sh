@@ -103,3 +103,7 @@ docker buildx build --progress=plain --sbom=true ${BUILD_PLATFORMS} \
   --output type=registry,name="${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}",compression=zstd \
   ${ADDITIONAL_DOCKER_BUILD_OPTIONS} \
   "${DOCKERFILE_BUILD_CONTEXT_FOLDER}"
+
+for PLATFORM in "${SELECTED_PLATFORMS[@]}"; do
+  trivy image --platform="$PLATFORM" --scanners secret "${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
+done
