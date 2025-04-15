@@ -73,10 +73,6 @@ services:
     - chmod 755 /usr/bin/regctl
     - regctl registry login docker.io -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
 
-.do_print_environment_variables: &do_print_environment_variables
-  - echo "GitLab CI/CD environment variables:"
-  - env
-
 .docker-configure:
   script:
     - apk add bash curl
@@ -89,6 +85,5 @@ services:
     ADD_TORADEX_REPOSITORY: 1
   script:
     - !reference [.docker-configure, script]
-    - *do_print_environment_variables
     - apk add curl bash
     - ./ci-scripts/build/docker-build.sh
