@@ -21,7 +21,7 @@ fi
 
 declare -A BUILD_TARGETS=(
   ["BUILD_FOR_ARM_V7"]="linux/arm/v7"
-  ["BUILD_FOR_ARM_V8"]="linux/arm64/v8"
+  ["BUILD_FOR_ARM_V8"]="linux/arm64"
   ["BUILD_FOR_AMD64"]="linux/amd64"
 )
 
