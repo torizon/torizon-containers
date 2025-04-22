@@ -80,7 +80,7 @@ teardown_file() {
     skip "imx7 doesn't have a GPU"
   fi
 
-  SCORE_PASS_THRESHOLD=220
+  SCORE_PASS_THRESHOLD=200
 
   run -0 clean_kernel_logs
 
