@@ -100,7 +100,7 @@ docker buildx build --progress=plain --sbom=true --push ${BUILD_PLATFORMS} \
   --label torizon.git.pipeline="${CI_PIPELINE_ID}" \
   --label torizon.debian.snapshot="${TORADEX_SNAPSHOT}" \
   -f "${DOCKERFILE_FOLDER}Dockerfile" \
-  "${ADDITIONAL_DOCKER_BUILD_OPTIONS}" \
+  ${ADDITIONAL_DOCKER_BUILD_OPTIONS} \
   -t "${PUSH_REGISTRY}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}" \
   "${DOCKERFILE_BUILD_CONTEXT_FOLDER}"
 
