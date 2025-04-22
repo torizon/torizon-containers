@@ -19,7 +19,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream, platform:am69
 @test "Qt5 cube runs" {
   bats_require_minimum_version 1.5.0
 
@@ -31,7 +31,7 @@ teardown_file() {
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream, platform:am69
 @test "Qt5 shapedclock runs" {
   bats_require_minimum_version 1.5.0
 

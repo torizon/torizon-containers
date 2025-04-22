@@ -7,6 +7,12 @@ setup_qt5() {
               --device-cgroup-rule='c 29:* rmw' --device-cgroup-rule='c 226:* rmw' \
               $REGISTRY/torizon/qt5-wayland-examples-am62:stable-rc"
 
+  DOCKER_RUN_AM69="docker container run -d -it --name=qt5-wayland-examples \
+              -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
+              --device-cgroup-rule='c 4:* rmw'  --device-cgroup-rule='c 13:* rmw' \
+              --device-cgroup-rule='c 29:* rmw' --device-cgroup-rule='c 226:* rmw' \
+              $REGISTRY/torizon/qt5-wayland-examples-am69:stable-rc"
+
   DOCKER_RUN_IMX8="docker container run -d -it --name=qt5-wayland-examples \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
               --device-cgroup-rule='c 4:* rmw' --device-cgroup-rule='c 13:* rmw' \
@@ -36,6 +42,8 @@ setup_qt5() {
     DOCKER_RUN=$DOCKER_RUN_IMX8
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX95
+  elif [[ "$PLATFORM_FILTER" == *am69* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_AM69
   else
     DOCKER_RUN=$DOCKER_RUN_UPSTREAM
   fi

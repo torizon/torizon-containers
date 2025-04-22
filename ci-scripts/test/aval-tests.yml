@@ -56,6 +56,11 @@ e2e-test-verdin-am62dual-release:
   variables:
     SOC_UDT: "verdin-am62dual"
 
+e2e-test-aquila-am69octa-release:
+  extends: .e2e-test-template
+  variables:
+    SOC_UDT: "aquila-am69octa"
+
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-template
   variables:
@@ -98,6 +103,12 @@ e2e-test-verdin-am62dual-nightly:
   variables:
     TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "verdin-am62dual"
+
+e2e-test-aquila-am69octa-nightly:
+  extends: .e2e-test-template
+  variables:
+    TARGET_BUILD_TYPE: "nightly"
+    SOC_UDT: "aquila-am69octa"
 
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-template
@@ -197,5 +208,6 @@ aggregate-reports:
     EVK_IMX95_TEST_EXEC_KEY: "TCCP-964"
     SK_AM62_TEST_EXEC_KEY: "TCCP-968"
     SK_AM62P_TEST_EXEC_KEY: "TCCP-979"
+    AQUILA_AM69OCTA_TEST_EXEC_KEY: "TCCP-997"
     TORIZON_OS_TEST_PLAN_KEY: "TOR-3748"
     GIT_CLEAN_FLAGS: none

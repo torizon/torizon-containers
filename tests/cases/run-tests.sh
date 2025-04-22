@@ -6,6 +6,8 @@ elif [[ "$SOC_UDT" == *imx8* ]]; then
   PLATFORM_FILTER="platform:imx8"
 elif [[ "$SOC_UDT" == *imx95* ]]; then
   PLATFORM_FILTER="platform:imx95"
+elif [[ "$SOC_UDT" == *am69* ]]; then
+  PLATFORM_FILTER="platform:am69"
 else
   PLATFORM_FILTER="platform:upstream"
 fi

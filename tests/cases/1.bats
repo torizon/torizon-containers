@@ -16,7 +16,7 @@ load ./kernel-helper.sh
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:imx8, platform:am62, platform:upstream
+# bats test_tags=platform:imx8, platform:am62, platform:upstream, platform:am69
 @test "DRM interface is available" {
   for interface in /sys/class/drm/*/status; do
     if [ -f "$interface" ]; then

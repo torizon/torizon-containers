@@ -10,6 +10,13 @@ DOCKER_RUN_AM62="docker container run -d --name=chromium \
     $REGISTRY/torizon/chromium-am62:stable-rc \
     --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html"
 
+DOCKER_RUN_AM69="docker container run -d --name=chromium \
+    -v /tmp:/tmp -v /var/run/dbus:/var/run/dbus \
+    -v /dev/dri:/dev/dri --device-cgroup-rule='c 226:* rmw' \
+    --security-opt seccomp=unconfined --shm-size 256mb \
+    $REGISTRY/torizon/chromium-am69:stable-rc \
+    --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html"
+
 # note the `-td`: it allocates a pty so it keeps the container running
 DOCKER_RUN_IMX8="docker container run -td --name=chromium-tests --entrypoint /usr/bin/bash \
     -v /tmp:/tmp -v /var/run/dbus:/var/run/dbus \
@@ -37,6 +44,7 @@ DOCKER_RUN_UPSTREAM="docker container run -d --name=chromium \
     $REGISTRY/torizon/chromium:stable-rc \
     --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html"
 
+
 setup_file() {
 
   setup_weston
@@ -50,6 +58,8 @@ setup_file() {
     DOCKER_RUN=$DOCKER_RUN_IMX8
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX95
+  elif [[ "$PLATFORM_FILTER" == *am69* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_AM69
   else
     DOCKER_RUN=$DOCKER_RUN_UPSTREAM
   fi
@@ -65,7 +75,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream, platform:am69
 @test "Chromium runs" {
   run -124 docker container exec --user torizon chromium-tests timeout 20s start-browser
 }
