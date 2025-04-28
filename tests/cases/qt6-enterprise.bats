@@ -11,6 +11,7 @@ DOCKER_RUN_IMX8="docker container run -d -it --net=host --name=qt6-enterprise-de
              $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc bash"
 
 setup_file() {
+  setup_weston
 
   docker container kill qt6-enterprise-demo || true
   docker container rm qt6-enterprise-demo || true
@@ -18,9 +19,12 @@ setup_file() {
   DOCKER_RUN=$DOCKER_RUN_IMX8
 
   eval "$DOCKER_RUN"
+  sleep 30
 }
 
 teardown_file() {
+  teardown_weston
+
   cleanup_container qt6-enterprise-demo
 }
 
