@@ -1,15 +1,22 @@
 #!/bin/bash
 
-for prefix in VERDIN_IMX8MPQ VERDIN_AM62DUAL VERDIN_IMX8MMQ APALIS_IMX6Q APALIS_IMX8QM COLIBRI_IMX8QXP COLIBRI_IMX7D_EMMC COLIBRI_IMX6DL COLIBIR_IMX6ULL SK_AM62 SK_AM62P; do
-  board_name=$(echo "$prefix" | tr '[:upper:]' '[:lower:]' | tr '_' '-')
+for report_path in reports/report-e2e-test-*-nightly.xml; do
+  if [ ! -e "$report_path" ]; then
+    echo "Warning: Report path '$report_path' does not exist, skipping."
+    continue
+  fi
 
-  var_name="${prefix}_TEST_EXEC_KEY"
-  report_path="reports/report-e2e-test-${board_name}-nightly.xml"
+  filename=$(basename "$report_path")
+  board_name=$(echo "$filename" | sed -E 's/^report-e2e-test-(.*)-nightly\.xml$/\1/' | tr '[:lower:]' '[:upper:]' | tr '-' '_')
 
-  if [ -f "$report_path" ]; then
+  var_name="${board_name}_TEST_EXEC_KEY"
+
+  if [ -n "${!var_name}" ]; then
     xray-junit-uploader \
       --report "$report_path" \
       --test-plan-key "$TORIZON_OS_TEST_PLAN_KEY" \
       --test-exec-key "${!var_name}"
+  else
+    echo "Warning: Variable ${var_name} is not set, skipping $report_path"
   fi
 done
