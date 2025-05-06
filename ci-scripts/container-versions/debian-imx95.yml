@@ -1,56 +1,56 @@
 debian-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-base-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-base-dev-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-gtk3-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 weston-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt5-wayland-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt5-wayland-examples-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-examples-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-tests-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 weston-touch-calibrator-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 graphics-tests-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 chromium-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 cog-imx95:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
