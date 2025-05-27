@@ -1,0 +1,16 @@
+services:
+  weston:
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp
+      - /run/udev/:/run/udev/
+    device_cgroup_rules:
+      - c 4:* rmw
+      - c 13:* rmw
+      - c 226:* rmw
+      - c 10:223 rmw
+    image: $REGISTRY/torizon/weston-am69:stable-rc
+    command: --developer --tty=/dev/tty7 -- --debug

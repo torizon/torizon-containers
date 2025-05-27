@@ -2,12 +2,7 @@
   retry: 2
   extends: .docker-build
   rules:
-    - if: $CI_WORLD_TEST == "true" || $CI_COMMIT_TAG == "true"
-      when: never
-    - if: $CI_WORLD_REBUILD == "true" || $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: always
-    - if: $CI_COMMIT_REF_PROTECTED == "true"
-      when: always
+    - if: '$CI_WORLD_REBUILD == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
   variables:

@@ -1,7 +1,6 @@
 include:
   - "/ci-scripts/release/release.yml"
   - "/ci-scripts/test/aval-tests.yml"
-  - "/ci-scripts/test/dotnet-tests.yml"
   - "/ci-scripts/test/support-files-tests.yml"
   - "/ci-scripts/build/upstream.yml"
   - "/ci-scripts/build/imx8.yml"
@@ -9,6 +8,7 @@ include:
   - "/ci-scripts/build/am62.yml"
   - "/ci-scripts/build/am69.yml"
   - "/ci-scripts/lint/lint.yml"
+  - "/ci-scripts/generate/generate.yml"
 
 image: docker:latest
 
