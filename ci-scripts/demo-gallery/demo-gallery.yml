@@ -1,0 +1,21 @@
+build-demo-gallery:
+  image: docker:latest
+  rules:
+    - if: '($CI_COMMIT_TAG =~ /^\d+-\d+\.\d+\.\d+$/ || $CI_BUILD_DEMO_GALLERY == "true")'
+  script:
+    - apk update && apk add python3 git
+    - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/composes
+    - git clone https://oauth2:${DEMO_GALLERY_TOKEN}@gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery.git
+    - cp -r ./temp/* ./demo-gallery/
+    - cd ./demo-gallery
+    - git config --global --add safe.directory $(realpath .)
+    - git config user.name "Tordy"
+    - git config user.email "tordy@toradex.com"
+    - git add .
+    - |
+      if git diff --cached --quiet; then
+        echo "No changes to commit"
+      else
+        git commit -m "auto: update demo gallery [ci skip]"
+        git push --force origin HEAD:$CI_COMMIT_REF_NAME
+      fi

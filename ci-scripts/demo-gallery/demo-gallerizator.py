@@ -1,0 +1,172 @@
+import os
+import shutil
+import argparse
+import subprocess
+import json
+
+platforms = {
+    "imx8": [
+        "apalis-imx8",
+        "apalis-imx8x",
+        "colibri-imx8x",
+        "verdin-imx8mm",
+        "verdin-imx8mp",
+    ],
+    "am62": ["verdin-am62"],
+    # TODO: graduate AM69 to demo gallery
+    # "am69": ["aquila-am69"],
+    "upstream": [
+        "apalis-imx6",
+        "colibri-imx6",
+        "colibri-imx6ull",
+        "colibri-imx7",
+    ],
+}
+
+
+def recursively_replace_contents(target_content, replace_with, target_dir):
+    for root, _, files in os.walk(target_dir):
+        for file in files:
+            file_path = os.path.join(root, file)
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            new_content = content.replace(target_content, replace_with)
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+
+
+def generate_app_json(composes_dir):
+    print("Finding apps...")
+    for app in os.listdir(composes_dir):
+        print(f"Found {app}")
+        app_dir = os.path.join(composes_dir, app)
+        if not os.path.isdir(app_dir):
+            continue
+
+        platform = None;
+        packages = []
+        for fname in os.listdir(app_dir):
+            if fname.startswith("docker-compose-") and fname.endswith(".yml"):
+                # Parse platform from filename
+                # Format: docker-compose-<platform>.yml
+                platform = fname[len("docker-compose-") : -len(".yml")]
+                package = {
+                    "name": f"{app}-{platform}",
+                    "filename": fname,
+                    # FIXME: hardcoded!
+                    "version": "4",
+                }
+                packages.append(package)
+
+        if packages:
+            app_json = {"packages": packages}
+            with open(
+                os.path.join(app_dir, "app.json"), "w", encoding="utf-8"
+            ) as f:
+                json.dump(app_json, f, indent=4)
+            print(f"Generated app.json for {app}: {platform}")
+
+
+def main(composes_dir):
+    # tcb doesn't support canonicalizing compose files with a fully qualified image
+    # ie, an `image:` specifying the registry such as `docker.io/torizon/weston:stable-rc`
+    recursively_replace_contents("$REGISTRY/", "", composes_dir)
+    # FIXME: we should only do this on torizon-containers releases, ie, tags
+    recursively_replace_contents("stable-rc", "4", composes_dir)
+
+    temp_dir = "./temp"
+
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+
+    # For each platform
+    for platform, members in platforms.items():
+        # For each app in ./composes
+        for app in os.listdir(composes_dir):
+            app_path = os.path.join(composes_dir, app)
+            if not os.path.isdir(app_path):
+                continue
+            compose_pattern = f"{app}-{platform}-compose.yml"
+            compose_file_path = os.path.join(app_path, compose_pattern)
+            if not os.path.isfile(compose_file_path):
+                continue
+            # For each member of platform
+            for member in members:
+                dest_dir = os.path.join(temp_dir, app)
+                os.makedirs(dest_dir, exist_ok=True)
+                dest_file = os.path.join(
+                    dest_dir, f"docker-compose-{member}.yml"
+                )
+                shutil.copyfile(compose_file_path, dest_file)
+                print(f"Created: {dest_file}")
+
+    temp_dir = "./temp"
+
+    base_cmd = [
+        "docker",
+        "run",
+        "--rm",
+        "-v",
+        "/deploy",
+        "-v",
+        f"{os.getcwd()}:/workdir",
+        "-v",
+        "storage:/storage",
+        "--net=host",
+        "-v",
+        "/var/run/docker.sock:/var/run/docker.sock",
+        "torizon/torizoncore-builder:3",
+    ]
+
+    for root, dirs, files in os.walk(temp_dir):
+        for file in files:
+            if file.startswith("docker-compose-") and not file.endswith(
+                ".lock.yml"
+            ):
+                compose_file_path = os.path.join(root, file)
+
+                # Canonicalize each compose file (ie, generate a .lock file with torizoncore-builder)
+                cmd = base_cmd + [
+                    "platform",
+                    "push",
+                    "--canonicalize-only",
+                    "--force",
+                    compose_file_path,
+                ]
+
+                try:
+                    subprocess.run(
+                        cmd, capture_output=True, text=True, check=True
+                    )
+                    print(f"Canonicalized: {compose_file_path}")
+                except subprocess.CalledProcessError as e:
+                    print(
+                        f"Error canonicalizing {compose_file_path}:\n{e.stderr}"
+                    )
+                    continue
+
+                # Replace the original docker-compose with the canonicalized version
+                lock_file_path = compose_file_path.replace(".yml", ".lock.yml")
+                if os.path.exists(lock_file_path):
+                    with open(
+                        lock_file_path, "r", encoding="utf-8"
+                    ) as lock_file:
+                        lock_content = lock_file.read()
+                    with open(
+                        compose_file_path, "w", encoding="utf-8"
+                    ) as orig_file:
+                        orig_file.write(lock_content)
+                    os.remove(lock_file_path)
+                    print(
+                        f"Replaced and removed lock file: {compose_file_path}"
+                    )
+                else:
+                    print(f"Lock file not found for: {compose_file_path}")
+
+    generate_app_json(temp_dir)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("composes_dir", help="Path to the composes directory")
+    args = parser.parse_args()
+    main(args.composes_dir)

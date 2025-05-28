@@ -9,6 +9,7 @@ include:
   - "/ci-scripts/build/am69.yml"
   - "/ci-scripts/lint/lint.yml"
   - "/ci-scripts/generate/generate.yml"
+  - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
 image: docker:latest
 
