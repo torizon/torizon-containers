@@ -1,0 +1,23 @@
+docker run -d \
+  --network host \
+  --cap-add "CAP_SYS_TTY_CONFIG" \
+  --volume "/dev:/dev" \
+  --volume "/tmp:/tmp" \
+  --volume "/run/udev/:/run/udev/" \
+  --device-cgroup-rule "c 4:* rmw" \
+  --device-cgroup-rule "c 253:* rmw" \
+  --device-cgroup-rule "c 13:* rmw" \
+  --device-cgroup-rule "c 226:* rmw" \
+  --device-cgroup-rule "c 10:223 rmw" \
+  --device-cgroup-rule "c 199:0 rmw" $REGISTRY/torizon/weston-imx8:stable-rc --developer --tty=/dev/tty7 -- --debug
+
+docker run -d \
+  --volume "/tmp:/tmp" \
+  --volume "/var/run/dbus:/var/run/dbus" \
+  --volume "/dev/dri:/dev/dri" \
+  --device-cgroup-rule "c 4:* rmw" \
+  --device-cgroup-rule "c 13:* rmw" \
+  --device-cgroup-rule "c 226:* rmw" \
+  --device-cgroup-rule "c 199:* rmw" \
+  --security-opt "seccomp:unconfined" \
+  --shm-size 256mb $REGISTRY/torizon/chromium-imx8:stable-rc --virtual-keyboard https://www.toradex.com
