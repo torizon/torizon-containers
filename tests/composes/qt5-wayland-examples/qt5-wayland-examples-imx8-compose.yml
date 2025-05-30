@@ -1,0 +1,29 @@
+services:
+  weston:
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 253:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 10:223 rmw'
+      - 'c 199:0 rmw'
+    image: '$REGISTRY/torizon/weston-imx8:stable-rc'
+    command: '--developer --tty=/dev/tty7'
+
+  qt5-wayland-examples:
+    depends_on:
+    - weston
+    device_cgroup_rules:
+      - 'c 199:* rmw'
+    image: $REGISTRY/torizon/qt5-wayland-examples-imx8:stable-rc
+    volumes:
+      - '/tmp:/tmp'
+      - '/dev/galcore:/dev/galcore'
+    command: /usr/lib/aarch64-linux-gnu/qt5/examples/widgets/widgets/calculator/calculator 
