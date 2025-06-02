@@ -51,8 +51,6 @@ build-tests-container:
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
 
 .e2e-test-nightly-template:
   extends: .e2e-test-template
