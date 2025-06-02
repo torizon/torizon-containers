@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 setup_qt5() {
-  QT5_WAYLAND_EXAMPLES_RUN_AM62=$(read-docker-run.sh "runs/qt5-wayland-examples/qt5-wayland-examples-am62-compose.run" "qt5-wayland-examples-am62" "qt5-wayland-examples")
-  QT5_WAYLAND_EXAMPLES_RUN_IMX8=$(read-docker-run.sh "runs/qt5-wayland-examples/qt5-wayland-examples-imx8-compose.run" "qt5-wayland-examples-imx8" "qt5-wayland-examples")
-  QT5_WAYLAND_EXAMPLES_RUN_UPSTREAM=$(read-docker-run.sh "runs/qt5-wayland-examples/qt5-wayland-examples-upstream-compose.run" "qt5-wayland-examples" "qt5-wayland-examples")
+  QT5_WAYLAND_EXAMPLES_RUN_AM62=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-am62-compose.run" "qt5-wayland-examples-am62" "qt5-wayland-examples")
+  QT5_WAYLAND_EXAMPLES_RUN_IMX8=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-imx8-compose.run" "qt5-wayland-examples-imx8" "qt5-wayland-examples")
+  QT5_WAYLAND_EXAMPLES_RUN_UPSTREAM=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-upstream-compose.run" "qt5-wayland-examples" "qt5-wayland-examples")
 
   docker container kill qt5-wayland-examples || true
   docker container rm qt5-wayland-examples || true
