@@ -46,137 +46,130 @@ build-tests-container:
   needs:
     - build-tests-container
 
-e2e-test-colibri-imx7d-emmc-release:
+.e2e-test-stable-template:
   extends: .e2e-test-template
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+
+.e2e-test-nightly-template:
+  extends: .e2e-test-template
+  variables:
+    TARGET_BUILD_TYPE: "nightly"
+
+e2e-test-colibri-imx7d-emmc-release:
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
 
 e2e-test-verdin-am62dual-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "verdin-am62dual"
 
 e2e-test-aquila-am69octa-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "aquila-am69octa"
 
 e2e-test-apalis-imx6q-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "apalis-imx6q"
 
 e2e-test-apalis-imx8qm-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "apalis-imx8qm"
 
 e2e-test-colibri-imx8qxp-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "colibri-imx8qxp"
 
 e2e-test-verdin-imx8mmq-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "verdin-imx8mmq"
 
 e2e-test-verdin-imx8mpq-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "verdin-imx8mpq"
 
 e2e-test-colibri-imx7d-emmc-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "colibri-imx7d-emmc"
 
 e2e-test-colibri-imx8qxp-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "colibri-imx8qxp"
 
 e2e-test-verdin-am62dual-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "verdin-am62dual"
 
 e2e-test-aquila-am69octa-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "aquila-am69octa"
 
 e2e-test-apalis-imx6q-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "apalis-imx6q"
 
 e2e-test-apalis-imx8qm-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "apalis-imx8qm"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: on_success
-      changes:
-        - /ci-scripts/test/*
-        - tests/**/*
-    - if: $CI_WORLD_TEST == "true"
-      when: always
 
 e2e-test-verdin-imx8mmq-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "verdin-imx8mmq"
 
 e2e-test-verdin-imx8mpq-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "verdin-imx8mpq"
 
 e2e-test-colibri-imx6dl-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "colibri-imx6dl"
 
 e2e-test-colibri-imx6dl-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "colibri-imx6dl"
 
 e2e-test-colibri-imx6ull-emmc-release:
-  extends: .e2e-test-template
+  extends: .e2e-test-stable-template
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-colibri-imx6ull-emmc-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-sk-am62-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   allow_failure: true
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "sk-am62"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-sk-am62p-nightly:
-  extends: .e2e-test-template
+  extends: .e2e-test-nightly-template
   allow_failure: true
   variables:
-    TARGET_BUILD_TYPE: "nightly"
     SOC_UDT: "sk-am62p"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
 
