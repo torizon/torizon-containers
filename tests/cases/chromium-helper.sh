@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 setup_chromium() {
-  CHROMIUM_RUN_AM62=$(read-docker-run.sh "runs/chromium/chromium-am62-compose.run" "chromium-am62" "chromium")
+  CHROMIUM_RUN_AM62=$(read-docker-run.sh "tests/runs/chromium/chromium-am62-compose.run" "chromium-am62" "chromium")
   CHROMIUM_RUN_IMX8
-  CHROMIUM_RUN_IMX8=$(read-docker-run.sh "runs/chromium/chromium-imx8-compose.run" "chromium-imx8" "chromium")
+  CHROMIUM_RUN_IMX8=$(read-docker-run.sh "tests/runs/chromium/chromium-imx8-compose.run" "chromium-imx8" "chromium")
   export CHROMIUM_RUN_IMX8
-  CHROMIUM_RUN_UPSTREAM=$(read-docker-run.sh "runs/chromium/chromium-upstream-compose.run" "chromium" "chromium")
+  CHROMIUM_RUN_UPSTREAM=$(read-docker-run.sh "tests/runs/chromium/chromium-upstream-compose.run" "chromium" "chromium")
 
   # For test containers
   CHROMIUM_TESTS_RUN_IMX8="docker container run -td --name=chromium-tests --entrypoint /usr/bin/bash \
