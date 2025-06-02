@@ -47,4 +47,4 @@ if [ "$DRY_RUN" = true ]; then
   echo "$COMMAND"
 else
   eval "$COMMAND"
-fi 
+fi

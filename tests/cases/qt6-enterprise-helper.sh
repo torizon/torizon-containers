@@ -2,7 +2,9 @@
 
 setup_qt6_enterprise() {
   QT6_ENTERPRISE_RUN_AM62=$(read-docker-run.sh "runs/qt6-enterprise/qt6-enterprise-am62-compose.run" "qt6-enterprise-am62" "qt6-enterprise")
+  QT6_ENTERPRISE_RUN_IMX8
   QT6_ENTERPRISE_RUN_IMX8=$(read-docker-run.sh "runs/qt6-enterprise/qt6-enterprise-imx8-compose.run" "qt6-enterprise-imx8" "qt6-enterprise")
+  export QT6_ENTERPRISE_RUN_IMX8
   QT6_ENTERPRISE_RUN_UPSTREAM=$(read-docker-run.sh "runs/qt6-enterprise/qt6-enterprise-upstream-compose.run" "qt6-enterprise" "qt6-enterprise")
 
   # For demo containers, we need a special setup
@@ -43,4 +45,4 @@ teardown_qt6_enterprise() {
     fi
     docker container rm "$container" || true
   done
-} 
+}
