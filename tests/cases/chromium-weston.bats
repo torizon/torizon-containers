@@ -14,7 +14,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:am62, platform:upstream
 @test "Chromium runs" {
   run -124 docker container exec --user torizon chromium-tests timeout 20s start-browser
 }

@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
 setup_qt6_enterprise() {
-  QT6_ENTERPRISE_RUN_AM62=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-am62-compose.run" "qt6-enterprise-am62" "qt6-enterprise")
-  QT6_ENTERPRISE_RUN_IMX8
-  QT6_ENTERPRISE_RUN_IMX8=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-imx8-compose.run" "qt6-enterprise-imx8" "qt6-enterprise")
-  export QT6_ENTERPRISE_RUN_IMX8
-  QT6_ENTERPRISE_RUN_UPSTREAM=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-upstream-compose.run" "qt6-enterprise" "qt6-enterprise")
-
   # For demo containers, we need a special setup
   QT6_ENTERPRISE_DEMO_RUN_IMX8="docker container run -d -it --net=host --name=qt6-enterprise-demo \
     --cap-add CAP_SYS_TTY_CONFIG -v /dev:/dev -v /tmp:/tmp -v /run/udev/:/run/udev/ \
@@ -20,13 +14,10 @@ setup_qt6_enterprise() {
   docker container rm qt6-enterprise-demo || true
 
   local DOCKER_RUN
-  if [[ "$PLATFORM_FILTER" == *am62* ]]; then
-    DOCKER_RUN="$QT6_ENTERPRISE_RUN_AM62"
-  elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
-    # For tests, use the demo container
+  if [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN="$QT6_ENTERPRISE_DEMO_RUN_IMX8"
   else
-    DOCKER_RUN="$QT6_ENTERPRISE_RUN_UPSTREAM"
+    DOCKER_RUN=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-upstream-compose.run" "qt6-enterprise" "qt6-enterprise")
   fi
 
   eval "$DOCKER_RUN"

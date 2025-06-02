@@ -1,20 +1,16 @@
 #!/usr/bin/env bash
 
 setup_weston() {
-  WESTON_RUN_AM62=$(read-docker-run.sh "/runs/weston/weston-am62-compose.run" "weston-am62" "weston")
-  WESTON_RUN_IMX8=$(read-docker-run.sh "/runs/weston/weston-imx8-compose.run" "weston-imx8" "weston")
-  WESTON_RUN_UPSTREAM=$(read-docker-run.sh "/runs/weston/weston-upstream-compose.run" "weston" "weston")
-
   docker container kill weston || true
   docker container rm weston || true
 
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *am62* ]]; then
-    DOCKER_RUN="$WESTON_RUN_AM62"
+    DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-am62-compose.run" "weston-am62" "weston")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
-    DOCKER_RUN="$WESTON_RUN_IMX8"
+    DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-imx8-compose.run" "weston-imx8" "weston")
   else
-    DOCKER_RUN="$WESTON_RUN_UPSTREAM"
+    DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-upstream-compose.run" "weston" "weston")
   fi
 
   eval "$DOCKER_RUN"
