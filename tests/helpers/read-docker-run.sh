@@ -19,22 +19,9 @@ parse_docker_run() {
     return 1
   fi
 
-  local commands
-  if ! commands=$(awk '/^docker run/ {if(cmd) print cmd; cmd=$0; next} {cmd=cmd" "$0} END {print cmd}' "$file"); then
-    echo "ERROR: Failed to parse docker run commands from file" >&2
-    echo ""
-    return 1
-  fi
-
-  if [[ -z "$commands" ]]; then
-    echo "ERROR: No docker run commands found in file" >&2
-    echo ""
-    return 1
-  fi
-
   local matched_command
-  if ! matched_command=$(echo "$commands" | grep "$match_keyword" | head -n 1); then
-    echo "ERROR: Failed to grep for match keyword" >&2
+  if ! matched_command=$(grep -A 50 "^docker run" "$file" | grep -B 50 "$match_keyword" | head -n 50 | tr -d '\\\n' | tr -s ' '); then
+    echo "ERROR: Failed to find matching docker run command" >&2
     echo ""
     return 1
   fi
@@ -51,10 +38,17 @@ parse_docker_run() {
     matched_command=${matched_command/docker run/docker container run -d --net=host}
   fi
 
-  matched_command=$(echo "$matched_command" | tr '\n' ' ' | sed 's/  */ /g' | sed 's/ *$//')
+  # Expand shell variables in the command while preserving quotes
+  local expanded_command
+  if ! expanded_command=$(echo "$matched_command" | envsubst); then
+    echo "ERROR: Failed to expand variables in command" >&2
+    echo ""
+    return 1
+  fi
 
   echo "DEBUG: Found command: $matched_command" >&2
-  echo "$matched_command"
+  echo "DEBUG: Expanded command: $expanded_command" >&2
+  echo "$expanded_command"
 }
 
 parse_docker_run "$@"
