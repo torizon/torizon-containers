@@ -33,9 +33,7 @@ parse_docker_run() {
   fi
 
   if [[ -n "$container_name" ]]; then
-    matched_command=${matched_command/docker run/docker container run -d --name=$container_name --net=host}
-  else
-    matched_command=${matched_command/docker run/docker container run -d --net=host}
+    matched_command=${matched_command/docker run -d/docker run -d --name=$container_name}
   fi
 
   # Expand shell variables in the command while preserving quotes
