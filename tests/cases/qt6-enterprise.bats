@@ -21,7 +21,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise-demo timeout 10s /opt/b2qt-demolauncher/qtlauncher
+  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise timeout 10s /opt/b2qt-demolauncher/qtlauncher
 
   run -0 gpu_kernel_logs
 }
@@ -32,7 +32,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise-demo timeout 10s /usr/local/bin/coffeemachine
+  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise timeout 10s /usr/local/bin/coffeemachine
 
   run -0 gpu_kernel_logs
 }
@@ -43,7 +43,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise-demo timeout 10s /usr/local/bin/RobotArmApp
+  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise timeout 10s /usr/local/bin/RobotArmApp
 
   run -0 gpu_kernel_logs
 }
@@ -54,7 +54,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise-demo timeout 10s /usr/local/bin/ThermostatApp
+  run -124 docker container exec -e QT_QPA_PLATFORM=wayland qt6-enterprise timeout 10s /usr/local/bin/ThermostatApp
 
   run -0 gpu_kernel_logs
 }

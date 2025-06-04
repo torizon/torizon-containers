@@ -3,8 +3,6 @@
 setup_qt6_enterprise() {
   docker container kill qt6-enterprise || true
   docker container rm qt6-enterprise || true
-  docker container kill qt6-enterprise-demo || true
-  docker container rm qt6-enterprise-demo || true
 
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *imx8* ]]; then
@@ -18,9 +16,8 @@ setup_qt6_enterprise() {
 
 teardown_qt6_enterprise() {
   docker container kill qt6-enterprise || true
-  docker container kill qt6-enterprise-demo || true
 
-  for container in qt6-enterprise qt6-enterprise-demo; do
+  for container in qt6-enterprise; do
     IMAGE_ID=$(docker container inspect -f '{{.Image}}' "$container" 2>/dev/null)
     if [[ -n "$IMAGE_ID" ]]; then
       docker image rm -f "$IMAGE_ID" || true
