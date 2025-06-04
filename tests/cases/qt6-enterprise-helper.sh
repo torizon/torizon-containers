@@ -17,11 +17,9 @@ setup_qt6_enterprise() {
 teardown_qt6_enterprise() {
   docker container kill qt6-enterprise || true
 
-  for container in qt6-enterprise; do
-    IMAGE_ID=$(docker container inspect -f '{{.Image}}' "$container" 2>/dev/null)
-    if [[ -n "$IMAGE_ID" ]]; then
-      docker image rm -f "$IMAGE_ID" || true
-    fi
-    docker container rm "$container" || true
-  done
+  IMAGE_ID=$(docker container inspect -f '{{.Image}}' "qt6-enterprise" 2>/dev/null)
+  if [[ -n "$IMAGE_ID" ]]; then
+    docker image rm -f "$IMAGE_ID" || true
+  fi
+  docker container rm "qt6-enterprise" || true
 }
