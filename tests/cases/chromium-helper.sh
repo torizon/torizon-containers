@@ -3,8 +3,6 @@
 setup_chromium() {
   docker container kill chromium || true
   docker container rm chromium || true
-  docker container kill chromium-tests || true
-  docker container rm chromium-tests || true
 
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *am62* ]]; then
@@ -22,13 +20,10 @@ setup_chromium() {
 
 teardown_chromium() {
   docker container kill chromium || true
-  docker container kill chromium-tests || true
 
-  for container in chromium chromium-tests; do
-    IMAGE_ID=$(docker container inspect -f '{{.Image}}' "$container" 2>/dev/null)
-    if [[ -n "$IMAGE_ID" ]]; then
-      docker image rm -f "$IMAGE_ID" || true
-    fi
-    docker container rm "$container" || true
-  done
+  IMAGE_ID=$(docker container inspect -f '{{.Image}}' "chromium" 2>/dev/null)
+  if [[ -n "$IMAGE_ID" ]]; then
+    docker image rm -f "$IMAGE_ID" || true
+  fi
+  docker container rm "chromium" || true
 }
