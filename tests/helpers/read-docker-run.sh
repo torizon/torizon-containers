@@ -7,11 +7,13 @@ parse_docker_run() {
   local file="$1"
   local match_keyword="$2"
   local container_name="$3"
+  local override_command="$4"
 
   # Debug output
   echo "DEBUG: Looking for file: $file" >&2
   echo "DEBUG: Match keyword: $match_keyword" >&2
   echo "DEBUG: Container name: $container_name" >&2
+  echo "DEBUG: Override command: $override_command" >&2
 
   if [[ ! -f "$file" ]]; then
     echo "ERROR: File not found: $file" >&2
@@ -34,6 +36,12 @@ parse_docker_run() {
 
   if [[ -n "$container_name" ]]; then
     matched_command=${matched_command/docker run -d/docker run -d --name=$container_name}
+  fi
+
+  if [[ -n "$override_command" ]]; then
+    # Remove everything after the last image name
+    matched_command=$(echo "$matched_command" | sed -E 's/(.*[^ ]) .*$/\1/')
+    matched_command="$matched_command $override_command"
   fi
 
   # Expand shell variables in the command while preserving quotes

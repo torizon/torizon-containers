@@ -6,7 +6,7 @@ setup_qt6_enterprise() {
 
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *imx8* ]]; then
-    DOCKER_RUN=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-imx8-compose.run" "qt6-enterprise-imx8" "qt6-enterprise")
+    DOCKER_RUN=$(read-docker-run.sh "/runs/qt6-enterprise/qt6-enterprise-imx8-compose.run" "qt6-enterprise-imx8" "qt6-enterprise" "bash")
   fi
 
   eval "$DOCKER_RUN"

@@ -3,23 +3,23 @@
 setup_qt6() {
   DOCKER_RUN_AM62="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
-              $REGISTRY/torizon/qt6-wayland-tests-am62:stable-rc"
+              $REGISTRY/torizon/qt6-wayland-tests-am62:stable-rc bash"
 
   DOCKER_RUN_AM69="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
-              $REGISTRY/torizon/qt6-wayland-tests-am69:stable-rc"
+              $REGISTRY/torizon/qt6-wayland-tests-am69:stable-rc bash"
 
   DOCKER_RUN_IMX8="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
-              $REGISTRY/torizon/qt6-wayland-tests-imx8:stable-rc"
+              $REGISTRY/torizon/qt6-wayland-tests-imx8:stable-rc bash"
 
   DOCKER_RUN_IMX95="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
-              $REGISTRY/torizon/qt6-wayland-tests-imx95:stable-rc"
+              $REGISTRY/torizon/qt6-wayland-tests-imx95:stable-rc bash"
 
   DOCKER_RUN_UPSTREAM="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
-              $REGISTRY/torizon/qt6-wayland-tests:stable-rc"
+              $REGISTRY/torizon/qt6-wayland-tests:stable-rc bash"
 
   docker container kill qt6-wayland-tests || true
   docker container rm qt6-wayland-tests || true
