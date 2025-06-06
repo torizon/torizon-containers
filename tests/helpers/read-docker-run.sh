@@ -21,18 +21,37 @@ parse_docker_run() {
     return 1
   fi
 
-  local matched_command
-  if ! matched_command=$(grep -A 50 "^docker run" "$file" | grep -B 50 "$match_keyword" | head -n 50 | tr -d '\\\n' | tr -s ' '); then
-    echo "ERROR: Failed to find matching docker run command" >&2
-    echo ""
-    return 1
+  local commands=()
+  local current_cmd=""
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^docker[[:space:]]+run ]]; then
+      if [[ -n "$current_cmd" ]]; then
+        commands+=("$current_cmd")
+      fi
+      current_cmd="$line"
+    elif [[ -n "$current_cmd" ]]; then
+      current_cmd+=" $line"
+    fi
+  done < "$file"
+  if [[ -n "$current_cmd" ]]; then
+    commands+=("$current_cmd")
   fi
+
+  local matched_command=""
+  for cmd in "${commands[@]}"; do
+    if [[ "$cmd" == *"$match_keyword"* ]]; then
+      matched_command="$cmd"
+      break
+    fi
+  done
 
   if [[ -z "$matched_command" ]]; then
     echo "ERROR: No matching command found for keyword: $match_keyword" >&2
     echo ""
     return 1
   fi
+
+  matched_command=$(echo "$matched_command" | tr -d '\\\n' | tr -s ' ')
 
   if [[ -n "$container_name" ]]; then
     matched_command=${matched_command/docker run -d/docker run -d --name=$container_name}
