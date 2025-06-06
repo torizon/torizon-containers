@@ -32,7 +32,7 @@ parse_docker_run() {
     elif [[ -n "$current_cmd" ]]; then
       current_cmd+=" $line"
     fi
-  done < "$file"
+  done <"$file"
   if [[ -n "$current_cmd" ]]; then
     commands+=("$current_cmd")
   fi
