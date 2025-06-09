@@ -18,7 +18,6 @@ docker run -d \
   --device-cgroup-rule "c 253:* rmw" \
   --device-cgroup-rule "c 226:* rmw" \
   --device-cgroup-rule "c 235:* rmw" \
-  --entrypoint /usr/bin/bash \
   --security-opt "seccomp:unconfined" \
   --shm-size 256mb \
   --interactive \
