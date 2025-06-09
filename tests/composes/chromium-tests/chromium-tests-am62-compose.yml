@@ -19,7 +19,6 @@ services:
     - weston
     device_cgroup_rules:
       - 'c 226:* rmw'
-    entrypoint: '/usr/bin/bash'
     image: $REGISTRY/torizon/chromium-tests-am62:stable-rc
     security_opt:
     - seccomp:unconfined

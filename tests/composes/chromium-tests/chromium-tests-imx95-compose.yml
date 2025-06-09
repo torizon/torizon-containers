@@ -27,7 +27,6 @@ services:
       - 'c 253:* rmw'
       - 'c 226:* rmw'
       - 'c 235:* rmw'
-    entrypoint: '/usr/bin/bash'
     image: $REGISTRY/torizon/chromium-tests-imx95:stable-rc
     security_opt:
     - seccomp:unconfined
