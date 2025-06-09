@@ -6,17 +6,11 @@ load ./chromium-tests-helper.sh
 
 setup_file() {
   setup_weston
-
-  cleanup_container chromium-tests
-
-  eval "$DOCKER_RUN"
-
-  sleep 40
+  setup_chromium_tests
 }
 
 teardown_file() {
-  cleanup_container chromium-tests
-
+  teardown_chromium_tests
   teardown_weston
 }
 
