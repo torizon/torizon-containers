@@ -14,16 +14,18 @@ services:
     image: '$REGISTRY/torizon/weston-am62:stable-rc'
     command: '--developer'
 
-  chromium:
-    command: --virtual-keyboard https://www.toradex.com
+  chromium-tests:
     depends_on:
     - weston
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/chromium-am62:stable-rc
+    entrypoint: '/usr/bin/bash'
+    image: $REGISTRY/torizon/chromium-tests-am62:stable-rc
     security_opt:
     - seccomp:unconfined
     shm_size: 256mb
+    stdin_open: true
+    tty: true
     volumes:
       - '/tmp:/tmp'
       - '/var/run/dbus:/var/run/dbus'

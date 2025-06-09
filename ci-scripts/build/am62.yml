@@ -124,6 +124,15 @@ build-chromium-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: [build-wayland-base-am62]
 
+build-chromium-tests-am62:
+  extends: .build-am62-template
+  variables:
+    BASE_IMAGE_NAME: chromium-am62
+    IMAGE_NAME: chromium-tests-am62
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+  needs: [build-chromium-am62]
+
 build-cog-am62:
   extends: .build-am62-template
   variables:
