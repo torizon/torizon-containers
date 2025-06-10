@@ -17,7 +17,7 @@ setup_chromium_tests() {
 
   eval "$DOCKER_RUN"
 
-  sleep 40
+  sleep 240
 }
 
 teardown_chromium_tests() {
