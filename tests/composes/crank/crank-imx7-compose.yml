@@ -1,0 +1,30 @@
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston:stable-rc'
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    command: '--developer'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+
+  crank:
+    image: '$REGISTRY/cranksoftware/imx7-sb_8_2-debian:v0.2'
+    container_name: crank
+    stdin_open: true
+    tty: true
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    volumes:
+      - /tmp:/tmp
+      - /dev/dri:/dev/dri
+      - /var/run/dbus:/var/run/dbus
+    depends_on:
+      weston:
+        condition: service_healthy

@@ -1,0 +1,34 @@
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston-imx8:stable-rc'
+    container_name: weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    command: '--tty=/dev/tty7'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 10:223 rmw'
+      - 'c 13:* rmw'
+      - 'c 199:0 rmw'
+      - 'c 226:* rmw'
+      - 'c 253:* rmw'
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp
+      - /run/udev:/run/udev
+
+  crank:
+    image: '$REGISTRY/cranksoftware/imx8-sb_8_2-wayland-base-imx8_4:v0.1'
+    container_name: crank
+    device_cgroup_rules:
+      - 'c 199:* rmw'
+    stdin_open: true
+    tty: true
+    volumes:
+      - /tmp:/tmp
+      - /var/run/dbus:/var/run/dbus
+      - /dev/galcore:/dev/galcore
+    depends_on:
+      weston:
+        condition: service_healthy
