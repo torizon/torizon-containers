@@ -6,6 +6,10 @@
       when: always
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+    - if: '$CI_BUILD_IMX95 == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
   variables:
     BUILD_FOR_ARM_V8: "true"
 
