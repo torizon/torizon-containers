@@ -42,6 +42,7 @@ RUN apt-get -y update && apt-get install -y \
     mesa-opencl-icd \
     mesa-utils-extra \
     ti-img-rogue-umlibs-am62 \
+    ti-img-rogue-umlibs-am62p \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Make sure the user can access DRM and video devices
