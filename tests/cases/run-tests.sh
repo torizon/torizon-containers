@@ -18,6 +18,3 @@ export PLATFORM_FILTER
 
 # It's ok if bats fails, we just care about the report, hence the || true
 bats --report-formatter junit --output /home/torizon --verbose-run --show-output-of-passing-tests --trace --recursive --timing --filter-tags "$PLATFORM_FILTER" . || true
-
-# Reports may contain escape codes from program logs which breaks parsers, so remove any escape code
-sed -i 's/\x1b\[[0-9;]*[a-zA-Z]//g' /home/torizon/report.xml
