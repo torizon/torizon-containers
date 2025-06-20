@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2025 Toradex AG
+# Copyright (c) 2019-2024 Toradex AG
 # SPDX-License-Identifier: MIT
 
 ARG BASE_IMAGE_NAME
@@ -19,7 +19,6 @@ USER root
 
 RUN apt-get update && apt-get install -y nodejs npm
 
-
 WORKDIR /usr/src/app
 
 COPY package*.json ./
@@ -28,5 +27,4 @@ COPY . .
 
 USER torizon
 
-ENTRYPOINT ["/usr/bin/npm"]
-CMD [ "test" ]
+ENTRYPOINT ["/usr/bin/bash"]
