@@ -14,12 +14,12 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream
 @test "Chromium runs" {
   run -124 docker container exec --user torizon chromium-tests timeout 20s start-browser
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p
 @test "Chromium can display WebGL content" {
   docker exec chromium-tests npm test
 }

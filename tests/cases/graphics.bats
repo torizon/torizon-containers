@@ -9,6 +9,12 @@ DOCKER_RUN_AM62="docker container run -d -it \
             --device-cgroup-rule='c 226:* rmw' \
             $REGISTRY/torizon/graphics-tests-am62:stable-rc"
 
+DOCKER_RUN_AM62P="docker container run -d -it \
+            --name=graphics-tests -v /dev:/dev --device-cgroup-rule='c 4:* rmw'  \
+            --device-cgroup-rule='c 13:* rmw' --device-cgroup-rule='c 199:* rmw' \
+            --device-cgroup-rule='c 226:* rmw' \
+            $REGISTRY/torizon/graphics-tests-am62p:stable-rc"
+
 DOCKER_RUN_AM69="docker container run -d -it \
             --name=graphics-tests -v /dev:/dev --device-cgroup-rule='c 4:* rmw'  \
             --device-cgroup-rule='c 13:* rmw' --device-cgroup-rule='c 199:* rmw' \
@@ -31,7 +37,9 @@ setup_file() {
   docker container kill graphics-tests || true
   docker container rm graphics-tests || true
 
-  if [[ "$PLATFORM_FILTER" == *am62* ]]; then
+  if [[ "$PLATFORM_FILTER" == *am62p* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_AM62P
+  elif [[ "$PLATFORM_FILTER" == *am62* ]]; then
     DOCKER_RUN=$DOCKER_RUN_AM62
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX8
@@ -54,7 +62,7 @@ teardown_file() {
   cleanup_container graphics-tests
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
 @test "kmscube has sufficient score" {
   run -0 clean_kernel_logs
 
@@ -66,7 +74,7 @@ teardown_file() {
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:am62, platform:upstream, platform:am69
+# bats test_tags=platform:am62, platform:am62p, platform:upstream, platform:am69
 @test "Modetest is able to probe DRM information " {
   docker container exec graphics-tests modetest
 }

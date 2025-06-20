@@ -5,7 +5,9 @@ setup_chromium_tests() {
   docker container rm chromium-tests || true
 
   local DOCKER_RUN
-  if [[ "$PLATFORM_FILTER" == *am62* ]]; then
+  if [[ "$PLATFORM_FILTER" == *am62p* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-am62p-compose.run" "chromium-tests-am62p" "chromium-tests")
+  elif [[ "$PLATFORM_FILTER" == *am62* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-am62-compose.run" "chromium-tests-am62" "chromium-tests")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-imx8-compose.run" "chromium-tests-imx8" "chromium-tests")
