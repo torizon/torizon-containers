@@ -124,8 +124,9 @@ build-chromium-am62p:
   variables:
     BASE_IMAGE_NAME: wayland-base-am62p
     IMAGE_NAME: chromium-am62p
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62P_FOLDER}/${CHROMIUM_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62P_FOLDER}/${CHROMIUM_FOLDER}/"
+    # Not a typo, we use the AM62 for this, as it's same container
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: [build-wayland-base-am62p]
 
 build-cog-am62p:
