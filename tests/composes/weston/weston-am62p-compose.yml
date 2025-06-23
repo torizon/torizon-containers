@@ -12,5 +12,5 @@ services:
       - c 13:* rmw
       - c 226:* rmw
       - c 10:223 rmw
-    image: $REGISTRY/torizon/weston-am62:stable-rc
+    image: $REGISTRY/torizon/weston-am62p:stable-rc
     command: --developer --tty=/dev/tty7 -- --debug

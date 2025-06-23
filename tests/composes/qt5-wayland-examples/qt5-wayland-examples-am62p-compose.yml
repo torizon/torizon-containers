@@ -14,17 +14,13 @@ services:
     image: '$REGISTRY/torizon/weston-am62p:stable-rc'
     command: '--developer'
 
-  chromium:
-    command: --virtual-keyboard https://www.toradex.com
+  qt5-wayland-examples:
     depends_on:
     - weston
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/chromium-am62p:stable-rc
-    security_opt:
-    - seccomp:unconfined
-    shm_size: 256mb
+    image: $REGISTRY/torizon/qt5-wayland-examples-am62p:stable-rc
     volumes:
       - '/tmp:/tmp'
-      - '/var/run/dbus:/var/run/dbus'
       - '/dev/dri:/dev/dri'
+    command: /usr/lib/aarch64-linux-gnu/qt5/examples/widgets/widgets/calculator/calculator 
