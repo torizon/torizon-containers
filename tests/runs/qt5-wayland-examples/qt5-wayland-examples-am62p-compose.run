@@ -10,10 +10,5 @@ docker run -d \
 
 docker run -d \
   --device-cgroup-rule "c 226:* rmw" \
-  --security-opt "seccomp:unconfined" \
-  --shm-size 256mb \
-  --interactive \
-  --tty \
   --volume "/tmp:/tmp" \
-  --volume "/var/run/dbus:/var/run/dbus" \
-  --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/chromium-tests-am62p:stable-rc
+  --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/qt5-wayland-examples-am62p:stable-rc /usr/lib/aarch64-linux-gnu/qt5/examples/widgets/widgets/calculator/calculator

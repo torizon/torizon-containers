@@ -6,7 +6,7 @@ docker run -d \
   --volume "/run/udev/:/run/udev/" \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-am62:stable-rc --developer
+  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-am62p:stable-rc --developer
 
 docker run -d \
   --volume "/tmp:/tmp" \
@@ -14,4 +14,4 @@ docker run -d \
   --volume "/dev/dri:/dev/dri" \
   --device-cgroup-rule "c 226:* rmw" \
   --security-opt "seccomp:unconfined" \
-  --shm-size 256mb $REGISTRY/torizon/chromium-am62:stable-rc --virtual-keyboard https://www.toradex.com
+  --shm-size 256mb $REGISTRY/torizon/chromium-am62p:stable-rc --virtual-keyboard https://www.toradex.com

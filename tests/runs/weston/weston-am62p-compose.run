@@ -7,4 +7,4 @@ docker run -d \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
   --device-cgroup-rule "c 226:* rmw" \
-  --device-cgroup-rule "c 10:223 rmw" $REGISTRY/torizon/weston-am62:stable-rc --developer --tty=/dev/tty7 -- --debug
+  --device-cgroup-rule "c 10:223 rmw" $REGISTRY/torizon/weston-am62p:stable-rc --developer --tty=/dev/tty7 -- --debug

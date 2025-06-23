@@ -6,9 +6,9 @@ docker run -d \
   --volume "/run/udev/:/run/udev/" \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-am62:stable-rc --developer
+  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-am62p:stable-rc --developer
 
 docker run -d \
   --device-cgroup-rule "c 226:* rmw" \
   --volume "/tmp:/tmp" \
-  --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/qt6-wayland-examples-am62:stable-rc /usr/lib/aarch64-linux-gnu/qt6/examples/widgets/widgets/calculator/calculator
+  --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/qt6-wayland-examples-am62p:stable-rc /usr/lib/aarch64-linux-gnu/qt6/examples/widgets/widgets/calculator/calculator
