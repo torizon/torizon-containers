@@ -69,7 +69,7 @@ if [[ "${CI_COMMIT_REF_PROTECTED}" == "true" ]]; then
   export IMAGE_TAG=${CI_COMMIT_BRANCH}-rc
 fi
 
-if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" || "${CI_COMMIT_REF_PROTECTED}" == "false" || ${CI_WORLD_TEST} == "true" ]]; then
+if [[ "${CI_PIPELINE_SOURCE}" == "merge_request_event" || "${CI_COMMIT_REF_PROTECTED}" == "false" || ${CI_WORLD_TEST} == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]]; then
   export PULL_REGISTRY=${CI_REGISTRY}
   export PUSH_REGISTRY=${CI_REGISTRY}
   export REGISTRY_NAMESPACE=${CI_PROJECT_PATH}
