@@ -1,3 +1,63 @@
+spec:
+  inputs:
+    world_test:
+      type: boolean
+      default: false
+      description: "Run all tests (overrides individual machine selections)"
+    test_stable:
+      type: boolean
+      default: false
+      description: "Run stable tests for all machines"
+    colibri_imx7d_emmc:
+      type: boolean
+      default: false
+      description: "Run tests for Colibri iMX7D eMMC"
+    verdin_am62dual:
+      type: boolean
+      default: false
+      description: "Run tests for Verdin AM62 Dual"
+    sk_am62:
+      type: boolean
+      default: false
+      description: "Run tests for SK AM62"
+    sk_am62p:
+      type: boolean
+      default: false
+      description: "Run tests for SK AM62P"
+    aquila_am69octa:
+      type: boolean
+      default: false
+      description: "Run tests for Aquila AM69 Octa"
+    apalis_imx6q:
+      type: boolean
+      default: false
+      description: "Run tests for Apalis iMX6Q"
+    colibri_imx6dl:
+      type: boolean
+      default: false
+      description: "Run tests for Colibri iMX6DL"
+    colibri_imx6ull_emmc:
+      type: boolean
+      default: false
+      description: "Run tests for Colibri iMX6ULL eMMC"
+    apalis_imx8qm:
+      type: boolean
+      default: false
+      description: "Run tests for Apalis iMX8QM"
+    colibri_imx8qxp:
+      type: boolean
+      default: false
+      description: "Run tests for Colibri iMX8QXP"
+    verdin_imx8mmq:
+      type: boolean
+      default: false
+      description: "Run tests for Verdin iMX8MM Quad"
+    verdin_imx8mpq:
+      type: boolean
+      default: false
+      description: "Run tests for Verdin iMX8MP Quad"
+---
+
 stages:
   - build
   - test
@@ -7,7 +67,13 @@ build-tests-container:
   extends: .docker-build
   stage: build
   rules:
-    - if: $CI_WORLD_TEST == "true" || $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $[[ inputs.world_test ]] == true || $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+      changes:
+        - /ci-scripts/test/*
+        - tests/**/*
+    # FIXME: very bad
+    - if: $[[ inputs.colibri_imx7d_emmc ]] == true || $[[ inputs.verdin_am62dual ]] == true || $[[ inputs.sk_am62 ]] == true || $[[ inputs.sk_am62p ]] == true || $[[ inputs.aquila_am69octa ]] == true || $[[ inputs.apalis_imx6q ]] == true || $[[ inputs.colibri_imx6dl ]] == true || $[[ inputs.colibri_imx6ull_emmc ]] == true || $[[ inputs.apalis_imx8qm ]] == true || $[[ inputs.colibri_imx8qxp ]] == true || $[[ inputs.verdin_imx8mmq ]] == true || $[[ inputs.verdin_imx8mpq ]] == true
       when: always
       changes:
         - /ci-scripts/test/*
@@ -35,7 +101,7 @@ build-tests-container:
     TARGET_BUILD_TYPE: "release"
     AVAL_EXTRA_OPTIONS: ""
   rules:
-    - if: $CI_WORLD_TEST == "true"
+    - if: $[[ inputs.world_test ]] == true
       when: on_success
   artifacts:
     when: always
@@ -49,7 +115,7 @@ build-tests-container:
 .e2e-test-stable-template:
   extends: .e2e-test-template
   rules:
-    - if: $CI_TEST_STABLE == "true"
+    - if: $[[ inputs.test_stable ]] == true
       when: on_success
 
 .e2e-test-nightly-template:
@@ -59,107 +125,170 @@ build-tests-container:
 
 e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.colibri_imx7d_emmc ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
 
 e2e-test-verdin-am62dual-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.verdin_am62dual ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-am62dual"
 
 e2e-test-aquila-am69octa-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.aquila_am69octa ]] == true
+      when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
 
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.apalis_imx6q ]] == true
+      when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
 
 e2e-test-apalis-imx8qm-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.apalis_imx8qm ]] == true
+      when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
 
 e2e-test-colibri-imx8qxp-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.colibri_imx8qxp ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
 
 e2e-test-verdin-imx8mmq-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.verdin_imx8mmq ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
 
 e2e-test-verdin-imx8mpq-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.verdin_imx8mpq ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
 
 e2e-test-colibri-imx7d-emmc-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.colibri_imx7d_emmc ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
 
 e2e-test-colibri-imx8qxp-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.colibri_imx8qxp ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
 
 e2e-test-verdin-am62dual-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.verdin_am62dual ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-am62dual"
 
 e2e-test-aquila-am69octa-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.aquila_am69octa ]] == true
+      when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
 
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.apalis_imx6q ]] == true
+      when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
 
 e2e-test-apalis-imx8qm-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.apalis_imx8qm ]] == true
+      when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
 
 e2e-test-verdin-imx8mmq-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.verdin_imx8mmq ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
 
 e2e-test-verdin-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.verdin_imx8mpq ]] == true
+      when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
 
 e2e-test-colibri-imx6dl-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.colibri_imx6dl ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
 
 e2e-test-colibri-imx6dl-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.colibri_imx6dl ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
 
 e2e-test-colibri-imx6ull-emmc-release:
   extends: .e2e-test-stable-template
+  rules:
+    - if: $[[ inputs.colibri_imx6ull_emmc ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-colibri-imx6ull-emmc-nightly:
   extends: .e2e-test-nightly-template
+  rules:
+    - if: $[[ inputs.colibri_imx6ull_emmc ]] == true
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-template
   allow_failure: true
+  rules:
+    - if: $[[ inputs.sk_am62 ]] == true
+      when: on_success
   variables:
     SOC_UDT: "sk-am62"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
@@ -167,6 +296,9 @@ e2e-test-sk-am62-nightly:
 e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-template
   allow_failure: true
+  rules:
+    - if: $[[ inputs.sk_am62p ]] == true
+      when: on_success
   variables:
     SOC_UDT: "sk-am62p"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
@@ -175,7 +307,10 @@ aggregate-reports:
   stage: report
   image: homebrew/brew
   rules:
-    - if: $CI_WORLD_TEST == "true"
+    - if: $[[ inputs.world_test ]] == true
+      when: on_success
+    # FIXME: very bad
+    - if: $[[ inputs.colibri_imx7d_emmc ]] == true || $[[ inputs.verdin_am62dual ]] == true || $[[ inputs.sk_am62 ]] == true || $[[ inputs.sk_am62p ]] == true || $[[ inputs.aquila_am69octa ]] == true || $[[ inputs.apalis_imx6q ]] == true || $[[ inputs.colibri_imx6dl ]] == true || $[[ inputs.colibri_imx6ull_emmc ]] == true || $[[ inputs.apalis_imx8qm ]] == true || $[[ inputs.colibri_imx8qxp ]] == true || $[[ inputs.verdin_imx8mmq ]] == true || $[[ inputs.verdin_imx8mpq ]] == true
       when: on_success
   script:
     - mkdir -p reports

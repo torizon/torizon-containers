@@ -1,6 +1,6 @@
 include:
-  - "/ci-scripts/release/release.yml"
   - "/ci-scripts/test/aval-tests.yml"
+  - "/ci-scripts/release/release.yml"
   - "/ci-scripts/test/support-files-tests.yml"
   - "/ci-scripts/build/upstream.yml"
   - "/ci-scripts/build/imx8.yml"
