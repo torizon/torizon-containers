@@ -39,9 +39,6 @@ build-tests-container:
   variables:
     TARGET_BUILD_TYPE: "release"
     AVAL_EXTRA_OPTIONS: ""
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
   artifacts:
     when: always
     reports:
@@ -129,6 +126,8 @@ e2e-test-verdin-imx8mpq-release:
 e2e-test-colibri-imx7d-emmc-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true"'
       when: on_success
   variables:
@@ -137,6 +136,8 @@ e2e-test-colibri-imx7d-emmc-nightly:
 e2e-test-colibri-imx8qxp-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
       when: on_success
   variables:
@@ -145,6 +146,8 @@ e2e-test-colibri-imx8qxp-nightly:
 e2e-test-verdin-am62dual-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
       when: on_success
   variables:
@@ -153,6 +156,8 @@ e2e-test-verdin-am62dual-nightly:
 e2e-test-aquila-am69octa-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
       when: on_success
   variables:
@@ -161,6 +166,8 @@ e2e-test-aquila-am69octa-nightly:
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_APALIS_IMX6Q == "true"'
       when: on_success
   variables:
@@ -169,6 +176,8 @@ e2e-test-apalis-imx6q-nightly:
 e2e-test-apalis-imx8qm-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_APALIS_IMX8QM == "true"'
       when: on_success
   variables:
@@ -177,6 +186,8 @@ e2e-test-apalis-imx8qm-nightly:
 e2e-test-verdin-imx8mmq-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
       when: on_success
   variables:
@@ -185,6 +196,8 @@ e2e-test-verdin-imx8mmq-nightly:
 e2e-test-verdin-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
       when: on_success
   variables:
@@ -201,6 +214,8 @@ e2e-test-colibri-imx6dl-release:
 e2e-test-colibri-imx6dl-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_COLIBRI_IMX6DL == "true"'
       when: on_success
   variables:
@@ -217,6 +232,8 @@ e2e-test-colibri-imx6ull-emmc-release:
 e2e-test-colibri-imx6ull-emmc-nightly:
   extends: .e2e-test-nightly-template
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_COLIBRI_IMX6ULL_EMMC == "true"'
       when: on_success
   variables:
@@ -226,6 +243,8 @@ e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-template
   allow_failure: true
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_SK_AM62 == "true"'
       when: on_success
   variables:
@@ -236,6 +255,8 @@ e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-template
   allow_failure: true
   rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
     - if: '$CI_TEST_SK_AM62P == "true"'
       when: on_success
   variables:
