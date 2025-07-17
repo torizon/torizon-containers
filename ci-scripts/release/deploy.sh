@@ -59,7 +59,5 @@ while IFS=: read -r image_name rest; do
     re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor" "--force"
     re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major" "--force"
   fi
-  echo "$image_name: $major.$minor.$patch" >>release_notes.md
-  echo "" >>release_notes.md
 
 done < <(yq e 'keys | .[]' "$yaml_file")
