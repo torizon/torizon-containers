@@ -1,52 +1,52 @@
-debian-am62:
+debian-am62p:
   major: 4
   minor: 0
   patch: 0
-wayland-base-am62:
+wayland-base-am62p:
   major: 4
   minor: 0
   patch: 0
-wayland-base-dev-am62:
+wayland-base-dev-am62p:
   major: 4
   minor: 0
   patch: 0
-wayland-gtk3-am62:
+wayland-gtk3-am62p:
   major: 4
   minor: 0
   patch: 0
-weston-am62:
+weston-am62p:
   major: 4
   minor: 0
   patch: 0
-qt5-wayland-am62:
+qt5-wayland-am62p:
   major: 4
   minor: 0
   patch: 0
-qt5-wayland-examples-am62:
+qt5-wayland-examples-am62p:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland-am62:
+qt6-wayland-am62p:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland-examples-am62:
+qt6-wayland-examples-am62p:
   major: 4
   minor: 0
   patch: 0
-qt6-wayland-tests-am62:
+qt6-wayland-tests-am62p:
   major: 4
   minor: 0
   patch: 0
-graphics-tests-am62:
+graphics-tests-am62p:
   major: 4
   minor: 0
   patch: 0
-chromium-am62:
+chromium-am62p:
   major: 4
   minor: 0
   patch: 0
-cog-am62:
+cog-am62p:
   major: 4
   minor: 0
   patch: 0
