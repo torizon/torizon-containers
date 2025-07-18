@@ -23,6 +23,8 @@ platforms = {
     ],
 }
 
+apps_deny_list = ["chromium-tests"]
+
 
 def recursively_replace_contents(target_content, replace_with, target_dir):
     for root, _, files in os.walk(target_dir):
@@ -38,6 +40,9 @@ def recursively_replace_contents(target_content, replace_with, target_dir):
 def generate_app_json(composes_dir):
     print("Finding apps...")
     for app in os.listdir(composes_dir):
+        if app in apps_deny_list:
+            print(f"Not demo-gallelirizing {app} because it's on the deny list")
+            continue
         print(f"Found {app}")
         app_dir = os.path.join(composes_dir, app)
         if not os.path.isdir(app_dir):
