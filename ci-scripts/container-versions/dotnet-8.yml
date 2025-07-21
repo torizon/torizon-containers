@@ -1,7 +1,7 @@
 # upstream
 dotnet8: &dotnet
   release: &dotnet-release "8.0"
-  semver: &dotnet-semver "8.0.17"
+  semver: &dotnet-semver "8.0.18"
   major: 4
   minor: 7
   patch: 0
