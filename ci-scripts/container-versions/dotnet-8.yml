@@ -3,11 +3,11 @@ dotnet8: &dotnet
   release: &dotnet-release "8.0"
   semver: &dotnet-semver "8.0.18"
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 aspdotnet8:
   <<: *dotnet
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-debug:
   release: *dotnet-release
@@ -16,17 +16,17 @@ dotnet8-debug:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   debugger-version: "17.14.10528.2"
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-gtk3:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 
 # imx8
@@ -34,21 +34,21 @@ dotnet8-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 aspdotnet8-imx8:
   <<: *dotnet-imx8
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-gtk3-imx8:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 
 # am62
@@ -56,21 +56,21 @@ dotnet8-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 aspdotnet8-am62:
   <<: *dotnet-am62
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-gtk3-am62:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 
 # am62p
@@ -78,21 +78,21 @@ dotnet8-am62p: &dotnet-am62p
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 aspdotnet8-am62p:
   <<: *dotnet-am62p
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-gtk3-am62p:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 
 # imx95
@@ -100,19 +100,19 @@ dotnet8-imx95: &dotnet-imx95
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 aspdotnet8-imx95:
   <<: *dotnet-imx95
-  minor: 7
+  minor: 8
   patch: 0
 dotnet8-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 dotnet8-gtk3-imx95:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
