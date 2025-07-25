@@ -48,6 +48,8 @@ build-tests-container:
       - ./report-${CI_JOB_NAME}.xml
   needs:
     - build-tests-container
+  tags:
+    - torizoncore
 
 .e2e-test-stable-template:
   extends: .e2e-test-template
