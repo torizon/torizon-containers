@@ -17,7 +17,7 @@ RUN apk update && apk upgrade && \
         envsubst \
         dmesg
 
-RUN git clone https://github.com/bats-core/bats-core.git /tmp/bats-core && \
+RUN git clone https://github.com/torizon/bats-core.git /tmp/bats-core && \
     /tmp/bats-core/install.sh /usr/local && \
     rm -rf /tmp/bats-core
 
