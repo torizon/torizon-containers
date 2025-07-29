@@ -22,7 +22,7 @@ services:
     - weston
     device_cgroup_rules:
       - 'c 199:* rmw'
-    image: $REGISTRY/torizon/qt6-enterprise-imx8:stable-rc
+    image: $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc
     volumes:
       - '/tmp:/tmp'
       - '/dev/galcore:/dev/galcore'
