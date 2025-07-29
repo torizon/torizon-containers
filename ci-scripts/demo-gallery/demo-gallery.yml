@@ -6,11 +6,12 @@ build-demo-gallery:
     - apk update && apk add python3 git
     - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/composes
     - git clone https://oauth2:${DEMO_GALLERY_TOKEN}@gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery.git
-    - cp -r ./temp/* ./demo-gallery/
     - cd ./demo-gallery
     - git config --global --add safe.directory $(realpath .)
     - git config user.name "Tordy"
     - git config user.email "tordy@toradex.com"
+    - git rm -r '*'
+    - cp -r ../temp/* .
     - git add .
     - |
       if git diff --cached --quiet; then
