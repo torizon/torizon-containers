@@ -88,6 +88,9 @@ def main(composes_dir):
     for platform, members in platforms.items():
         # For each app in ./composes
         for app in os.listdir(composes_dir):
+            if app in apps_deny_list:
+                print(f"Not demo-gallelirizing {app} because it's on the deny list")
+                continue
             app_path = os.path.join(composes_dir, app)
             if not os.path.isdir(app_path):
                 continue
@@ -110,6 +113,8 @@ def main(composes_dir):
     base_cmd = [
         "docker",
         "run",
+        "--platform",
+        "linux/amd64",
         "--rm",
         "-v",
         "/deploy",
