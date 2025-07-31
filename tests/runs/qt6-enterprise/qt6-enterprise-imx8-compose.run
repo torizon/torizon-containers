@@ -14,4 +14,4 @@ docker run -d \
 docker run -d \
   --device-cgroup-rule "c 199:* rmw" \
   --volume "/tmp:/tmp" \
-  --volume "/dev/galcore:/dev/galcore" $REGISTRY/torizon/qt6-enterprise-imx8:stable-rc /usr/lib/aarch64-linux-gnu/qt6/examples/widgets/widgets/calculator/calculator
+  --volume "/dev/galcore:/dev/galcore" $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc /usr/lib/aarch64-linux-gnu/qt6/examples/widgets/widgets/calculator/calculator

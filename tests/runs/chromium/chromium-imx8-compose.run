@@ -15,9 +15,11 @@ docker run -d \
   --volume "/tmp:/tmp" \
   --volume "/var/run/dbus:/var/run/dbus" \
   --volume "/dev/dri:/dev/dri" \
-  --device-cgroup-rule "c 4:* rmw" \
-  --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 226:* rmw" \
   --device-cgroup-rule "c 199:* rmw" \
+  --device-cgroup-rule "c 81:* rmw" \
+  --device-cgroup-rule "c 234:* rmw" \
+  --device-cgroup-rule "c 253:* rmw" \
+  --device-cgroup-rule "c 226:* rmw" \
+  --device-cgroup-rule "c 235:* rmw" \
   --security-opt "seccomp:unconfined" \
   --shm-size 256mb $REGISTRY/torizon/chromium-imx8:stable-rc --virtual-keyboard https://www.toradex.com
