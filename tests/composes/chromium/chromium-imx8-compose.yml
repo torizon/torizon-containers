@@ -22,10 +22,12 @@ services:
     depends_on:
     - weston
     device_cgroup_rules:
-      - 'c 4:* rmw'
-      - 'c 13:* rmw'
-      - 'c 226:* rmw'
       - 'c 199:* rmw'
+      - 'c 81:* rmw'
+      - 'c 234:* rmw'
+      - 'c 253:* rmw'
+      - 'c 226:* rmw'
+      - 'c 235:* rmw'
     image: $REGISTRY/torizon/chromium-imx8:stable-rc
     security_opt:
     - seccomp:unconfined
