@@ -1,3 +1,4 @@
+# description: launches the Weston Compositor with shell and then Chromium opening the Toradex Homepage
 services:
   weston:
     network_mode: host

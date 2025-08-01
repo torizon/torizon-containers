@@ -1,3 +1,4 @@
+# description: launches the Weston Compositor with shell and the Enterprise Qt Application Launcher
 services:
   weston:
     network_mode: host

@@ -1,3 +1,4 @@
+# description: launches the Weston Compositor with shell and a Qt6 Calculator App
 services:
   weston:
     network_mode: host
