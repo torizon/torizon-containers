@@ -4,9 +4,6 @@ import argparse
 import subprocess
 import json
 
-"""
-To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/composes
-"""
 platforms = {
     "imx8": [
         "apalis-imx8",
@@ -55,9 +52,6 @@ def generate_app_json(composes_dir):
         packages = []
         for fname in os.listdir(app_dir):
             if fname.startswith("docker-compose-") and fname.endswith(".yml"):
-                description = None
-                with open(os.path.join(app_dir, fname)) as f:
-                    description = f.readline().replace("# description: ", "").rstrip().capitalize()
                 # Parse platform from filename
                 # Format: docker-compose-<platform>.yml
                 platform = fname[len("docker-compose-") : -len(".yml")]
@@ -66,7 +60,6 @@ def generate_app_json(composes_dir):
                     "filename": fname,
                     # FIXME: hardcoded!
                     "version": "4",
-                    "description":f"{description}",
                 }
                 packages.append(package)
 

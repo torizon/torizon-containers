@@ -164,7 +164,7 @@ Create compose files for each supported platform using the naming convention:
 
 **Example compose file structure:**
 ```yaml
-# description: a description of what your demo actually does, *MUST* start with `description: ` exactly
+# tests/composes/your-demo/your-demo-imx8-compose.yml
 services:
   weston:
     network_mode: host
@@ -313,14 +313,10 @@ teardown_your_demo() {
 
 2. **Platform-specific images** should match the compose file platform:
    ```yaml
+   # In your-demo-imx8-compose.yml
    image: $REGISTRY/torizon/your-demo-imx8:stable-rc
    ```
 
-2. **First line should be a description** which starts with `# description: `, including the white space:
-   ```yaml
-   # description: a description of what your demo actually does
-   image: $REGISTRY/torizon/your-demo-imx8:stable-rc
-   ```
 ## Test Requirements
 
 ### Test Tags
