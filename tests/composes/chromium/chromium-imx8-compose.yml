@@ -36,4 +36,4 @@ services:
     volumes:
       - '/tmp:/tmp'
       - '/var/run/dbus:/var/run/dbus'
-      - '/dev/dri:/dev/dri'
+      - '/dev:/dev'
