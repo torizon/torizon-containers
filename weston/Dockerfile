@@ -36,4 +36,7 @@ RUN chmod u+s /usr/bin/seatd-launch
 
 WORKDIR /home/torizon
 
+HEALTHCHECK --interval=1s --timeout=5s --start-period=0s --retries=3 \
+    CMD find /tmp/1000-runtime-dir -maxdepth 1 -type s -name 'wayland-*' -print -quit | grep -q .
+
 ENTRYPOINT ["/usr/bin/entry.sh"]
