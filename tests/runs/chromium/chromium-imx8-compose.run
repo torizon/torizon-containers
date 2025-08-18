@@ -14,7 +14,7 @@ docker run -d \
 docker run -d \
   --volume "/tmp:/tmp" \
   --volume "/var/run/dbus:/var/run/dbus" \
-  --volume "/dev/dri:/dev/dri" \
+  --volume "/dev:/dev" \
   --device-cgroup-rule "c 199:* rmw" \
   --device-cgroup-rule "c 81:* rmw" \
   --device-cgroup-rule "c 234:* rmw" \
