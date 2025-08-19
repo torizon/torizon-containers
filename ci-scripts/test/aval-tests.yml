@@ -252,6 +252,7 @@ e2e-test-sk-am62-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-template
@@ -263,6 +264,7 @@ e2e-test-sk-am62p-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62p"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-x86-nightly:
   extends: .e2e-test-nightly-template
