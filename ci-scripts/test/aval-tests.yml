@@ -27,7 +27,9 @@ build-tests-container:
 
 .e2e-test-template:
   stage: test
-  image: registry.gitlab.com/toradex/rd/torizon-core/aval/aval:main
+  image:
+    name: registry.gitlab.com/toradex/rd/torizon-core/aval/aval:main
+    pull_policy: always
   before_script:
     - cd /aval && /usr/local/bin/entrypoint.sh "docker run -e REGISTRY=$TORADEX_INTERNAL_DOCKERHUB_CACHE -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
