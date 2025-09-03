@@ -127,6 +127,15 @@ build-chromium-am69:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
   needs: [build-wayland-base-am69]
 
+build-chromium-tests-am69:
+  extends: .build-am69-template
+  variables:
+    BASE_IMAGE_NAME: chromium-am69
+    IMAGE_NAME: chromium-tests-am69
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
+  needs: [build-chromium-am69]
+
 build-cog-am69:
   extends: .build-am69-template
   variables:
