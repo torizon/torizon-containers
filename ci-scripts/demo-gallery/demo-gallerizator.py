@@ -4,6 +4,9 @@ import argparse
 import subprocess
 import json
 
+"""
+To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/composes
+"""
 platforms = {
     "imx8": [
         "apalis-imx8",
@@ -52,6 +55,17 @@ def generate_app_json(composes_dir):
         packages = []
         for fname in os.listdir(app_dir):
             if fname.startswith("docker-compose-") and fname.endswith(".yml"):
+                description = None
+                # Try to read description from separate .description file
+                description_file_path = os.path.join(app_dir, fname + ".description")
+                if os.path.exists(description_file_path):
+                    try:
+                        with open(description_file_path, "r", encoding="utf-8") as f:
+                            description = f.read().strip()
+                    except Exception as e:
+                        print(f"Warning: Could not read description file {description_file_path}: {e}")
+                        description = None
+                
                 # Parse platform from filename
                 # Format: docker-compose-<platform>.yml
                 platform = fname[len("docker-compose-") : -len(".yml")]
@@ -60,6 +74,7 @@ def generate_app_json(composes_dir):
                     "filename": fname,
                     # FIXME: hardcoded!
                     "version": "4",
+                    "description": description if description else "",
                 }
                 packages.append(package)
 
@@ -70,6 +85,18 @@ def generate_app_json(composes_dir):
             ) as f:
                 json.dump(app_json, f, indent=4)
             print(f"Generated app.json for {app}: {platform}")
+
+
+def extract_description_from_file(file_path):
+    """Extract description from the first line of a docker-compose file."""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            first_line = f.readline()
+            if first_line.startswith("# description: "):
+                return first_line.replace("# description: ", "").rstrip().capitalize()
+    except Exception as e:
+        print(f"Warning: Could not extract description from {file_path}: {e}")
+    return None
 
 
 def main(composes_dir):
@@ -98,6 +125,10 @@ def main(composes_dir):
             compose_file_path = os.path.join(app_path, compose_pattern)
             if not os.path.isfile(compose_file_path):
                 continue
+            
+            # Extract description from original file before copying
+            description = extract_description_from_file(compose_file_path)
+            
             # For each member of platform
             for member in members:
                 dest_dir = os.path.join(temp_dir, app)
@@ -107,6 +138,13 @@ def main(composes_dir):
                 )
                 shutil.copyfile(compose_file_path, dest_file)
                 print(f"Created: {dest_file}")
+                
+                # Save description to a separate file if it exists
+                if description:
+                    description_file = dest_file + ".description"
+                    with open(description_file, "w", encoding="utf-8") as f:
+                        f.write(description)
+                    print(f"Saved description: {description_file}")
 
     temp_dir = "./temp"
 
@@ -132,7 +170,7 @@ def main(composes_dir):
         for file in files:
             if file.startswith("docker-compose-") and not file.endswith(
                 ".lock.yml"
-            ):
+            ) and not file.endswith(".description"):
                 compose_file_path = os.path.join(root, file)
 
                 # Canonicalize each compose file (ie, generate a .lock file with torizoncore-builder)
