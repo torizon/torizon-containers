@@ -3,7 +3,6 @@ import { launch } from "puppeteer"
 async function parse_main_webgl_report() {
 
   const chromiumArgs = [
-    "--in-process-gpu",
     "--disable-seccomp-filter-sandbox",
     "--no-sandbox",
     "--enable-features=UseOzonePlatform",
