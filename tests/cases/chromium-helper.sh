@@ -7,6 +7,8 @@ setup_chromium() {
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *am62* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium/chromium-am62-compose.run" "chromium-am62" "chromium")
+  elif [[ "$PLATFORM_FILTER" == *am69* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/chromium/chromium-imx8-compose.run" "chromium-imx8" "chromium")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium/chromium-imx8-compose.run" "chromium-imx8" "chromium")
   else
