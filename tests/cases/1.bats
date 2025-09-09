@@ -31,3 +31,9 @@ load ./kernel-helper.sh
   echo "No display interface is connected."
   return 1
 }
+
+# bats test_tags=platform:imx8, platform:am62, platform:am62p, platform:upstream, platform:am69
+@test "renderD node exists in /dev/dri" {
+  run compgen -G "/dev/dri/renderD*"
+  [ "$status" -eq 0 ]
+}
