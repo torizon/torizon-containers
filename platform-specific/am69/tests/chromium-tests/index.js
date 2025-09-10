@@ -5,13 +5,13 @@ async function parse_main_webgl_report() {
   const vivanteArgs = [
     "--allow-insecure-localhost",
     "--disable-notifications",
-    "--use-gl=egl",
-    "--in-process-gpu",
+    "--use-gl=angle",
     "--check-for-update-interval=315360000",
     "--disable-seccomp-filter-sandbox",
     "--no-sandbox",
     "--enable-features=UseOzonePlatform",
     "--ozone-platform=wayland"
+    
   ];
 
   const browser = await launch({ headless: false, args: vivanteArgs, executablePath: '/usr/bin/chromium' });
