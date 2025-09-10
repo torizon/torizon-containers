@@ -12,7 +12,7 @@ build-tests-container:
       changes:
         - /ci-scripts/test/*
         - tests/**/*
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"'
       when: always
       changes:
         - /ci-scripts/test/*
@@ -208,6 +208,16 @@ e2e-test-verdin-imx8mpq-nightly:
   variables:
     SOC_UDT: "verdin-imx8mpq"
 
+e2e-test-smarc-imx8mpq-nightly:
+  extends: .e2e-test-nightly-template
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_SMARC_IMX8MPQ == "true"'
+      when: on_success
+  variables:
+    SOC_UDT: "smarc-imx8mpq"
+
 e2e-test-smarc-imx95h-nightly:
   extends: .e2e-test-nightly-template
   rules:
@@ -296,7 +306,7 @@ aggregate-reports:
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"'
       when: on_success
   script:
     - mkdir -p reports
