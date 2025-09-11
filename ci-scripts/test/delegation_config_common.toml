@@ -1,0 +1,5 @@
+[[delegation_filter.filter]]
+hardware_id_pattern = ".*"
+name_prefix = "scarthgap"
+namespace = "common-torizon"
+name_suffix = "torizon-docker"

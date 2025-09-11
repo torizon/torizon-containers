@@ -34,7 +34,7 @@ build-tests-container:
     - cd /aval && /usr/local/bin/entrypoint.sh "docker run -e REGISTRY=$TORADEX_INTERNAL_DOCKERHUB_CACHE -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} /cases/run-tests.sh"
-      --copy-artifact /home/torizon/report.xml $CI_PROJECT_DIR/report.xml --remove-databases --delegation-config $CI_PROJECT_DIR/ci-scripts/test/delegation_config.toml
+      --copy-artifact /home/torizon/report.xml $CI_PROJECT_DIR/report.xml --remove-databases --delegation-config $DELEGATION_PATH
       --before "docker kill $(docker ps -q) || true && docker system prune --all --force" --ignore-different-secondaries-between-updates ${AVAL_EXTRA_OPTIONS}
   allow_failure: true
   script:
@@ -58,11 +58,20 @@ build-tests-container:
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
+  variables:
+    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config.toml"
 
 .e2e-test-nightly-template:
   extends: .e2e-test-template
   variables:
     TARGET_BUILD_TYPE: "nightly"
+    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config.toml"
+
+.e2e-test-nightly-common-template:
+  extends: .e2e-test-template
+  variables:
+    TARGET_BUILD_TYPE: "nightly"
+    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config_common.toml"
 
 e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
@@ -285,7 +294,7 @@ e2e-test-colibri-imx6ull-emmc-nightly:
     SOC_UDT: "colibri-imx6ull-emmc"
 
 e2e-test-sk-am62-nightly:
-  extends: .e2e-test-nightly-template
+  extends: .e2e-test-nightly-common-template
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -294,10 +303,9 @@ e2e-test-sk-am62-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-sk-am62p-nightly:
-  extends: .e2e-test-nightly-template
+  extends: .e2e-test-nightly-common-template
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -306,10 +314,9 @@ e2e-test-sk-am62p-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62p"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-x86-nightly:
-  extends: .e2e-test-nightly-template
+  extends: .e2e-test-nightly-common-template
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
