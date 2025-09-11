@@ -318,7 +318,6 @@ e2e-test-x86-nightly:
       when: on_success
   variables:
     SOC_UDT: "x86"
-    USE_RAC: "true"
 
 aggregate-reports:
   stage: report
