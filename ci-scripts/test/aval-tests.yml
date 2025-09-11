@@ -331,7 +331,7 @@ aggregate-reports:
   script:
     - mkdir -p reports
     - mv *.xml reports/
-    - brew tap homebrew-toradex/xray-junit-uploader https://gitlab.int.toradex.com/rd/torizon-core-containers/homebrew-toradex.git
+    - brew tap homebrew-toradex/xray-junit-uploader https://gitlab.com/toradex/rd/torizon-core/homebrew-toradex.git
     - brew install xray-junit-uploader
     - ./ci-scripts/test/xray-junit-uploader-wrapper.sh
   artifacts:
