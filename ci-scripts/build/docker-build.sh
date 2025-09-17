@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -x
+set -euo pipefail
 
 # Copyright (c) 2019-2025 Toradex AG
 # SPDX-License-Identifier: MIT
