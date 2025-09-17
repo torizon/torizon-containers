@@ -75,6 +75,7 @@ build-tests-container:
 
 e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
+  resource_group: colibri-imx7d-emmc
   rules:
     - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true"'
       when: on_success
@@ -83,6 +84,7 @@ e2e-test-colibri-imx7d-emmc-release:
 
 e2e-test-verdin-am62dual-release:
   extends: .e2e-test-stable-template
+  resource_group: verdin-am62dual
   rules:
     - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
       when: on_success
@@ -91,6 +93,7 @@ e2e-test-verdin-am62dual-release:
 
 e2e-test-aquila-am69octa-release:
   extends: .e2e-test-stable-template
+  resource_group: aquila-am69octa
   rules:
     - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
       when: on_success
@@ -99,6 +102,7 @@ e2e-test-aquila-am69octa-release:
 
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-stable-template
+  resource_group: apalis-imx6q
   rules:
     - if: '$CI_TEST_APALIS_IMX6Q == "true"'
       when: on_success
@@ -107,6 +111,7 @@ e2e-test-apalis-imx6q-release:
 
 e2e-test-apalis-imx8qm-release:
   extends: .e2e-test-stable-template
+  resource_group: apalis-imx8qm
   rules:
     - if: '$CI_TEST_APALIS_IMX8QM == "true"'
       when: on_success
@@ -115,6 +120,7 @@ e2e-test-apalis-imx8qm-release:
 
 e2e-test-colibri-imx8qxp-release:
   extends: .e2e-test-stable-template
+  resource_group: colibri-imx8qxp
   rules:
     - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
       when: on_success
@@ -123,6 +129,7 @@ e2e-test-colibri-imx8qxp-release:
 
 e2e-test-verdin-imx8mmq-release:
   extends: .e2e-test-stable-template
+  resource_group: verdin-imx8mmq
   rules:
     - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
       when: on_success
@@ -131,6 +138,7 @@ e2e-test-verdin-imx8mmq-release:
 
 e2e-test-verdin-imx8mpq-release:
   extends: .e2e-test-stable-template
+  resource_group: verdin-imx8mpq
   rules:
     - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
       when: on_success
@@ -139,6 +147,7 @@ e2e-test-verdin-imx8mpq-release:
 
 e2e-test-colibri-imx7d-emmc-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: colibri-imx7d-emmc
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -149,6 +158,7 @@ e2e-test-colibri-imx7d-emmc-nightly:
 
 e2e-test-colibri-imx8qxp-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: colibri-imx8qxp
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -159,6 +169,7 @@ e2e-test-colibri-imx8qxp-nightly:
 
 e2e-test-verdin-am62dual-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-am62dual
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -169,6 +180,7 @@ e2e-test-verdin-am62dual-nightly:
 
 e2e-test-verdin-am62quad-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-am62quad
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -179,6 +191,7 @@ e2e-test-verdin-am62quad-nightly:
 
 e2e-test-verdin-am62pq-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-am62pq
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -189,6 +202,7 @@ e2e-test-verdin-am62pq-nightly:
 
 e2e-test-aquila-am69octa-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: aquila-am69octa
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -199,6 +213,7 @@ e2e-test-aquila-am69octa-nightly:
 
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: apalis-imx6q
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -209,6 +224,7 @@ e2e-test-apalis-imx6q-nightly:
 
 e2e-test-apalis-imx8qm-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: apalis-imx8qm
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -219,6 +235,7 @@ e2e-test-apalis-imx8qm-nightly:
 
 e2e-test-verdin-imx8mmq-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-imx8mmq
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -229,6 +246,7 @@ e2e-test-verdin-imx8mmq-nightly:
 
 e2e-test-verdin-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-imx8mpq
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -239,6 +257,7 @@ e2e-test-verdin-imx8mpq-nightly:
 
 e2e-test-smarc-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: smarc-imx8mpq
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -249,6 +268,7 @@ e2e-test-smarc-imx8mpq-nightly:
 
 e2e-test-verdin-imx95h-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: verdin-imx95h
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -259,6 +279,7 @@ e2e-test-verdin-imx95h-nightly:
 
 e2e-test-smarc-imx95h-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: smarc-imx95h
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -269,6 +290,7 @@ e2e-test-smarc-imx95h-nightly:
 
 e2e-test-colibri-imx6dl-release:
   extends: .e2e-test-stable-template
+  resource_group: colibri-imx6dl
   rules:
     - if: '$CI_TEST_COLIBRI_IMX6DL == "true"'
       when: on_success
@@ -277,6 +299,7 @@ e2e-test-colibri-imx6dl-release:
 
 e2e-test-colibri-imx6dl-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: colibri-imx6dl
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -287,6 +310,7 @@ e2e-test-colibri-imx6dl-nightly:
 
 e2e-test-colibri-imx6ull-emmc-release:
   extends: .e2e-test-stable-template
+  resource_group: colibri-imx6ull-emmc
   rules:
     - if: '$CI_TEST_COLIBRI_IMX6ULL_EMMC == "true"'
       when: on_success
@@ -295,6 +319,7 @@ e2e-test-colibri-imx6ull-emmc-release:
 
 e2e-test-colibri-imx6ull-emmc-nightly:
   extends: .e2e-test-nightly-template
+  resource_group: colibri-imx6ull-emmc
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -305,6 +330,7 @@ e2e-test-colibri-imx6ull-emmc-nightly:
 
 e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-common-template
+  resource_group: sk-am62
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -316,6 +342,7 @@ e2e-test-sk-am62-nightly:
 
 e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-common-template
+  resource_group: sk-am62p
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -327,6 +354,7 @@ e2e-test-sk-am62p-nightly:
 
 e2e-test-x86-nightly:
   extends: .e2e-test-nightly-common-template
+  resource_group: x86
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
