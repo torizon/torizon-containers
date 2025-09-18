@@ -68,10 +68,10 @@ services:
 .include-regctl:
   before_script:
     - apk update && apk add curl
-    - curl -L https://github.com/regclient/regclient/releases/download/v0.6.0/regctl-linux-amd64 > /usr/bin/regctl
+    - curl -L https://github.com/regclient/regclient/releases/download/v0.9.2/regctl-linux-amd64 > /usr/bin/regctl
     # to update the hash: download the metadata the regctl repo, verify the signatures, generate the SHA256SUMS file
     # with `sha256sum -b regctl > SHA256SUMS` and update it here.
-    - echo "44216c0ab3bd41ae30b07392d6cdab6971f48ab3f72400e617f5f0ded4d70742 /usr/bin/regctl" > SHA256SUMS
+    - echo "4da11cfe7009661a498ffafc11f510049864ffb4eb44961743618b3975db3c55 /usr/bin/regctl" > SHA256SUMS
     - if ! sha256sum -c SHA256SUMS; then echo "Checksum for regctl has failed"; fi
     - chmod 755 /usr/bin/regctl
     - regctl registry login docker.io -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
@@ -79,7 +79,7 @@ services:
 .docker-configure:
   script:
     - apk add bash curl
-    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.57.1
+    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.66.0
     - ./ci-scripts/configure/docker-buildx-configure.sh
 
 .docker-build:
