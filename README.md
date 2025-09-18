@@ -107,6 +107,50 @@ This is only an example to show the syntax of the `docker buildx build` command.
 The real Debian base release can be seen looking to the `DEBIAN_POINT_RELEASE`
 variable in [.gitlab-ci.yml](https://github.com/torizon/torizon-containers/blob/stable/.gitlab-ci.yml#L13)
 
+### Commit Hygiene
+
+We use git headers to identify where a change is being done. Headers refer to the
+directory in which a change is being done. For example, let's say I added a new
+package to the Cog image that lives under the [cog](./cog/) directory. My commit
+message title is thus
+
+```
+cog: add new package <package_name>
+```
+
+Or if I make a contribution related to the demo gallery, my commit message shall read
+
+```
+demo-gallery: ...
+```
+
+When contributions are made for documentation:
+
+```
+docs: ...
+```
+
+And when contributions are made to platform-specific directories, we specify the
+platform, such as
+
+```
+am62p: ...
+```
+
+There is one additional type of change which may relate to many files because it's
+really useful, `chore:`. This is, for example, when we update third-party dependencies
+on any file, such as `regctl` and `trivy`, for example.
+
+Another aspect of commit hygine is to not use Uppercase after the header. Example:
+
+Correct: `chore: update regclient to x.y.z`
+
+Incorrect: `chore: Update regclient to x.y.z`.
+
+Moreover, we do not ever in any circumstance use merge-commits. The history is purely
+linear. There's no good technical explanation for this other than personal taste.
+In this way, branch names do not matter, so you're free to `git checkout -b <ideally something quite funny>`.
+
 ### Linting
 
 Inside the [lint](ci-scripts/lint/) directory you'll find several small scripts
