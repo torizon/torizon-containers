@@ -76,6 +76,9 @@ if [[ "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" || "${CI_COMMIT_REF_PRO
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 fi
 
+# echo the Dockerfile in CI, making it easier to spot bugs.
+cat "${DOCKERFILE_FOLDER-}Dockerfile"
+
 # shellcheck disable=SC2086
 docker buildx build --progress=plain --sbom=true --push ${BUILD_PLATFORMS} \
   --build-arg ACCEPT_FSL_EULA="${ACCEPT_FSL_EULA-}" \
