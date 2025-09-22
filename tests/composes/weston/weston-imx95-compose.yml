@@ -11,9 +11,9 @@ services:
     device_cgroup_rules:
       - c 4:* rmw
       - c 253:* rmw
+      - c 10:* rmw
       - c 13:* rmw
       - c 226:* rmw
-      - c 10:223 rmw
       - c 199:0 rmw
     image: $REGISTRY/torizon/weston-imx95:stable-rc
     command: --developer --tty=/dev/tty7 -- --debug
