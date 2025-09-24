@@ -65,7 +65,7 @@ done
 # CI_WORLD_TEST == true, achieving the effect described above.
 if [[ "${CI_COMMIT_REF_PROTECTED:-}" == "true" ]]; then
   export PULL_REGISTRY=${TORADEX_INTERNAL_DOCKERHUB_CACHE-}
-  export PUSH_REGISTRY="docker.io"
+  export PUSH_REGISTRY="registry-1.docker.io"
   export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE-}
   export IMAGE_TAG=${CI_COMMIT_BRANCH-}-rc
 fi
