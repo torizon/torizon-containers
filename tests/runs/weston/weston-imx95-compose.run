@@ -6,7 +6,7 @@ docker run -d \
   --volume "/run/udev/:/run/udev/" \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 253:* rmw" \
+  --device-cgroup-rule "c 10:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
   --device-cgroup-rule "c 226:* rmw" \
-  --device-cgroup-rule "c 10:223 rmw" \
   --device-cgroup-rule "c 199:0 rmw" $REGISTRY/torizon/weston-imx95:stable-rc --developer --tty=/dev/tty7 -- --debug
