@@ -12,7 +12,7 @@ include:
   - "/ci-scripts/generate/generate.yml"
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
-image: docker:latest
+image: docker:28.4.0
 
 variables:
   DEBIAN_POINT_RELEASE: "12.11-slim"
