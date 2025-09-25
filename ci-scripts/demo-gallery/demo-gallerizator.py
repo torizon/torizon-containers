@@ -10,7 +10,6 @@ To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/comp
 platforms = {
     "imx8": [
         "apalis-imx8",
-        "apalis-imx8x",
         "colibri-imx8x",
         "verdin-imx8mm",
         "verdin-imx8mp",
