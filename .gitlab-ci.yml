@@ -17,7 +17,7 @@ image: docker:28.4.0
 
 variables:
   DEBIAN_POINT_RELEASE: "12.11-slim"
-  TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"
+  TORADEX_INTERNAL_DOCKERHUB_CACHE: "docker.io"
   # This should be set by docker image already, just to be sure...
   DOCKER_HOST: tcp://docker:2375
   # Use overlayfs driver for better performance

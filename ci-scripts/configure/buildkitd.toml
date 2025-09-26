@@ -1,5 +1,0 @@
-[registry."docker.io"]
-mirrors = ["https://artifactory-horw.int.toradex.com/dockerhub-proxy-horw"]
-
-[registry."artifactory-horw.int.toradex.com"]
-http = true
