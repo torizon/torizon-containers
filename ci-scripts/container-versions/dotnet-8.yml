@@ -138,3 +138,25 @@ dotnet8-gtk3-imx95:
   major: 4
   minor: 4
   patch: 0
+
+# sl1680
+dotnet8-sl1680: &dotnet-sl1680
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+aspdotnet8-sl1680:
+  <<: *dotnet-sl1680
+  minor: 0
+  patch: 0
+dotnet8-wayland-sl1680:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+dotnet8-gtk3-sl1680:
+  major: 4
+  minor: 0
+  patch: 0
