@@ -26,7 +26,7 @@ ENV LC_ALL C.UTF-8
 
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
-RUN bash -c "if [[ ${TORADEX_FEED_URL} =~ 'am6x' ]]; then printf 'Types: deb\n\
+RUN bash -c "if [[ ${TORADEX_FEED_URL} =~ (am6x|sl1680) ]]; then printf 'Types: deb\n\
 URIs: http://deb.debian.org/debian\n\
 Suites: bookworm-backports\n\
 Components: main\n\
