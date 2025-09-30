@@ -18,6 +18,7 @@ prepare:
     # CI_COMMIT_BRANCH is not defined for tag pipelines and tags can refer to commits in multiple branches.
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/cross-toolchains.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-am62.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
+    - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-am62p.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-am69.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx95.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
