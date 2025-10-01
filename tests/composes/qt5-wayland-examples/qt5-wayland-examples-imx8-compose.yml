@@ -20,7 +20,8 @@ services:
 
   qt5-wayland-examples:
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 199:* rmw'
     image: $REGISTRY/torizon/qt5-wayland-examples-imx8:stable-rc

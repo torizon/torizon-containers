@@ -19,7 +19,8 @@ services:
 
   chromium-tests:
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 199:* rmw'
       - 'c 81:* rmw'

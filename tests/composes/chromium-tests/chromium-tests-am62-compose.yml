@@ -16,7 +16,8 @@ services:
 
   chromium-tests:
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
     image: $REGISTRY/torizon/chromium-tests-am62:stable-rc

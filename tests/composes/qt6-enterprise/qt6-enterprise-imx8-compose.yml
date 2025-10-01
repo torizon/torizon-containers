@@ -20,7 +20,8 @@ services:
 
   qt6-enterprise:
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 199:* rmw'
     image: $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc

@@ -18,7 +18,8 @@ services:
   chromium:
     command: --virtual-keyboard https://www.toradex.com
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
     image: $REGISTRY/torizon/chromium-am62:stable-rc

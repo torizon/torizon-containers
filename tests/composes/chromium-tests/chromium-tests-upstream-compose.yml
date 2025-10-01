@@ -17,7 +17,8 @@ services:
   chromium-tests:
     command: --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
     image: $REGISTRY/torizon/chromium:stable-rc
