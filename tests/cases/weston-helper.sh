@@ -13,6 +13,8 @@ setup_weston() {
     DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-am69-compose.run" "weston-am69" "weston")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-imx8-compose.run" "weston-imx8" "weston")
+  elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-imx95-compose.run" "weston-imx95" "weston")
   else
     DOCKER_RUN=$(read-docker-run.sh "/runs/weston/weston-upstream-compose.run" "weston" "weston")
   fi
