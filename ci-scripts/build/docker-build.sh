@@ -60,24 +60,35 @@ for PLATFORM in "${SELECTED_PLATFORMS[@]}"; do
   BUILD_PLATFORMS="$BUILD_PLATFORMS --platform $PLATFORM"
 done
 
-# The two if blocks below must be in this specific order so that the tests
-# container is pushed to the local GitLab registry instead of DockerHub
-# *even* if it's running on a protected tag.
-# ie, the first block (CI_COMMIT_REF_PROTECTED == true) will match, but will
-# get overwritten by the second block on test pipelines due to
-# CI_WORLD_TEST == true, achieving the effect described above.
-if [[ "${CI_COMMIT_REF_PROTECTED:-}" == "true" ]]; then
+export REGISTRY=${CI_REGISTRY-}
+export PUSH_REGISTRY=${CI_REGISTRY-}
+export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
+export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
+
+# Protected refs outside an MR: pull & push on Docker Hub with -rc tag
+if [[ "${CI_COMMIT_REF_PROTECTED:-}" == "true" && "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
-  export PUSH_REGISTRY="docker.io"
+  export PUSH_REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE-}
-  export IMAGE_TAG=${CI_COMMIT_BRANCH-}-rc
+  export IMAGE_TAG=${CI_COMMIT_BRANCH-${CI_COMMIT_REF_NAME-}}-rc
 fi
-if [[ "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" || "${CI_COMMIT_REF_PROTECTED:-}" == "false" || "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]]; then
+
+# Override for Aval test images, push to GitLab even inside protected branches
+if [[ "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]]; then
   export REGISTRY=${CI_REGISTRY-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
   export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 fi
+
+# Base images on MR: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
+if [[ ${CI_JOB_NAME:-} == build-base-* && "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" ]]; then
+  export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
+  export PUSH_REGISTRY=${CI_REGISTRY-}
+  export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
+  export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
+fi
+
 
 # echo the Dockerfile in CI, making it easier to spot bugs.
 cat "${DOCKERFILE_FOLDER-}Dockerfile"
