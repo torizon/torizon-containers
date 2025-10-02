@@ -26,3 +26,5 @@ RUN npm install
 COPY . .
 
 USER torizon
+
+ENTRYPOINT ["/usr/bin/bash"]
