@@ -112,11 +112,11 @@ build-qt6-wayland-tests-am69:
   extends: .build-am69-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-am69
-    BASE_IMAGE_NAME: qt6-wayland-am69
+    BASE_IMAGE_NAME: qt6-wayland-examples-am69
     IMAGE_NAME: qt6-wayland-tests-am69
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-am69, build-qt6-wayland-am69]
+  needs: [build-wayland-base-dev-am69, build-qt6-wayland-examples-am69]
 
 build-chromium-am69:
   extends: .build-am69-template
