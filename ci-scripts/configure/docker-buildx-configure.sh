@@ -13,4 +13,4 @@ docker info
 docker buildx create --name multiarch-builder --driver docker-container --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --use
 docker buildx inspect --bootstrap
 
-docker run --privileged --rm "${TORADEX_INTERNAL_DOCKERHUB_CACHE}/tonistiigi/binfmt" --install arm64,arm
+docker run --privileged --rm "${DOCKERHUB_REGISTRY_URL}/tonistiigi/binfmt" --install arm64,arm
