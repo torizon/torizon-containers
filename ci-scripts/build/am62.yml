@@ -19,7 +19,7 @@ build-base-am62:
     BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-am62
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
-    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am6x/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am6x"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
