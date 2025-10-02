@@ -67,13 +67,13 @@ done
 # get overwritten by the second block on test pipelines due to
 # CI_WORLD_TEST == true, achieving the effect described above.
 if [[ "${CI_COMMIT_REF_PROTECTED:-}" == "true" ]]; then
-  export PULL_REGISTRY=${DOCKERHUB_REGISTRY_URL-}
+  export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY="docker.io"
   export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE-}
   export IMAGE_TAG=${CI_COMMIT_BRANCH-}-rc
 fi
 if [[ "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" || "${CI_COMMIT_REF_PROTECTED:-}" == "false" || "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]]; then
-  export PULL_REGISTRY=${CI_REGISTRY-}
+  export REGISTRY=${CI_REGISTRY-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
   export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
@@ -96,8 +96,7 @@ docker buildx build --progress=plain --sbom=true --push ${BUILD_PLATFORMS} \
   --build-arg DOTNET_RUNTIME="${DOTNET_RUNTIME-}" \
   --build-arg DOTNET_SEMVER="${DOTNET_SEMVER-}" \
   --build-arg IMAGE_TAG="${IMAGE_TAG-}" \
-  --build-arg REGISTRY_PROXY="${DOCKERHUB_REGISTRY_URL-}" \
-  --build-arg REGISTRY="${PULL_REGISTRY-}" \
+  --build-arg REGISTRY="${REGISTRY-}" \
   --build-arg REGISTRY_NAMESPACE="${REGISTRY_NAMESPACE-}" \
   --build-arg TORADEX_SNAPSHOT="${TORADEX_SNAPSHOT-}" \
   --label torizon.image.name="${IMAGE_NAME-}" \

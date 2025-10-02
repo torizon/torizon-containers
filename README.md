@@ -98,7 +98,7 @@ For example, if I wish to build the base Docker for the iMX8 platform, from the
 ```
 tar -ch . | docker buildx build \
 --build-arg DEBIAN_POINT_RELEASE="12.6-slim" \
---build-arg REGISTRY_PROXY="docker.io" \
+--build-arg REGISTRY="docker.io" \
 --build-arg TORADEX_FEED_URL="https://feeds.toradex.com/stable/imx8/" \
 -t base -
 ```
