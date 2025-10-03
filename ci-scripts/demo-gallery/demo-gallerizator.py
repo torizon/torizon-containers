@@ -13,6 +13,7 @@ platforms = {
         "colibri-imx8x",
         "verdin-imx8mm",
         "verdin-imx8mp",
+        "smarc-imx8mp",
     ],
     "am62": ["verdin-am62"],
     # TODO: graduate AM69 to demo gallery
