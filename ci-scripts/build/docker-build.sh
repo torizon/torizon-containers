@@ -89,7 +89,6 @@ if [[ ${CI_JOB_NAME:-} == build-base-* && "${CI_PIPELINE_SOURCE:-}" == "merge_re
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 fi
 
-
 # echo the Dockerfile in CI, making it easier to spot bugs.
 cat "${DOCKERFILE_FOLDER-}Dockerfile"
 
