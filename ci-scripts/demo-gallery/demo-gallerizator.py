@@ -17,7 +17,7 @@ platforms = {
     ],
     "am62": ["verdin-am62"],
     # TODO: graduate AM69 to demo gallery
-    #"am69": ["aquila-am69"],
+    # "am69": ["aquila-am69"],
     "upstream": [
         "apalis-imx6",
         "colibri-imx6",
@@ -51,7 +51,7 @@ def generate_app_json(composes_dir):
         if not os.path.isdir(app_dir):
             continue
 
-        platform = None;
+        platform = None
         packages = []
         for fname in os.listdir(app_dir):
             if fname.startswith("docker-compose-") and fname.endswith(".yml"):
@@ -63,9 +63,11 @@ def generate_app_json(composes_dir):
                         with open(description_file_path, "r", encoding="utf-8") as f:
                             description = f.read().strip()
                     except Exception as e:
-                        print(f"Warning: Could not read description file {description_file_path}: {e}")
+                        print(
+                            f"Warning: Could not read description file {description_file_path}: {e}"
+                        )
                         description = None
-                
+
                 # Parse platform from filename
                 # Format: docker-compose-<platform>.yml
                 platform = fname[len("docker-compose-") : -len(".yml")]
@@ -80,9 +82,7 @@ def generate_app_json(composes_dir):
 
         if packages:
             app_json = {"packages": packages}
-            with open(
-                os.path.join(app_dir, "app.json"), "w", encoding="utf-8"
-            ) as f:
+            with open(os.path.join(app_dir, "app.json"), "w", encoding="utf-8") as f:
                 json.dump(app_json, f, indent=4)
             print(f"Generated app.json for {app}: {platform}")
 
@@ -125,20 +125,18 @@ def main(composes_dir):
             compose_file_path = os.path.join(app_path, compose_pattern)
             if not os.path.isfile(compose_file_path):
                 continue
-            
+
             # Extract description from original file before copying
             description = extract_description_from_file(compose_file_path)
-            
+
             # For each member of platform
             for member in members:
                 dest_dir = os.path.join(temp_dir, app)
                 os.makedirs(dest_dir, exist_ok=True)
-                dest_file = os.path.join(
-                    dest_dir, f"docker-compose-{member}.yml"
-                )
+                dest_file = os.path.join(dest_dir, f"docker-compose-{member}.yml")
                 shutil.copyfile(compose_file_path, dest_file)
                 print(f"Created: {dest_file}")
-                
+
                 # Save description to a separate file if it exists
                 if description:
                     description_file = dest_file + ".description"
@@ -168,9 +166,11 @@ def main(composes_dir):
 
     for root, dirs, files in os.walk(temp_dir):
         for file in files:
-            if file.startswith("docker-compose-") and not file.endswith(
-                ".lock.yml"
-            ) and not file.endswith(".description"):
+            if (
+                file.startswith("docker-compose-")
+                and not file.endswith(".lock.yml")
+                and not file.endswith(".description")
+            ):
                 compose_file_path = os.path.join(root, file)
 
                 # Canonicalize each compose file (ie, generate a .lock file with torizoncore-builder)
@@ -183,35 +183,26 @@ def main(composes_dir):
                 ]
 
                 try:
-                    subprocess.run(
-                        cmd, capture_output=True, text=True, check=True
-                    )
+                    subprocess.run(cmd, capture_output=True, text=True, check=True)
                     print(f"Canonicalized: {compose_file_path}")
                 except subprocess.CalledProcessError as e:
-                    print(
-                        f"Error canonicalizing {compose_file_path}:\n{e.stderr}"
-                    )
+                    print(f"Error canonicalizing {compose_file_path}:\n{e.stderr}")
                     continue
 
                 # Replace the original docker-compose with the canonicalized version
                 lock_file_path = compose_file_path.replace(".yml", ".lock.yml")
                 if os.path.exists(lock_file_path):
-                    with open(
-                        lock_file_path, "r", encoding="utf-8"
-                    ) as lock_file:
+                    with open(lock_file_path, "r", encoding="utf-8") as lock_file:
                         lock_content = lock_file.read()
-                    with open(
-                        compose_file_path, "w", encoding="utf-8"
-                    ) as orig_file:
+                    with open(compose_file_path, "w", encoding="utf-8") as orig_file:
                         orig_file.write(lock_content)
                     os.remove(lock_file_path)
-                    print(
-                        f"Replaced and removed lock file: {compose_file_path}"
-                    )
+                    print(f"Replaced and removed lock file: {compose_file_path}")
                 else:
                     print(f"Lock file not found for: {compose_file_path}")
 
     generate_app_json(temp_dir)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
