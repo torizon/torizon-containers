@@ -21,6 +21,10 @@ setup_qt6() {
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
               $REGISTRY/torizon/qt6-wayland-tests-imx95:stable-rc bash"
 
+  DOCKER_RUN_SL1680="docker container run -d -it --privileged --name=qt6-wayland-tests \
+              -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
+              $REGISTRY/torizon/qt6-wayland-tests-sl1680:stable-rc bash"
+
   DOCKER_RUN_UPSTREAM="docker container run -d -it --privileged --name=qt6-wayland-tests \
               -v /dev:/dev -v /run/udev/:/run/udev/ -v /tmp:/tmp \
               $REGISTRY/torizon/qt6-wayland-tests:stable-rc bash"
@@ -34,6 +38,8 @@ setup_qt6() {
     DOCKER_RUN=$DOCKER_RUN_AM62
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX8
+  elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_SL1680
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX95
   elif [[ "$PLATFORM_FILTER" == *am69* ]]; then

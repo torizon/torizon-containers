@@ -246,12 +246,12 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream
 @test "Your demo starts successfully" {
   run -0 docker container exec your-demo your-demo-command --test
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62
 @test "Your demo displays content" {
   run -124 docker container exec your-demo timeout 10s your-demo-command --display-test
   echo "Demo ran for 10 seconds without crashing, terminated by timeout."
@@ -328,7 +328,7 @@ teardown_your_demo() {
 Use `bats test_tags` to specify which platforms your test supports:
 
 ```bash
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream
 @test "Test that runs on multiple platforms" {
   # test code
 }

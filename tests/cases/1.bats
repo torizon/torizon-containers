@@ -10,13 +10,13 @@ load ./kernel-helper.sh
 # tests here are meant to be generally about system information that
 # will be flushed in subsequent test runs (dmesg is the first example).
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream
 @test "pre-test: unflushed GPU kernel logs" {
   # subsequent tests will clean the kernel logs, so don't bother here
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
 @test "DRM interface is available" {
   for interface in /sys/class/drm/*/status; do
     if [ -f "$interface" ]; then
@@ -32,7 +32,7 @@ load ./kernel-helper.sh
   return 1
 }
 
-# bats test_tags=platform:imx8, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
 @test "renderD node exists in /dev/dri" {
   run compgen -G "/dev/dri/renderD*"
   [ "$status" -eq 0 ]

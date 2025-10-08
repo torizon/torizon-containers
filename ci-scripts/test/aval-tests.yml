@@ -12,7 +12,7 @@ build-tests-container:
       changes:
         - /ci-scripts/test/*
         - tests/**/*
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"'
+    - if: $CI_TEST_ASTRA_SL1680 == "true" || $CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"
       when: always
       changes:
         - /ci-scripts/test/*
@@ -364,6 +364,19 @@ e2e-test-x86-nightly:
   variables:
     SOC_UDT: "x86"
 
+e2e-test-astra-sl1680-nightly:
+  extends: .e2e-test-nightly-common-template
+  resource_group: astra-sl1680
+  allow_failure: true
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_ASTRA_SL1680 == "true"'
+      when: on_success
+  variables:
+    SOC_UDT: "astra-sl1680"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
+
 aggregate-reports:
   stage: report
   image: homebrew/brew
@@ -400,5 +413,6 @@ aggregate-reports:
     SMARC_IMX8MPQ_TEST_EXEC_KEY: "TCCP-1074"
     VERDIN_IMX95H_TEST_EXEC_KEY: "TCCP-1075"
     SMARC_IMX95H_TEST_EXEC_KEY: "TCCP-1076"
+    ASTRA_SL1680_TEST_EXEC_KEY: "TCCP-1114"
     X86_TEST_EXEC_KEY: "TCCP-1077"
     GIT_CLEAN_FLAGS: none

@@ -13,6 +13,8 @@ setup_chromium_tests() {
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-am69-compose.run" "chromium-tests-am69" "chromium-tests")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-imx8-compose.run" "chromium-tests-imx8" "chromium-tests")
+  elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-sl1680-compose.run" "chromium-tests-sl1680" "chromium-tests")
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/chromium-tests/chromium-tests-imx95-compose.run" "chromium-tests-imx95" "chromium-tests")
   else
