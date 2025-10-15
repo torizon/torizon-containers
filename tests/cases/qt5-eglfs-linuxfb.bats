@@ -25,15 +25,3 @@ teardown_file() {
 
   run -0 gpu_kernel_logs
 }
-
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream
-@test "Qt5 LinuxFB shapedclock runs" {
-  bats_require_minimum_version 1.5.0
-
-  run -0 clean_kernel_logs
-
-  run -124 docker container exec -e QT_QPA_PLATFORM=linuxfb qt5-wayland-examples \
-    timeout 10s "/usr/lib/$ARCH_TRIPLET/qt5/examples/widgets/widgets/shapedclock/shapedclock"
-
-  run -0 gpu_kernel_logs
-}

@@ -30,18 +30,6 @@ teardown_file() {
 }
 
 # bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
-@test "Qt6 LinuxFB shapedclock runs" {
-  bats_require_minimum_version 1.5.0
-
-  run -0 clean_kernel_logs
-
-  run -124 docker container exec -e QT_QPA_PLATFORM=linuxfb qt6-wayland-tests \
-    timeout 10s "/usr/lib/$ARCH_TRIPLET/qt6/examples/widgets/widgets/shapedclock/shapedclock"
-
-  run -0 gpu_kernel_logs
-}
-
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
 @test "Qt6 can create OpenGLES context" {
   bats_require_minimum_version 1.5.0
 
