@@ -18,6 +18,10 @@ weston-am62p:
   major: 4
   minor: 2
   patch: 0
+weston-touch-calibrator-am62p:
+  major: 4
+  minor: 0
+  patch: 0
 qt5-wayland-am62p:
   major: 4
   minor: 2
