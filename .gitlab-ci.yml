@@ -16,7 +16,7 @@ include:
 image: docker:28.4.0
 
 variables:
-  DEBIAN_POINT_RELEASE: "12.11-slim"
+  DEBIAN_POINT_RELEASE: "12.12-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"
 
