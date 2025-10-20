@@ -3,11 +3,11 @@ dotnet8: &dotnet
   release: &dotnet-release "8.0"
   semver: &dotnet-semver "8.0.21"
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet8:
   <<: *dotnet
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-debug:
   release: *dotnet-release
@@ -16,17 +16,17 @@ dotnet8-debug:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   debugger-version: "18.0.10821.2"
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-gtk3:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # imx8
@@ -34,21 +34,21 @@ dotnet8-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet8-imx8:
   <<: *dotnet-imx8
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-gtk3-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # am62
@@ -56,21 +56,21 @@ dotnet8-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet8-am62:
   <<: *dotnet-am62
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-gtk3-am62:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # am62p
@@ -78,21 +78,21 @@ dotnet8-am62p: &dotnet-am62p
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 aspdotnet8-am62p:
   <<: *dotnet-am62p
-  minor: 2
+  minor: 3
   patch: 0
 dotnet8-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 dotnet8-gtk3-am62p:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 
 # am69
@@ -100,21 +100,21 @@ dotnet8-am69: &dotnet-am69
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 aspdotnet8-am69:
   <<: *dotnet-am69
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-wayland-am69:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-gtk3-am69:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 
 # imx95
@@ -122,21 +122,21 @@ dotnet8-imx95: &dotnet-imx95
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 aspdotnet8-imx95:
   <<: *dotnet-imx95
-  minor: 9
+  minor: 10
   patch: 0
 dotnet8-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 dotnet8-gtk3-imx95:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 
 # sl1680
@@ -144,19 +144,19 @@ dotnet8-sl1680: &dotnet-sl1680
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 aspdotnet8-sl1680:
   <<: *dotnet-sl1680
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-wayland-sl1680:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 dotnet8-gtk3-sl1680:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0

@@ -1,60 +1,60 @@
 debian-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 wayland-base-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 wayland-base-dev-imx8:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-gtk3-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 weston-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 qt5-wayland-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 qt5-wayland-examples-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 qt6-wayland-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 qt6-wayland-examples-imx8:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt6-wayland-tests-imx8:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-enterprise-demo-imx8:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 weston-touch-calibrator-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 graphics-tests-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 chromium-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 cog-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
