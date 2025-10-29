@@ -16,8 +16,7 @@ platforms = {
         "smarc-imx8mp",
     ],
     "am62": ["verdin-am62"],
-    # TODO: graduate AM69 to demo gallery
-    # "am69": ["aquila-am69"],
+    "am69": ["aquila-am69"],
     "upstream": [
         "apalis-imx6",
         "colibri-imx6",
