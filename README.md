@@ -145,11 +145,19 @@ Another aspect of commit hygine is to not use Uppercase after the header. Exampl
 
 Correct: `chore: update regclient to x.y.z`
 
-Incorrect: `chore: Update regclient to x.y.z`.
+Incorrect: `chore: Update regclient to x.y.z`
 
 Moreover, we do not ever in any circumstance use merge-commits. The history is purely
 linear. There's no good technical explanation for this other than personal taste.
 In this way, branch names do not matter, so you're free to `git checkout -b <ideally something quite funny>`.
+
+Also, please don't use the past tense. Use the imperative present tense to describe changes. Example:
+
+Correct: `qt5-wayland: add new package dependency`
+
+Incorrect:`qt5-wayland: added new package dependency`
+
+There's no reason for this other than sticking to a standard and personal preference.
 
 ### Linting
 
