@@ -111,6 +111,7 @@ def main(composes_dir):
         "upstream": ["chromium", "chromium-tests"],
         "imx8": ["chromium-tests"],
         "am62": ["chromium-tests"],
+        "am69": ["chromium-tests"],
     }
 
     # For each platform
