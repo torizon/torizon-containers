@@ -175,6 +175,16 @@ build-cog-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-imx8]
 
+build-crank-weston-imx8:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-imx8
+    IMAGE_NAME: crank-weston-imx8
+    DOCKERFILE_FOLDER: "${CRANK_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_FOLDER}/"
+  needs: [build-weston-imx8]
+
 .build-dotnet-imx8-template:
   extends: .build-imx8-template
   before_script:

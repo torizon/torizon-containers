@@ -150,6 +150,16 @@ build-cog-am62:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-am62]
 
+build-crank-weston-am62:
+  extends: .build-am62-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-am62
+    IMAGE_NAME: crank-weston-am62
+    DOCKERFILE_FOLDER: "${CRANK_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_FOLDER}/"
+  needs: [build-weston-am62]
+
 .build-dotnet-am62-template:
   extends: .build-am62-template
   before_script:

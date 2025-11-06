@@ -65,6 +65,7 @@ variables:
   STRESS_TESTS_FOLDER: "stress-tests"
   CHROMIUM_FOLDER: "chromium"
   COG_FOLDER: "cog"
+  CRANK_FOLDER: "crank"
 
 services:
   - name: docker:dind
