@@ -160,7 +160,7 @@ build-crank-weston-upstream:
     IMAGE_NAME: crank-weston-upstream
     DOCKERFILE_FOLDER: "${CRANK_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_FOLDER}/"
-  needs: [build-weston-upstream]
+  needs: [build-weston]
 
 .build-dotnet-upstream-template:
   extends: .build-upstream-template
