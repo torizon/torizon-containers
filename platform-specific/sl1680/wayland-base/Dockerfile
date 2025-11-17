@@ -41,8 +41,7 @@ RUN apt-get -y update && apt-get install -y \
     mesa-common-dev \
     mesa-opencl-icd \
     mesa-utils-extra \
-    # FIXME: we need to correctly identify which umlibs sl1680 is using and add it to the feed
-    # ti-img-rogue-umlibs-am62 \
+    sl1680-gpu-pvr \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Make sure the user can access DRM and video devices
