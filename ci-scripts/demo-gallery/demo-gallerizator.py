@@ -17,6 +17,11 @@ platforms = {
     ],
     "am62": ["verdin-am62"],
     "am69": ["aquila-am69"],
+    "am62p": ["verdin-am62p"],
+    "imx95": [
+        "verdin-imx95",
+        "smarc-imx95",
+    ],
     "upstream": [
         "apalis-imx6",
         "colibri-imx6",
@@ -112,6 +117,8 @@ def main(composes_dir):
         "imx8": ["chromium-tests"],
         "am62": ["chromium-tests"],
         "am69": ["chromium-tests"],
+        "imx95": ["chromium-tests"],
+        "am62p": ["chromium-tests"],
     }
 
     # For each platform
