@@ -15,16 +15,17 @@ services:
     command: '--developer'
 
   chromium-tests:
-    command: --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html
     depends_on:
       weston:
         condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/chromium-sl1680:stable-rc
+    image: $REGISTRY/torizon/chromium-tests-sl1680:stable-rc
     security_opt:
     - seccomp:unconfined
     shm_size: 256mb
+    stdin_open: true
+    tty: true
     volumes:
       - '/tmp:/tmp'
       - '/var/run/dbus:/var/run/dbus'
