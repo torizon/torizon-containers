@@ -13,6 +13,8 @@ setup_qt5() {
     DOCKER_RUN=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-am69-compose.run" "qt5-wayland-examples-am69" "qt5-wayland-examples" "bash")
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-imx8-compose.run" "qt5-wayland-examples-imx8" "qt5-wayland-examples" "bash")
+  elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-imx95-compose.run" "qt5-wayland-examples-imx95" "qt5-wayland-examples" "bash")
   elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/qt5-wayland-examples/qt5-wayland-examples-sl1680-compose.run" "qt5-wayland-examples-sl1680" "qt5-wayland-examples" "bash")
   else
