@@ -9,9 +9,11 @@ docker run -d \
   --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-sl1680:stable-rc --developer
 
 docker run -d \
-  --volume "/tmp:/tmp" \
-  --volume "/var/run/dbus:/var/run/dbus" \
-  --volume "/dev/dri:/dev/dri" \
   --device-cgroup-rule "c 226:* rmw" \
   --security-opt "seccomp:unconfined" \
-  --shm-size 256mb $REGISTRY/torizon/chromium-sl1680:stable-rc --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html
+  --shm-size 256mb \
+  --interactive \
+  --tty \
+  --volume "/tmp:/tmp" \
+  --volume "/var/run/dbus:/var/run/dbus" \
+  --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/chromium-tests-sl1680:stable-rc
