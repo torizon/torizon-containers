@@ -86,7 +86,7 @@ teardown_file() {
 }
 
 # autodetection is frail for imx-drm
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95
+# bats test_tags=platform:imx8, platform:imx95
 @test "Modetest is able to probe DRM information" {
   docker container exec graphics-tests modetest -M imx-drm
 }
