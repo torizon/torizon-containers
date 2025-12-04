@@ -148,47 +148,88 @@ build-cog:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base]
 
-build-dotnet-8:
+.build-dotnet-upstream-template:
   extends: .build-upstream-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V7: "true"
     BASE_IMAGE_NAME: debian
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+build-dotnet-8:
+  extends: .build-dotnet-upstream-template
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8
     IMAGE_NAME: dotnet8
     DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base"]
+
+build-dotnet-10:
+  extends: .build-dotnet-upstream-template
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10
+    IMAGE_NAME: dotnet10
+    DOTNET_RUNTIME: dotnet
+  needs: ["build-base"]
+
+.build-dotnet-asp-upstream-template:
+  extends: .build-dotnet-upstream-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
 
 build-dotnet-8-asp:
-  extends: .build-upstream-template
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  extends: .build-dotnet-asp-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
-    BASE_IMAGE_NAME: debian
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8
     IMAGE_NAME: aspdotnet8
-    DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base"]
 
-build-dotnet-8-wayland:
+build-dotnet-10-asp:
+  extends: .build-dotnet-asp-upstream-template
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10
+    IMAGE_NAME: aspdotnet10
+  needs: ["build-base"]
+
+.build-dotnet-wayland-upstream-template:
   extends: .build-upstream-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V7: "true"
-    BUILD_BASE_IMAGE_NAME: dotnet8
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
     BASE_IMAGE_NAME: wayland-base
-    IMAGE_NAME: dotnet8-wayland
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+build-dotnet-8-wayland:
+  extends: .build-dotnet-wayland-upstream-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8
+    IMAGE_NAME: dotnet8-wayland
   needs: ["build-dotnet-8", "build-wayland-base"]
+
+build-dotnet-10-wayland:
+  extends: .build-dotnet-wayland-upstream-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10
+    IMAGE_NAME: dotnet10-wayland
+  needs: ["build-dotnet-10", "build-wayland-base"]
 
 build-dotnet-8-debug:
   extends: .build-upstream-template
@@ -288,6 +329,19 @@ build-dotnet-8-gtk3:
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
   needs: [build-dotnet-8-wayland]
+
+build-dotnet-10-gtk3:
+  extends: .build-upstream-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BASE_IMAGE_NAME: dotnet10-wayland
+    IMAGE_NAME: dotnet10-gtk3
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-dotnet-10-wayland]
 
 build-gtk3-tests:
   extends: .build-upstream-template

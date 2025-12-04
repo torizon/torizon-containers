@@ -147,44 +147,83 @@ build-cog-am62p:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-am62p]
 
-build-dotnet-8-am62p:
+.build-dotnet-am62p-template:
   extends: .build-am62p-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-am62p
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BASE_IMAGE_NAME: debian-am62p
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+build-dotnet-8-am62p:
+  extends: .build-dotnet-am62p-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-am62p
     IMAGE_NAME: dotnet8-am62p
     DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-am62p"]
+
+build-dotnet-10-am62p:
+  extends: .build-dotnet-am62p-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-am62p
+    IMAGE_NAME: dotnet10-am62p
+    DOTNET_RUNTIME: dotnet
+  needs: ["build-base-am62p"]
+
+.build-dotnet-asp-am62p-template:
+  extends: .build-dotnet-am62p-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
 
 build-dotnet-8-asp-am62p:
-  extends: .build-am62p-template
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-am62p
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  extends: .build-dotnet-asp-am62p-template
   variables:
-    BASE_IMAGE_NAME: debian-am62p
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8-am62p
     IMAGE_NAME: aspdotnet8-am62p
-    DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-am62p"]
 
-build-dotnet-8-wayland-am62p:
+build-dotnet-10-asp-am62p:
+  extends: .build-dotnet-asp-am62p-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10-am62p
+    IMAGE_NAME: aspdotnet10-am62p
+  needs: ["build-base-am62p"]
+
+.build-dotnet-wayland-am62p-template:
   extends: .build-am62p-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-am62p
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_BASE_IMAGE_NAME: dotnet8-am62p
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
     BASE_IMAGE_NAME: wayland-base-am62p
-    IMAGE_NAME: dotnet8-wayland-am62p
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+build-dotnet-8-wayland-am62p:
+  extends: .build-dotnet-wayland-am62p-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland-am62p
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-am62p
+    IMAGE_NAME: dotnet8-wayland-am62p
   needs: ["build-dotnet-8-am62p", "build-wayland-base-am62p"]
+
+build-dotnet-10-wayland-am62p:
+  extends: .build-dotnet-wayland-am62p-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland-am62p
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-am62p
+    IMAGE_NAME: dotnet10-wayland-am62p
+  needs: ["build-dotnet-10-am62p", "build-wayland-base-am62p"]
 
 build-arm64-toolchain-am62p:
   extends: .build-am62p-template
@@ -231,6 +270,18 @@ build-dotnet-8-gtk3-am62p:
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
   needs: [build-dotnet-8-wayland-am62p]
+
+build-dotnet-10-gtk3-am62p:
+  extends: .build-am62p-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet10-wayland-am62p
+    IMAGE_NAME: dotnet10-gtk3-am62p
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-dotnet-10-wayland-am62p]
 
 build-gtk3-tests-am62p:
   extends: .build-am62p-template

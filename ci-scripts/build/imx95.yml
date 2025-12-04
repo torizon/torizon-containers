@@ -157,47 +157,83 @@ build-cog-imx95:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-imx95]
 
-build-dotnet-8-imx95:
+.build-dotnet-imx95-template:
   extends: .build-imx95-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-imx95
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-imx95
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+build-dotnet-8-imx95:
+  extends: .build-dotnet-imx95-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-imx95
     IMAGE_NAME: dotnet8-imx95
     DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-imx95"]
+
+build-dotnet-10-imx95:
+  extends: .build-dotnet-imx95-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-imx95
+    IMAGE_NAME: dotnet10-imx95
+    DOTNET_RUNTIME: dotnet
+  needs: ["build-base-imx95"]
+
+.build-dotnet-asp-imx95-template:
+  extends: .build-dotnet-imx95-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
 
 build-dotnet-8-asp-imx95:
-  extends: .build-imx95-template
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-imx95
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  extends: .build-dotnet-asp-imx95-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: debian-imx95
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8-imx95
     IMAGE_NAME: aspdotnet8-imx95
-    DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-imx95"]
 
-build-dotnet-8-wayland-imx95:
+build-dotnet-10-asp-imx95:
+  extends: .build-dotnet-asp-imx95-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10-imx95
+    IMAGE_NAME: aspdotnet10-imx95
+  needs: ["build-base-imx95"]
+
+.build-dotnet-wayland-imx95-template:
   extends: .build-imx95-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-imx95
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_BASE_IMAGE_NAME: dotnet8-imx95
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
     BASE_IMAGE_NAME: wayland-base-imx95
-    IMAGE_NAME: dotnet8-wayland-imx95
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+build-dotnet-8-wayland-imx95:
+  extends: .build-dotnet-wayland-imx95-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland-imx95
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-imx95
+    IMAGE_NAME: dotnet8-wayland-imx95
   needs: ["build-dotnet-8-imx95", "build-wayland-base-imx95"]
+
+build-dotnet-10-wayland-imx95:
+  extends: .build-dotnet-wayland-imx95-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland-imx95
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-imx95
+    IMAGE_NAME: dotnet10-wayland-imx95
+  needs: ["build-dotnet-10-imx95", "build-wayland-base-imx95"]
 
 build-arm64-toolchain-imx95:
   extends: .build-imx95-template
@@ -244,6 +280,18 @@ build-dotnet-8-gtk3-imx95:
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
   needs: [build-dotnet-8-wayland-imx95]
+
+build-dotnet-10-gtk3-imx95:
+  extends: .build-imx95-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet10-wayland-imx95
+    IMAGE_NAME: dotnet10-gtk3-imx95
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-dotnet-10-wayland-imx95]
 
 build-gtk3-tests-imx95:
   extends: .build-imx95-template

@@ -159,47 +159,83 @@ build-cog-sl1680:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
   needs: [build-wayland-base-sl1680]
 
-build-dotnet-8-sl1680:
+.build-dotnet-sl1680-template:
   extends: .build-sl1680-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-sl1680
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-sl1680
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+build-dotnet-8-sl1680:
+  extends: .build-dotnet-sl1680-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-sl1680
     IMAGE_NAME: dotnet8-sl1680
     DOTNET_RUNTIME: dotnet
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-sl1680"]
+
+build-dotnet-10-sl1680:
+  extends: .build-dotnet-sl1680-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-sl1680
+    IMAGE_NAME: dotnet10-sl1680
+    DOTNET_RUNTIME: dotnet
+  needs: ["build-base-sl1680"]
+
+.build-dotnet-asp-sl1680-template:
+  extends: .build-dotnet-sl1680-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
 
 build-dotnet-8-asp-sl1680:
-  extends: .build-sl1680-template
-  before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml aspdotnet8-sl1680
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  extends: .build-dotnet-asp-sl1680-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: debian-sl1680
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8-sl1680
     IMAGE_NAME: aspdotnet8-sl1680
-    DOTNET_RUNTIME: aspnetcore
-    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
   needs: ["build-base-sl1680"]
 
-build-dotnet-8-wayland-sl1680:
+build-dotnet-10-asp-sl1680:
+  extends: .build-dotnet-asp-sl1680-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10-sl1680
+    IMAGE_NAME: aspdotnet10-sl1680
+  needs: ["build-base-sl1680"]
+
+.build-dotnet-wayland-sl1680-template:
   extends: .build-sl1680-template
   before_script:
-    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-wayland-sl1680
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BUILD_BASE_IMAGE_NAME: dotnet8-sl1680
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
     BASE_IMAGE_NAME: wayland-base-sl1680
-    IMAGE_NAME: dotnet8-wayland-sl1680
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+build-dotnet-8-wayland-sl1680:
+  extends: .build-dotnet-wayland-sl1680-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland-sl1680
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-sl1680
+    IMAGE_NAME: dotnet8-wayland-sl1680
   needs: ["build-dotnet-8-sl1680", "build-wayland-base-sl1680"]
+
+build-dotnet-10-wayland-sl1680:
+  extends: .build-dotnet-wayland-sl1680-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland-sl1680
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-sl1680
+    IMAGE_NAME: dotnet10-wayland-sl1680
+  needs: ["build-dotnet-10-sl1680", "build-wayland-base-sl1680"]
 
 build-arm64-toolchain-sl1680:
   extends: .build-sl1680-template
@@ -246,6 +282,18 @@ build-dotnet-8-gtk3-sl1680:
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
   needs: [build-dotnet-8-wayland-sl1680]
+
+build-dotnet-10-gtk3-sl1680:
+  extends: .build-sl1680-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet10-wayland-sl1680
+    IMAGE_NAME: dotnet10-gtk3-sl1680
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: [build-dotnet-10-wayland-sl1680]
 
 build-gtk3-tests-sl1680:
   extends: .build-sl1680-template
