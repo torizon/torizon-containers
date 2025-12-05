@@ -81,8 +81,8 @@ if [[ "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 fi
 
-# Base images on MR: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
-if [[ ${CI_JOB_NAME:-} == build-base-* && "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" ]]; then
+# Base images outside stable branch: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
+if [[ ${CI_JOB_NAME:-} == build-base-* && "${CI_COMMIT_BRANCH:-}" != "stable" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
   export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
