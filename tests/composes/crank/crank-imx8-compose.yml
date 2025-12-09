@@ -1,7 +1,7 @@
 services:
-  weston:
-    image: '$REGISTRY/torizon/weston-imx8:stable-rc'
-    container_name: weston
+  crank-weston:
+    image: '$REGISTRY/torizon/crank-weston-imx8:stable-rc'
+    container_name: crank-weston
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG
@@ -30,5 +30,5 @@ services:
       - /var/run/dbus:/var/run/dbus
       - /dev/galcore:/dev/galcore
     depends_on:
-      weston:
+      crank-weston:
         condition: service_healthy

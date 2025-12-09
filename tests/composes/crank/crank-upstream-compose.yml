@@ -1,6 +1,6 @@
 services:
-  weston:
-    image: '$REGISTRY/torizon/weston:stable-rc'
+  crank-weston:
+    image: '$REGISTRY/torizon/crank-weston-upstream:stable-rc'
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG
@@ -26,5 +26,5 @@ services:
       - /dev/dri:/dev/dri
       - /var/run/dbus:/var/run/dbus
     depends_on:
-      weston:
+      crank-weston:
         condition: service_healthy
