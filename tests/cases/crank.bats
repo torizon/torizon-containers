@@ -15,7 +15,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:am62, platform:imx8, platform:imx7, platform:imx6
+# bats test_tags=platform:am62, platform:imx8, platform:upstream
 @test "Crank Demo Launcher" {
   bats_require_minimum_version 1.5.0
 
