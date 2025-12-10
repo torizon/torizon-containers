@@ -12,7 +12,7 @@ build-tests-container:
       changes:
         - /ci-scripts/test/*
         - tests/**/*
-    - if: $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_ASTRA_SL1680 == "true" || $CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" ||  $CI_TEST_X86 == "true"
+    - if: $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_ASTRA_SL1680 == "true" || $CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" || $CI_TEST_FRDM_IMX93 == "true" || $CI_TEST_X86 == "true"
       when: always
       changes:
         - /ci-scripts/test/*
@@ -390,13 +390,26 @@ e2e-test-luna-sl1680-nightly:
     SOC_UDT: "luna-sl1680"
     AVAL_EXTRA_OPTIONS: "--do-not-update"
 
+e2e-test-frdm-imx93-nightly:
+  extends: .e2e-test-nightly-common-template
+  resource_group: frdm-imx93
+  allow_failure: true
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+      when: on_success
+  variables:
+    SOC_UDT: "frdm-imx93"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
+
 aggregate-reports:
   stage: report
   image: homebrew/brew
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" || $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_X86 == "true" ||  $CI_TEST_EVK_IMX95 == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" || $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_FRDM_IMX93 == "true" || $CI_TEST_X86 == "true" ||  $CI_TEST_EVK_IMX95 == "true"'
       when: on_success
   script:
     - mkdir -p reports
@@ -428,5 +441,6 @@ aggregate-reports:
     SMARC_IMX95H_TEST_EXEC_KEY: "TCCP-1076"
     ASTRA_SL1680_TEST_EXEC_KEY: "TCCP-1114"
     LUNA_SL1680_TEST_EXEC_KEY: "TCCP-1150"
+    FRDM_IMX93_TEST_EXEC_KEY: "TCCP-1188"
     X86_TEST_EXEC_KEY: "TCCP-1077"
     GIT_CLEAN_FLAGS: none
