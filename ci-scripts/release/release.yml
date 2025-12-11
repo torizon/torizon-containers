@@ -22,8 +22,10 @@ prepare:
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-am69.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx95.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
+    - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-sl1680.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-upstream.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
+    - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-10.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/rt-tests.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "stable-rc"
 
   artifacts:
