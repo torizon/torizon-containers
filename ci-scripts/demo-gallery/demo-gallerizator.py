@@ -22,6 +22,10 @@ platforms = {
         "verdin-imx95",
         "smarc-imx95",
     ],
+    "sl1680": [
+        "astra-sl1680",
+        "luna-sl1680",
+    ],
     "upstream": [
         "apalis-imx6",
         "colibri-imx6",
@@ -119,6 +123,7 @@ def main(composes_dir):
         "am69": ["chromium-tests"],
         "imx95": ["chromium-tests"],
         "am62p": ["chromium-tests"],
+        "sl1680": ["chromium-tests"],
     }
 
     # For each platform
