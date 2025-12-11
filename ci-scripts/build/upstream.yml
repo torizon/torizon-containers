@@ -243,6 +243,18 @@ build-dotnet-8-debug:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
   needs: ["build-dotnet-8"]
 
+build-dotnet-10-debug:
+  extends: .build-upstream-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml dotnet10-debug
+  variables:
+    BUILD_FOR_ARM_V7: "true"
+    BASE_IMAGE_NAME: dotnet10
+    IMAGE_NAME: dotnet10-debug
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
+  needs: ["build-dotnet-10"]
+
 build-rt-tests:
   extends: .build-upstream-template
   before_script:
