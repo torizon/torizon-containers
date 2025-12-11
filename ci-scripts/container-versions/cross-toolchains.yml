@@ -1,20 +1,20 @@
 cross-toolchain-arm:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 cross-toolchain-ssh-arm:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 cross-toolchain-arm64:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 cross-toolchain-ssh-arm64:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 cross-toolchain-arm64-imx8:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
