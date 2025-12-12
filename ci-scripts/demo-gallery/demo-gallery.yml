@@ -18,5 +18,5 @@ build-demo-gallery:
         echo "No changes to commit"
       else
         git commit -m "auto: update demo gallery [ci skip]"
-        git push --force origin HEAD:$CI_COMMIT_REF_NAME
+        git push --force origin HEAD:stable
       fi
