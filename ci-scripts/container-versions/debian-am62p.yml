@@ -1,56 +1,56 @@
 debian-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-base-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-base-dev-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-gtk3-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 weston-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 weston-touch-calibrator-am62p:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 qt5-wayland-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt5-wayland-examples-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-examples-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-tests-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 graphics-tests-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 chromium-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 cog-am62p:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
