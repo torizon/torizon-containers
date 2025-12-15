@@ -59,19 +59,19 @@ build-tests-container:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
   variables:
-    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config.toml"
+    DELEGATION_PATH: "/aval/delegation_config.toml"
 
 .e2e-test-nightly-template:
   extends: .e2e-test-template
   variables:
     TARGET_BUILD_TYPE: "nightly"
-    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config.toml"
+    DELEGATION_PATH: "/aval/delegation_config.toml"
 
 .e2e-test-nightly-common-template:
   extends: .e2e-test-template
   variables:
     TARGET_BUILD_TYPE: "nightly"
-    DELEGATION_PATH: "$CI_PROJECT_DIR/ci-scripts/test/delegation_config_common.toml"
+    DELEGATION_PATH: "/aval/delegation_config_common.toml"
 
 e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
