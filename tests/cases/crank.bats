@@ -21,7 +21,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 timeout 10s docker container exec crank /usr/crank/docker_sbengine.sh
+  run -124 timeout 10s docker container exec crank /bin/sh /usr/crank/docker_sbengine.sh
 
   run -0 gpu_kernel_logs
 }
