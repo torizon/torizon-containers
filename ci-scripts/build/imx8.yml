@@ -330,3 +330,13 @@ build-gtk3-tests-imx8:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: [build-wayland-base-dev-imx8, build-wayland-gtk3-imx8]
+
+build-tensorflow-lite-imx8:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx8
+    IMAGE_NAME: tensorflow-lite-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_FOLDER}/"
+  needs: [build-base-imx8]

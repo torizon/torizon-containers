@@ -64,9 +64,13 @@ variables:
   STRESS_TESTS_FOLDER: "stress-tests"
   CHROMIUM_FOLDER: "chromium"
   COG_FOLDER: "cog"
+<<<<<<< HEAD
   CRANK_WESTON_FOLDER: "crank-weston"
 
 image: docker:$DOCKER_VERSION
+=======
+  TENSORFLOW_FOLDER: "tensorflow"
+>>>>>>> bb55e4f (imx8: add tensorflow-lite build and example)
 
 services:
   - name: docker:$DOCKER_VERSION-dind
