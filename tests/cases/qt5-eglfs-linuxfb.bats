@@ -14,7 +14,7 @@ teardown_file() {
   teardown_qt5
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am67a
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx93, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am67a
 @test "Qt5 EGL kmscube runs" {
   bats_require_minimum_version 1.5.0
 

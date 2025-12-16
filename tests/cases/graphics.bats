@@ -35,6 +35,10 @@ DOCKER_RUN_SL1680="docker container run -e ACCEPT_FSL_EULA=1 -d -it --privileged
             --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
             $REGISTRY/torizon/graphics-tests-sl1680:stable-rc"
 
+DOCKER_RUN_IMX93="docker container run -e ACCEPT_FSL_EULA=1 -d -it --privileged \
+            --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
+            $REGISTRY/torizon/graphics-tests-imx93:stable-rc"
+
 DOCKER_RUN_IMX95="docker container run -e ACCEPT_FSL_EULA=1 -d -it --privileged \
             --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
             $REGISTRY/torizon/graphics-tests-imx95:stable-rc"
@@ -53,6 +57,8 @@ setup_file() {
     DOCKER_RUN=$DOCKER_RUN_AM62
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX8
+  elif [[ "$PLATFORM_FILTER" == *imx93* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_IMX93
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX95
   elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
@@ -76,7 +82,7 @@ teardown_file() {
   cleanup_container graphics-tests
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx93, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "kmscube has sufficient score" {
   run -0 clean_kernel_logs
 
@@ -94,7 +100,7 @@ teardown_file() {
 }
 
 # autodetection is frail for imx-drm
-# bats test_tags=platform:imx8, platform:imx95
+# bats test_tags=platform:imx8, platform:imx93, platform:imx95
 @test "Modetest is able to probe DRM information" {
   docker container exec graphics-tests modetest -M imx-drm
 }

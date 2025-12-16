@@ -10,6 +10,8 @@ elif [[ "$SOC_UDT" == *am62* ]]; then
   PLATFORM_FILTER="platform:am62"
 elif [[ "$SOC_UDT" == *imx8* ]]; then
   PLATFORM_FILTER="platform:imx8"
+elif [[ "$SOC_UDT" == *imx93* ]]; then
+  PLATFORM_FILTER="platform:imx93"
 elif [[ "$SOC_UDT" == *imx95* ]]; then
   PLATFORM_FILTER="platform:imx95"
 elif [[ "$SOC_UDT" == *am69* ]]; then

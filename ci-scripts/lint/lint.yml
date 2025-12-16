@@ -52,6 +52,7 @@ lint-dependencies:
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am67a.yml    "-am67a"  || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am69.yml     "-am69"   || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx8.yml     "-imx8"   || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx93.yml    "-imx93"  || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx95.yml    "-imx95"  || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/sl1680.yml   "-sl1680" || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/upstream.yml ""        || ERROR_FOUND=1
@@ -77,6 +78,7 @@ lint-templates:
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am67a.yml    || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am69.yml     || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx8.yml     || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx93.yml    || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx95.yml    || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/sl1680.yml   || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/upstream.yml || ERROR_FOUND=1

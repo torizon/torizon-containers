@@ -38,7 +38,7 @@ uses_base_template() {
 for job in $jobs; do
   [[ "$job" != build-* ]] && continue
 
-  if [[ "$job" =~ ^build-.*-(sl1680|imx95|am62p|am62|am67a|am69|imx8|upstream)$ ]]; then
+  if [[ "$job" =~ ^build-.*-(sl1680|imx95|imx93|imx8|am62p|am62|am67a|am69|upstream)$ ]]; then
     PATTERN="${BASH_REMATCH[1]}"
 
     if ! uses_base_template "$job" "$PATTERN"; then

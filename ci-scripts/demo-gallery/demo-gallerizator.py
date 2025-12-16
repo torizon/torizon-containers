@@ -30,6 +30,9 @@ platforms = {
         "verdin-am62p",
         "sk-am62p",
     ],
+    "imx93": [
+        "frdm-imx93",
+    ],
     "imx95": [
         "verdin-imx95",
         "smarc-imx95",
@@ -44,7 +47,6 @@ platforms = {
         "colibri-imx6",
         "colibri-imx6ull",
         "colibri-imx7",
-        "frdm-imx93",
     ],
 }
 
@@ -135,6 +137,7 @@ def main(composes_dir):
         "imx8": ["chromium-tests"],
         "am62": ["chromium-tests"],
         "am69": ["chromium-tests"],
+        "imx93": ["chromium-tests"],
         "imx95": ["chromium-tests"],
         "am62p": ["chromium-tests"],
         "sl1680": ["chromium-tests"],
