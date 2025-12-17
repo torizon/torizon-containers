@@ -31,6 +31,7 @@ platforms = {
         "colibri-imx6",
         "colibri-imx6ull",
         "colibri-imx7",
+        "frdm-imx93",
     ],
 }
 
