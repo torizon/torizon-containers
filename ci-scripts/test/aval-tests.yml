@@ -389,7 +389,6 @@ e2e-test-astra-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "astra-sl1680"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-luna-sl1680-nightly:
   extends: .e2e-test-nightly-common-template
@@ -402,7 +401,6 @@ e2e-test-luna-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "luna-sl1680"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-frdm-imx93-nightly:
   extends: .e2e-test-nightly-common-template
