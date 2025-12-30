@@ -7,7 +7,8 @@ generate-run-from-compose:
   script:
     - ls
     - git config --global --add safe.directory $(realpath .)
-    - git checkout stable
+    - git fetch origin stable
+    - git checkout -B stable origin/stable
     - git config user.name "Tordy"
     - git config user.email "tordy@toradex.com"
     - |
