@@ -72,6 +72,15 @@ build-graphics-tests-imx8:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base-imx8]
 
+build-benchmark-imx8:
+  extends: .build-imx8-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-imx8
+    IMAGE_NAME: benchmark-imx8
+    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
+  needs: [build-wayland-base-imx8]
+
 build-weston-touch-calibrator-imx8:
   extends: .build-imx8-template
   variables:

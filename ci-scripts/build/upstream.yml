@@ -71,6 +71,15 @@ build-graphics-tests:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base]
 
+build-benchmark:
+  extends: .build-upstream-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base
+    IMAGE_NAME: benchmark
+    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
+  needs: [build-wayland-base]
+
 build-weston-touch-calibrator:
   extends: .build-upstream-template
   variables:

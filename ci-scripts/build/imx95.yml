@@ -72,6 +72,15 @@ build-graphics-tests-imx95:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base-imx95]
 
+build-benchmark-imx95:
+  extends: .build-imx95-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-imx95
+    IMAGE_NAME: benchmark-imx95
+    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
+  needs: [build-wayland-base-imx95]
+
 build-weston-touch-calibrator-imx95:
   extends: .build-imx95-template
   variables:
