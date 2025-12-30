@@ -24,6 +24,8 @@ build-tests-container:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_AMD64: "true"
+  tags:
+    - saas-linux-small-amd64
 
 .e2e-test-template:
   stage: test
@@ -444,3 +446,5 @@ aggregate-reports:
     FRDM_IMX93_TEST_EXEC_KEY: "TCCP-1188"
     X86_TEST_EXEC_KEY: "TCCP-1077"
     GIT_CLEAN_FLAGS: none
+  tags:
+    - saas-linux-small-amd64

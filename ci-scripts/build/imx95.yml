@@ -1,3 +1,7 @@
+default:
+  tags:
+    - saas-linux-small-amd64
+
 .build-imx95-template:
   retry: 2
   extends: .docker-build

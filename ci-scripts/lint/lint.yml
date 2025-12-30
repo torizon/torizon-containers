@@ -1,3 +1,7 @@
+default:
+  tags:
+    - saas-linux-small-amd64
+
 .shellcheck:
   image: koalaman/shellcheck-alpine:latest
   script: find . -type f \( -iname "*.sh" -o -iname "*.bash" -o -iname "*.bats" \) | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
