@@ -51,7 +51,7 @@ build-tests-container:
   needs:
     - build-tests-container
   tags:
-    - torizoncore
+    - all
 
 .e2e-test-stable-template:
   extends: .e2e-test-template
