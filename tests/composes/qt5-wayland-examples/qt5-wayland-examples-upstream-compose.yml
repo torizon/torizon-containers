@@ -27,7 +27,7 @@ services:
       - '/dev/dri:/dev/dri'
     command: >
       sh -c '
-        arch="$(uname -m)"
+        arch="$(uname -m)";
         case "$$arch" in
           x86_64)  TRIPLET="x86_64-linux-gnu" ;;
           aarch64) TRIPLET="aarch64-linux-gnu" ;;
