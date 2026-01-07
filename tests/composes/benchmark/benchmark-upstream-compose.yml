@@ -1,28 +1,7 @@
 # description: launches the Weston Compositor with shell and then GLMark demo benchmark
 services:
-  benchmark:
-    image: $REGISTRY/torizon/benchmark:stable-rc
-    environment:
-      - MANGOHUD=1
-      - MANGOHUD_CONFIG=cpu_temp,gpu_temp,position=top-left,height=500,font_size=32
-    volumes:
-      - type: bind
-        source: /tmp
-        target: /tmp
-      - type: bind
-        source: /dev
-        target: /dev
-    device_cgroup_rules:
-      - "c 4:* rmw"
-      - "c 13:* rmw"
-      - "c 199:* rmw"
-      - "c 226:* rmw"
-    depends_on:
-      weston:
-        condition: service_healthy
-
   weston:
-    image: torizon/weston:stable-rc
+    image: $REGISTRY/torizon/weston:stable-rc
     environment:
       - ACCEPT_FSL_EULA=1
     # Required to get udev events from host udevd via netlink
@@ -57,3 +36,24 @@ services:
       timeout: 4s
       retries: 6
       start_period: 10s
+
+  benchmark:
+    image: $REGISTRY/torizon/benchmark:stable-rc
+    environment:
+      - MANGOHUD=1
+      - MANGOHUD_CONFIG=cpu_temp,gpu_temp,position=top-left,height=500,font_size=32
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+    device_cgroup_rules:
+      - "c 4:* rmw"
+      - "c 13:* rmw"
+      - "c 199:* rmw"
+      - "c 226:* rmw"
+    depends_on:
+      weston:
+        condition: service_healthy
