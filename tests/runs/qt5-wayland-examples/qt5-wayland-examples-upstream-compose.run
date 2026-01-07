@@ -12,7 +12,7 @@ docker run -d \
   --device-cgroup-rule "c 226:* rmw" \
   --volume "/tmp:/tmp" \
   --volume "/dev/dri:/dev/dri" $REGISTRY/torizon/qt5-wayland-examples:stable-rc sh -c '
-  arch="$(uname -m)"
+  arch="$(uname -m)";
   case "$arch" in
     x86_64)  TRIPLET="x86_64-linux-gnu" ;;
     aarch64) TRIPLET="aarch64-linux-gnu" ;;
