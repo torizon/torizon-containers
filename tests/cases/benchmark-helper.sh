@@ -4,22 +4,22 @@ setup_benchmark() {
   docker container kill benchmark || true
   docker container rm benchmark || true
 
-  local PLATFORM
-  PLATFORM="${PLATFORM_FILTER:+-${PLATFORM_FILTER}}"
-
   local DOCKER_RUN
-  DOCKER_RUN="docker run -d \
-    --name benchmark \
-    -e MANGOHUD=1 \
-    -e MANGOHUD_CONFIG=cpu_temp,gpu_temp,position=top-left,height=500,font_size=32 \
-    -v /tmp:/tmp \
-    -v /dev:/dev \
-    --device-cgroup-rule='c 4:* rmw' \
-    --device-cgroup-rule='c 13:* rmw' \
-    --device-cgroup-rule='c 199:* rmw' \
-    --device-cgroup-rule='c 226:* rmw' \
-    $REGISTRY/torizon/benchmark${PLATFORM}:stable-rc \
-    bash"
+  if [[ "$PLATFORM_FILTER" == *am62p* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-am62p-compose.run" "benchmark-am62p" "benchmark")
+  elif [[ "$PLATFORM_FILTER" == *am62* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-am62-compose.run" "benchmark-am62" "benchmark")
+  elif [[ "$PLATFORM_FILTER" == *am69* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-am69-compose.run" "benchmark-am69" "benchmark")
+  elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-imx8-compose.run" "benchmark-imx8" "benchmark")
+  elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-imx95-compose.run" "benchmark-imx95" "benchmark")
+  elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-sl1680-compose.run" "benchmark-sl1680" "benchmark")
+  else
+    DOCKER_RUN=$(read-docker-run.sh "/runs/benchmark/benchmark-upstream-compose.run" "benchmark" "benchmark")
+  fi
 
   eval "$DOCKER_RUN"
 
