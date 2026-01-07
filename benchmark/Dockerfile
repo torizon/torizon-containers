@@ -15,4 +15,4 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["mangohud", "--dlsym", "glmark2-es2-wayland", "--run-forever"]
+ENTRYPOINT ["mangohud", "--dlsym", "glmark2-es2-wayland", "--run-forever"]
