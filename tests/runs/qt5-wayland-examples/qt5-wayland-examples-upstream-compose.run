@@ -21,7 +21,7 @@ docker run -d \
       echo "Unsupported architecture: $arch" >&2
       exit 1
       ;;
-  esac
+  esac;
   exec /usr/lib/$TRIPLET/qt5/examples/widgets/widgets/calculator/calculator
 '
 
