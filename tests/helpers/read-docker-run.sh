@@ -65,7 +65,7 @@ parse_docker_run() {
 
   # Expand shell variables in the command while preserving quotes
   local expanded_command
-  if ! expanded_command=$(echo "$matched_command" | envsubst); then
+  if ! expanded_command=$(echo "$matched_command" | envsubst '$REGISTRY'); then
     echo "ERROR: Failed to expand variables in command" >&2
     echo ""
     return 1
