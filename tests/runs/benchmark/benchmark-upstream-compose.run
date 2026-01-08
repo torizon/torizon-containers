@@ -1,4 +1,14 @@
 docker run -d \
+  --network host \
+  --cap-add "CAP_SYS_TTY_CONFIG" \
+  --volume "/dev:/dev" \
+  --volume "/tmp:/tmp" \
+  --volume "/run/udev/:/run/udev/" \
+  --device-cgroup-rule "c 4:* rmw" \
+  --device-cgroup-rule "c 13:* rmw" \
+  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston:stable-rc --developer
+
+docker run -d \
   --env "MANGOHUD=1" \
   --env "MANGOHUD_CONFIG=cpu_temp,gpu_temp,position=top-left,height=500,font_size=32" \
   --mount type=bind,source=/tmp,target=/tmp \
@@ -7,19 +17,3 @@ docker run -d \
   --device-cgroup-rule "c 13:* rmw" \
   --device-cgroup-rule "c 199:* rmw" \
   --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/benchmark:stable-rc
-
-docker run -d \
-  --env "ACCEPT_FSL_EULA=1" \
-  --network host \
-  --mount type=bind,source=/tmp,target=/tmp \
-  --mount type=bind,source=/dev,target=/dev \
-  --mount type=bind,source=/run/udev,target=/run/udev \
-  --cap-add "CAP_SYS_TTY_CONFIG" \
-  --device-cgroup-rule "c 4:* rmw" \
-  --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 199:* rmw" \
-  --device-cgroup-rule "c 226:* rmw" \
-  --device-cgroup-rule "c 253:* rmw" \
-  --health-interval 5s \
-  --health-timeout 4s \
-  --health-start-period 10s torizon/weston:stable-rc
