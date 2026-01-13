@@ -66,15 +66,6 @@ build-graphics-tests-am69:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM69_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base-am69]
 
-build-benchmark-am69:
-  extends: .build-am69-template
-  variables:
-    BASE_IMAGE_NAME: wayland-base-am69
-    IMAGE_NAME: benchmark-am69
-    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
-  needs: [build-wayland-base-am69]
-
 build-weston-touch-calibrator-am69:
   extends: .build-am69-template
   variables:

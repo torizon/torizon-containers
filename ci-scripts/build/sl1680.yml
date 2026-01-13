@@ -74,15 +74,6 @@ build-graphics-tests-sl1680:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base-sl1680]
 
-build-benchmark-sl1680:
-  extends: .build-sl1680-template
-  variables:
-    BASE_IMAGE_NAME: wayland-base-sl1680
-    IMAGE_NAME: benchmark-sl1680
-    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
-  needs: [build-wayland-base-sl1680]
-
 build-weston-touch-calibrator-sl1680:
   extends: .build-sl1680-template
   variables:

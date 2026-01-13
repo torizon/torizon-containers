@@ -67,15 +67,6 @@ build-graphics-tests-am62p:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62P_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: [build-wayland-base-am62p]
 
-build-benchmark-am62p:
-  extends: .build-am62p-template
-  variables:
-    BASE_IMAGE_NAME: wayland-base-am62p
-    IMAGE_NAME: benchmark-am62p
-    DOCKERFILE_FOLDER: "${BENCHMARK_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${BENCHMARK_FOLDER}/"
-  needs: [build-wayland-base-am62p]
-
 build-weston-touch-calibrator-am62p:
   extends: .build-am62p-template
   variables:

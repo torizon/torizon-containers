@@ -40,7 +40,6 @@ variables:
   CHROMIUM_TESTS_FOLDER: "chromium-tests"
   CROSS_TOOLCHAIN_FOLDER: "cross-toolchain"
   DOTNET_FOLDER: "dotnet"
-  BENCHMARK_FOLDER: "benchmark"
   SSH_FOLDER: "ssh"
   BASE_FOLDER: "base"
   WAYLAND_BASE_FOLDER: "wayland-base"
