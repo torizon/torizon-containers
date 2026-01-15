@@ -12,6 +12,7 @@ docker run -d \
   --device-cgroup-rule "c 199:0 rmw" $REGISTRY/torizon/weston-imx8:stable-rc --developer --tty=/dev/tty7
 
 docker run -d \
+  --user torizon \
   --device-cgroup-rule "c 199:* rmw" \
   --volume "/tmp:/tmp" \
   --volume "/dev/galcore:/dev/galcore" $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc /opt/b2qt-demolauncher/qtlauncher
