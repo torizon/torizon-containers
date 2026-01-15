@@ -22,6 +22,7 @@ services:
     depends_on:
       weston:
         condition: service_healthy
+    user: torizon
     device_cgroup_rules:
       - 'c 199:* rmw'
     image: $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc
