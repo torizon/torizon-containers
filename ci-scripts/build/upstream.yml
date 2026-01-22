@@ -312,6 +312,27 @@ build-arm-toolchain-ssh:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
   needs: ["build-arm-toolchain"]
 
+build-amd64-toolchain:
+  extends: .build-upstream-template
+  variables:
+    BASE_IMAGE_NAME: debian
+    CROSS_COMPILER: x86_64-linux-gnu
+    CROSS_TARGET_ARCH: amd64
+    IMAGE_NAME: cross-toolchain-amd64
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+  needs: [build-base]
+
+build-amd64-toolchain-ssh:
+  extends: .build-upstream-template
+  variables:
+    IMAGE_NAME: cross-toolchain-ssh-arm64
+    CROSS_TARGET_ARCH: arm64
+    BASE_IMAGE_NAME: cross-toolchain-arm64
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+  needs: [build-amd64-toolchain]
+
 build-arm64-toolchain:
   extends: .build-upstream-template
   variables:

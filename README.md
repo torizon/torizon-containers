@@ -1,7 +1,7 @@
 # Torizon Containers
 
 This repository contains container images used by or with
-[Torizon OS](https://www.torizon.io), the Easy-to-use Industrial Linux Software 
+[Torizon OS](https://www.torizon.io), the Easy-to-use Industrial Linux Software
 Platform.
 
 This repository provides images that need to be maintained over time with or
@@ -87,7 +87,7 @@ included in the image to `support-files`, so multiple builds can use the same
 Dockerfile defition, though installing different packages because of the
 different package feeds.
 
-To build an image, one can use the 
+To build an image, one can use the
 [phemmer trick](https://github.com/moby/moby/issues/6094#issuecomment-54556720)
 to resolve the symlinks with tar and pipe everything as the build context to
 `docker build`.
@@ -208,6 +208,7 @@ following definitions:
 |---------------------|--------------------------------------|
 | ARMv7 with VFP3-D16 | cross-toolchain-arm                  |
 | ARMv8-A             | cross-toolchain-arm64{-imx8, -am62}  |
+| x86_64              | cross-toolchain-amd64                |
 
 In the context of the architecture for all Container Images, we use the
 following definitions:
