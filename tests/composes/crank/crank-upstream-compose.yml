@@ -1,6 +1,6 @@
 services:
   crank-weston:
-    image: '$REGISTRY/torizon/crank-weston-upstream:stable-rc'
+    image: '$REGISTRY/torizon/crank-weston:stable-rc'
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG
