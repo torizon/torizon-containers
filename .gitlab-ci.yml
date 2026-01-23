@@ -13,8 +13,6 @@ include:
   - "/ci-scripts/generate/generate.yml"
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
-image: docker:28.4.0
-
 variables:
   DEBIAN_POINT_RELEASE: "12.12-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
@@ -26,6 +24,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
 
+  DOCKER_VERSION: "28.4.0"
   PLATFORM_SPECIFIC_FOLDER: "platform-specific"
   SUPPORT_FILES_FOLDER: "support-files"
   IMX8_FOLDER: "imx8"
@@ -67,8 +66,10 @@ variables:
   COG_FOLDER: "cog"
   CRANK_WESTON_FOLDER: "crank-weston"
 
+image: docker:$DOCKER_VERSION
+
 services:
-  - name: docker:dind
+  - name: docker:$DOCKER_VERSION-dind
 
 .include-regctl:
   before_script:
