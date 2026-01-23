@@ -156,8 +156,8 @@ build-crank-weston-am62:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston-am62
     IMAGE_NAME: crank-weston-am62
-    DOCKERFILE_FOLDER: "${CRANK_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_FOLDER}/"
+    DOCKERFILE_FOLDER: "${CRANK_WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_WESTON_FOLDER}/"
   needs: [build-weston-am62]
 
 .build-dotnet-am62-template:

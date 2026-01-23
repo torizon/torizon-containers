@@ -156,10 +156,10 @@ build-crank-weston-upstream:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: weston-upstream
-    IMAGE_NAME: crank-weston-upstream
-    DOCKERFILE_FOLDER: "${CRANK_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_FOLDER}/"
+    BASE_IMAGE_NAME: weston
+    IMAGE_NAME: crank-weston
+    DOCKERFILE_FOLDER: "${CRANK_WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_WESTON_FOLDER}/"
   needs: [build-weston]
 
 .build-dotnet-upstream-template:
