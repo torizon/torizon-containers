@@ -6,7 +6,7 @@ docker run -d \
   --volume "/run/udev/:/run/udev/" \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/crank-weston-upstream:stable-rc --developer
+  --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/crank-weston:stable-rc --developer
 
 docker run -d \
   --name crank \
