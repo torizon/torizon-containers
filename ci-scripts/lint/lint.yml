@@ -3,7 +3,9 @@ default:
     - saas-linux-small-amd64
 
 .shellcheck:
-  image: koalaman/shellcheck-alpine:latest
+  image:
+    name: koalaman/shellcheck-alpine:latest
+    pull_policy: always
   script: find . -type f \( -iname "*.sh" -o -iname "*.bash" -o -iname "*.bats" \) | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
   rules:
     - when: always
@@ -24,7 +26,9 @@ shell-format:
     - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
 
 check-line-breaks:
-  image: alpine:latest
+  image:
+    name: alpine:latest
+    pull_policy: always
   before_script:
     - apk update
     - apk add file
@@ -33,7 +37,9 @@ check-line-breaks:
     - when: always
 
 lint-dependencies:
-  image: alpine:latest
+  image:
+    name: alpine:latest
+    pull_policy: always
   rules:
     - when: always
   before_script:
@@ -51,7 +57,9 @@ lint-dependencies:
       fi
 
 lint-templates:
-  image: alpine:latest
+  image:
+    name: alpine:latest
+    pull_policy: always
   rules:
     - when: always
   before_script:

@@ -2,7 +2,9 @@ default:
   tags:
     - saas-linux-small-amd64
 
-image: alpine:latest
+image:
+  name: alpine:latest
+  pull_policy: always
 
 prepare:
   rules:
@@ -37,7 +39,9 @@ prepare:
       - release_notes.md
 
 release:
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  image:
+    name: registry.gitlab.com/gitlab-org/release-cli:latest
+    pull_policy: always
   before_script:
     - apk update && apk add curl
   needs:

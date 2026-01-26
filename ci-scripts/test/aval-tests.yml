@@ -417,7 +417,9 @@ e2e-test-frdm-imx93-nightly:
 
 aggregate-reports:
   stage: report
-  image: homebrew/brew
+  image:
+    name: homebrew/brew
+    pull_policy: always
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success

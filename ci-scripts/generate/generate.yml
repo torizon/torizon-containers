@@ -3,7 +3,9 @@ default:
     - saas-linux-small-amd64
 
 generate-run-from-compose:
-  image: homebrew/brew
+  image:
+    name: homebrew/brew
+    pull_policy: always
   variables:
     GIT_STRATEGY: clone
   rules:
