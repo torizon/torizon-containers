@@ -15,9 +15,15 @@ platforms = {
         "verdin-imx8mp",
         "smarc-imx8mp",
     ],
-    "am62": ["verdin-am62"],
+    "am62": [
+        "verdin-am62",
+        "sk-am62",
+    ],
     "am69": ["aquila-am69"],
-    "am62p": ["verdin-am62p"],
+    "am62p": [
+        "verdin-am62p",
+        "sk-am62p",
+    ],
     "imx95": [
         "verdin-imx95",
         "smarc-imx95",
