@@ -37,13 +37,12 @@ build-tests-container:
       -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} /cases/run-tests.sh"
       --copy-artifact /home/torizon/report.xml $CI_PROJECT_DIR/report.xml --remove-databases --delegation-config $DELEGATION_PATH
-      --before "docker kill $(docker ps -qa) || true && docker system prune --all --force" --ignore-different-secondaries-between-updates ${AVAL_EXTRA_OPTIONS}
+      --before "docker kill $(docker ps -qa) || true && docker system prune --all --force" ${AVAL_EXTRA_OPTIONS}
   allow_failure: true
   script:
     - mv $CI_PROJECT_DIR/report.xml $CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "release"
-    AVAL_EXTRA_OPTIONS: ""
   artifacts:
     when: always
     reports:
@@ -83,6 +82,7 @@ e2e-test-colibri-imx7d-emmc-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-am62dual-release:
   extends: .e2e-test-stable-template
@@ -92,6 +92,7 @@ e2e-test-verdin-am62dual-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62dual"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-aquila-am69octa-release:
   extends: .e2e-test-stable-template
@@ -101,6 +102,7 @@ e2e-test-aquila-am69octa-release:
       when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-stable-template
@@ -110,6 +112,7 @@ e2e-test-apalis-imx6q-release:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-apalis-imx8qm-release:
   extends: .e2e-test-stable-template
@@ -119,6 +122,7 @@ e2e-test-apalis-imx8qm-release:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx8qxp-release:
   extends: .e2e-test-stable-template
@@ -128,6 +132,7 @@ e2e-test-colibri-imx8qxp-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-imx8mmq-release:
   extends: .e2e-test-stable-template
@@ -137,6 +142,7 @@ e2e-test-verdin-imx8mmq-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-imx8mpq-release:
   extends: .e2e-test-stable-template
@@ -146,6 +152,7 @@ e2e-test-verdin-imx8mpq-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx7d-emmc-nightly:
   extends: .e2e-test-nightly-template
@@ -157,6 +164,7 @@ e2e-test-colibri-imx7d-emmc-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx8qxp-nightly:
   extends: .e2e-test-nightly-template
@@ -168,6 +176,7 @@ e2e-test-colibri-imx8qxp-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-am62dual-nightly:
   extends: .e2e-test-nightly-template
@@ -179,6 +188,7 @@ e2e-test-verdin-am62dual-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62dual"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-am62quad-nightly:
   extends: .e2e-test-nightly-template
@@ -190,6 +200,7 @@ e2e-test-verdin-am62quad-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62quad"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-am62pq-nightly:
   extends: .e2e-test-nightly-template
@@ -201,6 +212,7 @@ e2e-test-verdin-am62pq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62pq"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-aquila-am69octa-nightly:
   extends: .e2e-test-nightly-template
@@ -212,6 +224,7 @@ e2e-test-aquila-am69octa-nightly:
       when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-nightly-template
@@ -223,6 +236,7 @@ e2e-test-apalis-imx6q-nightly:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-apalis-imx8qm-nightly:
   extends: .e2e-test-nightly-template
@@ -234,6 +248,7 @@ e2e-test-apalis-imx8qm-nightly:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-imx8mmq-nightly:
   extends: .e2e-test-nightly-template
@@ -245,6 +260,7 @@ e2e-test-verdin-imx8mmq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-verdin-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
@@ -256,6 +272,7 @@ e2e-test-verdin-imx8mpq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-smarc-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
@@ -267,6 +284,7 @@ e2e-test-smarc-imx8mpq-nightly:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx8mpq"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-verdin-imx95h-nightly:
   extends: .e2e-test-nightly-template
@@ -278,6 +296,7 @@ e2e-test-verdin-imx95h-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-smarc-imx95h-nightly:
   extends: .e2e-test-nightly-template
@@ -289,6 +308,7 @@ e2e-test-smarc-imx95h-nightly:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-colibri-imx6dl-release:
   extends: .e2e-test-stable-template
@@ -298,6 +318,7 @@ e2e-test-colibri-imx6dl-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx6dl-nightly:
   extends: .e2e-test-nightly-template
@@ -309,6 +330,7 @@ e2e-test-colibri-imx6dl-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx6ull-emmc-release:
   extends: .e2e-test-stable-template
@@ -318,6 +340,7 @@ e2e-test-colibri-imx6ull-emmc-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx6ull-emmc-nightly:
   extends: .e2e-test-nightly-template
@@ -329,6 +352,7 @@ e2e-test-colibri-imx6ull-emmc-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-common-template
@@ -341,6 +365,7 @@ e2e-test-sk-am62-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-sk-am62l-nightly:
   extends: .e2e-test-nightly-common-template
@@ -353,6 +378,7 @@ e2e-test-sk-am62l-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62l"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-common-template
@@ -365,6 +391,7 @@ e2e-test-sk-am62p-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62p"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-x86-nightly:
   extends: .e2e-test-nightly-common-template
@@ -377,6 +404,7 @@ e2e-test-x86-nightly:
       when: on_success
   variables:
     SOC_UDT: "x86"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-astra-sl1680-nightly:
   extends: .e2e-test-nightly-common-template
@@ -389,6 +417,7 @@ e2e-test-astra-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "astra-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-luna-sl1680-nightly:
   extends: .e2e-test-nightly-common-template
@@ -401,6 +430,7 @@ e2e-test-luna-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "luna-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-frdm-imx93-nightly:
   extends: .e2e-test-nightly-common-template
