@@ -18,7 +18,7 @@ platforms = {
     "am62": [
         "verdin-am62",
         "sk-am62",
-        "am62l-evm",
+        "sk-am62l",
     ],
     "am69": ["aquila-am69"],
     "am62p": [
