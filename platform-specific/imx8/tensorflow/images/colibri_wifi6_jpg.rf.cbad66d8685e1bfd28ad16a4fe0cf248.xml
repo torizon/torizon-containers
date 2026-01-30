@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>colibri_wifi6_jpg.rf.cbad66d8685e1bfd28ad16a4fe0cf248.jpg</filename>
+	<path>/home/lucas_bernardes/Documents/computer_vision/labelImg/images/colibri_wifi6_jpg.rf.cbad66d8685e1bfd28ad16a4fe0cf248.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>som</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>98</xmin>
+			<ymin>137</ymin>
+			<xmax>478</xmax>
+			<ymax>396</ymax>
+		</bndbox>
+	</object>
+</annotation>

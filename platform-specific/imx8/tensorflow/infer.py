@@ -30,14 +30,13 @@ def preprocess(path, size, dtype):
 
 def main():
     root = os.getenv("APP_ROOT", "/app")
-    data_dir = os.getenv("DATA_DIR", f"{root}/cats_and_dogs_filtered/validation")
-    model = os.getenv("MODEL", f"{root}/mobilenet_v1_1.0_224_quant.tflite")
-    labels_fn = os.getenv("LABELS", f"{root}/labels_mobilenet_quant_v1_224.txt")
+    data_dir = os.getenv("DATA_DIR", f"{root}/images/validation")
+    model = os.getenv("MODEL", f"{root}/ssd_detect_quant_only_som.tflite")
+    labels_fn = os.getenv("LABELS", f"{root}/labelmap.txt")
     limit = int(os.getenv("LIMIT", "0"))
 
-    files = sorted(glob.glob(f"{data_dir}/dogs/*.jpg")) + sorted(
-        glob.glob(f"{data_dir}/cats/*.jpg")
-    )
+    files = sorted(glob.glob(f"{data_dir}/*.jpg"))
+    
     if limit > 0:
         files = files[:limit]
     if not files:

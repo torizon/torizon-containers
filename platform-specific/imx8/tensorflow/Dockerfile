@@ -27,10 +27,20 @@ RUN python3 -m venv /app/.venv --system-site-packages
 
 RUN . /app/.venv/bin/activate && \
     pip3 install --upgrade pip && \
-    pip3 install --break-system-packages --no-cache-dir tflite-runtime
+    pip3 install --no-cache-dir tflite-runtime
 
 COPY infer.py /app/infer.py
-COPY cats_and_dogs_filtered/ /app/cats_and_dogs_filtered/
+COPY ssd_detect_quant_only_som.tflite /app
+COPY images /app/images
+
+COPY scripts/script_take_labels.sh /app
+COPY scripts/separate.py /app
+COPY scripts/train_val_test_split.py /app
+
+
+RUN bash script_take_labels.sh
+RUN python3 separate.py
+RUN python3 train_val_test_split.py
 
 RUN set -eux; \
     wget -q -O mobilenet.zip https://storage.googleapis.com/download.tensorflow.org/models/tflite/mobilenet_v1_1.0_224_quant_and_labels.zip; \

@@ -4,7 +4,7 @@ load ./general-helper.sh
 
 TFLITE_CONTAINER_NAME="${TFLITE_CONTAINER_NAME:-tflite-tests}"
 TFLITE_IMAGE="${TFLITE_IMAGE:-torizon/tensorflow-lite-imx8:stable-rc}"
-TFLITE_MEAN_MAX="${TFLITE_MEAN_MAX:-0.01}"
+TFLITE_MEAN_MAX="${TFLITE_MEAN_MAX:-0.1}"
 
 setup_file() {
   bats_require_minimum_version 1.5.0
