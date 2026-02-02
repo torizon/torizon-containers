@@ -1,56 +1,56 @@
 debian-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-base-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 wayland-base-dev-am69:
   major: 4
-  minor: 8
+  minor: 9
   patch: 0
 wayland-gtk3-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 weston-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 weston-touch-calibrator-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt5-wayland-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt5-wayland-examples-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-examples-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 qt6-wayland-tests-am69:
   major: 4
-  minor: 8
+  minor: 9
   patch: 0
 graphics-tests-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 chromium-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 cog-am69:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0

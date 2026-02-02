@@ -14,7 +14,7 @@ include:
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
 variables:
-  DEBIAN_POINT_RELEASE: "12.12-slim"
+  DEBIAN_POINT_RELEASE: "12.13-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"
 
