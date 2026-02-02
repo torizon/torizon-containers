@@ -54,3 +54,7 @@ cog-am62:
   major: 4
   minor: 14
   patch: 0
+crank-weston-am62:
+  major: 4
+  minor: 1
+  patch: 0

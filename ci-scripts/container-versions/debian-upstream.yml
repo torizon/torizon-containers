@@ -54,3 +54,7 @@ cog:
   major: 4
   minor: 14
   patch: 0
+crank-weston:
+  major: 4
+  minor: 1
+  patch: 0
