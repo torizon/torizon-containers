@@ -27,9 +27,6 @@ for arg in "$@"; do
     --browser-mode)
       chromium_mode_params="--start-maximized "
       ;;
-    --virtual-keyboard)
-      chromium_extended_params="${chromium_extended_params} --load-extension=/chrome-extensions/chrome-virtual-keyboard-master"
-      ;;
     --dry-run)
       DRY_RUN=true
       ;;

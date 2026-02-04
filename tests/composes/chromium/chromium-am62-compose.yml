@@ -16,7 +16,7 @@ services:
     command: '--developer'
 
   chromium:
-    command: --virtual-keyboard https://www.toradex.com
+    command: https://www.toradex.com
     depends_on:
       weston:
         condition: service_healthy

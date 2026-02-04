@@ -15,7 +15,7 @@ services:
     command: '--developer'
 
   chromium-tests:
-    command: --virtual-keyboard http://info.cern.ch/hypertext/WWW/TheProject.html
+    command: http://info.cern.ch/hypertext/WWW/TheProject.html
     depends_on:
       weston:
         condition: service_healthy

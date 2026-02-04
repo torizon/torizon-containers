@@ -13,8 +13,6 @@ RUN apt-get -y update && \
     apt-get clean && apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-ADD chrome-virtual-keyboard.tar.gz /chrome-extensions
-
 COPY start-chromium.sh /usr/bin/start-browser
 
 USER torizon

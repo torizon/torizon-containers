@@ -31,11 +31,9 @@ run_test "Window Mode" "--dry-run --window-mode https://example.com" "chromium -
 
 run_test "Browser Mode" "--dry-run --browser-mode https://example.com" "chromium --allow-insecure-localhost --disable-notifications --use-gl=egl --in-process-gpu --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --no-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland --start-maximized https://example.com"
 
-run_test "Virtual Keyboard" "--dry-run --virtual-keyboard https://example.com" "chromium --allow-insecure-localhost --disable-notifications --use-gl=egl --in-process-gpu --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --no-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland --load-extension=/chrome-extensions/chrome-virtual-keyboard-master --kiosk https://example.com"
-
 run_test "Custom Param" "--dry-run --custom-param https://example.com" "chromium --allow-insecure-localhost --disable-notifications --use-gl=egl --in-process-gpu --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --no-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland --custom-param --kiosk https://example.com"
 
-run_test "Multiple Options" "--dry-run --window-mode --virtual-keyboard --custom-param https://example.com" "chromium --allow-insecure-localhost --disable-notifications --use-gl=egl --in-process-gpu --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --no-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland --load-extension=/chrome-extensions/chrome-virtual-keyboard-master --custom-param --start-maximized --app=https://example.com"
+run_test "Multiple Options" "--dry-run --window-mode --custom-param https://example.com" "chromium --allow-insecure-localhost --disable-notifications --use-gl=egl --in-process-gpu --check-for-update-interval=315360000 --disable-seccomp-filter-sandbox --no-sandbox --enable-features=UseOzonePlatform --ozone-platform=wayland --custom-param --start-maximized --app=https://example.com"
 
 if [ $FAILED_TESTS -gt 0 ]; then
   echo "Test suite failed: $FAILED_TESTS test(s) failed."
