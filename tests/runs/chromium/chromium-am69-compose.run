@@ -14,4 +14,4 @@ docker run -d \
   --volume "/dev/dri:/dev/dri" \
   --device-cgroup-rule "c 226:* rmw" \
   --security-opt "seccomp:unconfined" \
-  --shm-size 256mb $REGISTRY/torizon/chromium-am69:stable-rc --virtual-keyboard https://www.toradex.com
+  --shm-size 256mb $REGISTRY/torizon/chromium-am69:stable-rc https://www.toradex.com

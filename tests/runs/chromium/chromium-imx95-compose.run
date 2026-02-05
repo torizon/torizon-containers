@@ -23,4 +23,4 @@ docker run -d \
   --device-cgroup-rule "c 226:* rmw" \
   --device-cgroup-rule "c 235:* rmw" \
   --security-opt "seccomp:unconfined" \
-  --shm-size 256mb $REGISTRY/torizon/chromium-imx95:stable-rc --virtual-keyboard https://www.toradex.com
+  --shm-size 256mb $REGISTRY/torizon/chromium-imx95:stable-rc https://www.toradex.com
