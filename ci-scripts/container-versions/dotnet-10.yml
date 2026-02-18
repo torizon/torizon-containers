@@ -95,6 +95,28 @@ dotnet10-gtk3-am62p:
   minor: 4
   patch: 0
 
+# am67a
+dotnet10-am67a: &dotnet-am67a
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+aspdotnet10-am67a:
+  <<: *dotnet-am67a
+  minor: 0
+  patch: 0
+dotnet10-wayland-am67a:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 4
+  minor: 0
+  patch: 0
+dotnet10-gtk3-am67a:
+  major: 4
+  minor: 0
+  patch: 0
+
 # am69
 dotnet10-am69: &dotnet-am69
   release: *dotnet-release
