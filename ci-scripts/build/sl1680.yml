@@ -308,3 +308,13 @@ build-gtk3-tests-sl1680:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: [build-wayland-base-dev-sl1680, build-wayland-gtk3-sl1680]
+
+build-tensorflow-lite-sl1680:
+  extends: .build-sl1680-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-sl1680
+    IMAGE_NAME: tensorflow-lite-sl1680
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TENSORFLOW_FOLDER}/"
+  needs: [build-base-sl1680]
