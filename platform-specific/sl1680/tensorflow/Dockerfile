@@ -21,6 +21,7 @@ RUN apt-get update && \
       tflite-vx-delegate \
       synap-runtime \
       synap-prebuilts-libs \
+      synap-models \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /app/.venv --system-site-packages
