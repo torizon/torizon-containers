@@ -40,7 +40,7 @@ RUN apt-get -y update && apt-get install -y \
     mesa-common-dev \
     mesa-opencl-icd \
     mesa-utils-extra \
-    ti-img-rogue-umlibs-j784s4 \
+    ti-img-rogue-umlibs-am69 \
     && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
 
 # Make sure the user can access DRM and video devices
