@@ -24,28 +24,20 @@ RUN apt-get update && \
       synap-models \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /app/.venv --system-site-packages
-
-RUN . /app/.venv/bin/activate && \
+RUN python3 -m venv /app/.venv --system-site-packages && \
+    . /app/.venv/bin/activate && \
     pip3 install --upgrade pip && \
     pip3 install --no-cache-dir tflite-runtime
 
-COPY infer.py /app/infer.py
-COPY ssd_detect_quant_only_som.tflite /app
-COPY images /app/images
+COPY infer.py \
+     ssd_detect_quant_only_som.tflite \
+     /app/
+COPY images/ /app/images/
+COPY scripts/ /app/
 
-COPY scripts/script_take_labels.sh /app
-COPY scripts/separate.py /app
-COPY scripts/train_val_test_split.py /app
-
-RUN mkdir /app/images/test; mkdir /app/images/train; mkdir /app/images/validation; 
-RUN bash script_take_labels.sh
-RUN python3 separate.py
-RUN python3 train_val_test_split.py
-
-RUN set -eux; \
-    wget -q -O mobilenet.zip https://storage.googleapis.com/download.tensorflow.org/models/tflite/mobilenet_v1_1.0_224_quant_and_labels.zip; \
-    unzip -q mobilenet.zip -d /app; \
-    rm mobilenet.zip
+RUN mkdir -p /app/images/test /app/images/train /app/images/validation && \
+    bash script_take_labels.sh && \
+    python3 separate.py && \
+    python3 train_val_test_split.py
 
 CMD ["/bin/sh", "-lc", ". /app/.venv/bin/activate && python3 /app/infer.py"]
