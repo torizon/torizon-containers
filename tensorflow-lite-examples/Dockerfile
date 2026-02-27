@@ -16,12 +16,6 @@ RUN apt-get update && \
       python3 python3-venv python3-pip \
       python3-numpy python3-pil \
       wget unzip ca-certificates \
-      libtensorflow-lite2.15.0-1 \
-      tim-vx \
-      tflite-vx-delegate \
-      synap-runtime \
-      synap-prebuilts-libs \
-      synap-models \
     && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /app/.venv --system-site-packages && \

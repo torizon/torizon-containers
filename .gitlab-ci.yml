@@ -67,7 +67,9 @@ variables:
   CHROMIUM_FOLDER: "chromium"
   COG_FOLDER: "cog"
   CRANK_WESTON_FOLDER: "crank-weston"
-  TENSORFLOW_FOLDER: "tensorflow"
+  TENSORFLOW_LITE_FOLDER: "tensorflow-lite"
+  TENSORFLOW_LITE_DEV_FOLDER: "tensorflow-lite-dev"
+  TENSORFLOW_LITE_EXAMPLES_FOLDER: "tensorflow-lite-examples"
 
 image: docker:$DOCKER_VERSION
 

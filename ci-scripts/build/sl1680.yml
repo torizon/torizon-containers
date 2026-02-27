@@ -315,6 +315,26 @@ build-tensorflow-lite-sl1680:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-sl1680
     IMAGE_NAME: tensorflow-lite-sl1680
-    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TENSORFLOW_FOLDER}/"
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
   needs: [build-base-sl1680]
+
+build-tensorflow-lite-dev-sl1680:
+  extends: .build-sl1680-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-sl1680
+    IMAGE_NAME: tensorflow-lite-dev-sl1680
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${SL1680_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+  needs: [build-tensorflow-lite-sl1680]
+
+build-tensorflow-lite-examples-sl1680:
+  extends: .build-sl1680-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-sl1680
+    IMAGE_NAME: tensorflow-lite-examples-sl1680
+    DOCKERFILE_FOLDER: "${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+  needs: [build-tensorflow-lite-sl1680]
