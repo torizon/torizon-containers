@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load ./lvgl-pdf-reader-helper.sh
+load ./pdf-reader-helper.sh
 load ./kernel-helper.sh
 load ./general-helper.sh
 

@@ -8,7 +8,7 @@ setup_pdf-reader() {
   if [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/pdf-reader/pdf-reader-imx8-compose.run" "pdf-reader-imx8" "pdf-reader")
   else
-    DOCKER_RUN=$(read-docker-run.sh "/runs/pdf-reader/pdf-reader-imx8-compose.run" "pdf-reader-imx8" "pdf-reader")
+    return 1
   fi
 
   # Add -it flag to match the original behavior
