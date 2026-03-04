@@ -28,6 +28,7 @@ platforms = {
     "imx95": [
         "verdin-imx95",
         "smarc-imx95",
+        "aquila-imx95",
     ],
     "sl1680": [
         "astra-sl1680",
