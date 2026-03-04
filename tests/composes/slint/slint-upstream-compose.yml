@@ -1,0 +1,18 @@
+# description: launches the slint demo application
+services:
+  slint:
+    image: ghcr.io/slint-ui/slint/torizon-demos-armhf:latest
+    container_name: slint
+    
+    # Map necessary hardware paths
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp
+      - /run/udev:/run/udev
+
+    # Grant specific permissions to hardware devices (GPU, Screen, Input)
+    device_cgroup_rules:
+      - 'c 226:* rmw' # DRM/KMS (Display & Etnaviv GPU)
+      - 'c 13:* rmw'  # Input devices
+      - 'c 4:* rmw'   # TTY/Console
+      - 'c 29:* rmw'  # Framebuffer
