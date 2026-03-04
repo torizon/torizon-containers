@@ -2,7 +2,7 @@
 services:
   pdf-reader:
     image: '$REGISTRY/siliconsignals/pdf-reader-demo:1.0.0'
-    container_name: pdf-reader
+    container_name: pdf-reader-imx8
     #This demo requires access to DRM, framebuffer, and Linux input devices in order to:
     #Enable hardware-accelerated rendering on i.MX8 GPUs
     #Auto-detect touchscreens and input devices via /dev/input
