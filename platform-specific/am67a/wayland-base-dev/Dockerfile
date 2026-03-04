@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2025 Toradex AG
+# Copyright (c) 2019-2026 Toradex AG
 # SPDX-License-Identifier: MIT
 
 ARG BASE_IMAGE_NAME

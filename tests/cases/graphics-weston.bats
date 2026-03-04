@@ -12,6 +12,10 @@ DOCKER_RUN_AM62P="docker container run -d -it --privileged \
             --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
             $REGISTRY/torizon/graphics-tests-am62p:stable-rc"
 
+DOCKER_RUN_AM67A="docker container run -d -it --privileged \
+            --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
+            $REGISTRY/torizon/graphics-tests-am67a:stable-rc"
+
 DOCKER_RUN_AM69="docker container run -d -it --privileged \
             --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
             $REGISTRY/torizon/graphics-tests-am69:stable-rc"
@@ -43,6 +47,8 @@ setup_file() {
     DOCKER_RUN=$DOCKER_RUN_AM62P
   elif [[ "$PLATFORM_FILTER" == *am62* ]]; then
     DOCKER_RUN=$DOCKER_RUN_AM62
+  elif [[ "$PLATFORM_FILTER" == *am67a* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_AM67A
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$DOCKER_RUN_IMX8
   elif [[ "$PLATFORM_FILTER" == *imx95* ]]; then
@@ -68,7 +74,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "Weston Simple EGL runs" {
   bats_require_minimum_version 1.5.0
 
@@ -78,7 +84,7 @@ teardown_file() {
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "Weston Terminal runs" {
   bats_require_minimum_version 1.5.0
 
@@ -86,7 +92,7 @@ teardown_file() {
   echo "Ran for 5 seconds without crashing, terminated by timeout."
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "GLMark2 has sufficient score" {
   if [[ "$SOC_UDT" =~ imx7 ]]; then
     skip "imx7 doesn't have a GPU"
@@ -107,7 +113,7 @@ teardown_file() {
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "XTerm with XWayland runs" {
   bats_require_minimum_version 1.5.0
 

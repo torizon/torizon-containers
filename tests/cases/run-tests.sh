@@ -12,6 +12,8 @@ elif [[ "$SOC_UDT" == *am69* ]]; then
   PLATFORM_FILTER="platform:am69"
 elif [[ "$SOC_UDT" == *sl1680* ]]; then
   PLATFORM_FILTER="platform:sl1680"
+elif [[ "$SOC_UDT" == *beagley-ai* ]]; then
+  PLATFORM_FILTER="platform:am67a"
 else
   PLATFORM_FILTER="platform:upstream"
 fi

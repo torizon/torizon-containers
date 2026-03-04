@@ -17,6 +17,13 @@ DOCKER_RUN_AM62P="docker container run -d -it \
     --device-cgroup-rule='c 226:* rmw' \
     $REGISTRY/torizon/gtk3-tests-am62p:stable-rc bash"
 
+DOCKER_RUN_AM67A="docker container run -d -it \
+    --name=gtk3-tests -v /dev:/dev -v /tmp:/tmp \
+    --device-cgroup-rule='c 4:* rmw'  \
+    --device-cgroup-rule='c 13:* rmw' \
+    --device-cgroup-rule='c 226:* rmw' \
+    $REGISTRY/torizon/gtk3-tests-am67a:stable-rc bash"
+
 DOCKER_RUN_AM69="docker container run -d -it \
     --name=gtk3-tests -v /dev:/dev -v /tmp:/tmp \
     --device-cgroup-rule='c 4:* rmw'  \
@@ -74,6 +81,8 @@ setup_file() {
     DOCKER_RUN=$DOCKER_RUN_SL1680
   elif [[ "$PLATFORM_FILTER" == *am69* ]]; then
     DOCKER_RUN=$DOCKER_RUN_AM69
+  elif [[ "$PLATFORM_FILTER" == *am67a* ]]; then
+    DOCKER_RUN=$DOCKER_RUN_AM67A
   else
     DOCKER_RUN=$DOCKER_RUN_UPSTREAM
   fi
@@ -91,7 +100,7 @@ teardown_file() {
   teardown_weston
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "Simple GTK3 application runs" {
   bats_require_minimum_version 1.5.0
 
@@ -104,7 +113,7 @@ teardown_file() {
   echo "Ran for 10 seconds without crashing, terminated by timeout."
 }
 
-# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69
+# bats test_tags=platform:imx8, platform:sl1680, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "gtk3-icon-browser runs" {
   bats_require_minimum_version 1.5.0
 
