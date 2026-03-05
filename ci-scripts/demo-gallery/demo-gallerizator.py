@@ -20,7 +20,12 @@ platforms = {
         "sk-am62",
         "sk-am62l",
     ],
-    "am69": ["aquila-am69"],
+    "am67a": [
+        "beagley-ai",
+    ],
+    "am69": [
+        "aquila-am69",
+    ],
     "am62p": [
         "verdin-am62p",
         "sk-am62p",
@@ -133,6 +138,7 @@ def main(composes_dir):
         "imx95": ["chromium-tests"],
         "am62p": ["chromium-tests"],
         "sl1680": ["chromium-tests"],
+        "am67a": ["chromium-tests"],
     }
 
     # For each platform
