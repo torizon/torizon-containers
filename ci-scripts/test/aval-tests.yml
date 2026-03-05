@@ -62,6 +62,14 @@ build-tests-container:
   variables:
     DELEGATION_PATH: "/aval/delegation_config.toml"
 
+.e2e-test-stable-common-template:
+  extends: .e2e-test-template
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+  variables:
+    DELEGATION_PATH: "/aval/delegation_config_common.toml"
+
 .e2e-test-nightly-template:
   extends: .e2e-test-template
   variables:
@@ -448,7 +456,7 @@ e2e-test-sk-am62-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-sk-am62-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: sk-am62
   allow_failure: true
   rules:
@@ -474,7 +482,7 @@ e2e-test-sk-am62l-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-sk-am62l-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: sk-am62l
   allow_failure: true
   rules:
@@ -500,7 +508,7 @@ e2e-test-sk-am62p-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-sk-am62p-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: sk-am62p
   allow_failure: true
   rules:
@@ -526,7 +534,7 @@ e2e-test-x86-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-x86-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: x86
   allow_failure: true
   rules:
@@ -552,7 +560,7 @@ e2e-test-astra-sl1680-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-astra-sl1680-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: astra-sl1680
   allow_failure: true
   rules:
@@ -578,7 +586,7 @@ e2e-test-luna-sl1680-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-luna-sl1680-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: luna-sl1680
   allow_failure: true
   rules:
@@ -604,7 +612,7 @@ e2e-test-frdm-imx93-nightly:
     AVAL_EXTRA_OPTIONS: "--do-not-update"
 
 e2e-test-frdm-imx93-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: frdm-imx93
   allow_failure: true
   rules:
@@ -630,7 +638,7 @@ e2e-test-beagley-ai-nightly:
     AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-beagley-ai-release:
-  extends: .e2e-test-stable-template
+  extends: .e2e-test-stable-common-template
   resource_group: beagley-ai
   allow_failure: true
   rules:
