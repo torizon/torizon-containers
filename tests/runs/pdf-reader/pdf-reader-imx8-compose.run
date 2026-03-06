@@ -1,5 +1,5 @@
 docker run -d \
-  --name pdf-reader \
+  --name pdf-reader-imx8 \
   --privileged \
   --device "/dev/dri:/dev/dri" \
   --device "/dev/fb0:/dev/fb0" \
