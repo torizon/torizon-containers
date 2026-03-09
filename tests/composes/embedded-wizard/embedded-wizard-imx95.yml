@@ -1,0 +1,46 @@
+# description: launches the Embedded-Wizard demo application
+services:
+  ew-demo:
+    image: embeddedwizard/ew-demo:ewdemo-verdin_imx95
+    volumes:
+    - source: /tmp
+      target: /tmp
+      type: bind
+    - source: /dev
+      target: /dev
+      type: bind
+    device_cgroup_rules:
+    - c 4:* rmw
+    - c 10:* rmw
+    - c 13:* rmw
+    - c 199:* rmw
+    - c 226:* rmw
+    - c 253:* rmw
+    depends_on:
+    - weston
+    restart: always
+
+  weston:
+    image: $REGISTRY/torizon/weston-imx95:stable-rc
+    volumes:
+    - source: /tmp
+      target: /tmp
+      type: bind
+    - source: /dev
+      target: /dev
+      type: bind
+    - source: /run/udev
+      target: /run/udev
+      type: bind
+    environment:
+    - ACCEPT_FSL_EULA=1
+    device_cgroup_rules:
+    - c 4:* rmw
+    - c 10:* rmw
+    - c 13:* rmw
+    - c 199:* rmw
+    - c 226:* rmw
+    - c 253:* rmw
+    cap_add:
+    - CAP_SYS_TTY_CONFIG
+    network_mode: host
