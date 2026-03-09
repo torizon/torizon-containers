@@ -1,45 +1,35 @@
 # description: launches the Embedded-Wizard demo application
 services:
   ew-demo:
-    restart: always
-    device_cgroup_rules:
-    - c 4:0 rmw
-    - c 4:7 rmw
-    - c 13:* rmw
-    - c 199:* rmw
-    - c 226:* rmw
-    volumes:
-    - target: /tmp
-      source: /tmp
-      type: bind
-    - target: /dev
-      source: /dev
-      type: bind
     image: embeddedwizard/ew-demo:ewdemo-verdin_am62p
+    device_cgroup_rules:
+      - 'c 4:0 rmw'
+      - 'c 4:7 rmw'
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
     depends_on:
-    - weston
+      weston:
+        condition: service_healthy
 
   weston:
-    cap_add:
-    - CAP_SYS_TTY_CONFIG
-    volumes:
-    - target: /tmp
-      source: /tmp
-      type: bind
-    - target: /dev
-      source: /dev
-      type: bind
-    - target: /run/udev
-      source: /run/udev
-      type: bind
-    device_cgroup_rules:
-    - c 4:0 rmw
-    - c 4:1 rmw
-    - c 4:7 rmw
-    - c 13:* rmw
-    - c 199:* rmw
-    - c 226:* rmw
-    network_mode: host
-    environment:
-    - ACCEPT_FSL_EULA=1
     image: $REGISTRY/torizon/weston-am62p:stable-rc
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev:/run/udev'
+    device_cgroup_rules:
+      - 'c 4:0 rmw'
+      - 'c 4:1 rmw'
+      - 'c 4:7 rmw'
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      - 'c 226:* rmw'
+    environment:
+      - ACCEPT_FSL_EULA=1
