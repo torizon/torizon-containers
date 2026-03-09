@@ -1,0 +1,28 @@
+# description: launches a LVGL PDF Reader
+services:
+  pdf-reader:
+    image: '$REGISTRY/siliconsignals/pdf-reader-demo:1.0.0'
+    container_name: pdf-reader-am62
+    # This demo requires access to DRM, Wayland, and Linux input devices to:
+    # - Enable hardware-accelerated rendering on TI AM62 (PowerVR AXE GPU)
+    # - Auto-detect touchscreens and input devices via /dev/input
+    # - Support kiosk-style, compositor-less deployments
+    # Privileged mode is required for input device scanning (/dev/input)
+    privileged: true
+    devices:
+      # Direct Rendering Manager for GPU access
+      - /dev/dri:/dev/dri
+      # AM62 requires DMA heaps for graphics memory allocation
+      - /dev/dma_heap:/dev/dma_heap
+      # PowerVR sync driver used by TI SDKs
+      - /dev/pvr_sync:/dev/pvr_sync
+      # Framebuffer fallback
+      - /dev/fb0:/dev/fb0
+    volumes:
+      - /dev:/dev # Mount all devices so we can scan /dev/input
+      - /tmp:/tmp
+      - /run/udev:/run/udev
+    environment:
+      - WAYLAND_DISPLAY=wayland-0
+      - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
+    restart: unless-stopped
