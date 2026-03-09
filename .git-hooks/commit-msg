@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# This script configures the git hooks for the
+# commit message for torizon-containers project
+
+# This flag indicates if a commit should be rejected
+COMMIT_REJECTED=0
+
+# The commit msg file is the 1st arg for this hook checking
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Matches a 'abcd: efgh: header description' line
+# Multiple tags separated by colon+space (: ) followed by a header are allowed
+REGEX_COMMIT_HEADER='^([a-z0-9-]+:\s){1,}.+$'
+
+# Matches a 'Related-to: ABCD-1234' line
+# Multiple Related-to fields are allowed, each one on its own line
+REGEX_JIRA='^\s*Related-to:\s?[A-Z]{1,4}-[0-9]{1,5}$'
+
+# Matches a 'Signed-off-by: Name Surname <name.surname@email.com>'
+# Only one signature is allowed per commit
+REGEX_SIGNATURE='^\s*Signed-off-by:\s?[A-Za-z0-9._ ]+\s<[a-zA-Z0-9._]+@[a-zA-Z0-9._]+.[a-z]+>$'
+
+# Check if commit msg header is following the pattern
+if ! head -n1 "$COMMIT_MSG_FILE" | grep -Eoq "$REGEX_COMMIT_HEADER"; then
+    echo "Info: The commit header must have one or more tags followed by a description."
+    echo "> Example (single tag): 'demo-gallery: add foo demo'"
+    echo "> Example (multiple tags): 'imx8: test: add a new test for imx8'"
+    COMMIT_REJECTED=1
+fi
+
+# Check if the commit msg contains the 'Related-to:' key
+if ! echo "$COMMIT_MSG" | grep -Eoq "$REGEX_JIRA"; then
+    echo "Info: The commit message must have one or more 'Related-to' fields with a valid Jira ticket."
+    echo "> Example: 'Related-to: ABCD-1234'"
+    COMMIT_REJECTED=1
+fi
+
+# Check if the commit msg contains the 'Signed-off-by:' key
+if [[ $(echo "$COMMIT_MSG" | grep -Eoc "$REGEX_SIGNATURE") -ne 1 ]]; then
+    echo "Info: The commit message must have only one valid 'Signed-off-by' field. "
+    echo "> Example: 'Signed-off-by: Jill <jill.valentine@email.com>"
+    COMMIT_REJECTED=1
+fi
+
+# If any of the keys are missing, print a nice error message (with colors if available)
+if [[ "$COMMIT_REJECTED" -ne 0 ]]; then
+        if command -v tput > /dev/null && [[ "$(tput colors)" -gt 2 ]]; then
+                echo "$(tput setaf 1)Error: The commit was rejected!$(tput sgr0)"
+        else
+                echo "Error: The commit was rejected!"
+        fi
+fi
+
+exit $COMMIT_REJECTED

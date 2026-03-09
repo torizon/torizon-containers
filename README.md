@@ -78,6 +78,9 @@ the [versioning metadata](ci-scripts/container-versions) tracked by the repo.
 
 ## Developing
 
+> **Important**
+> Before start developing, you should run the `git-setup.sh` script to configure the git hooks in your local environment. You can do it by simply running `./git-setup.sh` from the root folder.
+
 Users are not expected to build their own images from this repository, as it's
 fairly optimized may be too complicated to build from the CLI. Nonetheless, one
 must be able to do this when developing for `torizon-containers` itself.
@@ -158,6 +161,38 @@ Correct: `qt5-wayland: add new package dependency`
 Incorrect:`qt5-wayland: added new package dependency`
 
 There's no reason for this other than sticking to a standard and personal preference.
+
+**Required fields**
+
+We also enforce (provided that the hooks were configured) the use of some fields in the commit message:
+
+- *Related-to*: this field is used to indicate the task the commits is referencing;
+- *Signed-off-by* : each commit should be signed. You can automatically add this field by running `git commit -s`
+
+**Example**
+
+Here follows an example of a good commit
+
+```
+demo-gallery: add foo demo for bar platform
+
+This commit adds a demo that runs 'foo' into the platform 'bar'
+
+Related-to: ABCD-1234
+
+Signed-off-by: Jill Valentine <jill.valentine@email.com>
+```
+
+### GPG Signing
+This project requires that contributors sign their commits with GPG. In order
+to do that, follow [this documentation](https://docs.gitlab.com/user/project/repository/signed_commits/gpg/).
+
+We also encourage you to configure Git to automatically GPG sign your commits,
+so you can suppress the `-S` flag.
+
+```
+git config --global commit.gpgsign true
+```
 
 ### Linting
 

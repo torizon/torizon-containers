@@ -64,11 +64,16 @@ The demo-gallerizator performs the following transformations on the source compo
 1. **Platform Mapping**: You will notice that we have several compose files that are identical, and this makes sense when thinking about the `platform` concept in Torizon Containers: the same software should run on Apalis iMX8 as it does on Verdin iMX8. However, due to pragmatic decisions when implementing the Demo Gallery feature, it was decided that we would have per-board apps, which means per-board Docker composef files.
 
 To alleviate programmer fatigue, the demo-gallerization script wil maps platform families to specific hardware modules:
-   - `imx8` → `apalis-imx8`, `apalis-imx8x`, `colibri-imx8x`, `verdin-imx8mm`, `verdin-imx8mp`
-   - `am62` → `verdin-am62`
-   - `upstream` → `apalis-imx6`, `colibri-imx6`, `colibri-imx6ull`, `colibri-imx7`
+   - `imx8` → `apalis-imx8`, `colibri-imx8x`, `verdin-imx8mm`, `verdin-imx8mp`, `smarc-imx8mp`
+   - `am62` → `verdin-am62`, `sk-am62`, `sk-am62l`
+   - `am62p` → `verdin-am62p`, `sk-am62p`
+   - `am67a` → `beagley-ai`
+   - `am69` → `aquila-am69`
+   - `imx95` → `verdin-im95`, `smarc-imx95`, `aquila-imx95`
+   - `sl1680` → `astra-sl1680`, `luna-sl1680`
+   - `upstream` → `apalis-imx6`, `colibri-imx6`, `colibri-imx6ull`, `colibri-imx7`, `frdm-imx93`
 
-Thus, from a single compose file for the iMX8 platform, we get board-specific composes for Apalis, Colibri, Verdin etc:
+Thus, from a single compose file for the iMX8 platform, we get board-specific composes for Apalis, Colibri, Verdin, etc.
 
 2. **File Transformation**: Converts platform-specific compose files to hardware-specific variants:
    - Input: `chromium-imx8-compose.yml`
@@ -160,7 +165,10 @@ Create compose files for each supported platform using the naming convention:
 - `imx8` - NXP i.MX8 family SoCs
 - `imx95` - NXP i.MX95 SoCs  
 - `am62` - TI AM62 SoCs
+- `am62p` - TI AM62p SoCs
 - `am69` - TI AM69 SoCs
+- `am67a` - TI AM67a SoCs
+- `sl1680` - Synaptics SL1680 SoCs
 
 **Example compose file structure:**
 ```yaml
@@ -347,6 +355,77 @@ Use existing helper functions from [`tests/helpers/`](tests/helpers/) and [`test
 - `check_if_base_container_runs` - Verify container startup
 - `cleanup_container` - Clean container shutdown
 - `clean_kernel_logs` / `gpu_kernel_logs` - Kernel log management
+
+## Commit hygiene
+
+As explained in the [README](README.md) file in this repo, we follow a standard when commiting. The contributor must be aware that every commit should comply with the following rules:
+
+### Commit header
+
+The commit header **must** have **at least one** tag followed by the commit title. For demo gallery contributions, the tag we use is `demo-gallery`. Every tag is followed by a **collon + space** (`: `). For example:
+
+```bash
+# This is a valid commit header
+demo-gallery: add foo demo
+
+# This is also a valid commit header
+demo-gallery: imx8: add foo demo for imx8 platform
+
+# This is invalid
+add bar demo
+```
+
+### Mandatory fields in the commit message body
+
+There are two mandatory fields that **must** be in the commit message:
+
+- *Related-to*: this field links the commit with a valid Jira ticket. We need **at least one** of this field. When having multiple Jira tickets, each one must have its own *Related-to* line.
+- *Signed-off-by*: this is a signature indicating who made the commit. We need **only one** signature per commit. The signature includes the username and the e-mail of the commit's author. You can add it to your commit by using git's `-s` flag.
+
+Examples:
+
+```bash
+# This is a valid commit message
+demo-gallery: add foo demo
+
+This commit adds a new demo called foo
+
+Related-to: ABCD-1234
+Related-to: EFGH-5678
+
+Signed-off-by: Jill Valentine <jill.valentine@email.com>
+```
+
+```bash
+# This is not valid
+demo-gallery: add bar demo
+
+This commit adds a new demo called bar. It also deliberately fails
+to add a Related-to field
+
+Signed-off-by: John Forget-A-Lot <johnforget@email.com>
+```
+
+Notice that both required fields must follow a given format. *Related-to* entries that fail to follow the `ABCD-1234` pattern (uppercase letters + hyphen + numerals) will be rejected.
+
+### That's a lot to remember
+
+Don't worry, we have a git hook that will check for all these rules. **Just remember to configure them as soon as you clone this repo into your machine**. It's very simple, just run the following command from the repo's root folder:
+
+```bash
+./git-setup.sh
+```
+
+### GPG Signing
+This project requires that contributors sign their commits with GPG. In order
+to do that, follow [this documentation](https://docs.gitlab.com/user/project/repository/signed_commits/gpg/).
+
+We also encourage you to configure Git to automatically GPG sign your commits,
+so you can suppress the `-S` flag.
+
+```
+git config --global commit.gpgsign true
+```
 
 ## CI Integration
 
