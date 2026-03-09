@@ -1,0 +1,32 @@
+# description: launches the LVGL 3D demo application
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston-am62p:stable-rc'
+    container_name: weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    command: '--developer'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 10:223 rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+
+  lvgl:
+    image: 'ghcr.io/andrecostaaa/lv_demo_truck:latest'
+    container_name: lvgl
+      - XDG_RUNTIME_DIR=/tmp
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    volumes:
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+      - '/dev:/dev'
+    depends_on:
+      weston:
+        condition: service_healthy
