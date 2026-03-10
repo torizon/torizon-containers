@@ -1,0 +1,13 @@
+docker run -d \
+  --name pdf-reader-am62 \
+  --privileged \
+  --device "/dev/dri:/dev/dri" \
+  --device "/dev/dma_heap:/dev/dma_heap" \
+  --device "/dev/pvr_sync:/dev/pvr_sync" \
+  --device "/dev/fb0:/dev/fb0" \
+  --volume "/dev:/dev" \
+  --volume "/tmp:/tmp" \
+  --volume "/run/udev:/run/udev" \
+  --env "WAYLAND_DISPLAY=wayland-0" \
+  --env "XDG_RUNTIME_DIR=/tmp/1000-runtime-dir" \
+  --restart unless-stopped $REGISTRY/siliconsignals/pdf-reader-demo:1.0.0
