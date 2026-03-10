@@ -1,28 +1,28 @@
 cross-toolchain-arm:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cross-toolchain-ssh-arm:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cross-toolchain-amd64:
   major: 4
-  minor: 1
+  minor: 2
   patch: 0
 cross-toolchain-ssh-amd64:
   major: 4
-  minor: 1
+  minor: 2
   patch: 0
 cross-toolchain-arm64:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cross-toolchain-ssh-arm64:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cross-toolchain-arm64-imx8:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0

@@ -1,60 +1,60 @@
 debian:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 wayland-base:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 wayland-base-dev:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 wayland-gtk3:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 weston:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt5-wayland:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt5-wayland-examples:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt6-wayland:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt6-wayland-examples:
   major: 4
-  minor: 12
+  minor: 13
   patch: 0
 qt6-wayland-tests:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 weston-touch-calibrator:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 graphics-tests:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 chromium:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cog:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 crank-weston:
   major: 4
-  minor: 1
+  minor: 2
   patch: 0

@@ -1,60 +1,60 @@
 debian-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 wayland-base-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 wayland-base-dev-am62:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 wayland-gtk3-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 weston-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 weston-touch-calibrator-am62:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 qt5-wayland-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt5-wayland-examples-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt6-wayland-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt6-wayland-examples-am62:
   major: 4
-  minor: 12
+  minor: 13
   patch: 0
 qt6-wayland-tests-am62:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 graphics-tests-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 chromium-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 cog-am62:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 crank-weston-am62:
   major: 4
-  minor: 1
+  minor: 2
   patch: 0

@@ -1,56 +1,56 @@
 debian-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-base-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-base-dev-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 wayland-gtk3-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 weston-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 weston-touch-calibrator-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt5-wayland-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt5-wayland-examples-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-examples-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 qt6-wayland-tests-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 graphics-tests-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 chromium-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 cog-am67a:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
