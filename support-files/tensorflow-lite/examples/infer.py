@@ -9,7 +9,7 @@ import tflite_runtime.interpreter as tfl
 def find_vx_delegate():
     for p in (
         os.getenv("VX_DELEGATE", "/usr/lib/aarch64-linux-gnu/libvx_delegate.so"),
-        "/usr/lib/libvx_delegate.so"
+        "/usr/lib/libvx_delegate.so",
         "/usr/lib/libvx_delegate.so.2",
         "/usr/lib/libvx_delegate.so.1",
     ):
