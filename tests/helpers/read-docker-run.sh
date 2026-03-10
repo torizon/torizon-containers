@@ -51,6 +51,10 @@ parse_docker_run() {
     return 1
   fi
 
+  # Remove the '--name' option if it exists
+  matched_command=$(echo "$matched_command" | sed -E 's/--name[[:space:]]+[^[:space:]]+[[:space:]]*//g; s/--name=[^[:space:]]+[[:space:]]*//g')
+
+  # Substitute newlines
   matched_command=$(echo "$matched_command" | tr -d '\\\n' | tr -s ' ')
 
   if [[ -n "$container_name" ]]; then
