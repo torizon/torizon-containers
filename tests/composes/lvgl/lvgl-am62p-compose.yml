@@ -20,8 +20,6 @@ services:
   lvgl:
     image: 'ghcr.io/andrecostaaa/lv_demo_truck:latest'
     container_name: lvgl
-    environment:
-      - XDG_RUNTIME_DIR=/tmp
     device_cgroup_rules:
       - 'c 226:* rmw'
     volumes:
