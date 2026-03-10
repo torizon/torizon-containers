@@ -54,3 +54,15 @@ cog-sl1680:
   major: 4
   minor: 4
   patch: 0
+tensorflow-lite-sl1680:
+  major: 4
+  minor: 1
+  patch: 0
+tensorflow-lite-dev-sl1680:
+  major: 4
+  minor: 1
+  patch: 0
+tensorflow-lite-examples-sl1680:
+  major: 4
+  minor: 1
+  patch: 0
