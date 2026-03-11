@@ -47,9 +47,14 @@ lint-dependencies:
     - apk add yq bash
   script:
     - ERROR_FOUND=0
-    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am62.yml "-am62" || ERROR_FOUND=1
-    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx8.yml "-imx8" || ERROR_FOUND=1
-    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/upstream.yml "" || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am62.yml     "-am62"   || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am62p.yml    "-am62p"  || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am67a.yml    "-am67a"  || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/am69.yml     "-am69"   || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx8.yml     "-imx8"   || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/imx95.yml    "-imx95"  || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/sl1680.yml   "-sl1680" || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-dependencies.sh ./ci-scripts/build/upstream.yml ""        || ERROR_FOUND=1
     - |
       if [ "$ERROR_FOUND" -eq 1 ]; then
         echo "One or more linting checks failed."
@@ -67,8 +72,13 @@ lint-templates:
     - apk add yq bash
   script:
     - ERROR_FOUND=0
-    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am62.yml || ERROR_FOUND=1
-    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx8.yml || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am62.yml     || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am62p.yml    || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am67a.yml    || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/am69.yml     || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx8.yml     || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/imx95.yml    || ERROR_FOUND=1
+    - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/sl1680.yml   || ERROR_FOUND=1
     - ./ci-scripts/lint/lint-templates.sh ./ci-scripts/build/upstream.yml || ERROR_FOUND=1
     - |
       if [ "$ERROR_FOUND" -eq 1 ]; then
