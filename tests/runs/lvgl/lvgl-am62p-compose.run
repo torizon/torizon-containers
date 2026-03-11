@@ -11,7 +11,7 @@ docker run -d \
   --device-cgroup-rule "c 10:223 rmw" $REGISTRY/torizon/weston-am62p:stable-rc --developer
 
 docker run -d \
-  --name lvgl - XDG_RUNTIME_DIR=/tmp \
+  --name lvgl \
   --device-cgroup-rule "c 226:* rmw" \
   --volume "/tmp:/tmp" \
   --volume "/var/run/dbus:/var/run/dbus" \
