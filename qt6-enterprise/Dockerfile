@@ -31,9 +31,13 @@ ADD https://github.com/qt/qtdoc.git#6.8.2 /qtdoc
 
 WORKDIR /qtdoc/examples/demos
 
+ENV QT_QPA_PLATFORM=wayland
+
 RUN for example in coffee robotarm thermostat; do \
         cd $example \
         && /opt/qt-6.8.2/aarch64-linux-gnu/bin/qt-cmake . \
+            -DQT_FEATURE_xcb=OFF \
+            -DQT_QPA_DEFAULT_PLATFORM=wayland \
         && make \
         && cd .. ; \
     done
