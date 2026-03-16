@@ -1,5 +1,7 @@
 #!/bin/bash
 
+printf "\e[0Ksection_end:%s:prepare\r\e[0KDevice preparation finished\n" "$(date +%s)"
+
 if [[ "$SOC_UDT" == *am62p* ]]; then
   PLATFORM_FILTER="platform:am62p"
 elif [[ "$SOC_UDT" == *am62* ]]; then
@@ -20,5 +22,9 @@ fi
 
 export PLATFORM_FILTER
 
+printf "\e[0Ksection_start:%s:testing\r\e[0KStart Bats Testing\n" "$(date +%s)"
+
 # It's ok if bats fails, we just care about the report, hence the || true
 bats --report-formatter junit --output /home/torizon --verbose-run --show-output-of-passing-tests --trace --recursive --timing --filter-tags "$PLATFORM_FILTER" . || true
+
+printf "\e[0Ksection_end:%s:testing\r\e[0KTests finished\n" "$(date +%s)"
