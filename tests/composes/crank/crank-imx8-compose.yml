@@ -20,7 +20,7 @@ services:
 
   crank:
     image: '$REGISTRY/cranksoftware/imx8-sb_8_2-wayland-base-imx8_4:v0.1'
-    container_name: crank
+    container_name: crank-imx8
     device_cgroup_rules:
       - 'c 199:* rmw'
     stdin_open: true

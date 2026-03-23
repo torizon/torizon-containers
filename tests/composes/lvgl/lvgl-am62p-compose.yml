@@ -19,7 +19,7 @@ services:
 
   lvgl:
     image: 'ghcr.io/andrecostaaa/lv_demo_truck:latest'
-    container_name: lvgl
+    container_name: lvgl-am62p
     device_cgroup_rules:
       - 'c 226:* rmw'
     volumes:

@@ -2,6 +2,7 @@
 services:
   ew-demo:
     image: embeddedwizard/ew-demo:ewdemo-verdin_am62p
+    container_name: embedded-wizard-am62p
     device_cgroup_rules:
       - 'c 4:0 rmw'
       - 'c 4:7 rmw'

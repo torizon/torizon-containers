@@ -2,6 +2,7 @@
 services:
   ew-demo:
     image: embeddedwizard/ew-demo:ewdemo-verdin_imx8mp
+    container_name: embedded-wizard-imx8
     volumes:
       - '/dev:/dev'
       - '/tmp:/tmp'

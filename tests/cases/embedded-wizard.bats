@@ -22,7 +22,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 timeout 10s docker container exec embedded-wizard /bin/sh /usr/bin/home-automation
+  run -0 docker top embedded-wizard | grep "EmbeddedWizard-Linux-OpenGL-Wayland"
 
   run -0 gpu_kernel_logs
 }

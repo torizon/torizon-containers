@@ -17,6 +17,7 @@ services:
 
   crank:
     image: '$REGISTRY/cranksoftware/ti62-sb_8_2-wayland-base-am62_4:v0.1'
+    container_name: crank-am62
     device_cgroup_rules:
       - 'c 226:* rmw'
     volumes:

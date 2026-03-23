@@ -18,7 +18,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 timeout 10s docker container exec slint /bin/sh /usr/bin/home-automation
+  run -0 docker top slint | grep home-automation
 
   run -0 gpu_kernel_logs
 }

@@ -22,7 +22,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -124 timeout 10s docker container exec lvgl /bin/sh /usr/bin/lv_demo_truck
+  run -0 docker top lvgl | grep lv_demo_truck
 
   run -0 gpu_kernel_logs
 }
