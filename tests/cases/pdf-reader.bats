@@ -5,11 +5,11 @@ load ./kernel-helper.sh
 load ./general-helper.sh
 
 setup_file() {
-  setup_pdf-reader
+  setup_pdf_reader
 }
 
 teardown_file() {
-  teardown_pdf-reader
+  teardown_pdf_reader
 }
 
 # bats test_tags=platform:am62, platform:am62p, platform:am69, platform:imx8, platform:imx95

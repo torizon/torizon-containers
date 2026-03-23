@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-setup_pdf-reader() {
+setup_pdf_reader() {
   docker container kill pdf-reader || true
   docker container rm pdf-reader || true
 
@@ -31,6 +31,6 @@ setup_pdf-reader() {
 
 }
 
-teardown_pdf-reader() {
+teardown_pdf_reader() {
   cleanup_container pdf-reader
 }
