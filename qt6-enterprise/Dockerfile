@@ -23,6 +23,9 @@ RUN --mount=type=secret,id=qt-feed-auth,target=/etc/apt/auth.conf.d/qt-feed-auth
     && apt-get install -y --no-install-recommends \
         qt6.8.2-full-dev \
         qt6.8.2-declarative-dev \
+    && rm -rf /opt/qt-6.8.2/aarch64-linux-gnu/plugins/platforms/libqxcb* \
+              /opt/qt-6.8.2/aarch64-linux-gnu/plugins/xcbglintegrations \
+              /opt/qt-6.8.2/aarch64-linux-gnu/lib/cmake/Qt6Gui/Qt6QXcb*Plugin* \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -36,8 +39,6 @@ ENV QT_QPA_PLATFORM=wayland
 RUN for example in coffee robotarm thermostat; do \
         cd $example \
         && /opt/qt-6.8.2/aarch64-linux-gnu/bin/qt-cmake . \
-            -DQT_FEATURE_xcb=OFF \
-            -DQT_QPA_DEFAULT_PLATFORM=wayland \
         && make \
         && cd .. ; \
     done
