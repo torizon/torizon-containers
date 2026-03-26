@@ -29,6 +29,8 @@ generate-run-from-compose:
       if git diff --cached --quiet; then
         echo "No changes to commit"
       else
-        git commit -m "auto: generate compose files [ci skip]"
+        git commit \
+        -m "auto: generate compose files [ci skip]" \
+        -m "Related-to: TCCP-1280"
         git push origin HEAD:$CI_COMMIT_REF_NAME
       fi
