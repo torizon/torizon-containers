@@ -11,6 +11,12 @@ chromium_base_params="
   --no-sandbox
   --enable-features=UseOzonePlatform
   --ozone-platform=wayland
+  --enable-gpu
+  --ignore-gpu-blocklist
+  --disable-features=UseDBus
+  --disable-vulkan
+  --use-gl=angle
+  --use-angle=gl
 "
 
 chromium_mode_params="--kiosk "
