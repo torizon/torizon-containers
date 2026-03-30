@@ -10,6 +10,7 @@ docker run -d \
   --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/crank-weston-am62:stable-rc --developer
 
 docker run -d \
+  --name crank-am62 \
   --device-cgroup-rule "c 226:* rmw" \
   --volume "/tmp:/tmp" \
   --volume "/var/run/dbus:/var/run/dbus" \

@@ -1,4 +1,5 @@
 docker run -d \
+  --name embedded-wizard-imx95 \
   --volume "/dev:/dev" \
   --volume "/tmp:/tmp" \
   --device-cgroup-rule "c 4:* rmw" \

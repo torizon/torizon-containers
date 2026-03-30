@@ -13,7 +13,7 @@ docker run -d \
   --device-cgroup-rule "c 253:* rmw" $REGISTRY/torizon/crank-weston-imx8:stable-rc --tty=/dev/tty7
 
 docker run -d \
-  --name crank \
+  --name crank-imx8 \
   --device-cgroup-rule "c 199:* rmw" \
   --interactive \
   --tty \

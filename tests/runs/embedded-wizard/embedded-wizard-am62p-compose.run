@@ -1,4 +1,5 @@
 docker run -d \
+  --name embedded-wizard-am62p \
   --device-cgroup-rule "c 4:0 rmw" \
   --device-cgroup-rule "c 4:7 rmw" \
   --device-cgroup-rule "c 13:* rmw" \
