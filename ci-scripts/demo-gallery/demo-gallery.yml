@@ -1,6 +1,6 @@
 default:
   tags:
-    - saas-linux-small-amd64
+    - internal-network-access
 
 build-demo-gallery:
   image:

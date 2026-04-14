@@ -25,7 +25,7 @@ build-tests-container:
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_AMD64: "true"
   tags:
-    - saas-linux-small-amd64
+    - internal-network-access
 
 .e2e-test-template:
   stage: test
@@ -54,7 +54,7 @@ build-tests-container:
   needs:
     - build-tests-container
   tags:
-    - all
+    - internal-network-access
 
 .e2e-test-stable-template:
   extends: .e2e-test-template
@@ -698,4 +698,4 @@ aggregate-reports:
     TORIZON_X86_TEST_EXEC_KEY: "TCCP-1077"
     GIT_CLEAN_FLAGS: none
   tags:
-    - saas-linux-small-amd64
+    - internal-network-access
