@@ -1,6 +1,6 @@
 default:
   tags:
-    - internal-network-access
+    - amd64
 
 test-start-chromium:
   image: debian:$DEBIAN_POINT_RELEASE

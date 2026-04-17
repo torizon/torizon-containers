@@ -1,6 +1,6 @@
 default:
   tags:
-    - internal-network-access
+    - amd64
 
 generate-run-from-compose:
   image:
