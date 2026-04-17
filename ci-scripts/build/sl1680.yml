@@ -1,6 +1,6 @@
 default:
   tags:
-    - internal-network-access
+    - arm64
 
 .build-sl1680-template:
   retry: 2

@@ -1,6 +1,6 @@
 default:
   tags:
-    - internal-network-access
+    - arm64
 
 .build-upstream-template:
   retry: 2

@@ -1,6 +1,6 @@
 default:
   tags:
-    - internal-network-access
+    - arm64
 
 .build-imx8-template:
   retry: 2
