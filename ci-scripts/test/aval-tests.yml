@@ -43,6 +43,7 @@ build-tests-container:
   variables:
     TARGET_BUILD_TYPE: "release"
     USE_RAC: "true"
+    FF_TIMESTAMPS: true
   artifacts:
     when: always
     reports:
