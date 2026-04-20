@@ -45,6 +45,7 @@ build-tests-container:
     - mv $CI_PROJECT_DIR/report.xml $CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "release"
+    FF_TIMESTAMPS: true
   artifacts:
     when: always
     reports:
