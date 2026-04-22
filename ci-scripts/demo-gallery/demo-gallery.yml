@@ -1,6 +1,6 @@
 default:
   tags:
-    - arm64
+    - amd64
 
 build-demo-gallery:
   image:

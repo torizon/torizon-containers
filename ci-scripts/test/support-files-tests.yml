@@ -1,6 +1,6 @@
 default:
   tags:
-    - arm64
+    - amd64
 
 test-start-chromium:
   image: debian:$DEBIAN_POINT_RELEASE

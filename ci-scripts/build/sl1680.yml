@@ -5,6 +5,8 @@ default:
 .build-sl1680-template:
   retry: 2
   extends: .docker-build
+  tags:
+    - arm64
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always

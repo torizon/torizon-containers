@@ -5,6 +5,8 @@ default:
 .build-am67a-template:
   retry: 2
   extends: .docker-build
+  tags:
+    - arm64
   rules:
     - if: '$CI_WORLD_REBUILD == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
       when: always
