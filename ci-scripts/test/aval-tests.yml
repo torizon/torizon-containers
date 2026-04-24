@@ -1,7 +1,3 @@
-default:
-  tags:
-    - internal-network-access
-
 stages:
   - build
   - test
@@ -28,13 +24,9 @@ build-tests-container:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_ARM_V7: "true"
     BUILD_FOR_AMD64: "true"
-  tags:
-    - internal-network-access
 
 .e2e-test-template:
   stage: test
-  tags:
-    - internal-network-access
   image:
     name: registry.gitlab.com/toradex/rd/torizon-core/aval/aval:main
     pull_policy: always
@@ -51,6 +43,7 @@ build-tests-container:
     - mv $CI_PROJECT_DIR/report.xml $CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "release"
+    USE_RAC: "true"
   artifacts:
     when: always
     reports:
