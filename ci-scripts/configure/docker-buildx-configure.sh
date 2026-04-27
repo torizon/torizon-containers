@@ -5,7 +5,6 @@ set -x
 # Copyright (c) 2019-2025 Toradex AG
 # SPDX-License-Identifier: MIT
 
-docker login -u "$DOCKERHUB_USER" -p "$DOCKERHUB_TOKEN"
 docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
 docker info

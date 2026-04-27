@@ -2,6 +2,8 @@
 
 printf "\e[0Ksection_end:%s:prepare\r\e[0KDevice preparation finished\n" "$(date +%s)"
 
+echo "$PAID_DOCKERHUB_TOKEN" | docker login --username "$PAID_DOCKERHUB_USER" --password-stdin
+
 if [[ "$SOC_UDT" == *am62p* ]]; then
   PLATFORM_FILTER="platform:am62p"
 elif [[ "$SOC_UDT" == *am62* ]]; then
