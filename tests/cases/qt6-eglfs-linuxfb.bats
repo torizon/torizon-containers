@@ -26,6 +26,8 @@ teardown_file() {
   run timeout 10s docker container exec -e QT_QPA_PLATFORM=eglfs qt6-wayland-tests \
     kms-setup.sh "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/cube"
 
+  refute_output -e "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+
   run -0 gpu_kernel_logs
 }
 
@@ -39,6 +41,7 @@ teardown_file() {
     kms-setup.sh contextinfo
 
   assert_output --regexp "OpenGL Version: OpenGL ES [23]\.[012].*"
-
+  refute_output -e "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  
   run -0 gpu_kernel_logs
 }
