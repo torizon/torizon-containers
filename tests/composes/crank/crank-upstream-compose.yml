@@ -17,7 +17,7 @@ services:
 
   crank:
     image: '$REGISTRY/cranksoftware/imx6-sb_8_2-wayland-base_4:v0.2'
-    container_name: crank
+    container_name: crank-upstream
     stdin_open: true
     tty: true
     device_cgroup_rules:

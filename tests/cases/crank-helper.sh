@@ -10,7 +10,7 @@ setup_crank() {
   elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/crank/crank-imx8-compose.run" "crank-imx8" "crank")
   else
-    DOCKER_RUN=$(read-docker-run.sh "/runs/crank/crank-upstream-compose.run" "crank" "crank")
+    DOCKER_RUN=$(read-docker-run.sh "/runs/crank/crank-upstream-compose.run" "crank-upstream" "crank")
   fi
 
   # Add -it flag to match the original behavior
