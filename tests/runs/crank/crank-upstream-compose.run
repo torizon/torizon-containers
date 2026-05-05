@@ -1,4 +1,5 @@
 docker run -d \
+  --name crank-weston \
   --network host \
   --cap-add "CAP_SYS_TTY_CONFIG" \
   --volume "/dev:/dev" \
