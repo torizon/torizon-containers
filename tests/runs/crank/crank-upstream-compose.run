@@ -10,7 +10,7 @@ docker run -d \
   --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/crank-weston:stable-rc --developer
 
 docker run -d \
-  --name crank \
+  --name crank-upstream \
   --interactive \
   --tty \
   --device-cgroup-rule "c 226:* rmw" \
