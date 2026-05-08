@@ -34,7 +34,7 @@ echo XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR >>/etc/environment
 # Start weston and fork to background
 check_gpu
 chvt 7
-weston "${WESTON_ARGS}" &
+weston ${WESTON_ARGS} &
 WESTON_SERVER=$!
 
 # Wait up to 5 seconds until weston starts
