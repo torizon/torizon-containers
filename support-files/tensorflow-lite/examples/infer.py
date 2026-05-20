@@ -6,16 +6,31 @@ from PIL import Image
 import tflite_runtime.interpreter as tfl
 
 
-def find_vx_delegate():
-    for p in (
-        os.getenv("VX_DELEGATE", "/usr/lib/aarch64-linux-gnu/libvx_delegate.so"),
-        "/usr/lib/libvx_delegate.so",
-        "/usr/lib/libvx_delegate.so.2",
-        "/usr/lib/libvx_delegate.so.1",
-    ):
-        if os.path.exists(p):
-            return p
-    return None
+def get_platform():
+    return os.getenv("HOST_PLATFORM", "default")
+
+
+def get_model(platform):
+    match platform:
+        case "imx95":
+            return "ssd_detect_quant_only_som_converted.tflite"
+        case _:
+            return "ssd_detect_quant_only_som.tflite"
+
+
+def find_delegate(platform):
+    match platform:
+        case "imx95":
+            p = os.getenv("NEUTRON_DELEGATE", "/usr/lib/aarch64-linux-gnu/libneutron_delegate.so")
+            return p if os.path.exists(p) else None
+        case _:
+            for p in (
+                os.getenv("VX_DELEGATE", "/usr/lib/aarch64-linux-gnu/libvx_delegate.so"),
+                "/usr/lib/libvx_delegate.so",
+                "/usr/lib/libvx_delegate.so.2",
+                "/usr/lib/libvx_delegate.so.1",
+            ):
+                return p if os.path.exists(p) else None
 
 
 def preprocess(path, size, dtype):
@@ -30,9 +45,10 @@ def preprocess(path, size, dtype):
 
 
 def main():
+    platform = get_platform()
     root = os.getenv("APP_ROOT", "/app")
     data_dir = os.getenv("DATA_DIR", f"{root}/images/validation")
-    model = os.getenv("MODEL", f"{root}/ssd_detect_quant_only_som.tflite")
+    model = os.getenv("MODEL", f"{root}/{get_model(platform)}")
     labels_fn = os.getenv("LABELS", f"{root}/labelmap.txt")
     limit = int(os.getenv("LIMIT", "0"))
 
@@ -46,10 +62,10 @@ def main():
     labels = [l.strip() for l in open(labels_fn, "r", encoding="utf-8") if l.strip()]
 
     delegates = []
-    vx = find_vx_delegate()
-    if vx:
+    delegate = find_delegate(platform)
+    if delegate:
         try:
-            delegates.append(tfl.load_delegate(vx))
+            delegates.append(tfl.load_delegate(delegate))
         except Exception:
             delegates = []
 

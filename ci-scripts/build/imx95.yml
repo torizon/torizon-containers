@@ -308,3 +308,33 @@ build-gtk3-tests-imx95:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: [build-wayland-base-dev-imx95, build-wayland-gtk3-imx95]
+
+build-tensorflow-lite-imx95:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx95
+    IMAGE_NAME: tensorflow-lite-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
+  needs: [build-base-imx95]
+
+build-tensorflow-lite-dev-imx95:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx95
+    IMAGE_NAME: tensorflow-lite-dev-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+  needs: [build-tensorflow-lite-imx95]
+
+build-tensorflow-lite-examples-imx95:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx95
+    IMAGE_NAME: tensorflow-lite-examples-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+  needs: [build-tensorflow-lite-imx95]
