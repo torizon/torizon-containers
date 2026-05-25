@@ -6,6 +6,7 @@ generate-run-from-compose:
   image:
     name: homebrew/brew
     pull_policy: always
+  stage: compose-generate
   variables:
     GIT_STRATEGY: clone
   rules:

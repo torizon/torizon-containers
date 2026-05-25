@@ -5,6 +5,7 @@ default:
 .build-upstream-template:
   retry: 2
   extends: .docker-build
+  stage: build
   tags:
     - arm64
   rules:
@@ -19,7 +20,7 @@ default:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
 
-build-base:
+upstream:[base]:
   extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
@@ -31,7 +32,7 @@ build-base:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
-build-wayland-base:
+upstream:[wayland-base]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -39,9 +40,9 @@ build-wayland-base:
     IMAGE_NAME: wayland-base
     DOCKERFILE_FOLDER: "${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${WAYLAND_BASE_FOLDER}/"
-  needs: [build-base]
+  needs: ["upstream:[base]"]
 
-build-wayland-base-dev:
+upstream:[wayland-base-dev]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -49,9 +50,9 @@ build-wayland-base-dev:
     IMAGE_NAME: wayland-base-dev
     DOCKERFILE_FOLDER: "${WAYLAND_BASE_DEV_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${WAYLAND_BASE_DEV_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-weston:
+upstream:[weston]:
   extends: .build-upstream-template
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
@@ -61,9 +62,9 @@ build-weston:
     IMAGE_NAME: weston
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-graphics-tests:
+upstream:[graphics-tests]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -71,9 +72,9 @@ build-graphics-tests:
     IMAGE_NAME: graphics-tests
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-weston-touch-calibrator:
+upstream:[weston-touch-calibrator]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -81,9 +82,9 @@ build-weston-touch-calibrator:
     IMAGE_NAME: weston-touch-calibrator
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: [build-weston]
+  needs: ["upstream:[weston]"]
 
-build-qt5-wayland:
+upstream:[qt5-wayland]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -91,9 +92,9 @@ build-qt5-wayland:
     IMAGE_NAME: qt5-wayland
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-qt5-wayland-examples:
+upstream:[qt5-wayland-examples]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -101,9 +102,9 @@ build-qt5-wayland-examples:
     IMAGE_NAME: qt5-wayland-examples
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt5-wayland]
+  needs: ["upstream:[qt5-wayland]"]
 
-build-qt6-wayland:
+upstream:[qt6-wayland]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -111,9 +112,9 @@ build-qt6-wayland:
     IMAGE_NAME: qt6-wayland
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-qt6-wayland-examples:
+upstream:[qt6-wayland-examples]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -121,9 +122,9 @@ build-qt6-wayland-examples:
     IMAGE_NAME: qt6-wayland-examples
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt6-wayland]
+  needs: ["upstream:[qt6-wayland]"]
 
-build-qt6-wayland-tests:
+upstream:[qt6-wayland-tests]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -132,9 +133,9 @@ build-qt6-wayland-tests:
     IMAGE_NAME: qt6-wayland-tests
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev, build-qt6-wayland-examples]
+  needs: ["upstream:[wayland-base-dev]", "upstream:[qt6-wayland-examples]"]
 
-build-chromium:
+upstream:[chromium]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -142,9 +143,9 @@ build-chromium:
     IMAGE_NAME: chromium
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-cog:
+upstream:[cog]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -152,9 +153,9 @@ build-cog:
     IMAGE_NAME: cog
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-crank-weston-upstream:
+upstream:[crank-weston]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -162,7 +163,7 @@ build-crank-weston-upstream:
     IMAGE_NAME: crank-weston
     DOCKERFILE_FOLDER: "${CRANK_WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CRANK_WESTON_FOLDER}/"
-  needs: [build-weston]
+  needs: ["upstream:[weston]"]
 
 .build-dotnet-upstream-template:
   extends: .build-upstream-template
@@ -174,7 +175,7 @@ build-crank-weston-upstream:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
 
-build-dotnet-8:
+upstream:[dotnet-8]:
   extends: .build-dotnet-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -182,9 +183,9 @@ build-dotnet-8:
     DOTNET_KEY: dotnet8
     IMAGE_NAME: dotnet8
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base"]
+  needs: ["upstream:[base]"]
 
-build-dotnet-10:
+upstream:[dotnet-10]:
   extends: .build-dotnet-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -192,30 +193,30 @@ build-dotnet-10:
     DOTNET_KEY: dotnet10
     IMAGE_NAME: dotnet10
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base"]
+  needs: ["upstream:[base]"]
 
 .build-dotnet-asp-upstream-template:
   extends: .build-dotnet-upstream-template
   variables:
     DOTNET_RUNTIME: aspnetcore
 
-build-dotnet-8-asp:
+upstream:[dotnet-8-asp]:
   extends: .build-dotnet-asp-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: aspdotnet8
     IMAGE_NAME: aspdotnet8
-  needs: ["build-base"]
+  needs: ["upstream:[base]"]
 
-build-dotnet-10-asp:
+upstream:[dotnet-10-asp]:
   extends: .build-dotnet-asp-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: aspdotnet10
     IMAGE_NAME: aspdotnet10
-  needs: ["build-base"]
+  needs: ["upstream:[base]"]
 
 .build-dotnet-wayland-upstream-template:
   extends: .build-upstream-template
@@ -229,25 +230,25 @@ build-dotnet-10-asp:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
 
-build-dotnet-8-wayland:
+upstream:[dotnet-8-wayland]:
   extends: .build-dotnet-wayland-upstream-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: dotnet8-wayland
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8
     IMAGE_NAME: dotnet8-wayland
-  needs: ["build-dotnet-8", "build-wayland-base"]
+  needs: ["upstream:[dotnet-8]", "upstream:[wayland-base]"]
 
-build-dotnet-10-wayland:
+upstream:[dotnet-10-wayland]:
   extends: .build-dotnet-wayland-upstream-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: dotnet10-wayland
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10
     IMAGE_NAME: dotnet10-wayland
-  needs: ["build-dotnet-10", "build-wayland-base"]
+  needs: ["upstream:[dotnet-10]", "upstream:[wayland-base]"]
 
-build-dotnet-8-debug:
+upstream:[dotnet-8-debug]:
   extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml dotnet8-debug
@@ -257,9 +258,9 @@ build-dotnet-8-debug:
     IMAGE_NAME: dotnet8-debug
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
-  needs: ["build-dotnet-8"]
+  needs: ["upstream:[dotnet-8]"]
 
-build-dotnet-10-debug:
+upstream:[dotnet-10-debug]:
   extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml dotnet10-debug
@@ -269,9 +270,9 @@ build-dotnet-10-debug:
     IMAGE_NAME: dotnet10-debug
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_DEBUG_FOLDER}/"
-  needs: ["build-dotnet-10"]
+  needs: ["upstream:[dotnet-10]"]
 
-build-rt-tests:
+upstream:[rt-tests]:
   extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
@@ -282,7 +283,7 @@ build-rt-tests:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${RT_TESTS_FOLDER}/"
   needs: []
 
-build-stress-tests:
+upstream:[stress-tests]:
   extends: .build-upstream-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
@@ -293,7 +294,7 @@ build-stress-tests:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${RT_VALIDATION_FOLDER}/${STRESS_TESTS_FOLDER}/"
   needs: []
 
-build-arm-toolchain:
+upstream:[arm-toolchain]:
   extends: .build-upstream-template
   variables:
     BASE_IMAGE_NAME: debian
@@ -302,9 +303,9 @@ build-arm-toolchain:
     IMAGE_NAME: cross-toolchain-arm
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs: [build-base]
+  needs: ["upstream:[base]"]
 
-build-arm-toolchain-ssh:
+upstream:[arm-toolchain-ssh]:
   extends: .build-upstream-template
   variables:
     IMAGE_NAME: cross-toolchain-ssh-arm
@@ -312,9 +313,9 @@ build-arm-toolchain-ssh:
     BASE_IMAGE_NAME: cross-toolchain-arm
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: ["build-arm-toolchain"]
+  needs: ["upstream:[arm-toolchain]"]
 
-build-amd64-toolchain:
+upstream:[amd64-toolchain]:
   extends: .build-upstream-template
   variables:
     BASE_IMAGE_NAME: debian
@@ -323,9 +324,9 @@ build-amd64-toolchain:
     IMAGE_NAME: cross-toolchain-amd64
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs: [build-base]
+  needs: ["upstream:[base]"]
 
-build-amd64-toolchain-ssh:
+upstream:[amd64-toolchain-ssh]:
   extends: .build-upstream-template
   variables:
     IMAGE_NAME: cross-toolchain-ssh-amd64
@@ -333,9 +334,9 @@ build-amd64-toolchain-ssh:
     BASE_IMAGE_NAME: cross-toolchain-amd64
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: [build-amd64-toolchain]
+  needs: ["upstream:[amd64-toolchain]"]
 
-build-arm64-toolchain:
+upstream:[arm64-toolchain]:
   extends: .build-upstream-template
   variables:
     BASE_IMAGE_NAME: debian
@@ -344,9 +345,9 @@ build-arm64-toolchain:
     IMAGE_NAME: cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs: [build-base]
+  needs: ["upstream:[base]"]
 
-build-arm64-toolchain-ssh:
+upstream:[arm64-toolchain-ssh]:
   extends: .build-upstream-template
   variables:
     IMAGE_NAME: cross-toolchain-ssh-arm64
@@ -354,9 +355,9 @@ build-arm64-toolchain-ssh:
     BASE_IMAGE_NAME: cross-toolchain-arm64
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: [build-arm64-toolchain]
+  needs: ["upstream:[arm64-toolchain]"]
 
-build-wayland-gtk3:
+upstream:[wayland-gtk3]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -364,9 +365,9 @@ build-wayland-gtk3:
     IMAGE_NAME: wayland-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-wayland-base]
+  needs: ["upstream:[wayland-base]"]
 
-build-dotnet-8-gtk3:
+upstream:[dotnet-8-gtk3]:
   extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
@@ -377,9 +378,9 @@ build-dotnet-8-gtk3:
     IMAGE_NAME: dotnet8-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-8-wayland]
+  needs: ["upstream:[dotnet-8-wayland]"]
 
-build-dotnet-10-gtk3:
+upstream:[dotnet-10-gtk3]:
   extends: .build-upstream-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
@@ -390,9 +391,9 @@ build-dotnet-10-gtk3:
     IMAGE_NAME: dotnet10-gtk3
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-10-wayland]
+  needs: ["upstream:[dotnet-10-wayland]"]
 
-build-gtk3-tests:
+upstream:[gtk3-tests]:
   extends: .build-upstream-template
   variables:
     BUILD_FOR_ARM_V7: "true"
@@ -401,4 +402,4 @@ build-gtk3-tests:
     IMAGE_NAME: gtk3-tests
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev, build-wayland-gtk3]
+  needs: ["upstream:[wayland-base-dev]", "upstream:[wayland-gtk3]"]

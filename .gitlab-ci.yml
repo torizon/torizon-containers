@@ -1,3 +1,13 @@
+stages:
+  - lint
+  - compose-generate
+  - build
+  - test
+  - report
+  - demo-gallery
+  - release
+
+
 include:
   - "/ci-scripts/test/aval-tests.yml"
   - "/ci-scripts/release/release.yml"

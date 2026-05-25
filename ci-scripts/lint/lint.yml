@@ -6,6 +6,7 @@ default:
   image:
     name: koalaman/shellcheck-alpine:latest
     pull_policy: always
+  stage: lint
   script: find . -type f \( -iname "*.sh" -o -iname "*.bash" -o -iname "*.bats" \) | xargs -r shellcheck --severity=${SHELLCHECK_SEVERITY}
   rules:
     - when: always
@@ -22,6 +23,7 @@ shell-warnings:
 
 shell-format:
   image: mvdan/shfmt:v3.2.0-alpine
+  stage: lint
   script:
     - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
 
@@ -29,6 +31,7 @@ check-line-breaks:
   image:
     name: alpine:latest
     pull_policy: always
+  stage: lint
   before_script:
     - apk update
     - apk add file
@@ -40,6 +43,7 @@ lint-dependencies:
   image:
     name: alpine:latest
     pull_policy: always
+  stage: lint
   rules:
     - when: always
   before_script:
@@ -66,6 +70,7 @@ lint-templates:
   image:
     name: alpine:latest
     pull_policy: always
+  stage: lint
   rules:
     - when: always
   before_script:

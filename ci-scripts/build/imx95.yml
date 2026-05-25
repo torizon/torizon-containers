@@ -5,6 +5,7 @@ default:
 .build-imx95-template:
   retry: 2
   extends: .docker-build
+  stage: build
   tags:
     - arm64
   rules:
@@ -19,7 +20,7 @@ default:
   variables:
     BUILD_FOR_ARM_V8: "true"
 
-build-base-imx95:
+imx95:[base]:
   extends: .build-imx95-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
@@ -32,7 +33,7 @@ build-base-imx95:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
-build-wayland-base-imx95:
+imx95:[wayland-base]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -40,9 +41,9 @@ build-wayland-base-imx95:
     IMAGE_NAME: wayland-base-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs: [build-base-imx95]
+  needs: ["imx95:[base]"]
 
-build-wayland-base-dev-imx95:
+imx95:[wayland-base-dev]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -50,9 +51,9 @@ build-wayland-base-dev-imx95:
     IMAGE_NAME: wayland-base-dev-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-weston-imx95:
+imx95:[weston]:
   extends: .build-imx95-template
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
@@ -62,9 +63,9 @@ build-weston-imx95:
     IMAGE_NAME: weston-imx95
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-graphics-tests-imx95:
+imx95:[graphics-tests]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -72,9 +73,9 @@ build-graphics-tests-imx95:
     IMAGE_NAME: graphics-tests-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-weston-touch-calibrator-imx95:
+imx95:[weston-touch-calibrator]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -82,9 +83,9 @@ build-weston-touch-calibrator-imx95:
     IMAGE_NAME: weston-touch-calibrator-imx95
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: [build-weston-imx95]
+  needs: ["imx95:[weston]"]
 
-build-qt5-wayland-imx95:
+imx95:[qt5-wayland]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -92,9 +93,9 @@ build-qt5-wayland-imx95:
     IMAGE_NAME: qt5-wayland-imx95
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-qt5-wayland-examples-imx95:
+imx95:[qt5-wayland-examples]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -102,9 +103,9 @@ build-qt5-wayland-examples-imx95:
     IMAGE_NAME: qt5-wayland-examples-imx95
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt5-wayland-imx95]
+  needs: ["imx95:[qt5-wayland]"]
 
-build-qt6-wayland-imx95:
+imx95:[qt6-wayland]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -112,9 +113,9 @@ build-qt6-wayland-imx95:
     IMAGE_NAME: qt6-wayland-imx95
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-qt6-wayland-examples-imx95:
+imx95:[qt6-wayland-examples]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -122,9 +123,9 @@ build-qt6-wayland-examples-imx95:
     IMAGE_NAME: qt6-wayland-examples-imx95
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt6-wayland-imx95]
+  needs: ["imx95:[qt6-wayland]"]
 
-build-qt6-wayland-tests-imx95:
+imx95:[qt6-wayland-tests]:
   extends: .build-imx95-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx95
@@ -132,9 +133,9 @@ build-qt6-wayland-tests-imx95:
     IMAGE_NAME: qt6-wayland-tests-imx95
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-imx95, build-qt6-wayland-examples-imx95]
+  needs: ["imx95:[wayland-base-dev]", "imx95:[qt6-wayland-examples]"]
 
-build-chromium-imx95:
+imx95:[chromium]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -142,18 +143,18 @@ build-chromium-imx95:
     IMAGE_NAME: chromium-imx95
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-chromium-tests-imx95:
+imx95:[chromium-tests]:
   extends: .build-imx95-template
   variables:
     BASE_IMAGE_NAME: chromium-imx95
     IMAGE_NAME: chromium-tests-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
-  needs: [build-chromium-imx95]
+  needs: ["imx95:[chromium]"]
 
-build-cog-imx95:
+imx95:[cog]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -161,7 +162,7 @@ build-cog-imx95:
     IMAGE_NAME: cog-imx95
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
 .build-dotnet-imx95-template:
   extends: .build-imx95-template
@@ -173,44 +174,44 @@ build-cog-imx95:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
 
-build-dotnet-8-imx95:
+imx95:[dotnet-8]:
   extends: .build-dotnet-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: dotnet8-imx95
     IMAGE_NAME: dotnet8-imx95
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base-imx95"]
+  needs: ["imx95:[base]"]
 
-build-dotnet-10-imx95:
+imx95:[dotnet-10]:
   extends: .build-dotnet-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: dotnet10-imx95
     IMAGE_NAME: dotnet10-imx95
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base-imx95"]
+  needs: ["imx95:[base]"]
 
 .build-dotnet-asp-imx95-template:
   extends: .build-dotnet-imx95-template
   variables:
     DOTNET_RUNTIME: aspnetcore
 
-build-dotnet-8-asp-imx95:
+imx95:[dotnet-8-asp]:
   extends: .build-dotnet-asp-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: aspdotnet8-imx95
     IMAGE_NAME: aspdotnet8-imx95
-  needs: ["build-base-imx95"]
+  needs: ["imx95:[base]"]
 
-build-dotnet-10-asp-imx95:
+imx95:[dotnet-10-asp]:
   extends: .build-dotnet-asp-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: aspdotnet10-imx95
     IMAGE_NAME: aspdotnet10-imx95
-  needs: ["build-base-imx95"]
+  needs: ["imx95:[base]"]
 
 .build-dotnet-wayland-imx95-template:
   extends: .build-imx95-template
@@ -223,25 +224,25 @@ build-dotnet-10-asp-imx95:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
 
-build-dotnet-8-wayland-imx95:
+imx95:[dotnet-8-wayland]:
   extends: .build-dotnet-wayland-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: dotnet8-wayland-imx95
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-imx95
     IMAGE_NAME: dotnet8-wayland-imx95
-  needs: ["build-dotnet-8-imx95", "build-wayland-base-imx95"]
+  needs: ["imx95:[dotnet-8]", "imx95:[wayland-base]"]
 
-build-dotnet-10-wayland-imx95:
+imx95:[dotnet-10-wayland]:
   extends: .build-dotnet-wayland-imx95-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: dotnet10-wayland-imx95
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-imx95
     IMAGE_NAME: dotnet10-wayland-imx95
-  needs: ["build-dotnet-10-imx95", "build-wayland-base-imx95"]
+  needs: ["imx95:[dotnet-10]", "imx95:[wayland-base]"]
 
-build-arm64-toolchain-imx95:
+imx95:[arm64-toolchain]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -252,9 +253,9 @@ build-arm64-toolchain-imx95:
     IMAGE_NAME: cross-toolchain-arm64-imx95
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs: [build-base-imx95]
+  needs: ["imx95:[base]"]
 
-build-arm64-toolchain-ssh-imx95:
+imx95:[arm64-toolchain-ssh]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -264,18 +265,18 @@ build-arm64-toolchain-ssh-imx95:
     BASE_IMAGE_NAME: cross-toolchain-arm64-imx95
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: ["build-arm64-toolchain-imx95"]
+  needs: ["imx95:[arm64-toolchain]"]
 
-build-wayland-gtk3-imx95:
+imx95:[wayland-gtk3]:
   extends: .build-imx95-template
   variables:
     BASE_IMAGE_NAME: wayland-base-imx95
     IMAGE_NAME: wayland-gtk3-imx95
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-wayland-base-imx95]
+  needs: ["imx95:[wayland-base]"]
 
-build-dotnet-8-gtk3-imx95:
+imx95:[dotnet-8-gtk3]:
   extends: .build-imx95-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
@@ -285,9 +286,9 @@ build-dotnet-8-gtk3-imx95:
     IMAGE_NAME: dotnet8-gtk3-imx95
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-8-wayland-imx95]
+  needs: ["imx95:[dotnet-8-wayland]"]
 
-build-dotnet-10-gtk3-imx95:
+imx95:[dotnet-10-gtk3]:
   extends: .build-imx95-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
@@ -297,9 +298,9 @@ build-dotnet-10-gtk3-imx95:
     IMAGE_NAME: dotnet10-gtk3-imx95
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-10-wayland-imx95]
+  needs: ["imx95:[dotnet-10-wayland]"]
 
-build-gtk3-tests-imx95:
+imx95:[gtk3-tests]:
   extends: .build-imx95-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-imx95
@@ -307,9 +308,9 @@ build-gtk3-tests-imx95:
     IMAGE_NAME: gtk3-tests-imx95
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-imx95, build-wayland-gtk3-imx95]
+  needs: ["imx95:[wayland-base-dev]", "imx95:[wayland-gtk3]"]
 
-build-tensorflow-lite-imx95:
+imx95:[tensorflow-lite]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -317,9 +318,9 @@ build-tensorflow-lite-imx95:
     IMAGE_NAME: tensorflow-lite-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
-  needs: [build-base-imx95]
+  needs: ["imx95:[base]"]
 
-build-tensorflow-lite-dev-imx95:
+imx95:[tensorflow-lite-dev]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -327,9 +328,9 @@ build-tensorflow-lite-dev-imx95:
     IMAGE_NAME: tensorflow-lite-dev-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
-  needs: [build-tensorflow-lite-imx95]
+  needs: ["imx95:[tensorflow-lite]"]
 
-build-tensorflow-lite-examples-imx95:
+imx95:[tensorflow-lite-examples]:
   extends: .build-imx95-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -337,4 +338,4 @@ build-tensorflow-lite-examples-imx95:
     IMAGE_NAME: tensorflow-lite-examples-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
-  needs: [build-tensorflow-lite-imx95]
+  needs: ["imx95:[tensorflow-lite]"]

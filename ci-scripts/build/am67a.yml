@@ -5,6 +5,7 @@ default:
 .build-am67a-template:
   retry: 2
   extends: .docker-build
+  stage: build
   tags:
     - arm64
   rules:
@@ -19,7 +20,7 @@ default:
   variables:
     BUILD_FOR_ARM_V8: "true"
 
-build-base-am67a:
+am67a:[base]:
   extends: .build-am67a-template
   variables:
     BUILD_FOR_AMD64: "true"
@@ -29,7 +30,7 @@ build-base-am67a:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
-build-wayland-base-am67a:
+am67a:[wayland-base]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: debian-am67a
@@ -37,18 +38,18 @@ build-wayland-base-am67a:
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs: [build-base-am67a]
+  needs: ["am67a:[base]"]
 
-build-wayland-base-dev-am67a:
+am67a:[wayland-base-dev]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: wayland-base-dev-am67a
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-weston-am67a:
+am67a:[weston]:
   extends: .build-am67a-template
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
@@ -58,36 +59,36 @@ build-weston-am67a:
     ACCEPT_FSL_EULA: 1
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-graphics-tests-am67a:
+am67a:[graphics-tests]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: graphics-tests-am67a
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM67A_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-weston-touch-calibrator-am67a:
+am67a:[weston-touch-calibrator]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: weston-am67a
     IMAGE_NAME: weston-touch-calibrator-am67a
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: [build-weston-am67a]
+  needs: ["am67a:[weston]"]
 
-build-qt5-wayland-am67a:
+am67a:[qt5-wayland]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: qt5-wayland-am67a
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-qt5-wayland-am67a-examples:
+am67a:[qt5-wayland-examples]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: qt5-wayland-am67a
@@ -95,27 +96,27 @@ build-qt5-wayland-am67a-examples:
     QT5_EXAMPLES_DEBIAN: 1
     DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt5-wayland-am67a]
+  needs: ["am67a:[qt5-wayland]"]
 
-build-qt6-wayland-am67a:
+am67a:[qt6-wayland]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: qt6-wayland-am67a
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-qt6-wayland-examples-am67a:
+am67a:[qt6-wayland-examples]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: qt6-wayland-am67a
     IMAGE_NAME: qt6-wayland-examples-am67a
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
-  needs: [build-qt6-wayland-am67a]
+  needs: ["am67a:[qt6-wayland]"]
 
-build-qt6-wayland-tests-am67a:
+am67a:[qt6-wayland-tests]:
   extends: .build-am67a-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-am67a
@@ -123,9 +124,9 @@ build-qt6-wayland-tests-am67a:
     IMAGE_NAME: qt6-wayland-tests-am67a
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${QT6_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${QT_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-am67a, build-qt6-wayland-examples-am67a]
+  needs: ["am67a:[wayland-base-dev]", "am67a:[qt6-wayland-examples]"]
 
-build-chromium-am67a:
+am67a:[chromium]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
@@ -133,9 +134,9 @@ build-chromium-am67a:
     # Not a typo, we use the AM62 for this, as it's same container
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-chromium-tests-am67a:
+am67a:[chromium-tests]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: chromium-am67a
@@ -143,16 +144,16 @@ build-chromium-tests-am67a:
     # Not a typo, we use the AM62 for this, as it's same container
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${AM62_FOLDER}/${TESTS_FOLDER}/${CHROMIUM_TESTS_FOLDER}/"
-  needs: [build-chromium-am67a]
+  needs: ["am67a:[chromium]"]
 
-build-cog-am67a:
+am67a:[cog]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: cog-am67a
     DOCKERFILE_FOLDER: "${COG_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${COG_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
 .build-dotnet-am67a-template:
   extends: .build-am67a-template
@@ -164,44 +165,44 @@ build-cog-am67a:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
 
-build-dotnet-8-am67a:
+am67a:[dotnet-8]:
   extends: .build-dotnet-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: dotnet8-am67a
     IMAGE_NAME: dotnet8-am67a
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base-am67a"]
+  needs: ["am67a:[base]"]
 
-build-dotnet-10-am67a:
+am67a:[dotnet-10]:
   extends: .build-dotnet-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: dotnet10-am67a
     IMAGE_NAME: dotnet10-am67a
     DOTNET_RUNTIME: dotnet
-  needs: ["build-base-am67a"]
+  needs: ["am67a:[base]"]
 
 .build-dotnet-asp-am67a-template:
   extends: .build-dotnet-am67a-template
   variables:
     DOTNET_RUNTIME: aspnetcore
 
-build-dotnet-8-asp-am67a:
+am67a:[dotnet-8-asp]:
   extends: .build-dotnet-asp-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: aspdotnet8-am67a
     IMAGE_NAME: aspdotnet8-am67a
-  needs: ["build-base-am67a"]
+  needs: ["am67a:[base]"]
 
-build-dotnet-10-asp-am67a:
+am67a:[dotnet-10-asp]:
   extends: .build-dotnet-asp-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: aspdotnet10-am67a
     IMAGE_NAME: aspdotnet10-am67a
-  needs: ["build-base-am67a"]
+  needs: ["am67a:[base]"]
 
 .build-dotnet-wayland-am67a-template:
   extends: .build-am67a-template
@@ -214,25 +215,25 @@ build-dotnet-10-asp-am67a:
     DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
 
-build-dotnet-8-wayland-am67a:
+am67a:[dotnet-8-wayland]:
   extends: .build-dotnet-wayland-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
     DOTNET_KEY: dotnet8-wayland-am67a
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-am67a
     IMAGE_NAME: dotnet8-wayland-am67a
-  needs: ["build-dotnet-8-am67a", "build-wayland-base-am67a"]
+  needs: ["am67a:[dotnet-8]", "am67a:[wayland-base]"]
 
-build-dotnet-10-wayland-am67a:
+am67a:[dotnet-10-wayland]:
   extends: .build-dotnet-wayland-am67a-template
   variables:
     DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
     DOTNET_KEY: dotnet10-wayland-am67a
     DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-am67a
     IMAGE_NAME: dotnet10-wayland-am67a
-  needs: ["build-dotnet-10-am67a", "build-wayland-base-am67a"]
+  needs: ["am67a:[dotnet-10]", "am67a:[wayland-base]"]
 
-build-arm64-toolchain-am67a:
+am67a:[arm64-toolchain]:
   extends: .build-am67a-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -243,9 +244,9 @@ build-arm64-toolchain-am67a:
     IMAGE_NAME: cross-toolchain-arm64-am67a
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
-  needs: ["build-base-am67a"]
+  needs: ["am67a:[base]"]
 
-build-arm64-toolchain-ssh-am67a:
+am67a:[arm64-toolchain-ssh]:
   extends: .build-am67a-template
   variables:
     BUILD_FOR_ARM_V8: "true"
@@ -255,18 +256,18 @@ build-arm64-toolchain-ssh-am67a:
     BASE_IMAGE_NAME: cross-toolchain-arm64-am67a
     DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
-  needs: ["build-arm64-toolchain-am67a"]
+  needs: ["am67a:[arm64-toolchain]"]
 
-build-wayland-gtk3-am67a:
+am67a:[wayland-gtk3]:
   extends: .build-am67a-template
   variables:
     BASE_IMAGE_NAME: wayland-base-am67a
     IMAGE_NAME: wayland-gtk3-am67a
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-wayland-base-am67a]
+  needs: ["am67a:[wayland-base]"]
 
-build-dotnet-8-gtk3-am67a:
+am67a:[dotnet-8-gtk3]:
   extends: .build-am67a-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
@@ -276,9 +277,9 @@ build-dotnet-8-gtk3-am67a:
     IMAGE_NAME: dotnet8-gtk3-am67a
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-8-wayland-am67a]
+  needs: ["am67a:[dotnet-8-wayland]"]
 
-build-dotnet-10-gtk3-am67a:
+am67a:[dotnet-10-gtk3]:
   extends: .build-am67a-template
   before_script:
     - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
@@ -288,9 +289,9 @@ build-dotnet-10-gtk3-am67a:
     IMAGE_NAME: dotnet10-gtk3-am67a
     DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
-  needs: [build-dotnet-10-wayland-am67a]
+  needs: ["am67a:[dotnet-10-wayland]"]
 
-build-gtk3-tests-am67a:
+am67a:[gtk3-tests]:
   extends: .build-am67a-template
   variables:
     BUILD_BASE_IMAGE_NAME: wayland-base-dev-am67a
@@ -298,4 +299,4 @@ build-gtk3-tests-am67a:
     IMAGE_NAME: gtk3-tests-am67a
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
-  needs: [build-wayland-base-dev-am67a, build-wayland-gtk3-am67a]
+  needs: ["am67a:[wayland-base-dev]", "am67a:[wayland-gtk3]"]

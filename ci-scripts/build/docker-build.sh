@@ -85,9 +85,9 @@ if [[ "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]
 fi
 
 # Base images outside stable branch: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
-if [[ ${CI_JOB_NAME:-} == build-base* || \
-  ${CI_JOB_NAME:-} == build-stress-tests || \
-  ${CI_JOB_NAME:-} == build-rt-tests ]] &&
+if [[ ${CI_JOB_NAME:-} == *:\[base\]* || \
+  ${CI_JOB_NAME:-} == *:\[stress-tests\]* || \
+  ${CI_JOB_NAME:-} == *:\[rt-tests\]* ]] &&
     [[ "${CI_COMMIT_BRANCH:-}" != "stable" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
