@@ -6,5 +6,5 @@ services:
         - /tmp:/tmp
     device_cgroup_rules:
         - 'c 10:119 rmw'
-    image: 'torizon/tensorflow-lite-examples-sl1680:4'
+    image: 'torizon/tensorflow-lite-examples-sl1680:stable-rc'
     command: /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"
