@@ -1,4 +1,4 @@
 docker run -d \
   --volume "/dev:/dev" \
   --volume "/tmp:/tmp" \
-  --device-cgroup-rule "c 10:119 rmw" torizon/tensorflow-lite-examples-sl1680:4 /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"
+  --device-cgroup-rule "c 10:119 rmw" torizon/tensorflow-lite-examples-sl1680:stable-rc /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"
