@@ -1,0 +1,35 @@
+# description: launches the Flutter Internet Radio demo application
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston-am62:stable-rc'
+    container_name: weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 10:223 rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+
+  flutter:
+    image: 'crossware.app:5050/public-repos/flutter:internet_radio_demo_v0.0.1'
+    container_name: flutter-am62
+    depends_on:
+      weston:
+        condition: service_healthy
+    network_mode: host
+    group_add:
+      - audio
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 116:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/tmp:/tmp'
+      - '/dev:/dev'
