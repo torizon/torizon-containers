@@ -71,9 +71,9 @@ imx93:[graphics-tests]:
     BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-imx93
     IMAGE_NAME: graphics-tests-imx93
-    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: ["imx93:[wayland-base]"]
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs: ["imx93:[wayland-base]", "imx93:[wayland-base-dev]"]
 
 imx93:[weston-touch-calibrator]:
   extends: .build-imx93-template
