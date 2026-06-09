@@ -341,5 +341,25 @@ imx8:[tensorflow-lite]:
     BASE_IMAGE_NAME: debian-imx8
     IMAGE_NAME: tensorflow-lite-imx8
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
   needs: ["imx8:[base]"]
+
+imx8:[tensorflow-lite-dev]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx8
+    IMAGE_NAME: tensorflow-lite-dev-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+  needs: ["imx8:[tensorflow-lite]"]
+
+imx8:[tensorflow-lite-examples]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx8
+    IMAGE_NAME: tensorflow-lite-examples-imx8
+    DOCKERFILE_FOLDER: "${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+  needs: ["imx8:[tensorflow-lite]"]
