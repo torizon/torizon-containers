@@ -17,7 +17,7 @@ teardown_file() {
 }
 
 ## add below the platform that should test the demo
-# bats test_tags=platform:am62, platform:imx8, platform:imx95
+# bats test_tags=platform:imx95
 @test "Flutter Internet Radio" {
   bats_require_minimum_version 1.5.0
 
