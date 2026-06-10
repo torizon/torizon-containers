@@ -3,12 +3,11 @@ docker run -d \
   --network host \
   --cap-add "CAP_SYS_TTY_CONFIG" \
   --device-cgroup-rule "c 4:* rmw" \
+  --device-cgroup-rule "c 253:* rmw" \
   --device-cgroup-rule "c 10:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
-  --device-cgroup-rule "c 116:* rmw" \
-  --device-cgroup-rule "c 199:* rmw" \
   --device-cgroup-rule "c 226:* rmw" \
-  --device-cgroup-rule "c 253:* rmw" \
+  --device-cgroup-rule "c 199:0 rmw" \
   --volume "/dev:/dev" \
   --volume "/tmp:/tmp" \
   --volume "/run/udev/:/run/udev/" $REGISTRY/torizon/weston-imx95:stable-rc
@@ -18,9 +17,11 @@ docker run -d \
   --network host \
   --group-add "audio" \
   --device-cgroup-rule "c 4:* rmw" \
+  --device-cgroup-rule "c 10:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
   --device-cgroup-rule "c 116:* rmw" \
   --device-cgroup-rule "c 199:* rmw" \
   --device-cgroup-rule "c 226:* rmw" \
+  --device-cgroup-rule "c 253:* rmw" \
   --volume "/tmp:/tmp" \
   --volume "/dev:/dev" crossware.app:5050/public-repos/flutter:internet_radio_demo_v0.0.1
