@@ -300,3 +300,33 @@ imx93:[gtk3-tests]:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: ["imx93:[wayland-base-dev]", "imx93:[wayland-gtk3]"]
+
+imx93:[tensorflow-lite]:
+  extends: .build-imx93-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx93
+    IMAGE_NAME: tensorflow-lite-imx93
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_FOLDER}/"
+  needs: ["imx93:[base]"]
+
+imx93:[tensorflow-lite-dev]:
+  extends: .build-imx93-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx93
+    IMAGE_NAME: tensorflow-lite-dev-imx93
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_DEV_FOLDER}/"
+  needs: ["imx93:[tensorflow-lite]"]
+
+imx93:[tensorflow-lite-examples]:
+  extends: .build-imx93-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: tensorflow-lite-imx93
+    IMAGE_NAME: tensorflow-lite-examples-imx93
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+  needs: ["imx93:[tensorflow-lite]"]

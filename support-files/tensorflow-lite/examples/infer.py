@@ -13,8 +13,13 @@ def get_platform():
 def get_model(platform):
     match platform:
         case "imx95":
+            # Model converted for Neutron
             return "ssd_detect_quant_only_som_converted.tflite"
+        case "imx93":
+            # Model converted for Ethos-U
+            return "output/ssd_detect_quant_only_som_vela.tflite"
         case _:
+            # Non-converted model
             return "ssd_detect_quant_only_som.tflite"
 
 
@@ -22,6 +27,9 @@ def find_delegate(platform):
     match platform:
         case "imx95":
             p = os.getenv("NEUTRON_DELEGATE", "/usr/lib/aarch64-linux-gnu/libneutron_delegate.so")
+            return p if os.path.exists(p) else None
+        case "imx93":
+            p = os.getenv("ETHOSU_DELEGATE", "/usr/lib/aarch64-linux-gnu/libethosu_delegate.so")
             return p if os.path.exists(p) else None
         case _:
             for p in (

@@ -1,0 +1,11 @@
+# description: launches the tensorflow lite example
+services:
+  tensorflow-lite-examples:
+    volumes:
+        - /dev:/dev
+        - /tmp:/tmp
+    device_cgroup_rules:
+        - 'c 511:0 rmw'
+        - 'c 240:0 rmw'
+    image: 'torizon/tensorflow-lite-examples-imx93:stable-rc'
+    command: /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"
