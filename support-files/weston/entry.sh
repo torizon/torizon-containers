@@ -117,6 +117,7 @@ else
 fi
 HAS_GPU=true
 HAS_DPU=false
+HAS_PXP=false
 
 function has_feature() {
   FEATURE=$1
@@ -129,9 +130,19 @@ function has_feature() {
 test -n "$SOC_ID" && {
   HAS_GPU=$(has_feature 'imxgpu')
   HAS_DPU=$(has_feature 'imxdpu')
+  HAS_PXP=$(has_feature 'imxpxp')
 }
 echo "SoC has GPU: $HAS_GPU"
 echo "SoC has DPU: $HAS_DPU"
+echo "SoC has PXP: $HAS_PXP"
+
+if $HAS_PXP; then
+  for DEV in /dev/dma_heap/linux,cma /dev/dma_heap/linux,cma-uncached /dev/dma_heap/system /dev/pxp_device; do
+    if [ -e "$DEV" ]; then
+      chmod 666 "$DEV" 2>/dev/null || echo "WARNING: could not chmod $DEV"
+    fi
+  done
+fi
 
 [[ "$SOC_ID" =~ "MX8" ]] && {
   WESTON_ARGS="$WESTON_ARGS --use-g2d"
@@ -146,6 +157,13 @@ echo "SoC has DPU: $HAS_DPU"
   test -e /etc/alternatives/libg2d.so.2 && update-alternatives --set libg2d.so.2 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2
 }
 
+[[ "$SOC_ID" =~ "MX93" ]] && {
+  WESTON_ARGS="$WESTON_ARGS --use-g2d"
+
+  G2D_IMPLEMENTATION='pxp'
+  echo "g2d implementation: $G2D_IMPLEMENTATION"
+  test -e /etc/alternatives/libg2d.so.2 && update-alternatives --set libg2d.so.2 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2
+}
 #
 # Set desktop defaults.
 #
@@ -191,7 +209,7 @@ function init() {
   fi
 }
 
-$HAS_GPU || $HAS_DPU || {
+$HAS_GPU || $HAS_DPU || $HAS_PXP || {
   echo "Fallbacking to software renderer."
   WESTON_ARGS="${WESTON_ARGS} --use-pixman"
 }

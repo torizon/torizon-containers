@@ -42,3 +42,4 @@ map_feature() {
 
 map_feature 'imxgpu'
 map_feature 'imxdpu'
+map_feature 'imxpxp'
