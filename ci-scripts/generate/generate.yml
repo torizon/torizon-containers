@@ -23,6 +23,7 @@ generate-run-from-compose:
         https://gitlab-ci-token:${PROJECT_TOKEN}@${CI_SERVER_HOST/#https:\/\//}/${CI_PROJECT_PATH}.git
     - git fetch origin $CI_COMMIT_REF_NAME
     - brew tap homebrew-toradex/decompose https://gitlab.com/toradex/rd/torizon-core/homebrew-toradex
+    - brew trust homebrew-toradex/decompose
     - brew install homebrew-toradex/decompose/decompose
     - ./ci-scripts/generate/run-from-compose.sh tests/composes '**/*-compose.yml' tests/runs
     - |
