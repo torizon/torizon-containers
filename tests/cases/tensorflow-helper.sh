@@ -10,6 +10,10 @@ setup_tensorflow() {
   local DOCKER_RUN
   if [[ "$PLATFORM_FILTER" == *imx95* ]]; then
     DOCKER_RUN=$(read-docker-run.sh "/runs/${CONTAINER_NAME}/${CONTAINER_NAME}-imx95-compose.run" "${CONTAINER_NAME}-imx95" "${CONTAINER_NAME}")
+  elif [[ "$PLATFORM_FILTER" == *imx8* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/${CONTAINER_NAME}/${CONTAINER_NAME}-imx8-compose.run" "${CONTAINER_NAME}-imx8" "${CONTAINER_NAME}")
+  elif [[ "$PLATFORM_FILTER" == *sl1680* ]]; then
+    DOCKER_RUN=$(read-docker-run.sh "/runs/${CONTAINER_NAME}/${CONTAINER_NAME}-sl1680-compose.run" "${CONTAINER_NAME}-sl1680" "${CONTAINER_NAME}")
   else
     DOCKER_RUN="false"
   fi
