@@ -6,6 +6,8 @@ load ./tensorflow-helper.sh
 TFLITE_MEAN_MAX="${TFLITE_MEAN_MAX:-0.1}"
 
 setup_file() {
+  bats_require_minimum_version 1.5.0
+
   setup_tensorflow
 }
 
