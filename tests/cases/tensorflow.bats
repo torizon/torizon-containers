@@ -3,21 +3,13 @@
 load ./general-helper.sh
 load ./tensorflow-helper.sh
 
-TFLITE_CONTAINER_NAME="${TFLITE_CONTAINER_NAME:-tflite-tests}"
-TFLITE_IMAGE="${TFLITE_IMAGE:-torizon/tensorflow-lite-imx8:stable-rc}"
 TFLITE_MEAN_MAX="${TFLITE_MEAN_MAX:-0.1}"
 
 setup_file() {
-  bats_require_minimum_version 1.5.0
-
-  cleanup_container "$TFLITE_CONTAINER_NAME" || true
-
   setup_tensorflow
 }
 
 teardown_file() {
-  cleanup_container "$TFLITE_CONTAINER_NAME" || true
-
   teardown_tensorflow
 }
 
