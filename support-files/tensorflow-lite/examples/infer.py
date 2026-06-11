@@ -30,7 +30,9 @@ def find_delegate(platform):
                 "/usr/lib/libvx_delegate.so.2",
                 "/usr/lib/libvx_delegate.so.1",
             ):
-                return p if os.path.exists(p) else None
+                if os.path.exists(p):
+                    return p
+            return None
 
 
 def preprocess(path, size, dtype):
