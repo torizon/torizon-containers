@@ -102,3 +102,23 @@ teardown_test() {
 
   rm -rf /tmp/1000-runtime-dir
 }
+
+export_has_gpu() {
+  local no_gpu_socs=(
+    am62l
+    imx6ull
+    imx7
+    imx93
+  )
+
+  local has_gpu=true
+
+  for soc in "${no_gpu_socs[@]}"; do
+    if [[ "$SOC_UDT" =~ $soc ]]; then
+      has_gpu=false
+      break
+    fi
+  done
+
+  export HAS_GPU="$has_gpu"
+}

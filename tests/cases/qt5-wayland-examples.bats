@@ -8,6 +8,7 @@ file_name=$(basename "$BATS_TEST_FILENAME" .bats)
 setup_file() {
   setup_test "${file_name}"
   export_arch_triplet
+  export_has_gpu
 }
 
 teardown_file() {
@@ -21,7 +22,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run docker compose -f "$COMPOSE_FILE" exec "${file_name}" timeout 10s \
+  run -124 docker compose -f "$COMPOSE_FILE" exec "${file_name}" timeout 10s \
     "/usr/lib/$ARCH_TRIPLET/qt5/examples/opengl/cube/cube"
 
   run -0 gpu_kernel_logs
@@ -45,8 +46,12 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run docker compose -f "$COMPOSE_FILE" exec -e QT_QPA_PLATFORM=eglfs "${file_name}" timeout 10s \
+  run -124 docker compose -f "$COMPOSE_FILE" exec -e QT_QPA_PLATFORM=eglfs "${file_name}" timeout 10s \
     kms-setup.sh "/usr/lib/$ARCH_TRIPLET/qt5/examples/opengl/cube/cube"
+
+  if $HAS_GPU; then
+    refute_output --regexp "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  fi
 
   run -0 gpu_kernel_logs
 }

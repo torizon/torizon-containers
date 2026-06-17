@@ -12,6 +12,7 @@ setup_file() {
   setup_test weston
   setup_test "${file_name}"
   export_arch_triplet
+  export_has_gpu
 }
 
 teardown_file() {
@@ -25,7 +26,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run docker compose -f "$COMPOSE_FILE" exec "${file_name}" timeout 10s \
+  run -124 docker compose -f "$COMPOSE_FILE" exec "${file_name}" timeout 10s \
     "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/cube"
 
   run -0 gpu_kernel_logs
@@ -52,8 +53,10 @@ teardown_file() {
   run docker compose -f "$COMPOSE_FILE" exec "${file_name}" contextinfo
 
   assert_output --regexp "OpenGL Version: OpenGL ES [23]\.[012].*"
-  refute_output -e "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
 
+  if $HAS_GPU; then
+    refute_output --regexp "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  fi
 
   run -0 gpu_kernel_logs
 }
@@ -64,10 +67,12 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run docker compose -f "$COMPOSE_FILE" exec -e QT_QPA_PLATFORM=eglfs "${file_name}" timeout 10s \
+  run -124 docker compose -f "$COMPOSE_FILE" exec -e QT_QPA_PLATFORM=eglfs "${file_name}" timeout 10s \
     kms-setup.sh "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/cube"
 
-  refute_output -e "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  if $HAS_GPU; then
+    refute_output --regexp "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  fi
 
   run -0 gpu_kernel_logs
 }
@@ -82,7 +87,10 @@ teardown_file() {
     kms-setup.sh contextinfo
 
   assert_output --regexp "OpenGL Version: OpenGL ES [23]\.[012].*"
-  refute_output -e "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+
+  if $HAS_GPU; then
+    refute_output --regexp "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
+  fi
   
   run -0 gpu_kernel_logs
 }
