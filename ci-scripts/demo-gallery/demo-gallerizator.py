@@ -5,7 +5,7 @@ import subprocess
 import json
 
 """
-To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/composes
+To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
 """
 platforms = {
     "imx8": [
@@ -49,9 +49,6 @@ platforms = {
         "colibri-imx7",
     ],
 }
-
-apps_deny_list = ["chromium-tests"]
-
 
 def recursively_replace_contents(target_content, replace_with, target_dir):
     for root, _, files in os.walk(target_dir):
@@ -132,27 +129,10 @@ def main(composes_dir):
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
-    platform_app_deny_dict = {
-        "upstream": ["chromium", "chromium-tests"],
-        "imx8": ["chromium-tests"],
-        "am62": ["chromium-tests"],
-        "am69": ["chromium-tests"],
-        "imx93": ["chromium-tests"],
-        "imx95": ["chromium-tests"],
-        "am62p": ["chromium-tests"],
-        "sl1680": ["chromium-tests"],
-        "am67a": ["chromium-tests"],
-    }
-
     # For each platform
     for platform, members in platforms.items():
         # For each app in ./composes
         for app in os.listdir(composes_dir):
-            if app in platform_app_deny_dict[platform]:
-                print(
-                    f"Not demo-gallelirizing {app} on {platform} because it's on the deny list"
-                )
-                continue
             app_path = os.path.join(composes_dir, app)
             if not os.path.isdir(app_path):
                 continue

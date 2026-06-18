@@ -1,16 +1,18 @@
 #!/usr/bin/env bats
 
-load ./slint-helper.sh
 load ./kernel-helper.sh
 load ./general-helper.sh
 
+file_name=$(basename "$BATS_TEST_FILENAME" .bats)
+
 setup_file() {
-  setup_slint
+  setup_test "${file_name}"
 }
 
 teardown_file() {
-  teardown_slint
+  teardown_test "${file_name}"
 }
+
 
 # bats test_tags=platform:am62, platform:imx8, platform:imx95
 @test "Slint Demo Launcher" {
@@ -18,7 +20,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -0 docker top slint | grep home-automation
+  run -0 docker compose -f "$COMPOSE_FILE" top "${file_name}" | grep home-automation
 
   run -0 gpu_kernel_logs
 }
@@ -29,7 +31,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -0 docker top slint | grep energy-monitor
+  run -0 docker compose -f "$COMPOSE_FILE" top "${file_name}" | grep energy-monitor
 
   run -0 gpu_kernel_logs
 }

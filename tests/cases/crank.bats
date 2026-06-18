@@ -1,18 +1,16 @@
 #!/usr/bin/env bats
 
-load ./weston-helper.sh
-load ./crank-helper.sh
 load ./kernel-helper.sh
 load ./general-helper.sh
 
+file_name=$(basename "$BATS_TEST_FILENAME" .bats)
+
 setup_file() {
-  setup_weston
-  setup_crank
+  setup_test "${file_name}"
 }
 
 teardown_file() {
-  teardown_crank
-  teardown_weston
+  teardown_test "${file_name}"
 }
 
 # bats test_tags=platform:am62, platform:imx8, platform:upstream
@@ -21,7 +19,7 @@ teardown_file() {
 
   run -0 clean_kernel_logs
 
-  run -0 docker top crank | grep "sbengine"
+  run -0 docker compose -f "$COMPOSE_FILE" top "${file_name}" | grep "sbengine"
 
   run -0 gpu_kernel_logs
 }

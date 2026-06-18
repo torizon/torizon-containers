@@ -1,0 +1,29 @@
+services:
+  crank-weston:
+    image: '$REGISTRY/torizon/crank-weston-am62:stable-rc'
+    container_name: crank-weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    command: '--developer'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev:/run/udev'
+
+  crank:
+    image: '$REGISTRY/cranksoftware/ti62-sb_8_2-wayland-base-am62_4:v0.1'
+    container_name: crank-am62
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    volumes:
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+      - '/dev/dri:/dev/dri'
+    depends_on:
+      crank-weston:
+        condition: service_healthy

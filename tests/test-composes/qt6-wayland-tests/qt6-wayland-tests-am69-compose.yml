@@ -1,0 +1,12 @@
+services:
+  qt6-wayland-tests:
+    image: $REGISTRY/torizon/qt6-wayland-tests-am69:stable-rc
+    container_name: qt6-wayland-tests
+    privileged: true
+    stdin_open: true
+    tty: true
+    command: bash
+    volumes:
+      - /dev:/dev
+      - /run/udev:/run/udev
+      - /tmp:/tmp

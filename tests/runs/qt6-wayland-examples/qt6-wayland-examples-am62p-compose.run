@@ -3,7 +3,7 @@ docker run -d \
   --cap-add "CAP_SYS_TTY_CONFIG" \
   --volume "/dev:/dev" \
   --volume "/tmp:/tmp" \
-  --volume "/run/udev/:/run/udev/" \
+  --volume "/run/udev:/run/udev" \
   --device-cgroup-rule "c 4:* rmw" \
   --device-cgroup-rule "c 13:* rmw" \
   --device-cgroup-rule "c 226:* rmw" $REGISTRY/torizon/weston-am62p:stable-rc --developer

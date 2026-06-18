@@ -1,0 +1,15 @@
+services:
+  gtk3-tests:
+    image: $REGISTRY/torizon/gtk3-tests-imx8:stable-rc
+    container_name: gtk3-tests
+    stdin_open: true
+    tty: true
+    command: bash
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp
+    device_cgroup_rules:
+      - "c 4:* rmw"
+      - "c 13:* rmw"
+      - "c 199:* rmw"
+      - "c 226:* rmw"

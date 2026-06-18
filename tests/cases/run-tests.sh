@@ -1,30 +1,15 @@
 #!/bin/bash
+source ./general-helper.sh
 
 printf "\e[0Ksection_end:%s:prepare\r\e[0KDevice preparation finished\n" "$(date +%s)"
 
 echo "$PAID_DOCKERHUB_TOKEN" | docker login --username "$PAID_DOCKERHUB_USER" --password-stdin
 
-if [[ "$SOC_UDT" == *am62p* ]]; then
-  PLATFORM_FILTER="platform:am62p"
-elif [[ "$SOC_UDT" == *am62* ]]; then
-  PLATFORM_FILTER="platform:am62"
-elif [[ "$SOC_UDT" == *imx8* ]]; then
-  PLATFORM_FILTER="platform:imx8"
-elif [[ "$SOC_UDT" == *imx93* ]]; then
-  PLATFORM_FILTER="platform:imx93"
-elif [[ "$SOC_UDT" == *imx95* ]]; then
-  PLATFORM_FILTER="platform:imx95"
-elif [[ "$SOC_UDT" == *am69* ]]; then
-  PLATFORM_FILTER="platform:am69"
-elif [[ "$SOC_UDT" == *sl1680* ]]; then
-  PLATFORM_FILTER="platform:sl1680"
-elif [[ "$SOC_UDT" == *beagley-ai* ]]; then
-  PLATFORM_FILTER="platform:am67a"
-else
-  PLATFORM_FILTER="platform:upstream"
-fi
-
+PLATFORM_FILTER=$(get_platform_filter "$SOC_UDT")
 export PLATFORM_FILTER
+
+PLATFORM="${PLATFORM_FILTER#platform:}"
+export PLATFORM
 
 printf "\e[0Ksection_start:%s:testing\r\e[0KStart Bats Testing\n" "$(date +%s)"
 

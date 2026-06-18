@@ -1,0 +1,41 @@
+# description: launches the Weston Compositor with shell and a Qt5 Calculator App
+services:
+  weston:
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev:/run/udev'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+    image: '$REGISTRY/torizon/weston:stable-rc'
+    command: '--developer'
+
+  qt5-wayland-examples:
+    depends_on:
+      weston:
+        condition: service_healthy
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    image: $REGISTRY/torizon/qt5-wayland-examples:stable-rc
+    volumes:
+      - '/tmp:/tmp'
+      - '/dev/dri:/dev/dri'
+    command: >
+      sh -c '
+        arch="$(uname -m)";
+        case "$$arch" in
+          x86_64)  TRIPLET="x86_64-linux-gnu" ;;
+          aarch64) TRIPLET="aarch64-linux-gnu" ;;
+          armv7l)  TRIPLET="arm-linux-gnueabihf" ;;
+          *)
+            echo "Unsupported architecture: $$arch" >&2
+            exit 1
+            ;;
+        esac;
+        exec /usr/lib/$$TRIPLET/qt5/examples/widgets/widgets/calculator/calculator
+      '
