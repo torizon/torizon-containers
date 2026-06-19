@@ -1,0 +1,67 @@
+# description: launches the Luna Dual Cameras AI demo application
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston-sl1680:stable-rc'
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 10:223 rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    command: '--developer --tty=/dev/tty7 -- --debug'
+
+  luna-cameras-ai-demo:
+    image: 'lbornia/luna-dual-cameras:latest'
+    container_name: luna-cameras-ai-demo
+    depends_on:
+      weston:
+        condition: service_healthy
+    environment:
+      XDG_RUNTIME_DIR: "/tmp/1000-runtime-dir"
+      WAYLAND_DISPLAY: "wayland-0"
+      QT_QPA_PLATFORM: "wayland"
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 253:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev:/run/udev'
+    healthcheck:
+      test: ["CMD", "test", "-f", "/tmp/ws-ready"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+      start_period: 5s
+
+  chromium:
+    image: '$REGISTRY/torizon/chromium-sl1680:stable-rc'
+    container_name: chromium
+    depends_on:
+      luna-cameras-ai-demo:
+        condition: service_healthy
+    command: http://127.0.0.1
+    network_mode: host
+    security_opt:
+      - seccomp:unconfined
+    shm_size: 256mb
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+      - 'c 10:223 rmw'
+      - 'c 81:* rmw'
+      - 'c 234:* rmw'
+      - 'c 235:* rmw'
+    volumes:
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+      - '/dev/dri:/dev/dri'
