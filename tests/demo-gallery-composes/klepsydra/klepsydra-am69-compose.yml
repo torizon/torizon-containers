@@ -1,0 +1,308 @@
+# description: launches the Klepsydra depth estimation demo application for AM69
+services:
+  couchdb:
+    image: couchdb:3.3.3
+    container_name: couchdb
+    pull_policy: missing
+    networks:
+      - openmct
+    ports:
+      - "${couchdb_port:-5984}:5984"
+    configs:
+      - source: couchdb_ini
+        target: /opt/couchdb/etc/local.d/couchdb.ini
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /opt/couchdb/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -m 3 -o /dev/null http://127.0.0.1:5984/_up || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  openmct:
+    image: klepsydratech/kpsr-openmct:latest
+    container_name: openmct
+    pull_policy: missing
+    depends_on:
+      couchdb:
+        condition: service_healthy
+      klepsydra:
+        condition: service_started
+    environment:
+      - couchdb_port=${couchdb_port:-5984}
+      - couchdb_url=${couchdb_url:-http://couchdb:5984}
+      - couchdb_user=${couchdb_user:-admin}
+      - couchdb_pass=${couchdb_pass:-admin}
+      - openmct_database_name=${openmct_database_name:-${COMPOSE_PROJECT_NAME}_db}
+    networks:
+      - openmct
+      - klepsydra
+    ports:
+      - "${openmct_port:-8080}:8080"
+    configs:
+      - source: connections_json
+        target: /root/kpe-openmct/conf/connections.json
+
+  klepsydra:
+    image: klepsydratech/kpsr-depth-demo-am69:0.1
+    container_name: klepsydra
+    pull_policy: missing
+    command: kpe-depth-estimation-demo-app -f /usr/local/src/kpe-depth-estimation-demo/conf/depth_conf.json -m /usr/local/share/kpe-depth-estimation-demo/models/monodepthencoder_decoderv2_named.onnx -i /usr/local/share/kpe-depth-estimation-demo/images/ -t 5000
+    networks:
+      - klepsydra
+    ports:
+      - "${depth_port:-7070}:7070"
+
+  dashboard:
+    image: nginx:alpine
+    container_name: dashboard
+    pull_policy: missing
+    depends_on:
+      openmct:
+        condition: service_started
+      klepsydra:
+        condition: service_started
+    command:
+      - sh
+      - -c
+      - |
+        rm -f /usr/share/nginx/html/ready
+        (
+          until curl -fsS -m 5 -o /dev/null "http://127.0.0.1:${openmct_port:-8080}/"; do sleep 2; done
+          until [ "$$(curl -s -m 4 -o /dev/null -w '%{http_code}' http://127.0.0.1:${depth_port:-7070}/)" = "200" ]; do sleep 2; done
+          echo ready > /usr/share/nginx/html/ready
+        ) &
+        exec nginx -g 'daemon off;'
+    network_mode: host
+    configs:
+      - source: dashboard_html
+        target: /usr/share/nginx/html/index.html
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS -m 3 -o /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  weston:
+    image: torizon/weston-am69:4
+    container_name: weston
+    command: '--developer'
+    network_mode: host
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+
+  chromium:
+    image: torizon/chromium-am69:4
+    container_name: chromium
+    depends_on:
+      weston:
+        condition: service_healthy
+      dashboard:
+        condition: service_healthy
+    command: http://localhost
+    network_mode: host
+    volumes:
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+      - '/dev:/dev'
+    security_opt:
+      - seccomp:unconfined
+    shm_size: 256mb
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+
+configs:
+  couchdb_ini:
+    content: |
+      [couchdb]
+      single_node=true
+      [admins]
+      admin = admin
+      [chttpd]
+      enable_cors = true
+      [cors]
+      origins = *
+      credentials = true
+      methods = "GET, PUT, POST, HEAD, DELETE"
+      headers = "accept, authorization, content-type, origin, referer, x-csrf-token"
+
+  connections_json:
+    content: |
+      [
+          {
+              "name": "klepsydra",
+              "socket_host": "klepsydra",
+              "socket_port": "8080",
+              "socket_system_port": "9090"
+          }
+      ]
+
+  dashboard_html:
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>Demo Dashboard</title>
+        <style>
+          *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+          body {
+            display: flex;
+            height: 100vh;
+            background: #111;
+            font-family: sans-serif;
+          }
+          #splash {
+            position: fixed;
+            inset: 0;
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            z-index: 10;
+            transition: opacity 0.6s ease;
+          }
+          #splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+          }
+          #splash p {
+            color: #ccc;
+            font-size: 1.3rem;
+            letter-spacing: 0.04em;
+          }
+          #status {
+            color: #777;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+          }
+          .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #333;
+            border-top-color: #888;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin { to { transform: rotate(360deg); } }
+          #panels {
+            display: flex;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+          }
+          #panels.visible { opacity: 1; }
+          .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #333;
+          }
+          .panel:last-child { border-right: none; }
+          .panel-header {
+            background: #1e1e1e;
+            color: #ccc;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+          }
+          iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <div id="splash">
+          <div class="spinner"></div>
+          <p>Wait… Demo is starting!</p>
+          <div id="status">waiting for services…</div>
+        </div>
+        <div id="panels">
+          <div class="panel">
+            <div class="panel-header">Depth Estimation — :${depth_port:-7070}</div>
+            <iframe id="depth-frame" title="Depth Estimation"></iframe>
+          </div>
+          <div class="panel">
+            <div class="panel-header">OpenMCT — :${openmct_port:-8080}</div>
+            <iframe id="openmct-frame" title="OpenMCT"></iframe>
+          </div>
+        </div>
+      </body>
+      <script>
+        var MAX_WAIT_MS = 240000;
+        var startedAt = Date.now();
+        var revealed = false;
+
+        var BASE = window.location.protocol + '//' + window.location.hostname;
+        var DEPTH_URL = BASE + ':${depth_port:-7070}';
+        var OPENMCT_URL = BASE + ':${openmct_port:-8080}';
+
+        function setStatus(text) {
+          var el = document.getElementById('status');
+          if (el) { el.textContent = text; }
+        }
+
+        function reveal() {
+          if (revealed) { return; }
+          revealed = true;
+          var splash = document.getElementById('splash');
+          var panels = document.getElementById('panels');
+          var openmctFrame = document.getElementById('openmct-frame');
+          document.getElementById('depth-frame').src = DEPTH_URL;
+          openmctFrame.src = OPENMCT_URL;
+          splash.classList.add('hidden');
+          panels.classList.add('visible');
+          setTimeout(function() { splash.remove(); }, 700);
+          openmctFrame.addEventListener('load', function() {
+            setTimeout(function() {
+              openmctFrame.src = OPENMCT_URL + '/#/browse/klepsydra.klepsydra.system.monitor.taxonomy:klepsydra.kpsr.system.monitor.dict/klepsydra.klepsydra.system.monitor.taxonomy:klepsydra.used_cpu?tc.mode=local&tc.startDelta=10000&tc.endDelta=0&tc.timeSystem=utc&view=plot-single&hideInspector=true&hideTree=true';
+            }, 3000);
+          }, { once: true });
+        }
+
+        function poll() {
+          fetch('/ready', { cache: 'no-store' })
+            .then(function(res) {
+              if (res.ok) { reveal(); return; }
+              throw new Error('not ready');
+            })
+            .catch(function() {
+              var waited = Date.now() - startedAt;
+              if (waited > MAX_WAIT_MS) {
+                console.warn('readiness timed out after ' + Math.round(waited / 1000) + 's; revealing anyway');
+                reveal();
+                return;
+              }
+              setStatus('waiting for services… ' + Math.round(waited / 1000) + 's');
+              setTimeout(poll, 2000);
+            });
+        }
+        poll();
+      </script>
+      </html>
+
+volumes:
+  dbdata:
+
+networks:
+  openmct: {}
+  klepsydra: {}
