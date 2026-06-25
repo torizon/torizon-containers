@@ -56,7 +56,7 @@ teardown_file() {
 # bats test_tags=platform:imx93
 @test "G2D basic test runs successfully" {
   run docker container exec graphics-tests \
-    /opt/g2d_samples/g2d_basic_test
+    /usr/share/libg2d-pxp-utils/g2d_samples/g2d_basic_test
   [ "$status" -eq 0 ]
 
   g2d_assert_faster_than_cpu "$output"
