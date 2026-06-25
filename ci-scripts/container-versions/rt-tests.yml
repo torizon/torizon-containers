@@ -1,8 +1,8 @@
 rt-tests:
   major: 4
-  minor: 16
+  minor: 17
   patch: 0
 stress-tests:
   major: 4
-  minor: 16
+  minor: 17
   patch: 0
