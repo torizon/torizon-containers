@@ -66,3 +66,11 @@ tensorflow-lite-examples-imx95:
   major: 4
   minor: 0
   patch: 0
+cross-toolchain-arm64-imx95:
+  major: 4
+  minor: 0
+  patch: 0
+cross-toolchain-ssh-arm64-imx95:
+  major: 4
+  minor: 0
+  patch: 0

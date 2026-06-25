@@ -74,3 +74,11 @@ tensorflow-lite-examples-imx8:
   major: 4
   minor: 0
   patch: 0
+cross-toolchain-arm64-imx8:
+  major: 4
+  minor: 0
+  patch: 0
+cross-toolchain-ssh-arm64-imx8:
+  major: 4
+  minor: 0
+  patch: 0

@@ -54,3 +54,11 @@ cog-am69:
   major: 4
   minor: 7
   patch: 0
+cross-toolchain-arm64-am69:
+  major: 4
+  minor: 0
+  patch: 0
+cross-toolchain-ssh-arm64-am69:
+  major: 4
+  minor: 0
+  patch: 0

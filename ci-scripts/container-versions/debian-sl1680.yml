@@ -66,3 +66,11 @@ tensorflow-lite-examples-sl1680:
   major: 4
   minor: 2
   patch: 0
+cross-toolchain-arm64-sl1680:
+  major: 4
+  minor: 0
+  patch: 0
+cross-toolchain-ssh-arm64-sl1680:
+  major: 4
+  minor: 0
+  patch: 0
