@@ -54,3 +54,15 @@ cog-imx95:
   major: 4
   minor: 11
   patch: 0
+tensorflow-lite-imx95:
+  major: 4
+  minor: 0
+  patch: 0
+tensorflow-lite-dev-imx95:
+  major: 4
+  minor: 0
+  patch: 0
+tensorflow-lite-examples-imx95:
+  major: 4
+  minor: 0
+  patch: 0

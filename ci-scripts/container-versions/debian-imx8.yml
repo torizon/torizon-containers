@@ -58,11 +58,19 @@ cog-imx8:
   major: 4
   minor: 16
   patch: 0
+crank-weston-imx8:
+  major: 4
+  minor: 3
+  patch: 0
 tensorflow-lite-imx8:
   major: 4
   minor: 3
   patch: 0
-crank-weston-imx8:
+tensorflow-lite-dev-imx8:
   major: 4
-  minor: 3
+  minor: 0
+  patch: 0
+tensorflow-lite-examples-imx8:
+  major: 4
+  minor: 0
   patch: 0
