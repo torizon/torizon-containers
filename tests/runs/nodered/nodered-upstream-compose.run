@@ -1,4 +1,0 @@
-docker run -d \
-  --env "TZ=Europe/Amsterdam" \
-  --publish "1880:1880" \
-  --volume "node-red-data:/data" nodered/node-red:latest
