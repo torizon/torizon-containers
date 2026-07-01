@@ -44,10 +44,6 @@ RUN case ${TARGETARCH} in \
     tar xz -C /usr/local/bin --strip=1 docker/docker && \
     chmod +x /usr/local/bin/docker
 
-COPY tests/cases /cases
-COPY tests/ /tests
-COPY tests/runs /runs
-COPY tests/helpers/remove-docker-image-if-outdated.sh /usr/bin
-COPY tests/helpers/read-docker-run.sh /usr/bin
+COPY tests /tests
 
-WORKDIR /cases
+WORKDIR /tests
