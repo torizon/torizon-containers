@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(realpath "${BASH_SOURCE[0]}")"
-export SCRIPT_DIR
+GENERAL_HELPER_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+export GENERAL_HELPER_DIR
 
-COMPOSE_DIR="${SCRIPT_DIR}/../compose"
+COMPOSE_DIR="${GENERAL_HELPER_DIR}/../compose"
 export COMPOSE_DIR
 
 check_if_base_container_runs() {

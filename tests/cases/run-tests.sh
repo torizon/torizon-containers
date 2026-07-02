@@ -1,5 +1,6 @@
 #!/bin/bash
-source ./general-helper.sh
+
+source /tests/cases/general-helper.sh
 
 printf "\e[0Ksection_end:%s:prepare\r\e[0KDevice preparation finished\n" "$(date +%s)"
 
