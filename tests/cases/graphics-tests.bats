@@ -31,9 +31,14 @@ teardown_file() {
 }
 
 # autodetection is frail for imx-drm
-# bats test_tags=platform:imx8, platform:imx93, platform:imx95
+# bats test_tags=platform:imx8, platform:imx93
 @test "Modetest is able to probe DRM information" {
   docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest -M imx-drm
+}
+
+# bats test_tags=platform:imx95
+@test "Modetest is able to probe DRM information" {
+  docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest -M imx95-dpu
 }
 
 # bats test_tags=platform:imx8
