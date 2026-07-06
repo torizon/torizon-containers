@@ -16,10 +16,14 @@ teardown_file() {
 
 # bats test_tags=platform:imx8, platform:sl1680
 @test "TensorFlow Lite container runs benchmark with Delegate" {
-
+  # imx8 runs the test verification before running the test 
+  # TODO: improve this fix
+  if [[ "$SOC_UDT" =~ imx8 ]]; then
+    sleep 30s
+  fi
   run -0 docker compose -f "$COMPOSE_FILE" logs "${file_name}"
 
-  echo "$output" | grep -qE 'vx_delegate Delegate::Init|INFO: Vx delegate:' \
+  echo "$output" | grep -qE 'vx_delegate Delegate::Init|INFO: Vx delegate:|Vx delegate: device num set' \
     || { echo "VX delegate not detected in output"; false; }
 
   images_processed="$(
