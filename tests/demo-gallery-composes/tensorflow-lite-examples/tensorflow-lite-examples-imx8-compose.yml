@@ -1,6 +1,6 @@
 # description: launches the tensorflow lite example
 services:
-  tensorflow-lite:
+  tensorflow-lite-examples:
     volumes:
         - /dev:/dev
         - /tmp:/tmp

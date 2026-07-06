@@ -1,7 +1,7 @@
 # description: launches Node-RED service that can be accessed by browser at port 1880
 
 services:
-  node-red:
+  nodered:
     image: nodered/node-red:latest
     environment:
       - TZ=Europe/Amsterdam
