@@ -12,7 +12,33 @@ build-tests-container:
       changes:
         - /ci-scripts/test/*
         - tests/**/*
-    - if: $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_ASTRA_SL1680 == "true" || $CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62L == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" || $CI_TEST_AQUILA_IMX95H == "true" || $CI_TEST_FRDM_IMX93 == "true" || $CI_TEST_BEAGLEY_AI == "true" || $CI_TEST_TORIZON_X86 == "true"
+    - if: $CI_MERGE_REQUEST_LABELS =~ /test::nightly/ || $CI_MERGE_REQUEST_LABELS =~ /test::release/
+      when: always
+    - if: >
+        $CI_TEST_LUNA_SL1680 == "true" ||
+        $CI_TEST_ASTRA_SL1680 == "true" ||
+        $CI_TEST_COLIBRI_IMX7D_EMMC == "true" ||
+        $CI_TEST_VERDIN_AM62DUAL == "true" ||
+        $CI_TEST_SK_AM62L == "true" ||
+        $CI_TEST_SK_AM62 == "true" ||
+        $CI_TEST_SK_AM62P == "true" ||
+        $CI_TEST_VERDIN_AM62QUAD == "true" ||
+        $CI_TEST_VERDIN_AM62PQ == "true" ||
+        $CI_TEST_AQUILA_AM69OCTA == "true" ||
+        $CI_TEST_APALIS_IMX6Q == "true" ||
+        $CI_TEST_COLIBRI_IMX6DL == "true" ||
+        $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" ||
+        $CI_TEST_APALIS_IMX8QM == "true" ||
+        $CI_TEST_COLIBRI_IMX8QXP == "true" ||
+        $CI_TEST_VERDIN_IMX8MMQ == "true" ||
+        $CI_TEST_VERDIN_IMX8MPQ == "true" ||
+        $CI_TEST_SMARC_IMX8MPQ == "true" ||
+        $CI_TEST_VERDIN_IMX95H == "true" ||
+        $CI_TEST_SMARC_IMX95H == "true" ||
+        $CI_TEST_AQUILA_IMX95H == "true" ||
+        $CI_TEST_FRDM_IMX93 == "true" ||
+        $CI_TEST_BEAGLEY_AI == "true" ||
+        $CI_TEST_TORIZON_X86 == "true"
       when: always
       changes:
         - /ci-scripts/test/*
@@ -34,11 +60,30 @@ build-tests-container:
     pull_policy: always
   before_script:
     - echo -e "\e[0Ksection_start:$(date +%s):prepare\r\e[0KDevice Preparation"
-    - cd /aval && /usr/local/bin/entrypoint.sh "docker run -e PAID_DOCKERHUB_USER=$PAID_DOCKERHUB_USER -e PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN -e REGISTRY=docker.io -e SOC_UDT=$SOC_UDT -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN --privileged --pid host
-      -v /var/run/docker.sock:/var/run/docker.sock -v /home/torizon:/home/torizon -v /sys:/sys
-      ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID} /tests/cases/run-tests.sh"
-      --copy-artifact /home/torizon/report.xml $CI_PROJECT_DIR/report.xml --delegation-config $DELEGATION_PATH
-      --before "docker rm -f $(docker ps -aq) || true && docker system prune --all --force" ${AVAL_EXTRA_OPTIONS}
+    - >
+      cd /aval &&
+      /usr/local/bin/entrypoint.sh
+      "docker run
+      -e PAID_DOCKERHUB_USER=$PAID_DOCKERHUB_USER
+      -e PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN
+      -e REGISTRY=docker.io
+      -e SOC_UDT=$SOC_UDT
+      -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN
+      --privileged
+      --pid host
+      -v /var/run/docker.sock:/var/run/docker.sock
+      -v /home/torizon:/home/torizon
+      -v /sys:/sys
+      ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
+      /tests/cases/run-tests.sh"
+      --copy-artifact
+      /home/torizon/report.xml
+      $CI_PROJECT_DIR/report.xml
+      --delegation-config
+      $DELEGATION_PATH
+      --before
+      "docker rm -f \$(docker ps -aq) || true && docker system prune --all --force"
+      ${AVAL_EXTRA_OPTIONS}
   allow_failure: true
   script:
     - mv $CI_PROJECT_DIR/report.xml $CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml
@@ -83,41 +128,24 @@ build-tests-container:
     TARGET_BUILD_TYPE: "nightly"
     DELEGATION_PATH: "/aval/delegation_config_common.toml"
 
-e2e-test-colibri-imx7d-emmc-release:
-  extends: .e2e-test-stable-template
-  resource_group: colibri-imx7d-emmc
+# -----------------------------------------------------------------------------
+# Upstream jobs
+# -----------------------------------------------------------------------------
+e2e-test-apalis-imx6q-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: apalis-imx6q
   rules:
-    - if: $CI_TEST_STABLE == "true"
+    - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true"'
+    - if: '$CI_TEST_APALIS_IMX6Q == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
-    SOC_UDT: "colibri-imx7d-emmc"
+    SOC_UDT: "apalis-imx6q"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62dual-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-am62dual
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62dual"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-aquila-am69octa-release:
-  extends: .e2e-test-stable-template
-  resource_group: aquila-am69octa
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "aquila-am69octa"
-    AVAL_EXTRA_OPTIONS: ""
 
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-stable-template
@@ -127,56 +155,12 @@ e2e-test-apalis-imx6q-release:
       when: on_success
     - if: '$CI_TEST_APALIS_IMX6Q == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-apalis-imx8qm-release:
-  extends: .e2e-test-stable-template
-  resource_group: apalis-imx8qm
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_APALIS_IMX8QM == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "apalis-imx8qm"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-colibri-imx8qxp-release:
-  extends: .e2e-test-stable-template
-  resource_group: colibri-imx8qxp
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "colibri-imx8qxp"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-imx8mmq-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-imx8mmq
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx8mmq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-imx8mpq-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-imx8mpq
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx8mpq"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx7d-emmc-nightly:
@@ -187,248 +171,28 @@ e2e-test-colibri-imx7d-emmc-nightly:
       when: on_success
     - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
-e2e-test-colibri-imx8qxp-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: colibri-imx8qxp
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "colibri-imx8qxp"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62dual-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-am62dual
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62dual"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62quad-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-am62quad
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62QUAD == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62quad"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62quad-stable:
+e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-am62quad
+  resource_group: colibri-imx7d-emmc
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_VERDIN_AM62QUAD == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "verdin-am62quad"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62pq-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-am62pq
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62PQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62pq"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-verdin-am62pq-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-am62pq
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62PQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62pq"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-aquila-am69octa-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: aquila-am69octa
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "aquila-am69octa"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-apalis-imx6q-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: apalis-imx6q
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_APALIS_IMX6Q == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "apalis-imx6q"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-apalis-imx8qm-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: apalis-imx8qm
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_APALIS_IMX8QM == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "apalis-imx8qm"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-imx8mmq-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-imx8mmq
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx8mmq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-imx8mpq-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-imx8mpq
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx8mpq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-smarc-imx8mpq-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: smarc-imx8mpq
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SMARC_IMX8MPQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "smarc-imx8mpq"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-smarc-imx8mpq-release:
-  extends: .e2e-test-stable-template
-  resource_group: smarc-imx8mpq
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_SMARC_IMX8MPQ == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "smarc-imx8mpq"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-verdin-imx95h-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-imx95h
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-verdin-imx95h-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-imx95h
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-smarc-imx95h-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: smarc-imx95h
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SMARC_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "smarc-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-smarc-imx95h-release:
-  extends: .e2e-test-stable-template
-  resource_group: smarc-imx95h
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_SMARC_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "smarc-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-aquila-imx95h-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: aquila-imx95h
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_AQUILA_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "aquila-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-aquila-imx95h-release:
-  extends: .e2e-test-stable-template
-  resource_group: aquila-imx95h
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_AQUILA_IMX95H == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "aquila-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-colibri-imx6dl-release:
-  extends: .e2e-test-stable-template
-  resource_group: colibri-imx6dl
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX6DL == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "colibri-imx6dl"
+    SOC_UDT: "colibri-imx7d-emmc"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx6dl-nightly:
@@ -439,20 +203,28 @@ e2e-test-colibri-imx6dl-nightly:
       when: on_success
     - if: '$CI_TEST_COLIBRI_IMX6DL == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
-e2e-test-colibri-imx6ull-emmc-release:
+e2e-test-colibri-imx6dl-release:
   extends: .e2e-test-stable-template
-  resource_group: colibri-imx6ull-emmc
+  resource_group: colibri-imx6dl
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX6ULL_EMMC == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX6DL == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "colibri-imx6ull-emmc"
+    SOC_UDT: "colibri-imx6dl"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-colibri-imx6ull-emmc-nightly:
@@ -463,87 +235,29 @@ e2e-test-colibri-imx6ull-emmc-nightly:
       when: on_success
     - if: '$CI_TEST_COLIBRI_IMX6ULL_EMMC == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
     AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
-e2e-test-sk-am62-nightly:
-  extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62
-  allow_failure: true
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62 == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62-release:
-  extends: .e2e-test-stable-common-template
-  resource_group: sk-am62
-  allow_failure: true
+e2e-test-colibri-imx6ull-emmc-release:
+  extends: .e2e-test-stable-template
+  resource_group: colibri-imx6ull-emmc
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_SK_AM62 == "true"'
+    - if: '$CI_TEST_COLIBRI_IMX6ULL_EMMC == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "sk-am62"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62l-nightly:
-  extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62l
-  allow_failure: true
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62L == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62l"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62l-release:
-  extends: .e2e-test-stable-common-template
-  resource_group: sk-am62l
-  allow_failure: true
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62L == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62l"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62p-nightly:
-  extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62p
-  allow_failure: true
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62P == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62p"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62p-release:
-  extends: .e2e-test-stable-common-template
-  resource_group: sk-am62p
-  allow_failure: true
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62P == "true"'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62p"
-    AVAL_EXTRA_OPTIONS: ""
+    SOC_UDT: "colibri-imx6ull-emmc"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
 
 e2e-test-torizon-x86-nightly:
   extends: .e2e-test-nightly-common-template
@@ -553,6 +267,10 @@ e2e-test-torizon-x86-nightly:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
     - if: '$CI_TEST_TORIZON_X86 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
     SOC_UDT: "torizon-x86"
@@ -567,88 +285,225 @@ e2e-test-torizon-x86-release:
       when: on_success
     - if: '$CI_TEST_TORIZON_X86 == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[upstream\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
   variables:
     SOC_UDT: "torizon-x86"
     AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-astra-sl1680-nightly:
+# -----------------------------------------------------------------------------
+# TI hardware
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# AM62 jobs
+# -----------------------------------------------------------------------------
+e2e-test-verdin-am62dual-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-am62dual
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62dual"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-am62dual-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-am62dual
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62dual"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: astra-sl1680
+  resource_group: sk-am62
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_ASTRA_SL1680 == "true"'
+    - if: '$CI_TEST_SK_AM62 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
-    SOC_UDT: "astra-sl1680"
+    SOC_UDT: "sk-am62"
     AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-astra-sl1680-release:
+e2e-test-sk-am62-release:
   extends: .e2e-test-stable-common-template
-  resource_group: astra-sl1680
+  resource_group: sk-am62
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_ASTRA_SL1680 == "true"'
+    - if: '$CI_TEST_SK_AM62 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "astra-sl1680"
+    SOC_UDT: "sk-am62"
     AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-luna-sl1680-nightly:
+e2e-test-sk-am62l-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: luna-sl1680
+  resource_group: sk-am62l
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_LUNA_SL1680 == "true"'
+    - if: '$CI_TEST_SK_AM62L == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
-    SOC_UDT: "luna-sl1680"
+    SOC_UDT: "sk-am62l"
     AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-luna-sl1680-release:
+e2e-test-sk-am62l-release:
   extends: .e2e-test-stable-common-template
-  resource_group: luna-sl1680
+  resource_group: sk-am62l
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_LUNA_SL1680 == "true"'
+    - if: '$CI_TEST_SK_AM62L == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "luna-sl1680"
+    SOC_UDT: "sk-am62l"
     AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-frdm-imx93-nightly:
+e2e-test-verdin-am62quad-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-am62quad
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62QUAD == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62quad"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-am62quad-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-am62quad
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62QUAD == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62quad"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+# -----------------------------------------------------------------------------
+# AM62P jobs
+# -----------------------------------------------------------------------------
+e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: frdm-imx93
+  resource_group: sk-am62p
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+    - if: '$CI_TEST_SK_AM62P == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62p\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
-    SOC_UDT: "frdm-imx93"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
+    SOC_UDT: "sk-am62p"
+    AVAL_EXTRA_OPTIONS: ""
 
-e2e-test-frdm-imx93-release:
+e2e-test-sk-am62p-release:
   extends: .e2e-test-stable-common-template
-  resource_group: frdm-imx93
+  resource_group: sk-am62p
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+    - if: '$CI_TEST_SK_AM62P == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62p\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "frdm-imx93"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
+    SOC_UDT: "sk-am62p"
+    AVAL_EXTRA_OPTIONS: ""
 
+e2e-test-verdin-am62pq-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-am62pq
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62PQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62p\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62pq"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-verdin-am62pq-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-am62pq
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_AM62PQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62p\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-am62pq"
+    AVAL_EXTRA_OPTIONS: ""
+
+# -----------------------------------------------------------------------------
+# AM67A BeagleY AI jobs
+# -----------------------------------------------------------------------------
 e2e-test-beagley-ai-nightly:
   extends: .e2e-test-nightly-common-template
   resource_group: beagley-ai
@@ -657,6 +512,10 @@ e2e-test-beagley-ai-nightly:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
     - if: '$CI_TEST_BEAGLEY_AI == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am67a\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
     SOC_UDT: "beagley-ai"
@@ -671,54 +530,424 @@ e2e-test-beagley-ai-release:
       when: on_success
     - if: '$CI_TEST_BEAGLEY_AI == "true"'
       when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am67a\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
   variables:
     SOC_UDT: "beagley-ai"
     AVAL_EXTRA_OPTIONS: ""
 
-aggregate-reports:
-  stage: report
-  image:
-    name: homebrew/brew
-    pull_policy: always
+# -----------------------------------------------------------------------------
+# AM69 jobs
+# -----------------------------------------------------------------------------
+e2e-test-aquila-am69octa-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: aquila-am69octa
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_COLIBRI_IMX7D_EMMC == "true" || $CI_TEST_VERDIN_AM62DUAL == "true" || $CI_TEST_SK_AM62 == "true" || $CI_TEST_SK_AM62L == "true" || $CI_TEST_SK_AM62P == "true" || $CI_TEST_VERDIN_AM62QUAD == "true" || $CI_TEST_VERDIN_AM62PQ == "true" || $CI_TEST_AQUILA_AM69OCTA == "true" || $CI_TEST_APALIS_IMX6Q == "true" || $CI_TEST_COLIBRI_IMX6DL == "true" || $CI_TEST_COLIBRI_IMX6ULL_EMMC == "true" || $CI_TEST_APALIS_IMX8QM == "true" || $CI_TEST_COLIBRI_IMX8QXP == "true" || $CI_TEST_VERDIN_IMX8MMQ == "true" || $CI_TEST_VERDIN_IMX8MPQ == "true" || $CI_TEST_SMARC_IMX8MPQ == "true" || $CI_TEST_VERDIN_IMX95H == "true" || $CI_TEST_SMARC_IMX95H == "true" || $CI_TEST_AQUILA_IMX95H == "true" || $CI_TEST_LUNA_SL1680 == "true" || $CI_TEST_FRDM_IMX93 == "true" || $CI_TEST_BEAGLEY_AI == "true" || $CI_TEST_TORIZON_X86 == "true" ||  $CI_TEST_EVK_IMX95 == "true"'
+    - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
       when: on_success
-  script:
-    - mkdir -p reports
-    - mv *.xml reports/
-    - brew tap homebrew-toradex/xray-junit-uploader https://gitlab.com/toradex/rd/torizon-core/homebrew-toradex.git
-    - brew trust homebrew-toradex/xray-junit-uploader
-    - brew install xray-junit-uploader
-    - ./ci-scripts/test/xray-junit-uploader-wrapper.sh
-  artifacts:
-    paths:
-      - reports/
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am69\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
   variables:
-    VERDIN_IMX8MPQ_TEST_EXEC_KEY: "TCCP-934"
-    VERDIN_AM62DUAL_TEST_EXEC_KEY: "TCCP-954"
-    VERDIN_IMX8MMQ_TEST_EXEC_KEY: "TCCP-955"
-    APALIS_IMX6Q_TEST_EXEC_KEY: "TCCP-956"
-    APALIS_IMX8QM_TEST_EXEC_KEY: "TCCP-957"
-    COLIBRI_IMX8QXP_TEST_EXEC_KEY: "TCCP-958"
-    COLIBRI_IMX7D_EMMC_TEST_EXEC_KEY: "TCCP-953"
-    COLIBRI_IMX6DL_TEST_EXEC_KEY: "TCCP-959"
-    COLIBRI_IMX6ULL_EMMC_TEST_EXEC_KEY: "TCCP-960"
-    EVK_IMX95_TEST_EXEC_KEY: "TCCP-964"
-    SK_AM62_TEST_EXEC_KEY: "TCCP-968"
-    SK_AM62L_TEST_EXEC_KEY: "TCCP-1200"
-    SK_AM62P_TEST_EXEC_KEY: "TCCP-979"
-    AQUILA_AM69OCTA_TEST_EXEC_KEY: "TCCP-997"
-    VERDIN_AM62QUAD_TEST_EXEC_KEY: "TCCP-1073"
-    VERDIN_AM62PQ_TEST_EXEC_KEY: "TCCP-1083"
-    SMARC_IMX8MPQ_TEST_EXEC_KEY: "TCCP-1074"
-    VERDIN_IMX95H_TEST_EXEC_KEY: "TCCP-1075"
-    SMARC_IMX95H_TEST_EXEC_KEY: "TCCP-1076"
-    AQUILA_IMX95H_TEST_EXEC_KEY: "TCCP-1319"
-    ASTRA_SL1680_TEST_EXEC_KEY: "TCCP-1114"
-    LUNA_SL1680_TEST_EXEC_KEY: "TCCP-1150"
-    FRDM_IMX93_TEST_EXEC_KEY: "TCCP-1188"
-    BEAGLEY_AI_TEST_EXEC_KEY: "TCCP-1264"
-    TORIZON_X86_TEST_EXEC_KEY: "TCCP-1077"
-    GIT_CLEAN_FLAGS: none
+    SOC_UDT: "aquila-am69octa"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-aquila-am69octa-release:
+  extends: .e2e-test-stable-template
+  resource_group: aquila-am69octa
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_AQUILA_AM69OCTA == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am69\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "aquila-am69octa"
+    AVAL_EXTRA_OPTIONS: ""
+
+# -----------------------------------------------------------------------------
+# NXP hardware
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# IMX8 jobs
+# -----------------------------------------------------------------------------
+e2e-test-apalis-imx8qm-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: apalis-imx8qm
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_APALIS_IMX8QM == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "apalis-imx8qm"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-apalis-imx8qm-release:
+  extends: .e2e-test-stable-template
+  resource_group: apalis-imx8qm
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_APALIS_IMX8QM == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "apalis-imx8qm"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-colibri-imx8qxp-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: colibri-imx8qxp
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "colibri-imx8qxp"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-colibri-imx8qxp-release:
+  extends: .e2e-test-stable-template
+  resource_group: colibri-imx8qxp
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_COLIBRI_IMX8QXP == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "colibri-imx8qxp"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-imx8mmq-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-imx8mmq
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx8mmq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-imx8mmq-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-imx8mmq
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX8MMQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx8mmq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-imx8mpq-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-imx8mpq
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx8mpq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-verdin-imx8mpq-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-imx8mpq
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX8MPQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx8mpq"
+    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+
+e2e-test-smarc-imx8mpq-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: smarc-imx8mpq
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_SMARC_IMX8MPQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "smarc-imx8mpq"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-smarc-imx8mpq-release:
+  extends: .e2e-test-stable-template
+  resource_group: smarc-imx8mpq
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_SMARC_IMX8MPQ == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx8\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "smarc-imx8mpq"
+    AVAL_EXTRA_OPTIONS: ""
+
+# -----------------------------------------------------------------------------
+# IMX93 jobs
+# -----------------------------------------------------------------------------
+e2e-test-frdm-imx93-nightly:
+  extends: .e2e-test-nightly-common-template
+  resource_group: frdm-imx93
+  allow_failure: true
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "frdm-imx93"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
+
+e2e-test-frdm-imx93-release:
+  extends: .e2e-test-stable-common-template
+  resource_group: frdm-imx93
+  allow_failure: true
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "frdm-imx93"
+    AVAL_EXTRA_OPTIONS: "--do-not-update"
+
+# -----------------------------------------------------------------------------
+# IMX95 jobs
+# -----------------------------------------------------------------------------
+e2e-test-verdin-imx95h-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: verdin-imx95h
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-verdin-imx95h-release:
+  extends: .e2e-test-stable-template
+  resource_group: verdin-imx95h
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_VERDIN_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "verdin-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-smarc-imx95h-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: smarc-imx95h
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_SMARC_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "smarc-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-smarc-imx95h-release:
+  extends: .e2e-test-stable-template
+  resource_group: smarc-imx95h
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_SMARC_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "smarc-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-aquila-imx95h-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: aquila-imx95h
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_AQUILA_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "aquila-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-aquila-imx95h-release:
+  extends: .e2e-test-stable-template
+  resource_group: aquila-imx95h
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_AQUILA_IMX95H == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx95\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "aquila-imx95h"
+    AVAL_EXTRA_OPTIONS: ""
+
+# -----------------------------------------------------------------------------
+# Synaptics hardware
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# SL1680 jobs
+# -----------------------------------------------------------------------------
+e2e-test-astra-sl1680-nightly:
+  extends: .e2e-test-nightly-common-template
+  resource_group: astra-sl1680
+  allow_failure: true
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_ASTRA_SL1680 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[sl1680\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "astra-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-astra-sl1680-release:
+  extends: .e2e-test-stable-common-template
+  resource_group: astra-sl1680
+  allow_failure: true
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_ASTRA_SL1680 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[sl1680\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "astra-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-luna-sl1680-nightly:
+  extends: .e2e-test-nightly-common-template
+  resource_group: luna-sl1680
+  allow_failure: true
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_LUNA_SL1680 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[sl1680\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "luna-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
+
+e2e-test-luna-sl1680-release:
+  extends: .e2e-test-stable-common-template
+  resource_group: luna-sl1680
+  allow_failure: true
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_LUNA_SL1680 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[sl1680\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "luna-sl1680"
+    AVAL_EXTRA_OPTIONS: ""
+

@@ -26,6 +26,8 @@ shell-format:
   stage: lint
   script:
     - find . -type f -iname "*.sh" | xargs -r shfmt -i 2 -ci -d
+  rules:
+    - when: always
 
 check-line-breaks:
   image:
