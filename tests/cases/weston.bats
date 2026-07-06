@@ -34,3 +34,16 @@ teardown_file() {
 
   echo "Ran for 5 seconds without crashing, terminated by timeout."
 }
+
+# bats test_tags=platform:imx93
+@test "Weston g2d renderer module is loaded" {
+  bats_require_minimum_version 1.5.0
+
+  run docker compose -f "$COMPOSE_FILE" logs "${file_name}"
+  [ "$status" -eq 0 ]
+
+  echo "$output" | grep -q "Loading module '.*g2d-renderer.so'" || {
+    echo "FAIL: g2d-renderer.so was never loaded"
+    return 1
+  }
+}
