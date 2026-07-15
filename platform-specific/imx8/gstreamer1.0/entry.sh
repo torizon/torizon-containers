@@ -1,0 +1,1 @@
+../../../support-files/gstreamer1.0/entry.sh

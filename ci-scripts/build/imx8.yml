@@ -363,3 +363,23 @@ imx8:[tensorflow-lite-examples]:
     DOCKERFILE_FOLDER: "${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
   needs: ["imx8:[tensorflow-lite]"]
+
+imx8:[gstreamer1.0]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx8
+    IMAGE_NAME: gstreamer1.0-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/gstreamer1.0/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/gstreamer1.0/"
+  needs: ["imx8:[base]"]
+
+imx8:[gstreamer1.0-dev]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: gstreamer1.0-imx8
+    IMAGE_NAME: gstreamer1.0-dev-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/gstreamer1.0-dev/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/gstreamer1.0/"
+  needs: ["imx8:[gstreamer1.0]"]
