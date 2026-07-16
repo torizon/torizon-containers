@@ -383,3 +383,13 @@ imx8:[gstreamer1.0-dev]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/gstreamer1.0-dev/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/gstreamer1.0/"
   needs: ["imx8:[gstreamer1.0]"]
+
+imx8:[gstreamer1.0-examples]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: gstreamer1.0-imx8
+    IMAGE_NAME: gstreamer1.0-examples-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/gstreamer1.0-examples/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/gstreamer1.0/examples"
+  needs: ["imx8:[gstreamer1.0]"]

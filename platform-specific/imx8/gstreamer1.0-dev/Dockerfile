@@ -19,8 +19,7 @@ RUN apt-get update \
         libgstreamer1.0-dev \
         libgstreamer-plugins-base1.0-dev \
         libgstreamer-plugins-bad1.0-dev \
-        #imx-gst1.0-plugin-dev \
-        #imx-dsp-dev \
+        imx-gst1.0-plugin-dev \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

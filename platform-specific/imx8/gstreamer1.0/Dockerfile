@@ -16,8 +16,7 @@ RUN apt-get -y update \
         gstreamer1.0-plugins-base \
         gstreamer1.0-plugins-good \
         gstreamer1.0-plugins-bad \
-        #gstreamer1.0-libav \ 
-        #imx-gst1.0-plugin \
+        imx-gst1.0-plugin \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Initializes the container for the detected i.MX8 SoC.
+# It reads the device-tree compatibility information, selects the appropriate
+# HiFi4 DSP firmware for supported platforms, updates the firmware symlink,
+# and then executes the command passed to the container.
+
 set -e
 
 DSP_FIRMWARE_DIR="/usr/lib/firmware/imx/dsp"

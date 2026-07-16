@@ -1,0 +1,16 @@
+services:
+  gstreamer1.0-examples:
+    network_mode: host
+    volumes:
+        - /dev:/dev
+        - /tmp:/tmp
+        - /run/udev:/run/udev:ro
+        - /proc/device-tree:/proc/device-tree:ro
+    device_cgroup_rules:
+        - 'c 81:* rmw'
+        - 'c 237:* rmw'
+        - 'c 238:* rmw'
+        - 'c 251:* rmw'
+        - 'c 253:* rmw'
+    image: 'torizon/gstreamer1.0-examples-imx8:stable-rc'
+    command: ["sleep", "infinity"]
