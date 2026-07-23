@@ -98,8 +98,14 @@ fi
 # echo the Dockerfile in CI, making it easier to spot bugs.
 cat "${DOCKERFILE_FOLDER-}Dockerfile"
 
+if grep -q 'gstreamer1.0' "${DOCKERFILE_FOLDER-}Dockerfile"; then
+  SBOM_FLAG="--attest type=sbom,generator=docker/buildkit-syft-scanner,SELECT_CATALOGERS=-file-executable-cataloger"
+else
+  SBOM_FLAG="--sbom=true"
+fi
+
 # shellcheck disable=SC2086
-docker buildx build --progress=plain --sbom=true --push ${BUILD_PLATFORMS} \
+docker buildx build --progress=plain ${SBOM_FLAG} --push ${BUILD_PLATFORMS} \
   --build-arg ACCEPT_FSL_EULA="${ACCEPT_FSL_EULA-}" \
   --build-arg TORADEX_FEED_URL="${TORADEX_FEED_URL-}" \
   --build-arg BASE_IMAGE_NAME="${BASE_IMAGE_NAME-}" \
