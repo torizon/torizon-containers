@@ -50,6 +50,14 @@ platforms = {
     ],
 }
 
+DISABLED_MARKER = ".disabled"
+
+
+def is_app_disabled(app_dir):
+    """An app is kept out of the published feed if it contains a `.disabled` marker file."""
+    return os.path.exists(os.path.join(app_dir, DISABLED_MARKER))
+
+
 def recursively_replace_contents(target_content, replace_with, target_dir):
     for root, _, files in os.walk(target_dir):
         for file in files:
@@ -129,12 +137,23 @@ def main(composes_dir):
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
 
+    disabled_apps = {
+        app
+        for app in os.listdir(composes_dir)
+        if os.path.isdir(os.path.join(composes_dir, app))
+        and is_app_disabled(os.path.join(composes_dir, app))
+    }
+    for app in sorted(disabled_apps):
+        print(f"Skipping disabled app: {app}")
+
     # For each platform
     for platform, members in platforms.items():
         # For each app in ./composes
         for app in os.listdir(composes_dir):
             app_path = os.path.join(composes_dir, app)
             if not os.path.isdir(app_path):
+                continue
+            if app in disabled_apps:
                 continue
             compose_pattern = f"{app}-{platform}-compose.yml"
             compose_file_path = os.path.join(app_path, compose_pattern)

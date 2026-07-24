@@ -147,6 +147,26 @@ services:
     # ... rest of service definition
 ```
 
+## Disabling a Demo from the Gallery Feed
+
+Sometimes a demo needs to be temporarily (or permanently) kept out of the published
+feed without deleting its compose files or tests, for example while a regression is
+being investigated. To do this, add an empty `.disabled` marker file to the demo's
+directory under [`tests/demo-gallery-composes/`](tests/demo-gallery-composes/):
+
+```bash
+touch tests/demo-gallery-composes/your-demo-name/.disabled
+```
+
+When the Demo Gallerizator runs, it skips any app directory containing this marker
+entirely: none of its compose files are copied, canonicalized, or included in the
+feed pushed to the [Demo Gallery Repository](https://gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery),
+so it will not reach the Delegation Publisher or appear as a Torizon Demo App.
+
+To re-enable the demo, remove the `.disabled` file. Note that this only controls
+whether the demo goes live through the Demo Gallerizator; it has no effect on the
+BATS tests, which keep running regardless.
+
 ## Step-by-Step Contribution Workflow
 
 ### 1. Create Compose Files
