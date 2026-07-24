@@ -60,6 +60,15 @@ build-tests-container:
     pull_policy: always
   before_script:
     - . ./ci-scripts/release-tag.sh
+    - |
+      if [ "${CI_COMMIT_REF_PROTECTED:-}" = "true" ]; then
+        AVAL_REGISTRY_ARGS="-e REGISTRY=${DOCKERHUB_REGISTRY_URL} -e REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE} -e IMAGE_TAG=${RELEASE_TAG}-rc"
+        echo "${DOCKERHUB_REGISTRY_URL}/${PROJECT_SETTING_REGISTRY_NAMESPACE}/<image>:${CI_COMMIT_BRANCH-${CI_COMMIT_REF_NAME-}}-rc"
+      else
+        AVAL_REGISTRY_ARGS="-e REGISTRY=${CI_REGISTRY} -e REGISTRY_NAMESPACE=${CI_PROJECT_PATH} -e IMAGE_TAG=${CI_COMMIT_REF_SLUG}-aval"
+        echo "Local alias tag: ${CI_REGISTRY}/${CI_PROJECT_PATH}/<image>:${CI_COMMIT_REF_SLUG}-aval"
+      fi
+
     - echo -e "\e[0Ksection_start:$(date +%s):prepare\r\e[0KDevice Preparation"
     - >
       cd /aval &&
@@ -67,7 +76,11 @@ build-tests-container:
       "docker run
       -e PAID_DOCKERHUB_USER=$PAID_DOCKERHUB_USER
       -e PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN
-      -e REGISTRY=docker.io
+      -e CI_REGISTRY=$CI_REGISTRY
+      -e CI_REGISTRY_USER=$CI_REGISTRY_USER
+      -e CI_REGISTRY_PASSWORD=$CI_REGISTRY_PASSWORD
+      -e CI_COMMIT_REF_SLUG=$CI_COMMIT_REF_SLUG
+      ${AVAL_REGISTRY_ARGS}
       -e RELEASE_TAG=$RELEASE_TAG
       -e SOC_UDT=$SOC_UDT
       -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN

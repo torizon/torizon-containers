@@ -12,14 +12,14 @@ services:
       - c 13:* rmw
       - c 226:* rmw
       - c 10:223 rmw
-    image: $REGISTRY/torizon/weston-am67a:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/weston-am67a:${IMAGE_TAG}
     command: --developer --tty=/dev/tty7 -- --debug
 
   graphics-tests:
     depends_on:
       weston:
         condition: service_healthy
-    image: $REGISTRY/torizon/graphics-tests-am67a:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/graphics-tests-am67a:${IMAGE_TAG}
     container_name: graphics-tests
     stdin_open: true
     tty: true

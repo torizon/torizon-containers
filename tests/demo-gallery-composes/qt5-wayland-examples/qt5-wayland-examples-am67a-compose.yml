@@ -12,7 +12,7 @@ services:
       - 'c 4:* rmw'
       - 'c 13:* rmw'
       - 'c 226:* rmw'
-    image: '$REGISTRY/torizon/weston-am67a:${RELEASE_TAG}-rc'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/weston-am67a:${IMAGE_TAG}'
     command: '--developer'
 
   qt5-wayland-examples:
@@ -21,7 +21,7 @@ services:
         condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/qt5-wayland-examples-am67a:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/qt5-wayland-examples-am67a:${IMAGE_TAG}
     volumes:
       - '/tmp:/tmp'
       - '/dev/dri:/dev/dri'
