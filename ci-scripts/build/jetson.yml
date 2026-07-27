@@ -1,0 +1,33 @@
+default:
+  tags:
+    - arm64
+
+.build-jetson-template:
+  retry: 2
+  extends: .docker-build
+  stage: build
+  tags:
+    - arm64
+  rules:
+    - if: '$CI_WORLD_REBUILD == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+    - if: '$CI_BUILD_JETSON == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+
+jetson:[base]:
+  extends: .build-jetson-template
+  before_script:
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: debian-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/jetson"

@@ -24,6 +24,9 @@ elif [[ "${IMAGE_NAME:-}" == *imx95 ]]; then
 elif [[ "${IMAGE_NAME:-}" == *sl1680 ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/sl1680/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
+elif [[ "${IMAGE_NAME:-}" == *jetson ]]; then
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/jetson/snapshots/latest-snapshot)
+  export TORADEX_SNAPSHOT
 else
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/upstream/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT

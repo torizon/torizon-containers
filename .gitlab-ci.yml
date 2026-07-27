@@ -21,6 +21,7 @@ include:
   - "/ci-scripts/build/am62p.yml"
   - "/ci-scripts/build/am67a.yml"
   - "/ci-scripts/build/am69.yml"
+  - "/ci-scripts/build/jetson.yml"
   - "/ci-scripts/lint/lint.yml"
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
@@ -33,6 +34,7 @@ variables:
     description: "Set to true to publish the demo gallery composes for this branch."
 
   DEBIAN_POINT_RELEASE: "12.15-slim"
+  DEBIAN_POINT_RELEASE_NVIDIA: "forky-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"
 
@@ -53,6 +55,7 @@ variables:
   AM67A_FOLDER: "am67a"
   AM69_FOLDER: "am69"
   SL1680_FOLDER: "sl1680"
+  JETSON_FOLDER: "jetson"
   UPSTREAM_FOLDER: "upstream"
   TESTS_FOLDER: "tests"
   TESTS_CONTAINERS_FOLDER: "containers"
