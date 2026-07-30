@@ -23,7 +23,7 @@ default:
 upstream:[base]:
   extends: .build-upstream-template
   before_script:
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
   variables:
     BUILD_FOR_ARM_V7: "true"
     IMAGE_NAME: debian

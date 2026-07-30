@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2025 Toradex AG
+# Copyright (c) 2019-2026 Toradex AG
 # SPDX-License-Identifier: MIT
 
 ARG DEBIAN_POINT_RELEASE
@@ -26,13 +26,6 @@ ENV LC_ALL C.UTF-8
 
 COPY 01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 
-RUN bash -c "if [[ ${TORADEX_FEED_URL} =~ (am6x|sl1680) ]]; then printf 'Types: deb\n\
-URIs: http://deb.debian.org/debian\n\
-Suites: bookworm-backports\n\
-Components: main\n\
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' >/etc/apt/sources.list.d/bookworm-backports.sources; \
-fi"
-
 RUN echo 'APT::Get::Assume-Yes "true";\n\
     APT::Install-Recommends "0";\n\
     APT::Install-Suggests "0";\n\
@@ -40,27 +33,36 @@ RUN echo 'APT::Get::Assume-Yes "true";\n\
     && mkdir -p /usr/share/man/man1
 
 COPY users-groups.sh /users-groups.sh
+
 RUN ./users-groups.sh \
     && rm users-groups.sh
 
 RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-07102024.gpg \
-    | gpg --dearmor \ 
+    | gpg --dearmor \
     | tee /usr/share/keyrings/toradex-debian-repo.gpg
 
 RUN echo "Types: deb\n\
 URIs: ${TORADEX_FEED_URL}/snapshots/${TORADEX_SNAPSHOT}\n\
 Suites: stable\n\
 Components: main non-free\n\
-Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" > /etc/apt/sources.list.d/toradex.sources \
-    && echo "Package: *\nPin: origin feeds.toradex.com\nPin-Priority: 900" > /etc/apt/preferences.d/toradex-feeds
-
-RUN apt-get -y update && apt-get upgrade -y
+Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" \
+    > /etc/apt/sources.list.d/toradex.sources \
+    && echo "Package: *\n\
+Pin: origin feeds.toradex.com\n\
+Pin-Priority: 900" \
+    > /etc/apt/preferences.d/toradex-feeds \
+    && echo "Package: fastfetch libyyjson0\n\
+Pin: origin feeds.toradex.com\n\
+Pin-Priority: -1" \
+    > /etc/apt/preferences.d/fastfetch-debian
 
 RUN apt-get -y update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-    fastfetch \
-    && apt-get clean && apt-get autoremove && rm -rf /var/lib/apt/lists/*
+        fastfetch \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s $(which fastfetch) /usr/local/bin/neofetch
 
