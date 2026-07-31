@@ -1,0 +1,41 @@
+services:
+  weston:
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp
+      - /run/udev:/run/udev
+    device_cgroup_rules:
+      - c 4:* rmw
+      - c 10:* rmw
+      - c 13:* rmw
+      - c 195:* rmw
+      - c 226:* rmw
+      - c 500:* rmw
+      - c 501:* rmw
+      - c 502:* rmw
+      - c 505:* rmw
+    image: $REGISTRY/torizon/weston-jetson:stable-rc
+    command: --developer --tty=/dev/tty7 -- --debug
+
+  graphics-tests:
+    depends_on:
+      weston:
+        condition: service_healthy
+    image: $REGISTRY/torizon/graphics-tests-jetson:stable-rc
+    container_name: graphics-tests
+    stdin_open: true
+    tty: true
+    device_cgroup_rules:
+      - c 10:* rmw
+      - c 195:* rmw
+      - c 226:* rmw
+      - c 500:* rmw
+      - c 501:* rmw
+      - c 502:* rmw
+      - c 505:* rmw
+    volumes:
+      - /dev:/dev
+      - /tmp:/tmp

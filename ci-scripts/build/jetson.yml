@@ -31,3 +31,76 @@ jetson:[base]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/jetson"
+  needs: []
+
+jetson:[core]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-jetson
+    IMAGE_NAME: core-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
+  needs: ["jetson:[base]"]
+
+jetson:[wayland-base]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: core-jetson
+    IMAGE_NAME: wayland-base-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+  needs: ["jetson:[core]"]
+
+jetson:[wayland-base-dev]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-jetson
+    IMAGE_NAME: wayland-base-dev-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+  needs: ["jetson:[wayland-base]"]
+
+jetson:[weston]:
+  extends: .build-jetson-template
+  before_script:
+    - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-jetson
+    IMAGE_NAME: weston-jetson
+    DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+  needs: ["jetson:[wayland-base]"]
+
+jetson:[weston-touch-calibrator]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-jetson
+    IMAGE_NAME: weston-touch-calibrator-jetson
+    DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+  needs: ["jetson:[weston]"]
+
+jetson:[chromium]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-jetson
+    IMAGE_NAME: chromium-jetson
+    DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+  needs: ["jetson:[wayland-base]"]
+
+jetson:[graphics-tests]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-jetson
+    IMAGE_NAME: graphics-tests-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs: ["jetson:[wayland-base]"]

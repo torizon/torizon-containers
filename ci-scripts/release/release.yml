@@ -31,11 +31,13 @@ prepare:
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx93.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-imx95.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
+    - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-jetson.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-sl1680.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/debian-upstream.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-8.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/dotnet-10.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/rt-tests.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"
+
 
   artifacts:
     reports:

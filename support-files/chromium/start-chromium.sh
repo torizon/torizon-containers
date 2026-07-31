@@ -6,8 +6,7 @@ DRY_RUN=false
 chromium_base_params="
   --allow-insecure-localhost
   --disable-notifications
-  --use-gl=egl
-  --in-process-gpu
+  --use-angle=gles
   --check-for-update-interval=315360000
   --disable-seccomp-filter-sandbox
   --no-sandbox

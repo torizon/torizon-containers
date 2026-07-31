@@ -279,8 +279,35 @@ function cleanup() {
 
 trap cleanup EXIT
 
+function drop_unavailable_modules() {
+  local config_file=$1
+  local modules available=''
+  local module module_list
+
+  modules=$(sed -n 's/^modules=//p' "$config_file")
+  test -z "$modules" && return
+
+  IFS=',' read -ra module_list <<<"$modules"
+  for module in "${module_list[@]}"; do
+    if find /usr/lib -maxdepth 3 -name "$module" -print -quit | grep -q .; then
+      available="${available:+$available,}$module"
+    else
+      echo "Weston module '$module' is not available in this build, dropping it from $config_file"
+    fi
+  done
+
+  if test -z "$available"; then
+    sed -i '/^modules=/d' "$config_file"
+  else
+    sed -i "s|^modules=.*|modules=$available|" "$config_file"
+  fi
+}
+
 dos2unix $CONFIGURATION_FILE
 dos2unix $CONFIGURATION_FILE_DEV
+
+drop_unavailable_modules $CONFIGURATION_FILE
+drop_unavailable_modules $CONFIGURATION_FILE_DEV
 
 # for every argument after "--", append that argument to WESTON_ARGS
 for i in "${!WESTON_EXTRA_ARGS[@]}"; do
