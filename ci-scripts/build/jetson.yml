@@ -104,3 +104,13 @@ jetson:[graphics-tests]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
   needs: ["jetson:[wayland-base]"]
+
+jetson:[cuda]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: core-jetson
+    IMAGE_NAME: cuda-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
+  needs: ["jetson:[core]"]
