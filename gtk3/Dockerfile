@@ -10,7 +10,7 @@ FROM $REGISTRY/$REGISTRY_NAMESPACE/${BASE_IMAGE_NAME}:${IMAGE_TAG}
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        libgtk-3-0 \
+        libgtk-3-0t64 \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

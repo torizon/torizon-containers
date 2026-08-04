@@ -20,7 +20,7 @@ RUN apt-get -q -y update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /var/run/sshd && mkdir /home/build && mkdir /home/build/sysroot
+RUN mkdir -p /var/run/sshd && mkdir -p /home/build && mkdir -p /home/build/sysroot
 
 # configures SSH access to the container and sets environment by default
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \

@@ -19,7 +19,10 @@ ENV PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib/${CROSS_COMPILER}/pkgconfig
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
-RUN dpkg --add-architecture ${CROSS_TARGET_ARCH}
+RUN NATIVE_ARCH=$(dpkg --print-architecture) \
+    && if [ "$NATIVE_ARCH" != "$CROSS_TARGET_ARCH" ]; then \
+        dpkg --add-architecture ${CROSS_TARGET_ARCH}; \
+    fi
 
 RUN apt-get -q -y update \
     && apt-get -q -y install --no-install-recommends \
@@ -30,14 +33,24 @@ RUN apt-get -q -y update \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get -q -y update \
+# Use the real cross-toolchain when actually cross-compiling; fall back to
+# plain build-essential (native gcc/g++) when the target arch matches the
+# host's — sidesteps the crossbuild-essential-* alternative resolution
+# that broke between bookworm's and forky's apt.
+RUN NATIVE_ARCH=$(dpkg --print-architecture) \
+    && if [ "$NATIVE_ARCH" = "$CROSS_TARGET_ARCH" ]; then \
+        CROSS_PKG="build-essential"; \
+    else \
+        CROSS_PKG="crossbuild-essential-${CROSS_TARGET_ARCH}"; \
+    fi \
+    && apt-get -q -y update \
     && apt-get -q -y upgrade \
     && apt-get -q -y install --no-install-recommends \
         git \
         openssl \
         wget \
         curl \
-        crossbuild-essential-${CROSS_TARGET_ARCH} \
+        $CROSS_PKG \
     && apt-get clean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*

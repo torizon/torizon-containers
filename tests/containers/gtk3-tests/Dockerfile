@@ -33,7 +33,7 @@ RUN apt-get update && \
 	# for testing. Remove the installation of this package
 	# if you're using this Dockerfile as a starting point.
         gtk-3-examples \
-        libgtk-3-0 \
+        libgtk-3-0t64 \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

@@ -9,6 +9,7 @@ ARG REGISTRY_NAMESPACE
 
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BUILD_BASE_IMAGE_NAME:$IMAGE_TAG as build
 
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         libqt6opengl6-dev \

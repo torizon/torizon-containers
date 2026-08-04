@@ -36,8 +36,8 @@ ENV PATH=$PATH:/dotnet
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
-        libicu72 \
-        libssl3 \
+        libicu78 \
+        libssl3t64 \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*

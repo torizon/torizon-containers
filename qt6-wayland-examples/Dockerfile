@@ -8,6 +8,7 @@ ARG REGISTRY_NAMESPACE
 
 FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         qt6-base-examples \

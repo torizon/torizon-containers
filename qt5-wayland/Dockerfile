@@ -34,18 +34,19 @@ RUN apt-get -y update \
         xz-utils \
     && WORK_DIR=$(mktemp -d) \
     && cd $WORK_DIR \
-    && ARCH=$(dpkg --print-architecture) apt-get download libqt5opengl5:$ARCH \
-    && ar x libqt5opengl5*.deb \
+    && ARCH=$(dpkg --print-architecture) \
+    && apt-get download libqt5opengl5t64:$ARCH \
+    && ar x libqt5opengl5t64*.deb \
     && tar -xJf control.tar.xz \
-    && sed -i '/^Depends:/s/, libqt5gui5 (>= 5.1.0)//' control \
+    && sed -i '/^Depends:/s/, libqt5gui5t64 (>= 5.1.0)//' control \
     && tar -cJf control.tar.xz control md5sums shlibs symbols triggers \
-    && ar rcs libqt5opengl5.deb debian-binary control.tar.xz data.tar.xz \
+    && ar rcs libqt5opengl5t64.deb debian-binary control.tar.xz data.tar.xz \
     && apt-get -y install --no-install-recommends \
-        ./libqt5opengl5.deb \
+        ./libqt5opengl5t64.deb \
     && cd ~ \
     && rm -rf $WORK_DIR \
     && apt-get -y remove binutils xz-utils \
-    && apt-mark hold libqt5opengl5 \
+    && apt-mark hold libqt5opengl5t64 \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -55,14 +56,14 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
         libfontconfig1-dev \
         libqt5quick5-gles \
         libqt5quickparticles5-gles \
-        libqt5concurrent5 \
-        libqt5dbus5 \
-        libqt5network5 \
-        libqt5printsupport5 \
-        libqt5sql5 \
-        libqt5test5 \
-        libqt5widgets5 \
-        libqt5xml5 \
+        libqt5concurrent5t64 \
+        libqt5dbus5t64 \
+        libqt5network5t64 \
+        libqt5printsupport5t64 \
+        libqt5sql5t64 \
+        libqt5test5t64 \
+        libqt5widgets5t64 \
+        libqt5xml5t64 \
         libqt5qml5 \
         libqt5quicktest5 \
         libqt5quickwidgets5 \
