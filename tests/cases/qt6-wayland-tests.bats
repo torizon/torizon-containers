@@ -27,7 +27,7 @@ teardown_file() {
   run -0 clean_kernel_logs
 
   run -124 docker compose -f "$COMPOSE_FILE" exec "${file_name}" timeout 10s \
-    "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/cube"
+    "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/bin/cube"
 
   run -0 gpu_kernel_logs
 }
@@ -39,7 +39,7 @@ teardown_file() {
   run -0 clean_kernel_logs
 
   run -124 docker compose -f "$COMPOSE_FILE" exec "${file_name}" \
-    timeout 10s "/usr/lib/$ARCH_TRIPLET/qt6/examples/widgets/widgets/shapedclock/shapedclock"
+    timeout 10s "/usr/lib/$ARCH_TRIPLET/qt6/examples/widgets/widgets/shapedclock/bin/shapedclock"
 
   run -0 gpu_kernel_logs
 }
@@ -68,7 +68,7 @@ teardown_file() {
   run -0 clean_kernel_logs
 
   run -124 docker compose -f "$COMPOSE_FILE" exec -e QT_QPA_PLATFORM=eglfs "${file_name}" timeout 10s \
-    kms-setup.sh "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/cube"
+    kms-setup.sh "/usr/lib/$ARCH_TRIPLET/qt6/examples/opengl/cube/bin/cube"
 
   if $HAS_GPU; then
     refute_output --regexp "[Ll][Ll][Vv][Mm][Pp][Ii][Pp][Ee]"
