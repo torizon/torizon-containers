@@ -130,7 +130,7 @@ def main(composes_dir):
     # ie, an `image:` specifying the registry such as `docker.io/torizon/weston:stable-rc`
     recursively_replace_contents("$REGISTRY/", "", composes_dir)
     # FIXME: we should only do this on torizon-containers releases, ie, tags
-    recursively_replace_contents("stable-rc", "4", composes_dir)
+    recursively_replace_contents("${RELEASE_TAG}-rc", "4", composes_dir)
 
     temp_dir = "./temp"
 

@@ -12,12 +12,12 @@ services:
       - c 13:* rmw
       - c 226:* rmw
       - c 10:223 rmw
-    image: $REGISTRY/torizon/weston-am69:stable-rc
+    image: $REGISTRY/torizon/weston-am69:${RELEASE_TAG}-rc
     command: --developer --tty=/dev/tty7 -- --debug
 
   graphics-tests:
 
-    image: $REGISTRY/torizon/graphics-tests-am69:stable-rc
+    image: $REGISTRY/torizon/graphics-tests-am69:${RELEASE_TAG}-rc
     container_name: graphics-tests
     stdin_open: true
     tty: true

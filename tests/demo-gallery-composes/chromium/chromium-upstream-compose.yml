@@ -12,7 +12,7 @@ services:
       - 'c 4:* rmw'
       - 'c 13:* rmw'
       - 'c 226:* rmw'
-    image: '$REGISTRY/torizon/weston:stable-rc'
+    image: '$REGISTRY/torizon/weston:${RELEASE_TAG}-rc'
     command: '--developer'
 
   chromium:
@@ -22,7 +22,7 @@ services:
         condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/chromium:stable-rc
+    image: $REGISTRY/torizon/chromium:${RELEASE_TAG}-rc
     security_opt:
     - seccomp:unconfined
     shm_size: 256mb

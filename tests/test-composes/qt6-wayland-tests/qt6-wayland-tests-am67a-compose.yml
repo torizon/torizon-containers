@@ -1,6 +1,6 @@
 services:
   qt6-wayland-tests:
-    image: $REGISTRY/torizon/qt6-wayland-tests-am67a:stable-rc
+    image: $REGISTRY/torizon/qt6-wayland-tests-am67a:${RELEASE_TAG}-rc
     container_name: qt6-wayland-tests
     privileged: true
     stdin_open: true

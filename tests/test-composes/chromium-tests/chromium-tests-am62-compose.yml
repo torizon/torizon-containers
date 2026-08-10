@@ -11,7 +11,7 @@ services:
       - 'c 4:* rmw'
       - 'c 13:* rmw'
       - 'c 226:* rmw'
-    image: '$REGISTRY/torizon/weston-am62:stable-rc'
+    image: '$REGISTRY/torizon/weston-am62:${RELEASE_TAG}-rc'
     command: '--developer'
 
   chromium-tests:
@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: $REGISTRY/torizon/chromium-tests-am62:stable-rc
+    image: $REGISTRY/torizon/chromium-tests-am62:${RELEASE_TAG}-rc
     security_opt:
     - seccomp:unconfined
     shm_size: 256mb

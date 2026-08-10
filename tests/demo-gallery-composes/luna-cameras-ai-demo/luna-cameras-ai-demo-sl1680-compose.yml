@@ -1,7 +1,7 @@
 # description: launches the Luna Dual Cameras AI demo application
 services:
   weston:
-    image: '$REGISTRY/torizon/weston-sl1680:stable-rc'
+    image: '$REGISTRY/torizon/weston-sl1680:${RELEASE_TAG}-rc'
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG
@@ -35,7 +35,7 @@ services:
       start_period: 5s
 
   chromium:
-    image: '$REGISTRY/torizon/chromium-sl1680:stable-rc'
+    image: '$REGISTRY/torizon/chromium-sl1680:${RELEASE_TAG}-rc'
     container_name: chromium
     depends_on:
       luna-cameras-ai-demo:

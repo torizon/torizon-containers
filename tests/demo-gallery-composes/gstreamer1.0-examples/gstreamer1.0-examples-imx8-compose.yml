@@ -12,5 +12,5 @@ services:
         - 'c 238:* rmw'
         - 'c 251:* rmw'
         - 'c 253:* rmw'
-    image: 'torizon/gstreamer1.0-examples-imx8:stable-rc'
+    image: 'torizon/gstreamer1.0-examples-imx8:${RELEASE_TAG}-rc'
     command: ["sleep", "infinity"]

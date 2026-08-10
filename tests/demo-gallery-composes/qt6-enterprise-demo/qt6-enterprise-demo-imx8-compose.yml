@@ -15,7 +15,7 @@ services:
       - 'c 226:* rmw'
       - 'c 10:223 rmw'
       - 'c 199:0 rmw'
-    image: '$REGISTRY/torizon/weston-imx8:stable-rc'
+    image: '$REGISTRY/torizon/weston-imx8:${RELEASE_TAG}-rc'
     command: '--developer --tty=/dev/tty7'
 
   qt6-enterprise-demo:
@@ -25,7 +25,7 @@ services:
     user: torizon
     device_cgroup_rules:
       - 'c 199:* rmw'
-    image: $REGISTRY/torizon/qt6-enterprise-demo-imx8:stable-rc
+    image: $REGISTRY/torizon/qt6-enterprise-demo-imx8:${RELEASE_TAG}-rc
     volumes:
       - '/tmp:/tmp'
       - '/dev/galcore:/dev/galcore'

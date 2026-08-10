@@ -31,6 +31,6 @@ services:
       - 'c 226:* rmw'
       - 'c 10:223 rmw'
       - 'c 199:0 rmw'
-    image: '$REGISTRY/torizon/weston-imx8:stable-rc'
+    image: '$REGISTRY/torizon/weston-imx8:${RELEASE_TAG}-rc'
     command: '--developer --tty=/dev/tty7 -- --debug'
 

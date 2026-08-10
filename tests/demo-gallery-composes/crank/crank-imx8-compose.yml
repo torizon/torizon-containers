@@ -1,6 +1,6 @@
 services:
   crank-weston:
-    image: '$REGISTRY/torizon/crank-weston-imx8:stable-rc'
+    image: '$REGISTRY/torizon/crank-weston-imx8:${RELEASE_TAG}-rc'
     container_name: crank-weston
     network_mode: host
     cap_add:

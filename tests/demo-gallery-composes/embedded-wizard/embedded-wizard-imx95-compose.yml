@@ -18,7 +18,7 @@ services:
         condition: service_healthy
 
   weston:
-    image: $REGISTRY/torizon/weston-imx95:stable-rc
+    image: $REGISTRY/torizon/weston-imx95:${RELEASE_TAG}-rc
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG

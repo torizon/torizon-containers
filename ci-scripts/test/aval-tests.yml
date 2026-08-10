@@ -59,6 +59,7 @@ build-tests-container:
     name: registry.gitlab.com/toradex/rd/torizon-core/aval/aval:main
     pull_policy: always
   before_script:
+    - . ./ci-scripts/release-tag.sh
     - echo -e "\e[0Ksection_start:$(date +%s):prepare\r\e[0KDevice Preparation"
     - >
       cd /aval &&
@@ -67,6 +68,7 @@ build-tests-container:
       -e PAID_DOCKERHUB_USER=$PAID_DOCKERHUB_USER
       -e PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN
       -e REGISTRY=docker.io
+      -e RELEASE_TAG=$RELEASE_TAG
       -e SOC_UDT=$SOC_UDT
       -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN
       --privileged

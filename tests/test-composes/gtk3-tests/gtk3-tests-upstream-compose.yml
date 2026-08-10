@@ -1,6 +1,6 @@
 services:
   gtk3-tests:
-    image: $REGISTRY/torizon/gtk3-tests:stable-rc
+    image: $REGISTRY/torizon/gtk3-tests:${RELEASE_TAG}-rc
     container_name: gtk3-tests
     stdin_open: true
     tty: true

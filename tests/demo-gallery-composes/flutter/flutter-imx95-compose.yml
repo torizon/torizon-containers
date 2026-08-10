@@ -1,7 +1,7 @@
 # description: launches the Flutter Internet Radio demo application
 services:
   weston:
-    image: '$REGISTRY/torizon/weston-imx95:stable-rc'
+    image: '$REGISTRY/torizon/weston-imx95:${RELEASE_TAG}-rc'
     container_name: weston
     network_mode: host
     cap_add:

@@ -6,6 +6,9 @@ set -euo pipefail
 # Copyright (c) 2019-2025 Toradex AG
 # SPDX-License-Identifier: MIT
 
+# shellcheck source=ci-scripts/release-tag.sh
+. "$(dirname "${BASH_SOURCE[0]}")/../release-tag.sh"
+
 if [[ "${IMAGE_NAME:-}" == *am6* ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/am6x/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
@@ -68,12 +71,12 @@ export PUSH_REGISTRY=${CI_REGISTRY-}
 export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
 export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 
-# Protected refs outside an MR: pull & push on Docker Hub with -rc tag
-if [[ "${CI_COMMIT_REF_PROTECTED:-}" == "true" && "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ]]; then
+# Protected refs listed in RELEASE_BRANCHES, outside an MR: pull & push on Docker Hub with -rc tag
+if [[ "$IS_RELEASE_BRANCH" == "true" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE-}
-  export IMAGE_TAG=${CI_COMMIT_BRANCH-${CI_COMMIT_REF_NAME-}}-rc
+  export IMAGE_TAG=${RELEASE_TAG}-rc
 fi
 
 # Override for Aval test images, push to GitLab even inside protected branches
@@ -84,11 +87,11 @@ if [[ "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]
   export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 fi
 
-# Base images outside stable branch: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
+# Base images outside a release branch: pull from Docker Hub, push to GitLab, because we start from the Debian image hosted at DockerHub
 if [[ ${CI_JOB_NAME:-} == *:\[base\]* || \
   ${CI_JOB_NAME:-} == *:\[stress-tests\]* || \
   ${CI_JOB_NAME:-} == *:\[rt-tests\]* ]] &&
-    [[ "${CI_COMMIT_BRANCH:-}" != "stable" ]]; then
+    [[ "$IS_RELEASE_BRANCH" != "true" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
   export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}

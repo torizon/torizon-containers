@@ -16,5 +16,5 @@ services:
       - c 253:* rmw
       - c 10:223 rmw
       - c 509:* rmw
-    image: $REGISTRY/torizon/weston-imx93:stable-rc
+    image: $REGISTRY/torizon/weston-imx93:${RELEASE_TAG}-rc
     command: --developer --tty=/dev/tty7 -- --debug

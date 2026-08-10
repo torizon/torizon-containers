@@ -12,7 +12,7 @@ services:
       - c 13:* rmw
       - c 226:* rmw
       - c 10:223 rmw
-    image: $REGISTRY/torizon/weston:stable-rc
+    image: $REGISTRY/torizon/weston:${RELEASE_TAG}-rc
     command: --developer --tty=/dev/tty7 -- --debug
 
   graphics-tests:
@@ -28,4 +28,4 @@ services:
     volumes:
         - /dev:/dev
         - /tmp:/tmp
-    image: $REGISTRY/torizon/graphics-tests:stable-rc
+    image: $REGISTRY/torizon/graphics-tests:${RELEASE_TAG}-rc
