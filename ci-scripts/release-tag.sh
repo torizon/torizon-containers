@@ -3,16 +3,9 @@
 RELEASE_TAG="stable"
 IS_RELEASE_BRANCH="false"
 
-if [ -n "${CI_COMMIT_BRANCH:-}" ]; then
-  case " ${RELEASE_BRANCHES:-} " in
-    *" ${CI_COMMIT_BRANCH} "*)
-      RELEASE_TAG="${CI_COMMIT_BRANCH}"
-      if [ "${CI_COMMIT_REF_PROTECTED:-}" = "true" ] &&
-        [ "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ]; then
-        IS_RELEASE_BRANCH="true"
-      fi
-      ;;
-  esac
+if [ -n "${CI_COMMIT_BRANCH:-}" ] && [ "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ]; then
+  RELEASE_TAG="$CI_COMMIT_BRANCH"
+  IS_RELEASE_BRANCH="true"
 fi
 
 export RELEASE_TAG

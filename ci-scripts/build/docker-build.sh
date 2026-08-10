@@ -71,7 +71,7 @@ export PUSH_REGISTRY=${CI_REGISTRY-}
 export REGISTRY_NAMESPACE=${CI_PROJECT_PATH-}
 export IMAGE_TAG=${CI_COMMIT_REF_SLUG-}-${CI_PIPELINE_ID-}
 
-# Protected refs listed in RELEASE_BRANCHES, outside an MR: pull & push on Docker Hub with -rc tag
+# Branch pipelines outside an MR: pull & push on Docker Hub with -rc tag
 if [[ "$IS_RELEASE_BRANCH" == "true" ]]; then
   export REGISTRY=${DOCKERHUB_REGISTRY_URL-}
   export PUSH_REGISTRY=${DOCKERHUB_REGISTRY_URL-}

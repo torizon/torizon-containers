@@ -25,6 +25,13 @@ include:
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
 variables:
+  MAKE_TAG_RELEASE:
+    value: "false"
+    description: "Set to true to promote this branch's -rc images to the versions in ci-scripts/container-versions and create a release."
+  MAKE_GALLERY_RELEASE:
+    value: "false"
+    description: "Set to true to publish the demo gallery composes for this branch."
+
   DEBIAN_POINT_RELEASE: "12.15-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"

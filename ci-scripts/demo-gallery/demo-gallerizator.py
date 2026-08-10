@@ -7,6 +7,8 @@ import json
 """
 To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
 """
+DEMO_GALLERY_VERSION = os.environ.get("DEMO_GALLERY_VERSION")
+
 platforms = {
     "imx8": [
         "apalis-imx8",
@@ -100,8 +102,7 @@ def generate_app_json(composes_dir):
                 package = {
                     "name": f"{app}-{platform}",
                     "filename": fname,
-                    # FIXME: hardcoded!
-                    "version": "4",
+                    "version": DEMO_GALLERY_VERSION,
                     "description": description if description else "",
                 }
                 packages.append(package)
@@ -130,7 +131,7 @@ def main(composes_dir):
     # ie, an `image:` specifying the registry such as `docker.io/torizon/weston:stable-rc`
     recursively_replace_contents("$REGISTRY/", "", composes_dir)
     # FIXME: we should only do this on torizon-containers releases, ie, tags
-    recursively_replace_contents("${RELEASE_TAG}-rc", "4", composes_dir)
+    recursively_replace_contents("${RELEASE_TAG}-rc", DEMO_GALLERY_VERSION, composes_dir)
 
     temp_dir = "./temp"
 

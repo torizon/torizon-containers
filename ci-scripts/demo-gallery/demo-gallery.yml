@@ -8,9 +8,12 @@ build-demo-gallery:
     pull_policy: always
   stage: demo-gallery
   rules:
-    - if: '($CI_COMMIT_TAG =~ /^\d+-\d+\.\d+\.\d+$/ || $CI_BUILD_DEMO_GALLERY == "true")'
+    - if: '$MAKE_GALLERY_RELEASE == "true"'
   script:
     - apk update && apk add python3 git
+    - . ./ci-scripts/release-tag.sh
+    - . ./ci-scripts/release/release-version.sh
+    - export DEMO_GALLERY_VERSION="$RELEASE_MAJOR"
     - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
     - git clone https://oauth2:${DEMO_GALLERY_TOKEN}@gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery.git
     - cd ./demo-gallery
@@ -25,5 +28,5 @@ build-demo-gallery:
         echo "No changes to commit"
       else
         git commit -m "auto: update demo gallery [ci skip]"
-        git push --force origin HEAD:stable
+        git push --force origin HEAD:$RELEASE_TAG
       fi
