@@ -13,7 +13,7 @@ build-demo-gallery:
     - apk update && apk add python3 git
     - . ./ci-scripts/release-tag.sh
     - . ./ci-scripts/release/release-version.sh
-    - export DEMO_GALLERY_VERSION="$RELEASE_MAJOR"
+    - export DEMO_GALLERY_VERSION="$RELEASE_SERIES"
     - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
     - git clone https://oauth2:${DEMO_GALLERY_TOKEN}@gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery.git
     - cd ./demo-gallery

@@ -20,7 +20,7 @@ prepare:
     - chmod +x ./ci-scripts/release/deploy.sh
     - . ./ci-scripts/release-tag.sh
     - . ./ci-scripts/release/release-version.sh
-    - printf 'RELEASE_MAJOR=%s\nRELEASE_VERSION=%s\n' "$RELEASE_MAJOR" "$RELEASE_VERSION" > release.env
+    - printf 'RELEASE_SERIES=%s\nRELEASE_VERSION=%s\n' "$RELEASE_SERIES" "$RELEASE_VERSION" > release.env
     - echo "Releasing $RELEASE_VERSION from ${RELEASE_TAG}-rc"
 
     - ./ci-scripts/release/deploy.sh $(realpath ./ci-scripts/container-versions/cross-toolchains.yml) $PROJECT_SETTING_REGISTRY_NAMESPACE "$RELEASE_TAG-rc"

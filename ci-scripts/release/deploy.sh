@@ -49,15 +49,32 @@ staging_tag="$3"
 while IFS=: read -r image_name rest; do
   image_name=$(echo "$image_name" | xargs)
 
-  major=$(yq e ".[\"$image_name\"].major" "$yaml_file")
-  minor=$(yq e ".[\"$image_name\"].minor" "$yaml_file")
-  patch=$(yq e ".[\"$image_name\"].patch" "$yaml_file")
+  major=$(yq e ".[\"$image_name\"].major // \"\"" "$yaml_file")
+  minor=$(yq e ".[\"$image_name\"].minor // \"\"" "$yaml_file")
+  patch=$(yq e ".[\"$image_name\"].patch // \"\"" "$yaml_file")
+  alias_tag=$(yq e ".[\"$image_name\"].alias // \"\"" "$yaml_file")
 
-  re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
-  re_tag_status=$?
-  if [ $re_tag_status -eq 0 ]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor" "--force"
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major" "--force"
+  if [ -z "$major" ] && [ -z "$alias_tag" ]; then
+    echo "$image_name: needs either a numbered version or an alias in $yaml_file"
+    exit 1
+  fi
+
+  if [ -n "$major" ]; then
+    if [ -z "$minor" ] || [ -z "$patch" ]; then
+      echo "$image_name: major is set but minor/patch is missing"
+      exit 1
+    fi
+
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
+    re_tag_status=$?
+    if [ $re_tag_status -eq 0 ]; then
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor" "--force"
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major" "--force"
+    fi
+  fi
+
+  if [ -n "$alias_tag" ]; then
+    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$alias_tag" "--force"
   fi
 
 done < <(yq e 'keys | .[]' "$yaml_file")
