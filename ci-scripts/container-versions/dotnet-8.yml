@@ -5,10 +5,12 @@ dotnet8: &dotnet
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8:
   <<: *dotnet
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-debug:
   release: *dotnet-release
   semver: *dotnet-semver
@@ -18,16 +20,19 @@ dotnet8-debug:
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3:
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 
 # imx8
 dotnet8-imx8: &dotnet-imx8
@@ -36,20 +41,24 @@ dotnet8-imx8: &dotnet-imx8
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-imx8:
   <<: *dotnet-imx8
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-imx8:
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 
 # am62
 dotnet8-am62: &dotnet-am62
@@ -58,20 +67,24 @@ dotnet8-am62: &dotnet-am62
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-am62:
   <<: *dotnet-am62
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-am62:
   major: 4
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 
 # am62p
 dotnet8-am62p: &dotnet-am62p
@@ -80,20 +93,24 @@ dotnet8-am62p: &dotnet-am62p
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-am62p:
   <<: *dotnet-am62p
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 
 # am67a
 dotnet8-am67a: &dotnet-am67a
@@ -102,20 +119,24 @@ dotnet8-am67a: &dotnet-am67a
   major: 4
   minor: 6
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-am67a:
   <<: *dotnet-am67a
   minor: 6
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-am67a:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 6
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-am67a:
   major: 4
   minor: 6
   patch: 0
+  alias: bookworm-scarthgap
 
 # am69
 dotnet8-am69: &dotnet-am69
@@ -124,20 +145,24 @@ dotnet8-am69: &dotnet-am69
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-am69:
   <<: *dotnet-am69
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-am69:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-am69:
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 
 # imx93
 dotnet8-imx93: &dotnet-imx93
@@ -146,20 +171,24 @@ dotnet8-imx93: &dotnet-imx93
   major: 4
   minor: 5
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-imx93:
   <<: *dotnet-imx93
   minor: 5
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-imx93:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 5
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-imx93:
   major: 4
   minor: 5
   patch: 0
+  alias: bookworm-scarthgap
 
 # imx95
 dotnet8-imx95: &dotnet-imx95
@@ -168,20 +197,24 @@ dotnet8-imx95: &dotnet-imx95
   major: 4
   minor: 15
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-imx95:
   <<: *dotnet-imx95
   minor: 20
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 15
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-imx95:
   major: 4
   minor: 15
   patch: 0
+  alias: bookworm-scarthgap
 
 # sl1680
 dotnet8-sl1680: &dotnet-sl1680
@@ -190,17 +223,21 @@ dotnet8-sl1680: &dotnet-sl1680
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 aspdotnet8-sl1680:
   <<: *dotnet-sl1680
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-wayland-sl1680:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 dotnet8-gtk3-sl1680:
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap

@@ -2,63 +2,79 @@ debian-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 wayland-base-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 wayland-base-dev-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 wayland-gtk3-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 weston-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 weston-touch-calibrator-am62p:
   major: 4
   minor: 11
   patch: 0
+  alias: bookworm-scarthgap
 qt5-wayland-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 qt5-wayland-examples-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 qt6-wayland-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 qt6-wayland-examples-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 qt6-wayland-tests-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 graphics-tests-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 chromium-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 cog-am62p:
   major: 4
   minor: 13
   patch: 0
+  alias: bookworm-scarthgap
 cross-toolchain-arm64-am62p:
   major: 4
   minor: 4
   patch: 0
+  alias: bookworm-scarthgap
 cross-toolchain-ssh-arm64-am62p:
   major: 4
   minor: 4
   patch: 0
+  alias: bookworm-scarthgap
