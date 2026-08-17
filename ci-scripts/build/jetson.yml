@@ -114,3 +114,13 @@ jetson:[cuda]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
   needs: ["jetson:[core]"]
+
+jetson:[gstreamer1.0]:
+  extends: .build-jetson-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-jetson
+    IMAGE_NAME: gstreamer1.0-jetson
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
+  needs: ["jetson:[wayland-base]"]
