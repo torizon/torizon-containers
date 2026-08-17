@@ -1,0 +1,126 @@
+default:
+  tags:
+    - arm64
+
+.build-thor-template:
+  retry: 2
+  extends: .docker-build
+  stage: build
+  tags:
+    - arm64
+  rules:
+    - if: '$CI_WORLD_REBUILD == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+    - if: '$CI_BUILD_THOR == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    L4T_DRIVER_VARIANT: openrm
+
+thor:[base]:
+  extends: .build-thor-template
+  before_script:
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: debian-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/jetson"
+  needs: []
+
+thor:[core]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-thor
+    IMAGE_NAME: core-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
+  needs: ["thor:[base]"]
+
+thor:[wayland-base]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: core-thor
+    IMAGE_NAME: wayland-base-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
+  needs: ["thor:[core]"]
+
+thor:[wayland-base-dev]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: wayland-base-dev-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[weston]:
+  extends: .build-thor-template
+  before_script:
+    - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: weston-thor
+    DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[weston-touch-calibrator]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: weston-thor
+    IMAGE_NAME: weston-touch-calibrator-thor
+    DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
+  needs: ["thor:[weston]"]
+
+thor:[chromium]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: chromium-thor
+    DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[graphics-tests]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: graphics-tests-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[cuda]:
+  extends: .build-thor-template
+  variables:
+    BASE_IMAGE_NAME: core-thor
+    IMAGE_NAME: cuda-thor
+    CUDA_ARCHS: "sm_110"
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
+  needs: ["thor:[core]"]
+
+thor:[gstreamer1.0]:
+  extends: .build-thor-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: gstreamer1.0-thor
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
+  needs: ["thor:[wayland-base]"]

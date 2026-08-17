@@ -59,7 +59,8 @@ get_platform_filter() {
     *am69*) echo "platform:am69" ;;
     *sl1680*) echo "platform:sl1680" ;;
     *beagley-ai*) echo "platform:am67a" ;;
-    *jetson*) echo "platform:jetson" ;;
+    *thor*) echo "platform:thor" ;;
+    *orin*) echo "platform:orin" ;;
     *) echo "platform:upstream" ;;
   esac
 }

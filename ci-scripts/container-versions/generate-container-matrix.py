@@ -18,7 +18,7 @@ from collections import OrderedDict
 
 FOLDER = '.'
 
-PLATFORM_SUFFIXES = ['am62', 'am62p', 'am67a', 'am69', 'sl1680', 'imx8', 'imx93', 'imx95', 'jetson']
+PLATFORM_SUFFIXES = ['am62', 'am62p', 'am67a', 'am69', 'sl1680', 'imx8', 'imx93', 'imx95', 'orin', 'thor']
 
 def detect_platform(key):
     for platform in PLATFORM_SUFFIXES:

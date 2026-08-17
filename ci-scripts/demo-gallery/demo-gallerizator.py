@@ -56,6 +56,14 @@ platforms = {
         "astra-sl1680",
         "luna-sl1680",
     ],
+    "orin": [
+        "jetson-orin-nano-devkit",
+        "jetson-orin-nano-devkit-nvme",
+    ],
+    "thor": [
+        "jetson-agx-thor-devkit",
+        "jetson-agx-thor-t4000",
+    ],
     "upstream": [
         "apalis-imx6",
         "colibri-imx6",

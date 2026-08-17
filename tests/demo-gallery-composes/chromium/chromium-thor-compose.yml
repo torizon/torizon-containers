@@ -18,7 +18,7 @@ services:
       - 'c 501:* rmw'
       - 'c 502:* rmw'
       - 'c 505:* rmw'
-    image: '$REGISTRY/torizon/weston-jetson:stable-rc'
+    image: '$REGISTRY/torizon/weston-thor:stable-rc'
     command: '--developer --tty=/dev/tty7 -- --debug'
 
   chromium:
@@ -34,7 +34,7 @@ services:
       - 'c 501:* rmw'
       - 'c 502:* rmw'
       - 'c 505:* rmw'
-    image: $REGISTRY/torizon/chromium-jetson:stable-rc
+    image: $REGISTRY/torizon/chromium-thor:stable-rc
     security_opt:
       - seccomp:unconfined
     shm_size: 1gb

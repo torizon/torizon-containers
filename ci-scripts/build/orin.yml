@@ -2,7 +2,7 @@ default:
   tags:
     - arm64
 
-.build-jetson-template:
+.build-orin-template:
   retry: 2
   extends: .docker-build
   stage: build
@@ -13,114 +13,114 @@ default:
       when: always
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
-    - if: '$CI_BUILD_JETSON == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+    - if: '$CI_BUILD_ORIN == "true" && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
       when: always
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
   variables:
     BUILD_FOR_ARM_V8: "true"
+    L4T_DRIVER_VARIANT: nvgpu
 
-jetson:[base]:
-  extends: .build-jetson-template
+orin:[base]:
+  extends: .build-orin-template
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
-    IMAGE_NAME: debian-jetson
+    IMAGE_NAME: debian-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/jetson"
   needs: []
 
-jetson:[core]:
-  extends: .build-jetson-template
+orin:[core]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: debian-jetson
-    IMAGE_NAME: core-jetson
+    BASE_IMAGE_NAME: debian-orin
+    IMAGE_NAME: core-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
-  needs: ["jetson:[base]"]
+  needs: ["orin:[base]"]
 
-jetson:[wayland-base]:
-  extends: .build-jetson-template
+orin:[wayland-base]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: core-jetson
-    IMAGE_NAME: wayland-base-jetson
+    BASE_IMAGE_NAME: core-orin
+    IMAGE_NAME: wayland-base-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
-  needs: ["jetson:[core]"]
+  needs: ["orin:[core]"]
 
-jetson:[wayland-base-dev]:
-  extends: .build-jetson-template
+orin:[wayland-base-dev]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base-jetson
-    IMAGE_NAME: wayland-base-dev-jetson
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: wayland-base-dev-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
-  needs: ["jetson:[wayland-base]"]
+  needs: ["orin:[wayland-base]"]
 
-jetson:[weston]:
-  extends: .build-jetson-template
+orin:[weston]:
+  extends: .build-orin-template
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base-jetson
-    IMAGE_NAME: weston-jetson
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: weston-orin
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/"
-  needs: ["jetson:[wayland-base]"]
+  needs: ["orin:[wayland-base]"]
 
-jetson:[weston-touch-calibrator]:
-  extends: .build-jetson-template
+orin:[weston-touch-calibrator]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: weston-jetson
-    IMAGE_NAME: weston-touch-calibrator-jetson
+    BASE_IMAGE_NAME: weston-orin
+    IMAGE_NAME: weston-touch-calibrator-orin
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
-  needs: ["jetson:[weston]"]
+  needs: ["orin:[weston]"]
 
-jetson:[chromium]:
-  extends: .build-jetson-template
+orin:[chromium]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base-jetson
-    IMAGE_NAME: chromium-jetson
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: chromium-orin
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${CHROMIUM_FOLDER}/"
-  needs: ["jetson:[wayland-base]"]
+  needs: ["orin:[wayland-base]"]
 
-jetson:[graphics-tests]:
-  extends: .build-jetson-template
+orin:[graphics-tests]:
+  extends: .build-orin-template
   variables:
     BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base-jetson
-    IMAGE_NAME: graphics-tests-jetson
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: graphics-tests-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"
-  needs: ["jetson:[wayland-base]"]
+  needs: ["orin:[wayland-base]"]
 
-jetson:[cuda]:
-  extends: .build-jetson-template
+orin:[cuda]:
+  extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: core-jetson
-    IMAGE_NAME: cuda-jetson
+    BASE_IMAGE_NAME: core-orin
+    IMAGE_NAME: cuda-orin
+    CUDA_ARCHS: "sm_87"
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CUDA_FOLDER}/"
-  needs: ["jetson:[core]"]
+  needs: ["orin:[core]"]
 
-jetson:[gstreamer1.0]:
-  extends: .build-jetson-template
+orin:[gstreamer1.0]:
+  extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
-    BASE_IMAGE_NAME: wayland-base-jetson
-    IMAGE_NAME: gstreamer1.0-jetson
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: gstreamer1.0-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
-  needs: ["jetson:[wayland-base]"]
+  needs: ["orin:[wayland-base]"]

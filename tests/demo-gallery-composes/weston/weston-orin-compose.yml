@@ -18,5 +18,5 @@ services:
       - c 501:* rmw
       - c 502:* rmw
       - c 505:* rmw
-    image: $REGISTRY/torizon/weston-jetson:stable-rc
+    image: $REGISTRY/torizon/weston-orin:stable-rc
     command: --developer --tty=/dev/tty7 -- --debug

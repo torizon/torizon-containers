@@ -13,7 +13,7 @@ ARG CUDA_VERSION=13.2
 ARG CUDA_PKG_VERSION=13-2
 ARG CUDA_MAJOR=13
 ARG CUDNN_MAJOR=9
-ARG CUDA_ARCHS="sm_87 sm_110"
+ARG CUDA_ARCHS
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     cuda-nvprune-${CUDA_PKG_VERSION} \
@@ -45,19 +45,19 @@ FROM $REGISTRY/$REGISTRY_NAMESPACE/$BASE_IMAGE_NAME:$IMAGE_TAG AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG CUDA_VERSION=13.2
+ARG L4T_DRIVER_VARIANT
 
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
     nvidia-l4t-cuda \
-    nvidia-l4t-cuda-nvgpu \
-    nvidia-l4t-cuda-openrm \
+    nvidia-l4t-cuda-${L4T_DRIVER_VARIANT} \
     nvidia-l4t-3d-core \
     zlib1g \
-    && dpkg -L nvidia-l4t-3d-core \
+    && { dpkg -L nvidia-l4t-3d-core \
         | grep -vE 'libnvidia-(ptxjitcompiler|nvvm)\.so' \
-        | xargs -r rm -f 2>/dev/null || true \
-    && dpkg -L nvidia-l4t-init nvidia-l4t-libvulkan nvidia-l4t-wayland nvidia-l4t-x11 \
+        | xargs -r rm -f 2>/dev/null || true; } \
+    && { dpkg -L nvidia-l4t-init nvidia-l4t-libvulkan nvidia-l4t-wayland nvidia-l4t-x11 \
         bridge-utils nvme-cli \
-        | xargs -r rm -f 2>/dev/null || true \
+        | xargs -r rm -f 2>/dev/null || true; } \
     && rm -rf /usr/lib/xorg /etc/X11 \
         /usr/share/doc/nvidia-l4t-* \
     && rm -f /etc/dpkg/dpkg.cfg.d/include-docs \
@@ -65,14 +65,14 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 
 COPY --from=pruner /usr/local/cuda-${CUDA_VERSION} /usr/local/cuda-${CUDA_VERSION}
 COPY --from=pruner /usr/lib/aarch64-linux-gnu/libcudnn*.so.* /usr/lib/aarch64-linux-gnu/
-COPY entry.sh /usr/bin/entry.sh
 
 RUN ln -sfn /usr/local/cuda-${CUDA_VERSION} /usr/local/cuda \
     && echo /usr/local/cuda/lib64 >/etc/ld.so.conf.d/cuda.conf \
-    && chmod +x /usr/bin/entry.sh \
+    && echo /opt/nvidia/l4t-gpu-libs/${L4T_DRIVER_VARIANT} \
+        >/etc/ld.so.conf.d/nvidia-l4t-cuda.conf \
     && ldconfig
 
 ENV CUDA_HOME="/usr/local/cuda"
 ENV PATH="/usr/local/cuda/bin:${PATH}"
 
-ENTRYPOINT ["/usr/bin/entry.sh"]
+CMD ["/bin/bash"]

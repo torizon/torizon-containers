@@ -24,7 +24,7 @@ elif [[ "${IMAGE_NAME:-}" == *imx95 ]]; then
 elif [[ "${IMAGE_NAME:-}" == *sl1680 ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/sl1680/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
-elif [[ "${IMAGE_NAME:-}" == *jetson ]]; then
+elif [[ "${IMAGE_NAME:-}" == *orin || "${IMAGE_NAME:-}" == *thor ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/jetson/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 else
@@ -117,6 +117,8 @@ docker buildx build --progress=plain ${SBOM_FLAG} --output type=image,push=true,
   --build-arg BASE_IMAGE_NAME="${BASE_IMAGE_NAME-}" \
   --build-arg BASE_IMAGE_NAME_DEBUG="${BASE_IMAGE_NAME_DEBUG-}" \
   --build-arg BUILD_BASE_IMAGE_NAME="${BUILD_BASE_IMAGE_NAME-}" \
+  --build-arg CUDA_ARCHS="${CUDA_ARCHS-}" \
+  --build-arg L4T_DRIVER_VARIANT="${L4T_DRIVER_VARIANT-}" \
   --build-arg CROSS_COMPILER="${CROSS_COMPILER-}" \
   --build-arg CROSS_TARGET_ARCH="${CROSS_TARGET_ARCH-}" \
   --build-arg DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE-}" \
