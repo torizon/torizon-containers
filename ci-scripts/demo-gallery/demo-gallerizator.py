@@ -5,7 +5,19 @@ import subprocess
 import json
 
 """
-To run locally: python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
+DEMO_GALLERY_VERSION is required: it replaces the "${RELEASE_TAG}-rc" image tags
+in the generated composes, so it has to be passed in the command.
+
+To run locally:
+
+    DEMO_GALLERY_VERSION=<series> python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
+
+To use the same value CI does, which is the "major:" from
+ci-scripts/container-versions/*.yml:
+
+    . ./ci-scripts/release-tag.sh
+    . ./ci-scripts/release/release-version.sh
+    DEMO_GALLERY_VERSION="$RELEASE_SERIES" python ./ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
 """
 DEMO_GALLERY_VERSION = os.environ.get("DEMO_GALLERY_VERSION")
 
