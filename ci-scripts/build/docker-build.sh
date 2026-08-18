@@ -105,7 +105,7 @@ else
 fi
 
 # shellcheck disable=SC2086
-docker buildx build --progress=plain ${SBOM_FLAG} --push ${BUILD_PLATFORMS} \
+docker buildx build --progress=plain ${SBOM_FLAG} --output type=image,push=true,unpack=false,oci-artifact=false ${BUILD_PLATFORMS} \
   --build-arg ACCEPT_FSL_EULA="${ACCEPT_FSL_EULA-}" \
   --build-arg TORADEX_FEED_URL="${TORADEX_FEED_URL-}" \
   --build-arg BASE_IMAGE_NAME="${BASE_IMAGE_NAME-}" \
