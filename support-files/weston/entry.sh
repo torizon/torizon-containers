@@ -127,11 +127,17 @@ function has_feature() {
   echo $ANSWER
 }
 
-test -n "$SOC_ID" && {
-  HAS_GPU=$(has_feature 'imxgpu')
-  HAS_DPU=$(has_feature 'imxdpu')
-  HAS_PXP=$(has_feature 'imxpxp')
-}
+case "$SOC_ID" in
+  '') ;;
+  i.*)
+    HAS_GPU=$(has_feature 'imxgpu')
+    HAS_DPU=$(has_feature 'imxdpu')
+    HAS_PXP=$(has_feature 'imxpxp')
+    ;;
+  *)
+    echo "SoC '$SOC_ID' is not an i.MX, the i.MX feature maps do not apply to it."
+    ;;
+esac
 echo "SoC has GPU: $HAS_GPU"
 echo "SoC has DPU: $HAS_DPU"
 echo "SoC has PXP: $HAS_PXP"
