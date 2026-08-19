@@ -30,6 +30,7 @@ imx93:[base]:
     IMAGE_NAME: debian-imx93
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/imx93"
+    TORADEX_FEED_SUITES: "stable"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 

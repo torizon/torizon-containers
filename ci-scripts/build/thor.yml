@@ -31,7 +31,9 @@ thor:[base]:
     IMAGE_NAME: debian-thor
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${BASE_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
-    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/jetson"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/torizon/jetson"
+    TORADEX_FEED_PATH: "/forky/wrynose"
+    TORADEX_FEED_SUITES: "stable experimental"
   needs: []
 
 thor:[core]:

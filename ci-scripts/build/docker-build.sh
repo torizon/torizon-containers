@@ -25,7 +25,7 @@ elif [[ "${IMAGE_NAME:-}" == *sl1680 ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/sl1680/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *orin || "${IMAGE_NAME:-}" == *thor ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/jetson/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/jetson/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 else
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/upstream/snapshots/latest-snapshot)
@@ -129,6 +129,8 @@ docker buildx build --progress=plain ${SBOM_FLAG} --output type=image,push=true,
   --build-arg REGISTRY="${REGISTRY-}" \
   --build-arg REGISTRY_NAMESPACE="${REGISTRY_NAMESPACE-}" \
   --build-arg TORADEX_SNAPSHOT="${TORADEX_SNAPSHOT-}" \
+  --build-arg TORADEX_FEED_PATH="${TORADEX_FEED_PATH-}" \
+  --build-arg TORADEX_FEED_SUITES="${TORADEX_FEED_SUITES-}" \
   --label torizon.image.name="${IMAGE_NAME-}" \
   --label torizon.git.branch="${CI_COMMIT_BRANCH-}" \
   --label torizon.git.hash="${CI_COMMIT_SHA-}" \

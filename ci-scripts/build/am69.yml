@@ -27,6 +27,7 @@ am69:[base]:
     IMAGE_NAME: debian-am69
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/stable/am6x"
+    TORADEX_FEED_SUITES: "stable"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
 
 am69:[wayland-base]:
