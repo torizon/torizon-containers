@@ -9,7 +9,6 @@ services:
       - 'c 4:* rmw'
       - 'c 13:* rmw'
       - 'c 226:* rmw'
-      - 'c 10:223 rmw'
     volumes:
       - '/dev:/dev'
       - '/tmp:/tmp'
@@ -22,15 +21,8 @@ services:
     depends_on:
       weston:
         condition: service_healthy
-    environment:
-      XDG_RUNTIME_DIR: "/tmp/1000-runtime-dir"
-      WAYLAND_DISPLAY: "wayland-0"
-      QT_QPA_PLATFORM: "wayland"
-    device_cgroup_rules:
-      - 'c 4:* rmw'
-      - 'c 13:* rmw'
-      - 'c 226:* rmw'
-      - 'c 253:* rmw'
+    network_mode: host
+    privileged: true
     volumes:
       - '/dev:/dev'
       - '/tmp:/tmp'
@@ -54,13 +46,7 @@ services:
       - seccomp:unconfined
     shm_size: 256mb
     device_cgroup_rules:
-      - 'c 4:* rmw'
-      - 'c 13:* rmw'
       - 'c 226:* rmw'
-      - 'c 10:223 rmw'
-      - 'c 81:* rmw'
-      - 'c 234:* rmw'
-      - 'c 235:* rmw'
     volumes:
       - '/tmp:/tmp'
       - '/var/run/dbus:/var/run/dbus'
