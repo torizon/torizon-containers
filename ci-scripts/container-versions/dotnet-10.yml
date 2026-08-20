@@ -1,7 +1,7 @@
 # upstream
 dotnet10: &dotnet
   release: &dotnet-release "10.0"
-  semver: &dotnet-semver "10.0.9"
+  semver: &dotnet-semver "10.0.11"
   major: 4
   minor: 8
   patch: 0
@@ -14,7 +14,7 @@ dotnet10-debug:
   semver: *dotnet-semver
   # The latest version of vsdbg can be obtained by running the follow command:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  debugger-version: "18.7.10521.2"
+  debugger-version: "18.10.10709.3"
   major: 4
   minor: 8
   patch: 0
