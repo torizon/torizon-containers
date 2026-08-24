@@ -2,34 +2,34 @@ cross-toolchain-arm:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-amd64:
   major: 4
   minor: 7
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-amd64:
   major: 4
   minor: 7
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm64:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64-imx8:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]

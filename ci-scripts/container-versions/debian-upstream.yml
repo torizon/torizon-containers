@@ -2,74 +2,74 @@ debian:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base-dev:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-gtk3:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-examples:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-examples:
   major: 4
   minor: 18
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-tests:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston-touch-calibrator:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 graphics-tests:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 chromium:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cog:
   major: 4
   minor: 20
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 crank-weston:
   major: 4
   minor: 7
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]

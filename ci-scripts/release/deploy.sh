@@ -52,9 +52,9 @@ while IFS=: read -r image_name rest; do
   major=$(yq e ".[\"$image_name\"].major // \"\"" "$yaml_file")
   minor=$(yq e ".[\"$image_name\"].minor // \"\"" "$yaml_file")
   patch=$(yq e ".[\"$image_name\"].patch // \"\"" "$yaml_file")
-  alias_tag=$(yq e ".[\"$image_name\"].alias // \"\"" "$yaml_file")
+  alias_tags=$(yq e ".[\"$image_name\"].alias[]" "$yaml_file")
 
-  if [ -z "$major" ] && [ -z "$alias_tag" ]; then
+  if [ -z "$major" ] && [ -z "$alias_tags" ]; then
     echo "$image_name: needs either a numbered version or an alias in $yaml_file"
     exit 1
   fi
@@ -73,8 +73,10 @@ while IFS=: read -r image_name rest; do
     fi
   fi
 
-  if [ -n "$alias_tag" ]; then
-    re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$alias_tag" "--force"
+  if [ -n "$alias_tags" ]; then
+    while IFS= read -r alias_tag; do
+      re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$alias_tag" "--force"
+    done <<<"$alias_tags"
   fi
 
 done < <(yq e 'keys | .[]' "$yaml_file")

@@ -2,94 +2,94 @@ debian-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base-dev-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-gtk3-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-examples-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-examples-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-tests-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston-touch-calibrator-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 graphics-tests-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 chromium-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cog-imx95:
   major: 4
   minor: 15
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-imx95:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-dev-imx95:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-examples-imx95:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64-imx95:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm64-imx95:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]

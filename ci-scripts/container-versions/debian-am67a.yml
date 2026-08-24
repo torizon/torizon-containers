@@ -2,79 +2,79 @@ debian-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-base-dev-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 wayland-gtk3-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 weston-touch-calibrator-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-examples-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-examples-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-tests-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 graphics-tests-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 chromium-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cog-am67a:
   major: 4
   minor: 6
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64-am67a:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm64-am67a:
   major: 4
   minor: 4
   patch: 0
-  alias: bookworm-scarthgap
+  alias: [scarthgap, bookworm-scarthgap]
