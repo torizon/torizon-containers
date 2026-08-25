@@ -1,64 +1,76 @@
 debian-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 wayland-base-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 wayland-base-dev-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 wayland-gtk3-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 weston-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 weston-touch-calibrator-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 qt5-wayland-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 qt5-wayland-examples-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 qt6-wayland-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 qt6-wayland-examples-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 qt6-wayland-tests-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 graphics-tests-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 chromium-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 cog-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 cross-toolchain-arm64-imx93:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 cross-toolchain-ssh-arm64-imx93:
   major: 4
-  minor: 2
+  minor: 3
+  patch: 0
+tensorflow-lite-imx93:
+  major: 4
+  minor: 0
+  patch: 0
+tensorflow-lite-dev-imx93:
+  major: 4
+  minor: 0
+  patch: 0
+tensorflow-lite-examples-imx93:
+  major: 4
+  minor: 0
   patch: 0

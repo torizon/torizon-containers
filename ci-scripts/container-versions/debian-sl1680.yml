@@ -1,76 +1,76 @@
 debian-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 wayland-base-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 wayland-base-dev-sl1680:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
 wayland-gtk3-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 weston-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 weston-touch-calibrator-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt5-wayland-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt5-wayland-examples-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt6-wayland-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt6-wayland-examples-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 qt6-wayland-tests-sl1680:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
 graphics-tests-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 chromium-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 cog-sl1680:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
 tensorflow-lite-sl1680:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 tensorflow-lite-dev-sl1680:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 tensorflow-lite-examples-sl1680:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 cross-toolchain-arm64-sl1680:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 cross-toolchain-ssh-arm64-sl1680:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
