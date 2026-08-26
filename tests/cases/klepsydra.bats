@@ -16,7 +16,9 @@ teardown_file() {
 # bats test_tags=platform:am69, platform:imx8
 @test "Klepsydra Demo Launcher" {
   bats_require_minimum_version 1.5.0
-
+  if [[ "$SOC_UDT" =~ imx8qxp ]]; then
+    skip "This demo is unsupported on imx8qxp"
+  fi
   run -0 clean_kernel_logs
 
   run -0 docker compose -f "$COMPOSE_FILE" top "${file_name}" | grep "kpe-depth-estimation-demo-app"
