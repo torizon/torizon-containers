@@ -5,10 +5,10 @@ This guide explains how to contribute new demos to the Torizon Containers demo g
 ## Description
 
 The demo gallery is a feature that spans over Torizon OS and Torizon Cloud, with contributions from the Developer
-Experience team. Essentially, it's a machine-generated package feed for the Torizon Cloud. In the Torizon Cloud UI
+Experience team. Essentially, it's a machine-generated package feed for Torizon Cloud. In the Torizon Cloud UI,
 it is a Package Source named "Torizon Demo Apps". 
 
-The intention of the Demo Gallery is that user can quickly evaluate simple applications through their our update system.
+The intention of the Demo Gallery is that users can quickly evaluate simple applications through our update system.
 The evaluation workflow is as follows:
 
 - User installs or already has Torizon OS 7 or above installed.
@@ -63,7 +63,7 @@ The demo-gallerizator performs the following transformations on the source compo
 
 1. **Platform Mapping**: You will notice that we have several compose files that are identical, and this makes sense when thinking about the `platform` concept in Torizon Containers: the same software should run on Apalis iMX8 as it does on Verdin iMX8. However, due to pragmatic decisions when implementing the Demo Gallery feature, it was decided that we would have per-board apps, which means per-board Docker composef files.
 
-To alleviate programmer fatigue, the demo-gallerization script wil maps platform families to specific hardware modules:
+To alleviate programmer fatigue, the demo-gallerizator script will map platform families to specific hardware modules:
    - `imx8` → `apalis-imx8`, `colibri-imx8x`, `verdin-imx8mm`, `verdin-imx8mp`, `smarc-imx8mp`
    - `am62` → `verdin-am62`, `sk-am62`, `sk-am62l`
    - `am62p` → `verdin-am62p`, `sk-am62p`
