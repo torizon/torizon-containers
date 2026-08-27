@@ -3,11 +3,11 @@ dotnet10: &dotnet
   release: &dotnet-release "10.0"
   semver: &dotnet-semver "10.0.11"
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10:
   <<: *dotnet
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-debug:
   release: *dotnet-release
@@ -16,17 +16,17 @@ dotnet10-debug:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   debugger-version: "18.7.10521.2"
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # imx8
@@ -34,21 +34,21 @@ dotnet10-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-imx8:
   <<: *dotnet-imx8
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-imx8:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # am62
@@ -56,21 +56,21 @@ dotnet10-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-am62:
   <<: *dotnet-am62
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-am62:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # am62p
@@ -78,21 +78,21 @@ dotnet10-am62p: &dotnet-am62p
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-am62p:
   <<: *dotnet-am62p
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-am62p:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # am67a
@@ -100,21 +100,21 @@ dotnet10-am67a: &dotnet-am67a
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 aspdotnet10-am67a:
   <<: *dotnet-am67a
-  minor: 5
+  minor: 6
   patch: 0
 dotnet10-wayland-am67a:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 dotnet10-gtk3-am67a:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 
 # am69
@@ -122,21 +122,21 @@ dotnet10-am69: &dotnet-am69
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-am69:
   <<: *dotnet-am69
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-am69:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-am69:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # imx93
@@ -144,21 +144,21 @@ dotnet10-imx93: &dotnet-imx93
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 aspdotnet10-imx93:
   <<: *dotnet-imx93
-  minor: 4
+  minor: 5
   patch: 0
 dotnet10-wayland-imx93:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 dotnet10-gtk3-imx93:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 
 # imx95
@@ -166,21 +166,21 @@ dotnet10-imx95: &dotnet-imx95
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-imx95:
   <<: *dotnet-imx95
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-imx95:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 
 # sl1680
@@ -188,19 +188,19 @@ dotnet10-sl1680: &dotnet-sl1680
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 aspdotnet10-sl1680:
   <<: *dotnet-sl1680
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-wayland-sl1680:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 9
+  minor: 10
   patch: 0
 dotnet10-gtk3-sl1680:
   major: 4
-  minor: 9
+  minor: 10
   patch: 0

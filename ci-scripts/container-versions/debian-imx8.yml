@@ -1,96 +1,96 @@
 debian-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 wayland-base-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 wayland-base-dev-imx8:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 wayland-gtk3-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 weston-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 qt5-wayland-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 qt5-wayland-examples-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 qt6-wayland-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 qt6-wayland-examples-imx8:
   major: 4
-  minor: 17
+  minor: 18
   patch: 0
 qt6-wayland-tests-imx8:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 qt6-enterprise-demo-imx8:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 weston-touch-calibrator-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 graphics-tests-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 chromium-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 cog-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 crank-weston-imx8:
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
 tensorflow-lite-imx8:
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
 tensorflow-lite-dev-imx8:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 tensorflow-lite-examples-imx8:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 cross-toolchain-arm64-imx8:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 cross-toolchain-ssh-arm64-imx8:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 gstreamer1.0-imx8:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 gstreamer1.0-dev-imx8:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0
 gstreamer1.0-examples-imx8:
   major: 4
-  minor: 0
+  minor: 1
   patch: 0

@@ -3,11 +3,11 @@ dotnet8: &dotnet
   release: &dotnet-release "8.0"
   semver: &dotnet-semver "8.0.30"
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 aspdotnet8:
   <<: *dotnet
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-debug:
   release: *dotnet-release
@@ -16,17 +16,17 @@ dotnet8-debug:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
   debugger-version: "18.7.10521.2"
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-gtk3:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 
 # imx8
@@ -34,21 +34,21 @@ dotnet8-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 aspdotnet8-imx8:
   <<: *dotnet-imx8
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-gtk3-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 
 # am62
@@ -56,21 +56,21 @@ dotnet8-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 aspdotnet8-am62:
   <<: *dotnet-am62
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-gtk3-am62:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
 
 # am62p
@@ -78,21 +78,21 @@ dotnet8-am62p: &dotnet-am62p
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 12
+  minor: 13
   patch: 0
 aspdotnet8-am62p:
   <<: *dotnet-am62p
-  minor: 12
+  minor: 13
   patch: 0
 dotnet8-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 12
+  minor: 13
   patch: 0
 dotnet8-gtk3-am62p:
   major: 4
-  minor: 12
+  minor: 13
   patch: 0
 
 # am67a
@@ -100,21 +100,21 @@ dotnet8-am67a: &dotnet-am67a
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 aspdotnet8-am67a:
   <<: *dotnet-am67a
-  minor: 5
+  minor: 6
   patch: 0
 dotnet8-wayland-am67a:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 dotnet8-gtk3-am67a:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 
 # am69
@@ -122,21 +122,21 @@ dotnet8-am69: &dotnet-am69
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 aspdotnet8-am69:
   <<: *dotnet-am69
-  minor: 10
+  minor: 11
   patch: 0
 dotnet8-wayland-am69:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 dotnet8-gtk3-am69:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 
 # imx93
@@ -144,21 +144,21 @@ dotnet8-imx93: &dotnet-imx93
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 aspdotnet8-imx93:
   <<: *dotnet-imx93
-  minor: 4
+  minor: 5
   patch: 0
 dotnet8-wayland-imx93:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 dotnet8-gtk3-imx93:
   major: 4
-  minor: 4
+  minor: 5
   patch: 0
 
 # imx95
@@ -166,21 +166,21 @@ dotnet8-imx95: &dotnet-imx95
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 aspdotnet8-imx95:
   <<: *dotnet-imx95
-  minor: 19
+  minor: 20
   patch: 0
 dotnet8-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 dotnet8-gtk3-imx95:
   major: 4
-  minor: 14
+  minor: 15
   patch: 0
 
 # sl1680
@@ -188,19 +188,19 @@ dotnet8-sl1680: &dotnet-sl1680
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 aspdotnet8-sl1680:
   <<: *dotnet-sl1680
-  minor: 10
+  minor: 11
   patch: 0
 dotnet8-wayland-sl1680:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
 dotnet8-gtk3-sl1680:
   major: 4
-  minor: 10
+  minor: 11
   patch: 0
