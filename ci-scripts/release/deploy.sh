@@ -49,9 +49,9 @@ staging_tag="$3"
 while IFS=: read -r image_name rest; do
   image_name=$(echo "$image_name" | xargs)
 
-  major=$(yq e ".$image_name.major" "$yaml_file")
-  minor=$(yq e ".$image_name.minor" "$yaml_file")
-  patch=$(yq e ".$image_name.patch" "$yaml_file")
+  major=$(yq e ".[\"$image_name\"].major" "$yaml_file")
+  minor=$(yq e ".[\"$image_name\"].minor" "$yaml_file")
+  patch=$(yq e ".[\"$image_name\"].patch" "$yaml_file")
 
   re_tag_image docker.io "$registry_namespace" "$image_name" "$staging_tag" "$major"."$minor"."$patch"
   re_tag_status=$?
