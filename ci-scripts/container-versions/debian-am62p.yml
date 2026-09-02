@@ -1,80 +1,80 @@
 debian-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base-dev-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-gtk3-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston-touch-calibrator-am62p:
-  major: 4
-  minor: 11
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-examples-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-examples-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-tests-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 graphics-tests-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 chromium-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cog-am62p:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cross-toolchain-arm64-am62p:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cross-toolchain-ssh-arm64-am62p:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]

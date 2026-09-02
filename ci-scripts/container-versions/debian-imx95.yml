@@ -1,95 +1,95 @@
 debian-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base-dev-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-gtk3-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-examples-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-examples-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-tests-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston-touch-calibrator-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 graphics-tests-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 chromium-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cog-imx95:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-imx95:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-dev-imx95:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-examples-imx95:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cross-toolchain-arm64-imx95:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cross-toolchain-ssh-arm64-imx95:
-  major: 4
-  minor: 4
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]

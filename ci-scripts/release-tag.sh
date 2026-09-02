@@ -16,7 +16,7 @@ if [ "$(printf '%s\n' "$RELEASE_ALIASES" | wc -l)" -ne 1 ]; then
   exit 1
 fi
 
-# alias is a list, e.g. [scarthgap, bookworm-scarthgap]; the first entry is
+# alias is a list, e.g. [wrynose, forky-wrynose]; the first entry is
 # the canonical one used for the staging/rc image tag.
 RELEASE_TAG=$(printf '%s\n' "$RELEASE_ALIASES" | cut -d',' -f1)
 

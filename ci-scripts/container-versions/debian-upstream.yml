@@ -1,75 +1,75 @@
 debian:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-base-dev:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 wayland-gtk3:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-examples:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-examples:
-  major: 4
-  minor: 18
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-tests:
-  major: 4
-  minor: 15
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 weston-touch-calibrator:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 graphics-tests:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 chromium:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 cog:
-  major: 4
-  minor: 20
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
 crank-weston:
-  major: 4
-  minor: 7
+  major: 8
+  minor: 0
   patch: 0
-  alias: [scarthgap, bookworm-scarthgap]
+  alias: [wrynose, forky-wrynose]
