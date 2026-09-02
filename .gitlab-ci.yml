@@ -34,7 +34,6 @@ variables:
     description: "Set to true to publish the demo gallery composes for this branch."
 
   DEBIAN_POINT_RELEASE: "forky-slim"
-  DEBIAN_POINT_RELEASE_NVIDIA: "forky-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
   TORADEX_INTERNAL_DOCKERHUB_CACHE: "artifactory-horw.int.toradex.com/dockerhub-proxy-no-cache-horw"
 

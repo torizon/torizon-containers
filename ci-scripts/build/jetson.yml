@@ -23,7 +23,7 @@ default:
 jetson:[base]:
   extends: .build-jetson-template
   before_script:
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
