@@ -24,57 +24,101 @@ upstreamed over time.
 These track the different releases of Torizon OS we either support or integrate
 for.
 
-Our naming scheme for the branches determines which Torizon OS is supported by
-which branch:
+Release branches are named after the Debian and Yocto releases they are built
+from, as `<debian>-<yocto>`:
 
-- oldstable: the LTS release of Torizon OS.
-- stable: the current release of Torizon OS.
-- next: the future release of Torizon OS.
-
-As an example:
-
-- oldstable: tracks TorizonCore 5.x.y based on the Dunfell Yocto release.
-- stable: trackes Torizon OS 6.x.y based on the Kirkstone Yocto Release.
-- next: tracks Torizon OS 7.x.y based on the Scarthgap Yocto Release.
+- `bookworm-scarthgap`: tracks Torizon OS 7.x.y, built on Debian Bookworm and
+the Scarthgap Yocto release.
+- `forky-wrynose`: tracks Torizon OS 8.x.y, built on Debian Forky and the
+Wrynose Yocto release.
 
 Thus there's always an one-to-one relationship between a major Torizon OS
-release and a given Torizon Containers Release.
+release and a given Torizon Containers release, and the container major matches
+the Torizon OS major it targets.
 
-Please note that this naming **does not have any relationship with the Debian
-releases**. Our `stable` may be based off Debian's `oldstable` if there's
-a compelling technical reason to do so.
+Older branches used rolling names (`oldstable`, `stable`, `next`) that had to be
+renamed as releases moved along. Naming branches after the Debian/Yocto pair
+instead means a branch never changes identity: it is created, it releases
+independently for as long as it is supported, and it is eventually dropped.
 
 Containers are pushed to [Torizon DockerHub](https://hub.docker.com/u/torizon),
-and all containers are versioning following
-[Semantic Versioning](https://semver.org/).
+and all containers are versioned following
+[Semantic Versioning](https://semver.org/), plus the alias tags described below.
 
 ## Release Candidates
 
-We use a Release Candidate scheme for **every branch**, meaning when a build
-pipeline runs, it actually pushes images with `<image-name>:<branch-name>-rc`.
+Every branch is built, tested and released independently of the others.
+
+The tag a branch publishes under is **not** derived from the branch name. It
+comes from the `alias:` field in the
+[versioning metadata](ci-scripts/container-versions) tracked by the repo:
+
+```yaml
+weston-imx8:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
+```
+
+The **first** entry is the canonical alias and is what the release candidate tag
+is built from. [`release-tag.sh`](ci-scripts/release-tag.sh) gathers the aliases
+from every file under [`ci-scripts/container-versions`](ci-scripts/container-versions)
+and refuses to run if they disagree, so a branch always resolves to exactly one
+rc tag.
+
+When a pipeline runs on a **protected branch** outside of a merge request, it
+pushes to DockerHub as `<image-name>:<alias>-rc`. On `forky-wrynose`, whose
+canonical alias is `wrynose`, that is `<image-name>:wrynose-rc`.
+
+Every other pipeline — merge requests, unprotected branches — pushes to the
+GitLab registry as `<image-name>:<branch-slug>-<pipeline-id>` instead, so
+work in progress never touches the public rc tags.
 
 Release Candidates allow us to test all branches independently before making a
-release, which for us is re-tagging a golden container image from
-`<image-name>:<branch-name>-rc` to `<image-name>:<major>.<minor>.<patch>`.
+release. So if there is a patch release of a Torizon OS LTS version, we can test
+it and make necessary adjustments without disrupting other branches. Every
+release is independent of each other, tracked by a branch.
 
-So if there is a patch release of a Torizon OS LTS version, we can test it and
-make necessary adjustments without disrupting other branches. Every release is
-independent of each other, tracked by a branch.
+### Making a Release
 
-When a new Torizon OS version is released, we fork from the `next` branch to
-`stable`, rename `stable` to `oldstable` and drop `oldstable` (or even rename it
-to `oldoldstable` if needed).
+A release is re-tagging the golden `-rc` images, and it is not automatic. Run a
+pipeline on the release branch with `MAKE_TAG_RELEASE=true`, and
+[`deploy.sh`](ci-scripts/release/deploy.sh) copies each `<image-name>:<alias>-rc`
+to:
+
+- `<major>.<minor>.<patch>`, which is skipped if it already exists so a
+published version is never silently overwritten;
+- `<major>.<minor>` and `<major>`, moved forward to the new release, but only
+when the exact version above was actually published;
+- every entry of `alias:`, so `forky-wrynose` publishes both `wrynose` and
+`forky-wrynose`.
+
+An image needs at least a `major:` or an `alias:`; if `major:` is set then
+`minor:` and `patch:` are required too. The job then creates a GitLab release
+tagged `<major>-<YYYY.MM.DD>`, for example `8-2026.09.02`, and announces it on
+Slack.
+
+Publishing the demo gallery is a separate switch: run a pipeline with
+`MAKE_GALLERY_RELEASE=true` to regenerate the composes with the `<alias>-rc`
+image references rewritten to the release major, and push them to the
+demo-gallery repository.
+
+When a new Torizon OS version is released, we branch for the new Debian/Yocto
+pair and give it its own alias and major.
 
 This process is implemented using GitLab CI and it's fairly segmented between
 the stages, looking from the pipeline YAML definitions:
 
 - [Main build pipeline](.gitlab-ci.yml) which pushes images to DockerHub with
- `<image-name>:<branch-name>-rc`.
-- [Test Pipeline](ci-scripts/test/test.yml) which runs integration tests on real
-hardware using the Aval Framework and the Torizon Cloud API.
+ `<image-name>:<alias>-rc`.
+- [Test pipelines](ci-scripts/test/), the
+[Aval tests](ci-scripts/test/aval-tests.yml) running integration tests on real
+hardware using the Aval Framework and the Torizon Cloud API, and the functional
+tests such as [support-files-tests.yml](ci-scripts/test/support-files-tests.yml).
 - [Release Pipeline](ci-scripts/release/release.yml) which retags images from
-`<image-name>:<branch-name>-rc` to `<image-name>:<major>.<minor>.<patch>` using
-the [versioning metadata](ci-scripts/container-versions) tracked by the repo.
+`<image-name>:<alias>-rc` to the numbered and alias tags declared in the
+[versioning metadata](ci-scripts/container-versions).
 
 ## Developing
 
