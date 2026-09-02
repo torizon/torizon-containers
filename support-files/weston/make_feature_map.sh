@@ -20,7 +20,7 @@ cleanup() {
 trap cleanup EXIT
 
 echo "$WHOAMI: fetching from meta-freescale sources..." >&2
-wget -qO - 'https://raw.githubusercontent.com/Freescale/meta-freescale/scarthgap/conf/machine/include/imx-base.inc' >"$IMX_BASE_INC"
+wget -qO - 'https://raw.githubusercontent.com/Freescale/meta-freescale/wrynose/conf/machine/include/imx-base.inc' >"$IMX_BASE_INC"
 
 MAP_DIR=${WHEREAMI}/imx_features
 rm -rf "$MAP_DIR"
