@@ -23,7 +23,8 @@ RELEASE_TAG=$(printf '%s\n' "$RELEASE_ALIASES" | cut -d',' -f1)
 IS_RELEASE_BRANCH="false"
 
 if [ "${CI_COMMIT_REF_PROTECTED:-}" = "true" ] && [ -n "${CI_COMMIT_BRANCH:-}" ] &&
-  [ "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ]; then
+  [ "${CI_PIPELINE_SOURCE:-}" != "merge_request_event" ] &&
+  [ "${MAKE_RC_RELEASE:-false}" = "true" ]; then
   IS_RELEASE_BRANCH="true"
 fi
 

@@ -27,6 +27,9 @@ include:
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
 variables:
+  MAKE_RC_RELEASE:
+    value: "false"
+    description: "Build this branch and publish its <alias>-rc images to Docker Hub. Nothing else publishes -rc: a plain push to a protected branch builds to the GitLab registry. Set by a manual run, or by a schedule."
   MAKE_TAG_RELEASE:
     value: "false"
     description: "Set to true to promote this branch's -rc images to the versions in ci-scripts/container-versions and create a release."
