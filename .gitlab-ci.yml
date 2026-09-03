@@ -4,8 +4,8 @@ stages:
   - build
   - test
   - report
-  - demo-gallery
   - release
+  - demo-gallery
 
 
 include:
