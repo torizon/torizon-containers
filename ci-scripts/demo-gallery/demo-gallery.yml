@@ -14,15 +14,23 @@ build-demo-gallery:
     - . ./ci-scripts/release-tag.sh
     - . ./ci-scripts/release/release-version.sh
     - export DEMO_GALLERY_VERSION="$RELEASE_SERIES"
-    - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes
     - git clone https://oauth2:${DEMO_GALLERY_TOKEN}@gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery.git
+    - git config --global --add safe.directory $(realpath ./demo-gallery)
+    - |
+      cd ./demo-gallery
+      if git ls-remote --exit-code --heads origin "$RELEASE_SERIES" >/dev/null 2>&1; then
+        git checkout "$RELEASE_SERIES"
+      else
+        echo "No branch for series $RELEASE_SERIES yet; starting from an empty tree"
+        git checkout --orphan "$RELEASE_SERIES"
+        git rm -rf . >/dev/null 2>&1 || true
+      fi
+      cd ..
+    - python3 ci-scripts/demo-gallery/demo-gallerizator.py tests/demo-gallery-composes --merge-into ./demo-gallery
     - cd ./demo-gallery
-    - git config --global --add safe.directory $(realpath .)
     - git config user.name "Tordy"
     - git config user.email "tordy@toradex.com"
-    - git rm -r '*'
-    - cp -r ../temp/* .
-    - git add .
+    - git add -A
     - |
       if git diff --cached --quiet; then
         echo "No changes to commit"

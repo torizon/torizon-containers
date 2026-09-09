@@ -21,6 +21,8 @@ ci-scripts/container-versions/*.yml:
 """
 DEMO_GALLERY_VERSION = os.environ.get("DEMO_GALLERY_VERSION")
 
+_PLATFORMS_ENV = os.environ.get("PLATFORMS", "").replace(",", " ").split()
+
 platforms = {
     "imx8": [
         "apalis-imx8",
@@ -73,6 +75,88 @@ platforms = {
 }
 
 DISABLED_MARKER = ".disabled"
+
+SELECTED_PLATFORMS = (
+    [p for p in platforms if p in _PLATFORMS_ENV] if _PLATFORMS_ENV else list(platforms)
+)
+SELECTED_MEMBERS = {m for p in SELECTED_PLATFORMS for m in platforms[p]}
+
+
+def member_of(compose_filename):
+    """docker-compose-verdin-imx8mm.yml -> verdin-imx8mm"""
+    return compose_filename[len("docker-compose-") : -len(".yml")]
+
+
+def app_dirs(root):
+    if not os.path.isdir(root):
+        return []
+    return [
+        d
+        for d in sorted(os.listdir(root))
+        if os.path.isdir(os.path.join(root, d)) and not d.startswith(".")
+    ]
+
+
+def compose_files(app_dir):
+    return [
+        f
+        for f in sorted(os.listdir(app_dir))
+        if f.startswith("docker-compose-") and f.endswith(".yml")
+    ]
+
+
+def merge_into_gallery(temp_dir, gallery_dir):
+    """Overlay the generated composes onto an existing gallery checkout.
+
+    Only files belonging to the selected platforms are touched. Everything else
+    the gallery already publishes is left exactly as it is.
+    """
+    for app in app_dirs(gallery_dir):
+        app_path = os.path.join(gallery_dir, app)
+        for fname in compose_files(app_path):
+            if member_of(fname) in SELECTED_MEMBERS:
+                os.remove(os.path.join(app_path, fname))
+                desc = os.path.join(app_path, fname + ".description")
+                if os.path.exists(desc):
+                    os.remove(desc)
+
+    for app in app_dirs(temp_dir):
+        src, dst = os.path.join(temp_dir, app), os.path.join(gallery_dir, app)
+        os.makedirs(dst, exist_ok=True)
+        for fname in os.listdir(src):
+            if fname == "app.json":
+                continue
+            shutil.copyfile(os.path.join(src, fname), os.path.join(dst, fname))
+
+    for app in app_dirs(gallery_dir):
+        app_path = os.path.join(gallery_dir, app)
+        remaining = compose_files(app_path)
+        if not remaining:
+            shutil.rmtree(app_path)
+            print(f"Removed now-empty app: {app}")
+            continue
+
+        generated = {}
+        gen_json = os.path.join(temp_dir, app, "app.json")
+        if os.path.exists(gen_json):
+            with open(gen_json, encoding="utf-8") as f:
+                generated = {p["name"]: p for p in json.load(f)["packages"]}
+
+        kept = {}
+        old_json = os.path.join(app_path, "app.json")
+        if os.path.exists(old_json):
+            with open(old_json, encoding="utf-8") as f:
+                for pkg in json.load(f)["packages"]:
+                    if member_of(pkg["filename"]) not in SELECTED_MEMBERS:
+                        kept[pkg["name"]] = pkg
+
+        merged = {**kept, **generated}
+        merged = {
+            n: p for n, p in merged.items() if p["filename"] in remaining
+        }
+        with open(old_json, "w", encoding="utf-8") as f:
+            json.dump({"packages": [merged[n] for n in sorted(merged)]}, f, indent=4)
+        print(f"Merged app.json for {app}: {len(merged)} packages")
 
 
 def is_app_disabled(app_dir):
@@ -146,7 +230,7 @@ def extract_description_from_file(file_path):
     return None
 
 
-def main(composes_dir):
+def main(composes_dir, merge_into=None):
     # tcb doesn't support canonicalizing compose files with a fully qualified image
     # ie, an `image:` specifying the registry such as `docker.io/torizon/weston:stable-rc`
     recursively_replace_contents("$REGISTRY/", "", composes_dir)
@@ -169,6 +253,9 @@ def main(composes_dir):
 
     # For each platform
     for platform, members in platforms.items():
+        if platform not in SELECTED_PLATFORMS:
+            print(f"Skipping platform not in $PLATFORMS: {platform}")
+            continue
         # For each app in ./composes
         for app in os.listdir(composes_dir):
             app_path = os.path.join(composes_dir, app)
@@ -258,9 +345,19 @@ def main(composes_dir):
 
     generate_app_json(temp_dir)
 
+    if merge_into:
+        print(f"Selected platforms: {' '.join(SELECTED_PLATFORMS)}")
+        merge_into_gallery(temp_dir, merge_into)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("composes_dir", help="Path to the composes directory")
+    parser.add_argument(
+        "--merge-into",
+        metavar="GALLERY_DIR",
+        help="Overlay the result onto an existing gallery checkout, touching only "
+        "the platforms in $PLATFORMS instead of replacing the whole tree.",
+    )
     args = parser.parse_args()
-    main(args.composes_dir)
+    main(args.composes_dir, args.merge_into)

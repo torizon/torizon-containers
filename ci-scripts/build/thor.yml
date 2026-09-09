@@ -17,6 +17,10 @@ default:
       when: always
       variables:
         REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
+    - if: '$MAKE_RC_RELEASE == "true" && $PLATFORMS =~ /(^|[\s,])thor([\s,]|$)/ && $CI_WORLD_TEST != "true" && $CI_COMMIT_TAG != "true"'
+      when: always
+      variables:
+        REGISTRY_NAMESPACE: $PROJECT_SETTING_REGISTRY_NAMESPACE
   variables:
     BUILD_FOR_ARM_V8: "true"
     L4T_DRIVER_VARIANT: openrm

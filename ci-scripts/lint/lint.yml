@@ -70,6 +70,19 @@ lint-dependencies:
         exit 1
       fi
 
+lint-platforms:
+  image:
+    name: alpine:latest
+    pull_policy: always
+  stage: lint
+  rules:
+    - when: always
+  before_script:
+    - apk update
+    - apk add yq bash
+  script:
+    - ./ci-scripts/lint/lint-platforms.sh
+
 lint-templates:
   image:
     name: alpine:latest

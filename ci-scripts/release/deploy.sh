@@ -46,8 +46,17 @@ yaml_file="$1"
 registry_namespace="$2"
 staging_tag="$3"
 
+# shellcheck source=ci-scripts/platform-filter.sh
+. "$(dirname "$0")/../platform-filter.sh"
+
 while IFS=: read -r image_name rest; do
   image_name=$(echo "$image_name" | xargs)
+
+  image_platform=$(platform_of_image "$image_name")
+  if ! platform_selected "$image_platform"; then
+    echo "$image_name: skipped, platform '$image_platform' is not in \$PLATFORMS"
+    continue
+  fi
 
   major=$(yq e ".[\"$image_name\"].major // \"\"" "$yaml_file")
   minor=$(yq e ".[\"$image_name\"].minor // \"\"" "$yaml_file")
