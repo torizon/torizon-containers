@@ -161,6 +161,108 @@ thor:[gstreamer1.0]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
   needs: ["thor:[wayland-base]"]
 
+.build-dotnet-thor-template:
+  extends: .build-thor-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: debian-thor
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+thor:[dotnet-8]:
+  extends: .build-dotnet-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-thor
+    IMAGE_NAME: dotnet8-thor
+    DOTNET_RUNTIME: dotnet
+  needs: ["thor:[base]"]
+
+thor:[dotnet-10]:
+  extends: .build-dotnet-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-thor
+    IMAGE_NAME: dotnet10-thor
+    DOTNET_RUNTIME: dotnet
+  needs: ["thor:[base]"]
+
+.build-dotnet-asp-thor-template:
+  extends: .build-dotnet-thor-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
+
+thor:[dotnet-8-asp]:
+  extends: .build-dotnet-asp-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8-thor
+    IMAGE_NAME: aspdotnet8-thor
+  needs: ["thor:[base]"]
+
+thor:[dotnet-10-asp]:
+  extends: .build-dotnet-asp-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10-thor
+    IMAGE_NAME: aspdotnet10-thor
+  needs: ["thor:[base]"]
+
+.build-dotnet-wayland-thor-template:
+  extends: .build-thor-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
+    BASE_IMAGE_NAME: wayland-base-thor
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+thor:[dotnet-8-wayland]:
+  extends: .build-dotnet-wayland-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland-thor
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-thor
+    IMAGE_NAME: dotnet8-wayland-thor
+  needs: ["thor:[dotnet-8]", "thor:[wayland-base]"]
+
+thor:[dotnet-10-wayland]:
+  extends: .build-dotnet-wayland-thor-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland-thor
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-thor
+    IMAGE_NAME: dotnet10-wayland-thor
+  needs: ["thor:[dotnet-10]", "thor:[wayland-base]"]
+
+thor:[dotnet-8-gtk3]:
+  extends: .build-thor-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet8-wayland-thor
+    IMAGE_NAME: dotnet8-gtk3-thor
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["thor:[dotnet-8-wayland]"]
+
+thor:[dotnet-10-gtk3]:
+  extends: .build-thor-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet10-wayland-thor
+    IMAGE_NAME: dotnet10-gtk3-thor
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["thor:[dotnet-10-wayland]"]
+
 thor:[wayland-gtk3]:
   extends: .build-thor-template
   variables:

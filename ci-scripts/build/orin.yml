@@ -161,6 +161,108 @@ orin:[gstreamer1.0]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
   needs: ["orin:[wayland-base]"]
 
+.build-dotnet-orin-template:
+  extends: .build-orin-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: debian-orin
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_BASE_FOLDER}/"
+
+orin:[dotnet-8]:
+  extends: .build-dotnet-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-orin
+    IMAGE_NAME: dotnet8-orin
+    DOTNET_RUNTIME: dotnet
+  needs: ["orin:[base]"]
+
+orin:[dotnet-10]:
+  extends: .build-dotnet-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-orin
+    IMAGE_NAME: dotnet10-orin
+    DOTNET_RUNTIME: dotnet
+  needs: ["orin:[base]"]
+
+.build-dotnet-asp-orin-template:
+  extends: .build-dotnet-orin-template
+  variables:
+    DOTNET_RUNTIME: aspnetcore
+
+orin:[dotnet-8-asp]:
+  extends: .build-dotnet-asp-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: aspdotnet8-orin
+    IMAGE_NAME: aspdotnet8-orin
+  needs: ["orin:[base]"]
+
+orin:[dotnet-10-asp]:
+  extends: .build-dotnet-asp-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: aspdotnet10-orin
+    IMAGE_NAME: aspdotnet10-orin
+  needs: ["orin:[base]"]
+
+.build-dotnet-wayland-orin-template:
+  extends: .build-orin-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh "${DOTNET_VERSIONS_FILE}" "${DOTNET_KEY}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BUILD_BASE_IMAGE_NAME: "${DOTNET_BUILD_BASE_IMAGE_NAME}"
+    BASE_IMAGE_NAME: wayland-base-orin
+    DOCKERFILE_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${DOTNET_FOLDER}/${DOTNET_WAYLAND_BASE_FOLDER}/"
+
+orin:[dotnet-8-wayland]:
+  extends: .build-dotnet-wayland-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-8.yml
+    DOTNET_KEY: dotnet8-wayland-orin
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet8-orin
+    IMAGE_NAME: dotnet8-wayland-orin
+  needs: ["orin:[dotnet-8]", "orin:[wayland-base]"]
+
+orin:[dotnet-10-wayland]:
+  extends: .build-dotnet-wayland-orin-template
+  variables:
+    DOTNET_VERSIONS_FILE: ./ci-scripts/container-versions/dotnet-10.yml
+    DOTNET_KEY: dotnet10-wayland-orin
+    DOTNET_BUILD_BASE_IMAGE_NAME: dotnet10-orin
+    IMAGE_NAME: dotnet10-wayland-orin
+  needs: ["orin:[dotnet-10]", "orin:[wayland-base]"]
+
+orin:[dotnet-8-gtk3]:
+  extends: .build-orin-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-8.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet8-wayland-orin
+    IMAGE_NAME: dotnet8-gtk3-orin
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["orin:[dotnet-8-wayland]"]
+
+orin:[dotnet-10-gtk3]:
+  extends: .build-orin-template
+  before_script:
+    - . ./ci-scripts/build/export-dotnet-build-args.sh ./ci-scripts/container-versions/dotnet-10.yml ${IMAGE_NAME}
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
+  variables:
+    BASE_IMAGE_NAME: dotnet10-wayland-orin
+    IMAGE_NAME: dotnet10-gtk3-orin
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["orin:[dotnet-10-wayland]"]
+
 orin:[wayland-gtk3]:
   extends: .build-orin-template
   variables:

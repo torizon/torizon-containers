@@ -216,6 +216,50 @@ dotnet10-gtk3-imx95:
   patch: 0
   alias: [wrynose, forky-wrynose]
 
+# orin
+dotnet10-orin: &dotnet-orin
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 8
+  minor: 0
+  patch: 0
+aspdotnet10-orin:
+  <<: *dotnet-orin
+  minor: 0
+  patch: 0
+dotnet10-wayland-orin:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 8
+  minor: 0
+  patch: 0
+dotnet10-gtk3-orin:
+  major: 8
+  minor: 0
+  patch: 0
+
+# thor
+dotnet10-thor: &dotnet-thor
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 8
+  minor: 0
+  patch: 0
+aspdotnet10-thor:
+  <<: *dotnet-thor
+  minor: 0
+  patch: 0
+dotnet10-wayland-thor:
+  release: *dotnet-release
+  semver: *dotnet-semver
+  major: 8
+  minor: 0
+  patch: 0
+dotnet10-gtk3-thor:
+  major: 4
+  minor: 0
+  patch: 0
+
 # sl1680
 dotnet10-sl1680: &dotnet-sl1680
   release: *dotnet-release
