@@ -160,3 +160,22 @@ orin:[gstreamer1.0]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
   needs: ["orin:[wayland-base]"]
+
+orin:[wayland-gtk3]:
+  extends: .build-orin-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: wayland-gtk3-orin
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["orin:[wayland-base]"]
+
+orin:[gtk3-tests]:
+  extends: .build-orin-template
+  variables:
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-orin
+    BASE_IMAGE_NAME: wayland-gtk3-orin
+    IMAGE_NAME: gtk3-tests-orin
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+  needs: ["orin:[wayland-base-dev]", "orin:[wayland-gtk3]"]

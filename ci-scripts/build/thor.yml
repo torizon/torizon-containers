@@ -160,3 +160,22 @@ thor:[gstreamer1.0]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${GSTREAMER_FOLDER}/"
   needs: ["thor:[wayland-base]"]
+
+thor:[wayland-gtk3]:
+  extends: .build-thor-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: wayland-gtk3-thor
+    DOCKERFILE_FOLDER: "${GTK_3_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${GTK_3_FOLDER}/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[gtk3-tests]:
+  extends: .build-thor-template
+  variables:
+    BUILD_BASE_IMAGE_NAME: wayland-base-dev-thor
+    BASE_IMAGE_NAME: wayland-gtk3-thor
+    IMAGE_NAME: gtk3-tests-thor
+    DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
+  needs: ["thor:[wayland-base-dev]", "thor:[wayland-gtk3]"]
