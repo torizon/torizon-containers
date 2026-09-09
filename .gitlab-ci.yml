@@ -25,12 +25,18 @@ include:
   - "/ci-scripts/demo-gallery/demo-gallery.yml"
 
 variables:
+  PLATFORMS:
+    value: "am62 am62p am67a am69 imx8 imx93 imx95 sl1680 upstream"
+    description: "Platforms the three MAKE_* switches below act on. Must match the ci-scripts/build/<platform>.yml names."
+  MAKE_RC_RELEASE:
+    value: "false"
+    description: "Build the selected platforms and publish their <alias>-rc images to Docker Hub."
   MAKE_TAG_RELEASE:
     value: "false"
-    description: "Set to true to promote this branch's -rc images to the versions in ci-scripts/container-versions and create a release."
+    description: "Promote the selected platforms' -rc images to the versions in ci-scripts/container-versions and create a release."
   MAKE_GALLERY_RELEASE:
     value: "false"
-    description: "Set to true to publish the demo gallery composes for this branch."
+    description: "Publish the demo gallery composes for the selected platforms. Platforms not selected keep whatever is already published in the gallery."
 
   DEBIAN_POINT_RELEASE: "12.15-slim"
   DOCKERHUB_REGISTRY_URL: "docker.io"
