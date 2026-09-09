@@ -1,6 +1,6 @@
 services:
   crank-weston:
-    image: '$REGISTRY/torizon/crank-weston-imx8:${RELEASE_TAG}-rc'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/crank-weston-imx8:${IMAGE_TAG}'
     container_name: crank-weston
     network_mode: host
     cap_add:
@@ -19,7 +19,7 @@ services:
       - /run/udev:/run/udev
 
   crank:
-    image: '$REGISTRY/cranksoftware/imx8-sb_8_2-wayland-base-imx8_4:v0.1'
+    image: 'docker.io/cranksoftware/imx8-sb_8_2-wayland-base-imx8_4:v0.1'
     container_name: crank-imx8
     device_cgroup_rules:
       - 'c 199:* rmw'

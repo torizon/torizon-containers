@@ -9,11 +9,13 @@ load ./general-helper.sh
 DOCKER_RUN_IMX93="docker container run -e ACCEPT_FSL_EULA=1 -d -it --privileged \
             --name=graphics-tests -v /dev:/dev -v /tmp:/tmp \
             --device-cgroup-rule='c 509:* rmw' \
-            $REGISTRY/torizon/graphics-tests-imx93:${RELEASE_TAG}-rc"
+            $REGISTRY/${REGISTRY_NAMESPACE}/graphics-tests-imx93:${IMAGE_TAG}"
             
 setup_file() {
   docker container kill graphics-tests || true
   docker container rm graphics-tests || true
+
+  resolve_image_tag graphics-tests-imx93
 
   eval "$DOCKER_RUN_IMX93"
 

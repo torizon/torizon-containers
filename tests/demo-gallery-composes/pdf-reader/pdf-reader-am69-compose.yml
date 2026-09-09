@@ -1,7 +1,7 @@
 # description: launches a LVGL PDF Reader
 services:
   pdf-reader:
-    image: '$REGISTRY/siliconsignals/pdf-reader-demo:1.0.0'
+    image: 'docker.io/siliconsignals/pdf-reader-demo:1.0.0'
     container_name: pdf-reader-am69
     # This demo requires access to DRM, Wayland, and Linux input devices to:
     # - Enable hardware-accelerated rendering on TI AM69 (PowerVR BXS GPU)
