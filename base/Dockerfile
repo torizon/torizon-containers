@@ -53,12 +53,18 @@ Signed-By: /usr/share/keyrings/toradex-debian-repo.gpg" \
 Pin: origin feeds.toradex.com\n\
 Pin-Priority: 900" \
     > /etc/apt/preferences.d/toradex-feeds \
+    && echo "Package: libc6 libc-gconv-modules-extra locales libc-bin\n\
+Pin: origin feeds.toradex.com\n\
+Pin-Priority: 1001" \
+> /etc/apt/preferences.d/toradex-glibc \
     && echo "Package: fastfetch libyyjson0\n\
 Pin: origin feeds.toradex.com\n\
 Pin-Priority: -1" \
     > /etc/apt/preferences.d/fastfetch-debian
 
 RUN apt-get -y update \
+    && apt-get install -y --allow-downgrades \
+        libc6 libc-gconv-modules-extra \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
         fastfetch \
