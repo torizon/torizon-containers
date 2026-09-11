@@ -1,6 +1,6 @@
 services:
   crank-weston:
-    image: '$REGISTRY/torizon/crank-weston:${RELEASE_TAG}-rc'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/crank-weston:${IMAGE_TAG}'
     container_name: crank-weston
     network_mode: host
     cap_add:
@@ -16,7 +16,7 @@ services:
       - '/run/udev:/run/udev'
 
   crank:
-    image: '$REGISTRY/cranksoftware/imx6-sb_8_2-wayland-base_4:v0.2'
+    image: 'docker.io/cranksoftware/imx6-sb_8_2-wayland-base_4:v0.2'
     container_name: crank-upstream
     stdin_open: true
     tty: true

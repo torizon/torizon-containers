@@ -1,6 +1,6 @@
 services:
   qt6-wayland-tests:
-    image: $REGISTRY/torizon/qt6-wayland-tests-sl1680:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/qt6-wayland-tests-sl1680:${IMAGE_TAG}
     container_name: qt6-wayland-tests
     privileged: true
     stdin_open: true

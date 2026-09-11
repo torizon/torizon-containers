@@ -13,5 +13,5 @@ services:
       - c 13:* rmw
       - c 226:* rmw
       - c 10:223 rmw
-    image: $REGISTRY/torizon/weston:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/weston:${IMAGE_TAG}
     command: --developer --tty=/dev/tty7 -- --debug

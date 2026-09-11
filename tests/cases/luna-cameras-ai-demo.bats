@@ -18,6 +18,8 @@ setup_file() {
   COMPOSE_FILE="$compose_file"
   export COMPOSE_FILE
 
+  resolve_dynamic_image_tags "$compose_file"
+
   docker compose -f "$compose_file" -f - up -d << EOF
 services:
  luna-cameras-ai-demo:

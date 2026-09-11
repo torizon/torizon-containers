@@ -1,7 +1,7 @@
 # description: launches the LVGL 3D demo application
 services:
   weston:
-    image: '$REGISTRY/torizon/weston-am62p:${RELEASE_TAG}-rc'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/weston-am62p:${IMAGE_TAG}'
     container_name: weston
     network_mode: host
     cap_add:

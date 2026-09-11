@@ -1,6 +1,6 @@
 services:
   pdf-reader:
-    image: '$REGISTRY/siliconsignals/pdf-reader-demo:1.0.0'
+    image: '$docker.io/siliconsignals/pdf-reader-demo:1.0.0'
     container_name: pdf-reader-imx95
     # This demo requires access to DRM, Wayland, and Linux input devices to:
     # - Enable hardware-accelerated rendering on i.MX95 (Arm Mali GPU)

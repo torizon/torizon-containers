@@ -1,6 +1,6 @@
 services:
   crank-weston:
-    image: '$REGISTRY/torizon/crank-weston-am62:${RELEASE_TAG}-rc'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/crank-weston-am62:${IMAGE_TAG}'
     container_name: crank-weston
     network_mode: host
     cap_add:
@@ -16,7 +16,7 @@ services:
       - '/run/udev:/run/udev'
 
   crank:
-    image: '$REGISTRY/cranksoftware/ti62-sb_8_2-wayland-base-am62_4:v0.1'
+    image: 'docker.io/cranksoftware/ti62-sb_8_2-wayland-base-am62_4:v0.1'
     container_name: crank-am62
     device_cgroup_rules:
       - 'c 226:* rmw'

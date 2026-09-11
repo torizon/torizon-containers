@@ -17,7 +17,7 @@ services:
         condition: service_healthy
 
   weston:
-    image: $REGISTRY/torizon/weston-am62p:${RELEASE_TAG}-rc
+    image: $REGISTRY/${REGISTRY_NAMESPACE}/weston-am62p:${IMAGE_TAG}
     network_mode: host
     cap_add:
       - CAP_SYS_TTY_CONFIG
