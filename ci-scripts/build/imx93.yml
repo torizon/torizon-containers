@@ -33,8 +33,9 @@ imx93:[base]:
     BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-imx93
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
-    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/imx93"
-    TORADEX_FEED_SUITES: "stable"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/torizon/imx93"
+    TORADEX_FEED_PATH: "/forky/wrynose"
+    TORADEX_FEED_SUITES: "experimental"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 

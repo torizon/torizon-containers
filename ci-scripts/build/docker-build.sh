@@ -10,25 +10,25 @@ set -euo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../release-tag.sh"
 
 if [[ "${IMAGE_NAME:-}" == *am6* ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/am6x/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/am6x/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *imx8 ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/imx8/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/imx8/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *imx93 ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/imx93/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/imx93/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *imx95 ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/imx95/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/imx95/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *sl1680 ]]; then
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/sl1680/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/sl1680/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 elif [[ "${IMAGE_NAME:-}" == *orin || "${IMAGE_NAME:-}" == *thor ]]; then
   TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/jetson/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 else
-  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/stable/upstream/snapshots/latest-snapshot)
+  TORADEX_SNAPSHOT=$(curl https://feeds.toradex.com/torizon/upstream/snapshots/latest-snapshot)
   export TORADEX_SNAPSHOT
 fi
 

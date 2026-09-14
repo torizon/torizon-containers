@@ -37,7 +37,7 @@ orin:[base]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
     TORADEX_FEED_URL: "https://feeds.toradex.com/torizon/jetson"
     TORADEX_FEED_PATH: "/forky/wrynose"
-    TORADEX_FEED_SUITES: "stable experimental"
+    TORADEX_FEED_SUITES: "experimental"
   needs: []
 
 orin:[core]:

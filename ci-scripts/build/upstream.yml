@@ -33,8 +33,9 @@ upstream:[base]:
     IMAGE_NAME: debian
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
     #TODO: Update feed URL
-    TORADEX_FEED_URL: "https://feeds.toradex.com/stable/upstream/"
-    TORADEX_FEED_SUITES: "stable"
+    TORADEX_FEED_URL: "https://feeds.toradex.com/torizon/upstream"
+    TORADEX_FEED_PATH: "/forky/wrynose"
+    TORADEX_FEED_SUITES: "experimental"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${BASE_FOLDER}/"
   needs: []
 
