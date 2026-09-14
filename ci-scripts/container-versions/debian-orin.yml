@@ -1,52 +1,52 @@
 debian-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 core-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 wayland-base-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 wayland-base-dev-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 qt6-wayland-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 qt6-wayland-examples-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 qt6-wayland-tests-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 weston-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 weston-touch-calibrator-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 chromium-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 graphics-tests-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 cuda-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
 gstreamer1.0-orin:
-  major: 4
-  minor: 13
+  major: 8
+  minor: 0
   patch: 0
