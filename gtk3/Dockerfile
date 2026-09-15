@@ -14,3 +14,5 @@ RUN apt-get update \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
+
+RUN printf '#!/bin/sh\nkill -s SYS $$\n' > /usr/bin/bwrap && chmod 755 /usr/bin/bwrap
