@@ -30,7 +30,6 @@ thor:[base]:
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-thor
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
@@ -43,7 +42,6 @@ thor:[base]:
 thor:[core]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-thor
     IMAGE_NAME: core-thor
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
@@ -53,7 +51,6 @@ thor:[core]:
 thor:[wayland-base]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: core-thor
     IMAGE_NAME: wayland-base-thor
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
@@ -63,7 +60,6 @@ thor:[wayland-base]:
 thor:[wayland-base-dev]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-thor
     IMAGE_NAME: wayland-base-dev-thor
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
@@ -73,7 +69,6 @@ thor:[wayland-base-dev]:
 thor:[qt6-wayland]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-thor
     IMAGE_NAME: qt6-wayland-thor
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
@@ -83,7 +78,6 @@ thor:[qt6-wayland]:
 thor:[qt6-wayland-examples]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-thor
     IMAGE_NAME: qt6-wayland-examples-thor
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
@@ -105,7 +99,6 @@ thor:[weston]:
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-thor
     IMAGE_NAME: weston-thor
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
@@ -115,7 +108,6 @@ thor:[weston]:
 thor:[weston-touch-calibrator]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston-thor
     IMAGE_NAME: weston-touch-calibrator-thor
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
@@ -125,7 +117,6 @@ thor:[weston-touch-calibrator]:
 thor:[chromium]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-thor
     IMAGE_NAME: chromium-thor
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
@@ -135,7 +126,6 @@ thor:[chromium]:
 thor:[graphics-tests]:
   extends: .build-thor-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-thor
     IMAGE_NAME: graphics-tests-thor
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"

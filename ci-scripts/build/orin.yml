@@ -30,7 +30,6 @@ orin:[base]:
   before_script:
     - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-orin
     DOCKERFILE_FOLDER: "${BASE_FOLDER}/"
@@ -43,7 +42,6 @@ orin:[base]:
 orin:[core]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: debian-orin
     IMAGE_NAME: core-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${CORE_FOLDER}/"
@@ -53,7 +51,6 @@ orin:[core]:
 orin:[wayland-base]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: core-orin
     IMAGE_NAME: wayland-base-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_FOLDER}/"
@@ -63,7 +60,6 @@ orin:[wayland-base]:
 orin:[wayland-base-dev]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-orin
     IMAGE_NAME: wayland-base-dev-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
@@ -73,7 +69,6 @@ orin:[wayland-base-dev]:
 orin:[qt6-wayland]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-orin
     IMAGE_NAME: qt6-wayland-orin
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_FOLDER}/"
@@ -83,7 +78,6 @@ orin:[qt6-wayland]:
 orin:[qt6-wayland-examples]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: qt6-wayland-orin
     IMAGE_NAME: qt6-wayland-examples-orin
     DOCKERFILE_FOLDER: "${QT6_WAYLAND_EXAMPLES_FOLDER}/"
@@ -105,7 +99,6 @@ orin:[weston]:
   before_script:
     - ./${SUPPORT_FILES_FOLDER}/${WESTON_FOLDER}/make_feature_map.sh
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-orin
     IMAGE_NAME: weston-orin
     DOCKERFILE_FOLDER: "${WESTON_FOLDER}/"
@@ -115,7 +108,6 @@ orin:[weston]:
 orin:[weston-touch-calibrator]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: weston-orin
     IMAGE_NAME: weston-touch-calibrator-orin
     DOCKERFILE_FOLDER: "${WESTON_TOUCH_CALIBRATOR_FOLDER}/"
@@ -125,7 +117,6 @@ orin:[weston-touch-calibrator]:
 orin:[chromium]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-orin
     IMAGE_NAME: chromium-orin
     DOCKERFILE_FOLDER: "${CHROMIUM_FOLDER}/"
@@ -135,7 +126,6 @@ orin:[chromium]:
 orin:[graphics-tests]:
   extends: .build-orin-template
   variables:
-    BUILD_FOR_ARM_V8: "true"
     BASE_IMAGE_NAME: wayland-base-orin
     IMAGE_NAME: graphics-tests-orin
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${TESTS_FOLDER}/${GRAPHICS_TESTS_FOLDER}/"

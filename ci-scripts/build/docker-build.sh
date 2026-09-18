@@ -41,7 +41,7 @@ declare -A BUILD_TARGETS=(
 SELECTED_PLATFORMS=()
 
 UNEXPECTED_PLATFORM=()
-for VAR in $(env | grep '^BUILD_FOR_' | cut -d= -f1); do
+for VAR in $(compgen -v | grep '^BUILD_FOR_'); do
   if [[ ! ${BUILD_TARGETS[$VAR]+_} ]]; then
     UNEXPECTED_PLATFORM+=("$VAR")
   fi
