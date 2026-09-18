@@ -14,6 +14,14 @@ wayland-base-dev-thor:
   major: 8
   minor: 0
   patch: 0
+qt5-wayland-thor:
+  major: 8
+  minor: 0
+  patch: 0
+qt5-wayland-examples-thor:
+  major: 8
+  minor: 0
+  patch: 0
 qt6-wayland-thor:
   major: 8
   minor: 0

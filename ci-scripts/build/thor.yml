@@ -66,6 +66,24 @@ thor:[wayland-base-dev]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
   needs: ["thor:[wayland-base]"]
 
+thor:[qt5-wayland]:
+  extends: .build-thor-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-thor
+    IMAGE_NAME: qt5-wayland-thor
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: ["thor:[wayland-base]"]
+
+thor:[qt5-wayland-examples]:
+  extends: .build-thor-template
+  variables:
+    BASE_IMAGE_NAME: qt5-wayland-thor
+    IMAGE_NAME: qt5-wayland-examples-thor
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: ["thor:[qt5-wayland]"]
+
 thor:[qt6-wayland]:
   extends: .build-thor-template
   variables:

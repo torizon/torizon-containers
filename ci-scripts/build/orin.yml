@@ -66,6 +66,24 @@ orin:[wayland-base-dev]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${JETSON_FOLDER}/${WAYLAND_BASE_DEV_FOLDER}/"
   needs: ["orin:[wayland-base]"]
 
+orin:[qt5-wayland]:
+  extends: .build-orin-template
+  variables:
+    BASE_IMAGE_NAME: wayland-base-orin
+    IMAGE_NAME: qt5-wayland-orin
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: ["orin:[wayland-base]"]
+
+orin:[qt5-wayland-examples]:
+  extends: .build-orin-template
+  variables:
+    BASE_IMAGE_NAME: qt5-wayland-orin
+    IMAGE_NAME: qt5-wayland-examples-orin
+    DOCKERFILE_FOLDER: "${QT5_WAYLAND_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/qt-wayland/"
+  needs: ["orin:[qt5-wayland]"]
+
 orin:[qt6-wayland]:
   extends: .build-orin-template
   variables:
