@@ -1,0 +1,111 @@
+# description: a simulated four-station machining line that keeps developing faults, and an agent driven by a language model that notices, diagnoses and repairs each one unattended
+services:
+  weston:
+    image: '$REGISTRY/torizon/weston-orin:wrynose-rc'
+    command: '--developer --tty=/dev/tty7'
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 10:* rmw'
+      - 'c 13:* rmw'
+      - 'c 195:* rmw'
+      - 'c 226:* rmw'
+      - 'c 500:* rmw'
+      - 'c 501:* rmw'
+      - 'c 502:* rmw'
+      - 'c 505:* rmw'
+    restart: unless-stopped
+
+  llm:
+    image: 'lbornia/line-llm:latest'
+    network_mode: host
+    volumes:
+      - '/dev:/dev'
+    device_cgroup_rules:
+      - 'c 10:* rmw'
+      - 'c 226:* rmw'
+      - 'c 500:* rmw'
+      - 'c 501:* rmw'
+      - 'c 502:* rmw'
+    restart: unless-stopped
+
+  sim:
+    image: 'lbornia/line-sim:latest'
+    network_mode: host
+    environment:
+      PORT: "8080"
+      TIME_SCALE: "1"
+      FAULT_INTERVAL_MIN_S: "60"
+      FAULT_INTERVAL_MAX_S: "120"
+      WARMUP_S: "90"
+      AUTO_RECOVER_S: "200"
+    restart: unless-stopped
+
+  agent:
+    image: 'lbornia/line-agent:latest'
+    network_mode: host
+    depends_on:
+      sim:
+        condition: service_healthy
+    environment:
+      SIM_URL: http://127.0.0.1:8080
+      LLM_BASE_URL: http://127.0.0.1:8000
+      LLM_MODEL: qwen
+      AGENT_MODE: classify
+      POLL_S: "2"
+    restart: unless-stopped
+
+  # Optional: drives station S2 from a real I2C sensor when one is wired to the
+  # 40-pin header. With no sensor the line keeps modelling that station.
+  sensor:
+    image: 'lbornia/line-sensor:latest'
+    network_mode: host
+    depends_on:
+      sim:
+        condition: service_healthy
+    environment:
+      SIM_URL: http://127.0.0.1:8080
+      STATION: S2
+      I2C_BUS: "7"
+      TEMP_GAIN: "4.0"
+      VIB_GAIN: "20.0"
+      CALIBRATION_S: "10"
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+    device_cgroup_rules:
+      - 'c 89:* rmw'
+      - 'c 254:* rmw'
+    restart: unless-stopped
+
+  chromium:
+    image: '$REGISTRY/torizon/chromium-orin:wrynose-rc'
+    command: http://127.0.0.1:8080
+    network_mode: host
+    depends_on:
+      weston:
+        condition: service_healthy
+      sim:
+        condition: service_healthy
+    security_opt:
+      - seccomp:unconfined
+    shm_size: 1gb
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+    device_cgroup_rules:
+      - 'c 10:* rmw'
+      - 'c 195:* rmw'
+      - 'c 226:* rmw'
+      - 'c 500:* rmw'
+      - 'c 501:* rmw'
+      - 'c 502:* rmw'
+      - 'c 505:* rmw'
+    restart: unless-stopped
