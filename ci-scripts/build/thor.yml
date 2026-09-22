@@ -289,3 +289,26 @@ thor:[gtk3-tests]:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: ["thor:[wayland-base-dev]", "thor:[wayland-gtk3]"]
+
+thor:[arm64-toolchain]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_AMD64: "true"
+    BASE_IMAGE_NAME: debian-thor
+    CROSS_COMPILER: aarch64-linux-gnu
+    CROSS_TARGET_ARCH: arm64
+    IMAGE_NAME: cross-toolchain-arm64-thor
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+  needs: ["thor:[base]"]
+
+thor:[arm64-toolchain-ssh]:
+  extends: .build-thor-template
+  variables:
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: cross-toolchain-ssh-arm64-thor
+    CROSS_TARGET_ARCH: arm64
+    BASE_IMAGE_NAME: cross-toolchain-arm64-thor
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+  needs: ["thor:[arm64-toolchain]"]

@@ -289,3 +289,26 @@ orin:[gtk3-tests]:
     DOCKERFILE_FOLDER: "${TESTS_FOLDER}/${TESTS_CONTAINERS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/${TESTS_FOLDER}/${GTK_3_TESTS_FOLDER}/"
   needs: ["orin:[wayland-base-dev]", "orin:[wayland-gtk3]"]
+
+orin:[arm64-toolchain]:
+  extends: .build-orin-template
+  variables:
+    BUILD_FOR_AMD64: "true"
+    BASE_IMAGE_NAME: debian-orin
+    CROSS_COMPILER: aarch64-linux-gnu
+    CROSS_TARGET_ARCH: arm64
+    IMAGE_NAME: cross-toolchain-arm64-orin
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${BASE_FOLDER}/"
+  needs: ["orin:[base]"]
+
+orin:[arm64-toolchain-ssh]:
+  extends: .build-orin-template
+  variables:
+    BUILD_FOR_AMD64: "true"
+    IMAGE_NAME: cross-toolchain-ssh-arm64-orin
+    CROSS_TARGET_ARCH: arm64
+    BASE_IMAGE_NAME: cross-toolchain-arm64-orin
+    DOCKERFILE_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${CROSS_TOOLCHAIN_FOLDER}/${SSH_FOLDER}/"
+  needs: ["orin:[arm64-toolchain]"]
