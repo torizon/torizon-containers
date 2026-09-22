@@ -77,14 +77,17 @@ cross-toolchain-ssh-arm64-imx93:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-imx93:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-dev-imx93:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 tensorflow-lite-examples-imx93:
   major: 8
   minor: 0

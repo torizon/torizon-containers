@@ -102,14 +102,17 @@ cross-toolchain-ssh-arm64-imx8:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 gstreamer1.0-imx8:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 gstreamer1.0-dev-imx8:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 gstreamer1.0-examples-imx8:
   major: 8
   minor: 0

@@ -2,59 +2,89 @@ debian-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 core-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 wayland-base-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 wayland-base-dev-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
+wayland-gtk3-orin:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-examples-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-examples-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-tests-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 weston-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 weston-touch-calibrator-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 chromium-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 graphics-tests-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 cuda-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 gstreamer1.0-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
+cross-toolchain-arm64-orin:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
+cross-toolchain-ssh-arm64-orin:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]

@@ -223,20 +223,24 @@ dotnet8-orin: &dotnet-orin
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 aspdotnet8-orin:
   <<: *dotnet-orin
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 dotnet8-wayland-orin:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 dotnet8-gtk3-orin:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 
 # thor
 dotnet8-thor: &dotnet-thor
@@ -245,20 +249,24 @@ dotnet8-thor: &dotnet-thor
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 aspdotnet8-thor:
   <<: *dotnet-thor
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 dotnet8-wayland-thor:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 dotnet8-gtk3-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 
 # sl1680
 dotnet8-sl1680: &dotnet-sl1680

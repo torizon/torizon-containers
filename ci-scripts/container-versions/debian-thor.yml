@@ -2,59 +2,89 @@ debian-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 core-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 wayland-base-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 wayland-base-dev-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
+wayland-gtk3-thor:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt5-wayland-examples-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-examples-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 qt6-wayland-tests-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 weston-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 weston-touch-calibrator-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 chromium-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 graphics-tests-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 cuda-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
 gstreamer1.0-thor:
   major: 8
   minor: 0
   patch: 0
+  alias: [wrynose, forky-wrynose]
+cross-toolchain-arm64-thor:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
+cross-toolchain-ssh-arm64-thor:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
