@@ -295,7 +295,7 @@ function drop_unavailable_modules() {
 
   IFS=',' read -ra module_list <<<"$modules"
   for module in "${module_list[@]}"; do
-    if find /usr/lib -maxdepth 3 -name "$module" -print -quit | grep -q .; then
+    if grep -q . < <(find /usr/lib -maxdepth 3 -name "$module" -print -quit); then
       available="${available:+$available,}$module"
     else
       echo "Weston module '$module' is not available in this build, dropping it from $config_file"
