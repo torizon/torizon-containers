@@ -78,6 +78,18 @@ get_compose_file() {
   fi
 }
 
+get_compose_override_file() {
+  local base_name="$1"
+  local compose_file="$2"
+  local override_file
+
+  override_file="$(dirname "$compose_file")/${base_name}-test-override.yml"
+
+  if [[ -f "$override_file" ]]; then
+    echo "$override_file"
+  fi
+}
+
 # Echoes the most recent <slug>-<pipeline-id> tag pushed for an image repo, or nothing if none exists.
 find_latest_pipeline_tag() {
   local repo="$1"
@@ -172,7 +184,14 @@ setup_test() {
 
   resolve_dynamic_image_tags "$compose_file"
 
-  docker compose -f "$compose_file" up -d
+  local compose_args=(-f "$compose_file")
+  local override_file
+  override_file=$(get_compose_override_file "$compose_service_name" "$compose_file")
+  if [[ -n "$override_file" ]]; then
+    compose_args+=(-f "$override_file")
+  fi
+
+  docker compose "${compose_args[@]}" up -d
 
   sleep "${timeout}"
 

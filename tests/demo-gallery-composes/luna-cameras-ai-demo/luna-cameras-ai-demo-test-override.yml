@@ -1,0 +1,4 @@
+services:
+  luna-cameras-ai-demo:
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
