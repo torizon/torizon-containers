@@ -28,7 +28,7 @@ default:
 thor:[base]:
   extends: .build-thor-template
   before_script:
-    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE_NVIDIA}"
+    - export DEBIAN_POINT_RELEASE="${DEBIAN_POINT_RELEASE}"
   variables:
     BUILD_FOR_AMD64: "true"
     IMAGE_NAME: debian-thor
