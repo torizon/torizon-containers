@@ -23,6 +23,8 @@ services:
         condition: service_healthy
     network_mode: host
     privileged: true
+    environment:
+      - PYTHONUNBUFFERED=1
     volumes:
       - '/dev:/dev'
       - '/tmp:/tmp'
