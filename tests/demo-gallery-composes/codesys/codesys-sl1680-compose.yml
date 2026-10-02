@@ -1,0 +1,108 @@
+# description: launches the CODESYS "Do What Simon Says" PLC demo, with its WebVisu shown in Chromium
+services:
+  codesys-setup:
+    image: toradexdemos/codesys_demo_arm64:4.21.0.0
+    container_name: codesys-demo-setup
+    network_mode: host
+    command: ["--developer"]
+    volumes:
+      - '/tmp/dockerMount:/dockerMount_copy'
+    healthcheck:
+      test: ["CMD-SHELL", "test -s /dockerMount_copy/conf/codesyscontrol/CODESYSControl.cfg"]
+      interval: 2s
+      timeout: 3s
+      retries: 45
+
+  codesys-prepare:
+    image: busybox:stable
+    container_name: codesys-demo-prepare
+    depends_on:
+      codesys-setup:
+        condition: service_healthy
+    volumes:
+      - '/tmp/dockerMount:/mnt'
+    command:
+      - sh
+      - -c
+      - |
+        set -e
+        mkdir -p /mnt/quarantine
+        for f in .SoftContainer_CmRuntime.wbb .UFC_SoftContainer_CmRuntime.WibuCmLif; do
+          if [ -e "/mnt/data/codesyscontrol/$$f" ]; then
+            mv "/mnt/data/codesyscontrol/$$f" /mnt/quarantine/
+            echo "quarantined $$f"
+          fi
+        done
+        CFG=/mnt/conf/codesyscontrol/CODESYSControl.cfg
+        sed -i 's/^InstallCmActContainer=.*/InstallCmActContainer=0/' "$$CFG"
+        sed -i 's/^InstallLegacyCmActContainer=.*/InstallLegacyCmActContainer=0/' "$$CFG"
+        echo "licence vault protected:"
+        grep -E '^Install(Legacy)?CmActContainer=' "$$CFG"
+        UCFG=/mnt/conf/codesyscontrol/CODESYSControl_User.cfg
+        sed -i 's/^Logger.0.Filter=.*/Logger.0.Filter=0xFFFFFFFF/' "$$UCFG"
+        echo "log filter raised (makes the visualisation licence verdict visible)"
+    restart: "no"
+
+  codesys:
+    image: toradexdemos/codesyscontrol_virtuallinuxarm64:4.21.0.0
+    container_name: codesys-demo-runtime
+    network_mode: host
+    command: ["-s", "localhost"]
+    depends_on:
+      codesys-prepare:
+        condition: service_completed_successfully
+    volumes:
+      - '/tmp/dockerMount/conf/codesyscontrol/:/conf/codesyscontrol/'
+      - '/tmp/dockerMount/data/codesyscontrol/:/data/codesyscontrol/'
+      - '/tmp/dockerMount/extension/codesyscontrol/:/var/opt/codesysextension/'
+    cap_add:
+      - CHOWN
+      - IPC_LOCK
+      - KILL
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETFCAP
+      - SETPCAP
+      - SYS_NICE
+      - SYS_RESOURCE
+      - SYS_TIME
+
+  weston:
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/weston-sl1680:${IMAGE_TAG}'
+    container_name: codesys-demo-weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev:/run/udev'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+    command: '--developer'
+    restart: unless-stopped
+
+  chromium:
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/chromium-sl1680:${IMAGE_TAG}'
+    container_name: codesys-demo-chromium
+    network_mode: host
+    depends_on:
+      weston:
+        condition: service_healthy
+      codesys-setup:
+        condition: service_started
+    volumes:
+      - '/dev/dri:/dev/dri'
+      - '/tmp:/tmp'
+      - '/var/run/dbus:/var/run/dbus'
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    security_opt:
+      - seccomp:unconfined
+    shm_size: 256mb
+    command: '--virtual-keyboard http://localhost'
+    restart: unless-stopped
