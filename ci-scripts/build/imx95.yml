@@ -343,7 +343,7 @@ imx95:[tensorflow-lite-examples]:
     BASE_IMAGE_NAME: tensorflow-lite-imx95
     IMAGE_NAME: tensorflow-lite-examples-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
   needs: ["imx95:[tensorflow-lite]"]
 
 imx95:[litert]:
@@ -373,5 +373,5 @@ imx95:[litert-examples]:
     BASE_IMAGE_NAME: litert-imx95
     IMAGE_NAME: litert-examples-imx95
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/litert/examples"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
   needs: ["imx95:[litert]"]

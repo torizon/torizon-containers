@@ -28,9 +28,9 @@ RUN python3 -m venv /app/.venv --system-site-packages && \
     pip3 install --upgrade pip && \
     pip3 install --no-cache-dir ai-edge-litert
 
-COPY infer.py ${TFLITE_MODEL} /app/
-COPY images/ /app/images/
-COPY scripts/ /app/
+COPY litert/infer.py litert/${TFLITE_MODEL} /app/
+COPY common/images/ /app/images/
+COPY common/scripts/ /app/
 
 RUN mkdir -p /app/images/test /app/images/train /app/images/validation && \
     bash script_take_labels.sh && \

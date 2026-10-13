@@ -23,11 +23,11 @@ RUN python3 -m venv /app/.venv --system-site-packages && \
     pip3 install --upgrade pip && \
     pip3 install --no-cache-dir tflite-runtime
 
-COPY infer.py \
-     ssd_detect_quant_only_som.tflite \
+COPY tensorflow-lite/infer.py \
+     tensorflow-lite/ssd_detect_quant_only_som.tflite \
      /app/
-COPY images/ /app/images/
-COPY scripts/ /app/
+COPY common/images/ /app/images/
+COPY common/scripts/ /app/
 
 RUN mkdir -p /app/images/test /app/images/train /app/images/validation && \
     bash script_take_labels.sh && \

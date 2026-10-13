@@ -28,9 +28,9 @@ RUN python3 -m venv /app/.venv --system-site-packages && \
     . /app/.venv/bin/activate && \
     pip3 install --upgrade pip
 
-COPY infer.py ${TFLITE_MODEL} /app/
-COPY images/ /app/images/
-COPY scripts/ /app/
+COPY tensorflow-lite/infer.py tensorflow-lite/${TFLITE_MODEL} /app/
+COPY common/images/ /app/images/
+COPY common/scripts/ /app/
 
 # Convert model to Ethos-U NPU
 RUN vela --accelerator-config ethos-u65-256 ${TFLITE_MODEL}

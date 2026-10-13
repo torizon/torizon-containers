@@ -334,5 +334,5 @@ imx93:[tensorflow-lite-examples]:
     BASE_IMAGE_NAME: tensorflow-lite-imx93
     IMAGE_NAME: tensorflow-lite-examples-imx93
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX93_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
   needs: ["imx93:[tensorflow-lite]"]

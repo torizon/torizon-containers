@@ -367,7 +367,7 @@ imx8:[tensorflow-lite-examples]:
     BASE_IMAGE_NAME: tensorflow-lite-imx8
     IMAGE_NAME: tensorflow-lite-examples-imx8
     DOCKERFILE_FOLDER: "${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
-    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
   needs: ["imx8:[tensorflow-lite]"]
 
 imx8:[gstreamer1.0]:
