@@ -345,3 +345,33 @@ imx95:[tensorflow-lite-examples]:
     DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${TENSORFLOW_LITE_EXAMPLES_FOLDER}/"
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/tensorflow-lite/examples"
   needs: ["imx95:[tensorflow-lite]"]
+
+imx95:[litert]:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx95
+    IMAGE_NAME: litert-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_FOLDER}/"
+  needs: ["imx95:[base]"]
+
+imx95:[litert-dev]:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: litert-imx95
+    IMAGE_NAME: litert-dev-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_DEV_FOLDER}/"
+  needs: ["imx95:[litert]"]
+
+imx95:[litert-examples]:
+  extends: .build-imx95-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: litert-imx95
+    IMAGE_NAME: litert-examples-imx95
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX95_FOLDER}/${LITERT_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/litert/examples"
+  needs: ["imx95:[litert]"]

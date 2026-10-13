@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>colibrinowifi5_jpg.rf.2447307ad48bf09ff77c3a1d2db22b36.jpg</filename>
+	<path>/home/lucas_bernardes/Documents/computer_vision/labelImg/images/colibrinowifi5_jpg.rf.2447307ad48bf09ff77c3a1d2db22b36.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>som</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>155</xmin>
+			<ymin>127</ymin>
+			<xmax>488</xmax>
+			<ymax>355</ymax>
+		</bndbox>
+	</object>
+</annotation>

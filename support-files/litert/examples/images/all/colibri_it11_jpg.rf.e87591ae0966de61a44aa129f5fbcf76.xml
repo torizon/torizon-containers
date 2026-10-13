@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>colibri_it11_jpg.rf.e87591ae0966de61a44aa129f5fbcf76.jpg</filename>
+	<path>/home/lucas_bernardes/Documents/computer_vision/labelImg/images/colibri_it11_jpg.rf.e87591ae0966de61a44aa129f5fbcf76.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>som</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>111</xmin>
+			<ymin>159</ymin>
+			<xmax>511</xmax>
+			<ymax>455</ymax>
+		</bndbox>
+	</object>
+</annotation>

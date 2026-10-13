@@ -100,6 +100,9 @@ variables:
   TENSORFLOW_LITE_FOLDER: "tensorflow-lite"
   TENSORFLOW_LITE_DEV_FOLDER: "tensorflow-lite-dev"
   TENSORFLOW_LITE_EXAMPLES_FOLDER: "tensorflow-lite-examples"
+  LITERT_FOLDER: "litert"
+  LITERT_DEV_FOLDER: "litert-dev"
+  LITERT_EXAMPLES_FOLDER: "litert-examples"
 
 image: docker:$DOCKER_VERSION
 

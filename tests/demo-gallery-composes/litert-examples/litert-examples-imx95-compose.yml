@@ -1,0 +1,11 @@
+# description: launches the tensorflow lite example
+services:
+  litert-examples:
+    volumes:
+        - /dev:/dev
+        - /tmp:/tmp
+    device_cgroup_rules:
+        - 'c 238:0 rmw'
+        - 'c 10:264 rmw'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/litert-examples-imx95:${IMAGE_TAG}'
+    command: /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"

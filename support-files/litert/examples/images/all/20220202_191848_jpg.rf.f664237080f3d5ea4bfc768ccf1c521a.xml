@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>20220202_191848_jpg.rf.f664237080f3d5ea4bfc768ccf1c521a.jpg</filename>
+	<path>/home/lucas_bernardes/Documents/computer_vision/labelImg/images/20220202_191848_jpg.rf.f664237080f3d5ea4bfc768ccf1c521a.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>640</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>som</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>379</xmin>
+			<ymin>402</ymin>
+			<xmax>464</xmax>
+			<ymax>613</ymax>
+		</bndbox>
+	</object>
+</annotation>
