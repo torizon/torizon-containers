@@ -13,7 +13,6 @@ RUN apt-get update \
         build-essential \
         cmake \
         imx-gpu-mali-dev \
-        libgles-dev \
         pkgconf \
     && apt-get clean \
     && apt-get autoremove \
