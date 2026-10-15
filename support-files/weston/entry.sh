@@ -150,26 +150,33 @@ if $HAS_PXP; then
   done
 fi
 
-[[ "$SOC_ID" =~ "MX8" ]] && {
+# Select the g2d implementation based on the SoC
+G2D_IMPLEMENTATION=''
+
+case "$SOC_ID" in
+  *MX8*)
+    # i.MX8 uses DPU when available, otherwise the Vivante GPU
+    if [ "$HAS_DPU" = true ]; then
+      G2D_IMPLEMENTATION='dpu'
+    else
+      G2D_IMPLEMENTATION='viv'
+    fi
+    ;;
+  *MX93*) G2D_IMPLEMENTATION='pxp' ;;
+  *MX95*) G2D_IMPLEMENTATION='dpu' ;;
+esac
+
+# Apply the common configuration only if a g2d implementation was selected
+if [ -n "$G2D_IMPLEMENTATION" ]; then
   WESTON_ARGS="$WESTON_ARGS --use-g2d"
-
-  #
-  # Decide on what g2d implementation must be enabled for weston.
-  #
-
-  G2D_IMPLEMENTATION='viv'
-  $HAS_DPU && G2D_IMPLEMENTATION='dpu'
   echo "g2d implementation: $G2D_IMPLEMENTATION"
-  test -e /etc/alternatives/libg2d.so.2 && update-alternatives --set libg2d.so.2 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2
-}
 
-[[ "$SOC_ID" =~ "MX93" ]] && {
-  WESTON_ARGS="$WESTON_ARGS --use-g2d"
+  if [ -e /etc/alternatives/libg2d.so.2 ]; then
+    update-alternatives --set libg2d.so.2 \
+      "/usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2"
+  fi
+fi
 
-  G2D_IMPLEMENTATION='pxp'
-  echo "g2d implementation: $G2D_IMPLEMENTATION"
-  test -e /etc/alternatives/libg2d.so.2 && update-alternatives --set libg2d.so.2 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2
-}
 #
 # Set desktop defaults.
 #
@@ -250,23 +257,25 @@ function generate_tls_certificate() {
   } 2>&1 | tee -a /var/volatile/weston.log
 }
 
+# Generate the TLS certificate and append the remote UI config for the given backend
+write_remote_ui_config() {
+  generate_tls_certificate
+  echo -e "${REMOTE_UI}\n${1}\n${START_ON_STARTUP_CONFIG}" |
+    tee -a "$CONFIGURATION_FILE" "$CONFIGURATION_FILE_DEV" >/dev/null
+}
+
 if [ "$ENABLE_VNC" = "1" ]; then
-  if [[ "$SOC_ID" =~ "MX8" ]]; then
-    generate_tls_certificate
-    MSG=$REMOTE_UI"\n$VNC_BACKEND\n"$START_ON_STARTUP_CONFIG
-    echo -e "$MSG" | tee -a $CONFIGURATION_FILE $CONFIGURATION_FILE_DEV 1>/dev/null
+  # Only enable VNC if the backend is actually installed
+  if [ -n "$(find /usr/lib -name 'vnc-backend.so' 2>/dev/null | head -n 1)" ]; then
+    write_remote_ui_config "$VNC_BACKEND"
   else
-    # Weston 10 doesn't have a VNC backend, this has been introduced in Weston 12
-    MSG="VNC is not supported, please use RDP instead."
-    echo -e "$MSG"
+    echo "VNC backend not found, please use RDP instead." >&2
     exit 1
   fi
 fi
 
 if [ "$ENABLE_RDP" = "1" ]; then
-  generate_tls_certificate
-  MSG=$REMOTE_UI"\n$RDP_BACKEND\n"$START_ON_STARTUP_CONFIG
-  echo -e "$MSG" | tee -a $CONFIGURATION_FILE $CONFIGURATION_FILE_DEV 1>/dev/null
+  write_remote_ui_config "$RDP_BACKEND"
 fi
 
 if [ "$IGNORE_X_LOCKS" != "1" ]; then
