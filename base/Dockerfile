@@ -41,7 +41,7 @@ RUN ./users-groups.sh \
 
 RUN wget -O- ${TORADEX_FEED_URL}/toradex-debian-repo-07102024.gpg \
     | gpg --dearmor \
-    | tee /usr/share/keyrings/toradex-debian-repo.gpg
+    | tee /usr/share/keyrings/toradex-debian-repo.gpg >/dev/null
 
 RUN echo "Types: deb\n\
 URIs: ${TORADEX_FEED_URL}/snapshots/${TORADEX_SNAPSHOT}${TORADEX_FEED_PATH}\n\
