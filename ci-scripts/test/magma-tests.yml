@@ -18,8 +18,6 @@ build-tests-container:
         $CI_TEST_LUNA_SL1680 == "true" ||
         $CI_TEST_ASTRA_SL1680 == "true" ||
         $CI_TEST_COLIBRI_IMX7D_EMMC == "true" ||
-        $CI_TEST_VERDIN_AM62DUAL == "true" ||
-        $CI_TEST_SK_AM62L == "true" ||
         $CI_TEST_SK_AM62 == "true" ||
         $CI_TEST_SK_AM62P == "true" ||
         $CI_TEST_VERDIN_AM62QUAD == "true" ||
@@ -33,10 +31,11 @@ build-tests-container:
         $CI_TEST_VERDIN_IMX8MMQ == "true" ||
         $CI_TEST_VERDIN_IMX8MPQ == "true" ||
         $CI_TEST_SMARC_IMX8MPQ == "true" ||
+        $CI_TEST_LINO_IMX93 == "true" ||
+        $CI_TEST_OSM_IMX93 == "true" ||
         $CI_TEST_VERDIN_IMX95H == "true" ||
         $CI_TEST_SMARC_IMX95H == "true" ||
         $CI_TEST_AQUILA_IMX95H == "true" ||
-        $CI_TEST_FRDM_IMX93 == "true" ||
         $CI_TEST_BEAGLEY_AI == "true" ||
         $CI_TEST_TORIZON_X86 == "true"
       when: always
@@ -56,34 +55,78 @@ build-tests-container:
   tags:
     - internal-network-access
   image:
-    name: registry.gitlab.com/toradex/rd/torizon-core/aval/aval:main
+    name: registry.gitlab.com/toradex/rd/torizon-core/magma:main
     pull_policy: always
   before_script:
     - . ./ci-scripts/release-tag.sh
     - |
       if [ "${CI_COMMIT_REF_PROTECTED:-}" = "true" ]; then
-        AVAL_REGISTRY_ARGS="-e REGISTRY=${DOCKERHUB_REGISTRY_URL} -e REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE} -e IMAGE_TAG=${RELEASE_TAG}-rc"
+        REGISTRY_ARGS="-e REGISTRY=${DOCKERHUB_REGISTRY_URL} -e REGISTRY_NAMESPACE=${PROJECT_SETTING_REGISTRY_NAMESPACE} -e IMAGE_TAG=${RELEASE_TAG}-rc"
         echo "${DOCKERHUB_REGISTRY_URL}/${PROJECT_SETTING_REGISTRY_NAMESPACE}/<image>:${CI_COMMIT_BRANCH-${CI_COMMIT_REF_NAME-}}-rc"
       else
-        AVAL_REGISTRY_ARGS="-e REGISTRY=${CI_REGISTRY} -e REGISTRY_NAMESPACE=${CI_PROJECT_PATH} -e IMAGE_TAG=${CI_COMMIT_REF_SLUG}-aval"
-        echo "Local alias tag: ${CI_REGISTRY}/${CI_PROJECT_PATH}/<image>:${CI_COMMIT_REF_SLUG}-aval"
+        REGISTRY_ARGS="-e REGISTRY=${CI_REGISTRY} -e REGISTRY_NAMESPACE=${CI_PROJECT_PATH} -e IMAGE_TAG=${CI_COMMIT_REF_SLUG}-magma"
+        echo "Local alias tag: ${CI_REGISTRY}/${CI_PROJECT_PATH}/<image>:${CI_COMMIT_REF_SLUG}-magma"
       fi
-
+    # TODO: TAU-124: move this SSH bootstrap into the magma image or
+    # magma-client, so each repo doesn't need its own copy
+    # $LAB_SSH_PRIVATE_KEY holds the key base64-encoded on a single
+    # line — pasting the raw multi-line PEM into GitLab's variable field
+    # got mangled (CRLF/whitespace), which `ssh` rejected with
+    # "error in libcrypto"
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - echo "$LAB_SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - LAB_HOST=$(magma-client -p "$PLACE" lab-host)
+    - echo "LAB_HOST=$LAB_HOST"
+    - ssh-keyscan -H "$LAB_HOST" >> ~/.ssh/known_hosts
+    # labgrid's own SSH to the exporter takes the user and key from here
+    - printf 'Host %s\n  User %s\n  IdentityFile ~/.ssh/id_ed25519\n  IdentitiesOnly yes\n' "$LAB_HOST" "$LAB_SSH_USER" > ~/.ssh/config
+    - chmod 600 ~/.ssh/config
+    - ssh -o BatchMode=yes -o ConnectTimeout=5 "$LAB_HOST" true
+    - apt update && apt install -y sshpass
+    - magma-client -p "$PLACE" acquire
+  script:
     - echo -e "\e[0Ksection_start:$(date +%s):prepare\r\e[0KDevice Preparation"
+    # teziget-cli picks the Artifactory repo, distro and image of the
+    # place's machine and TARGET_BUILD_TYPE. Only Toradex boards install
+    # through the Toradex Easy Installer.
+    - IMAGE_URL=$(teziget-cli torizon --version "$YOCTO_BRANCH" --build_type "$TARGET_BUILD_TYPE" --place "$PLACE")
+    - echo "IMAGE_URL=$IMAGE_URL"
+    - |
+      FLASH_ARGS="--image-url $IMAGE_URL"
+      if [ "$COMMON_TORIZON" != "true" ]; then
+        TEZI_URL=$(teziget-cli tezi --build_type "$TARGET_BUILD_TYPE" --place "$PLACE")
+        echo "TEZI_URL=$TEZI_URL"
+        FLASH_ARGS="--tezi-url $TEZI_URL $FLASH_ARGS"
+      fi
+    - magma-client -p "$PLACE" flash $FLASH_ARGS --tos-password "$DEVICE_PASSWORD"
+        --device-info-file device_information --no-progress
+    # The flash leaves the serial console logged in as torizon, so the
+    # tests run there with console-run
+    - magma-client -p "$PLACE" console-run
+        'docker rm -f $(docker ps -aq) || true && docker system prune --all --force'
+    - . ./device_information
+    # Secrets must not be passed on the console-run command line, since it is
+    # typed into the serial console and echoed to the logs. Instead, write them
+    # to an env file, copy it to the board over SSH and pass it to docker run
+    # with --env-file.
+    - (umask 077 && printf '%s\n'
+        "PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN"
+        "CI_REGISTRY_USER=$CI_REGISTRY_USER"
+        "CI_REGISTRY_PASSWORD=$CI_REGISTRY_PASSWORD" > ci-secrets.env)
+    - SSHPASS="$DEVICE_PASSWORD" sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        ci-secrets.env "torizon@$DEVICE_IP:/home/torizon/ci-secrets.env"
+    # Delete the .env file from gitlab runner
+    - rm -f ci-secrets.env
     - >
-      cd /aval &&
-      /usr/local/bin/entrypoint.sh
-      "docker run
+      magma-client -p "$PLACE" console-run "docker run
+      --env-file /home/torizon/ci-secrets.env
       -e PAID_DOCKERHUB_USER=$PAID_DOCKERHUB_USER
-      -e PAID_DOCKERHUB_TOKEN=$PAID_DOCKERHUB_TOKEN
       -e CI_REGISTRY=$CI_REGISTRY
-      -e CI_REGISTRY_USER=$CI_REGISTRY_USER
-      -e CI_REGISTRY_PASSWORD=$CI_REGISTRY_PASSWORD
       -e CI_COMMIT_REF_SLUG=$CI_COMMIT_REF_SLUG
-      ${AVAL_REGISTRY_ARGS}
+      ${REGISTRY_ARGS}
       -e RELEASE_TAG=$RELEASE_TAG
       -e SOC_UDT=$SOC_UDT
-      -e RM_ON_TEARDOWN=$RM_ON_TEARDOWN
       --privileged
       --pid host
       -v /var/run/docker.sock:/var/run/docker.sock
@@ -91,20 +134,30 @@ build-tests-container:
       -v /sys:/sys
       ${CI_REGISTRY}/${CI_PROJECT_PATH}/torizon-containers-tests:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}
       /tests/cases/run-tests.sh"
-      --copy-artifact
-      /home/torizon/report.xml
-      $CI_PROJECT_DIR/report.xml
-      --delegation-config
-      $DELEGATION_PATH
-      --before
-      "docker rm -f \$(docker ps -aq) || true && docker system prune --all --force"
-      ${AVAL_EXTRA_OPTIONS}
+    - SSHPASS="$DEVICE_PASSWORD" sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        "torizon@$DEVICE_IP" rm -f /home/torizon/ci-secrets.env
+    # The report is a file, so it is copied over SSH
+    - SSHPASS="$DEVICE_PASSWORD" sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        "torizon@$DEVICE_IP:/home/torizon/report.xml" "$CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml"
+  after_script:
+    # Always remove the secrets env file from the board, even if a step
+    # failed before the cleanup in script.
+    - |
+      if [ -f ./device_information ]; then
+        . ./device_information
+        SSHPASS="$DEVICE_PASSWORD" sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+          -o ConnectTimeout=10 "torizon@$DEVICE_IP" rm -f /home/torizon/ci-secrets.env || true
+      fi
+    # Delete the .env file from gitlab runner
+    - rm -f ci-secrets.env
+    # Always release the place, even if a step fails, so a bad run doesn't
+    # leave the board locked for everyone else
+    - magma-client -p "$PLACE" release
   allow_failure: true
-  script:
-    - mv $CI_PROJECT_DIR/report.xml $CI_PROJECT_DIR/report-${CI_JOB_NAME}.xml
   variables:
     TARGET_BUILD_TYPE: "release"
-    USE_RAC: "false"
+    YOCTO_BRANCH: "scarthgap-7.x.y"
+    LAB_SSH_USER: "ci_torizon_containers"
     FF_TIMESTAMPS: true
   artifacts:
     when: always
@@ -120,8 +173,6 @@ build-tests-container:
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-  variables:
-    DELEGATION_PATH: "/aval/delegation_config.toml"
 
 .e2e-test-stable-common-template:
   extends: .e2e-test-template
@@ -129,26 +180,25 @@ build-tests-container:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
   variables:
-    DELEGATION_PATH: "/aval/delegation_config_common.toml"
+    COMMON_TORIZON: "true"
 
 .e2e-test-nightly-template:
   extends: .e2e-test-template
   variables:
     TARGET_BUILD_TYPE: "nightly"
-    DELEGATION_PATH: "/aval/delegation_config.toml"
 
 .e2e-test-nightly-common-template:
   extends: .e2e-test-template
   variables:
     TARGET_BUILD_TYPE: "nightly"
-    DELEGATION_PATH: "/aval/delegation_config_common.toml"
+    COMMON_TORIZON: "true"
 
 # -----------------------------------------------------------------------------
 # Upstream jobs
 # -----------------------------------------------------------------------------
 e2e-test-apalis-imx6q-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: apalis-imx6q
+  resource_group: "0027-Apalis-iMX6-Quad-1GB-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -160,11 +210,11 @@ e2e-test-apalis-imx6q-nightly:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0027-Apalis-iMX6-Quad-1GB-01"
 
 e2e-test-apalis-imx6q-release:
   extends: .e2e-test-stable-template
-  resource_group: apalis-imx6q
+  resource_group: "0027-Apalis-iMX6-Quad-1GB-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -176,11 +226,11 @@ e2e-test-apalis-imx6q-release:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx6q"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0027-Apalis-iMX6-Quad-1GB-01"
 
 e2e-test-colibri-imx7d-emmc-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: colibri-imx7d-emmc
+  resource_group: "0039-Colibri-iMX7-Dual-1GB-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -192,11 +242,11 @@ e2e-test-colibri-imx7d-emmc-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0039-Colibri-iMX7-Dual-1GB-01"
 
 e2e-test-colibri-imx7d-emmc-release:
   extends: .e2e-test-stable-template
-  resource_group: colibri-imx7d-emmc
+  resource_group: "0039-Colibri-iMX7-Dual-1GB-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -208,11 +258,11 @@ e2e-test-colibri-imx7d-emmc-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx7d-emmc"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0039-Colibri-iMX7-Dual-1GB-01"
 
 e2e-test-colibri-imx6dl-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: colibri-imx6dl
+  resource_group: "0017-Colibri-iMX6-DualLite-512MB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -224,11 +274,11 @@ e2e-test-colibri-imx6dl-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0017-Colibri-iMX6-DualLite-512MB-IT-01"
 
 e2e-test-colibri-imx6dl-release:
   extends: .e2e-test-stable-template
-  resource_group: colibri-imx6dl
+  resource_group: "0017-Colibri-iMX6-DualLite-512MB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -240,11 +290,11 @@ e2e-test-colibri-imx6dl-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6dl"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0017-Colibri-iMX6-DualLite-512MB-IT-01"
 
 e2e-test-colibri-imx6ull-emmc-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: colibri-imx6ull-emmc
+  resource_group: "0062-Colibri-iMX6ULL-1GB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -256,11 +306,11 @@ e2e-test-colibri-imx6ull-emmc-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0062-Colibri-iMX6ULL-1GB-IT-01"
 
 e2e-test-colibri-imx6ull-emmc-release:
   extends: .e2e-test-stable-template
-  resource_group: colibri-imx6ull-emmc
+  resource_group: "0062-Colibri-iMX6ULL-1GB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -272,11 +322,11 @@ e2e-test-colibri-imx6ull-emmc-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx6ull-emmc"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0062-Colibri-iMX6ULL-1GB-IT-01"
 
 e2e-test-torizon-x86-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: torizon-x86
+  resource_group: "intel-corei7-64-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -289,11 +339,11 @@ e2e-test-torizon-x86-nightly:
       when: on_success
   variables:
     SOC_UDT: "torizon-x86"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "intel-corei7-64-01"
 
 e2e-test-torizon-x86-release:
   extends: .e2e-test-stable-common-template
-  resource_group: torizon-x86
+  resource_group: "intel-corei7-64-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -306,7 +356,7 @@ e2e-test-torizon-x86-release:
       when: on_success
   variables:
     SOC_UDT: "torizon-x86"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "intel-corei7-64-01"
 
 # -----------------------------------------------------------------------------
 # TI hardware
@@ -315,41 +365,9 @@ e2e-test-torizon-x86-release:
 # -----------------------------------------------------------------------------
 # AM62 jobs
 # -----------------------------------------------------------------------------
-e2e-test-verdin-am62dual-nightly:
-  extends: .e2e-test-nightly-template
-  resource_group: verdin-am62dual
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62dual"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
-e2e-test-verdin-am62dual-release:
-  extends: .e2e-test-stable-template
-  resource_group: verdin-am62dual
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_VERDIN_AM62DUAL == "true"'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
-      when: on_success
-  variables:
-    SOC_UDT: "verdin-am62dual"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
-
 e2e-test-sk-am62-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62
+  resource_group: "am62xx-evm-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -362,11 +380,11 @@ e2e-test-sk-am62-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "am62xx-evm-01"
 
 e2e-test-sk-am62-release:
   extends: .e2e-test-stable-common-template
-  resource_group: sk-am62
+  resource_group: "am62xx-evm-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -379,45 +397,11 @@ e2e-test-sk-am62-release:
       when: on_success
   variables:
     SOC_UDT: "sk-am62"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62l-nightly:
-  extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62l
-  allow_failure: true
-  rules:
-    - if: $CI_WORLD_TEST == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62L == "true"'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62l"
-    AVAL_EXTRA_OPTIONS: ""
-
-e2e-test-sk-am62l-release:
-  extends: .e2e-test-stable-common-template
-  resource_group: sk-am62l
-  allow_failure: true
-  rules:
-    - if: $CI_TEST_STABLE == "true"
-      when: on_success
-    - if: '$CI_TEST_SK_AM62L == "true"'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[am62\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
-      when: on_success
-    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
-      when: on_success
-  variables:
-    SOC_UDT: "sk-am62l"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "am62xx-evm-01"
 
 e2e-test-verdin-am62quad-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: verdin-am62quad
+  resource_group: "0076-Verdin-AM62-Quad-2GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -429,11 +413,11 @@ e2e-test-verdin-am62quad-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62quad"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0076-Verdin-AM62-Quad-2GB-WB-IT-01"
 
 e2e-test-verdin-am62quad-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-am62quad
+  resource_group: "0076-Verdin-AM62-Quad-2GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -445,14 +429,14 @@ e2e-test-verdin-am62quad-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62quad"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0076-Verdin-AM62-Quad-2GB-WB-IT-01"
 
 # -----------------------------------------------------------------------------
 # AM62P jobs
 # -----------------------------------------------------------------------------
 e2e-test-sk-am62p-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: sk-am62p
+  resource_group: "am62pxx-evm-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -465,11 +449,11 @@ e2e-test-sk-am62p-nightly:
       when: on_success
   variables:
     SOC_UDT: "sk-am62p"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "am62pxx-evm-01"
 
 e2e-test-sk-am62p-release:
   extends: .e2e-test-stable-common-template
-  resource_group: sk-am62p
+  resource_group: "am62pxx-evm-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -482,11 +466,11 @@ e2e-test-sk-am62p-release:
       when: on_success
   variables:
     SOC_UDT: "sk-am62p"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "am62pxx-evm-01"
 
 e2e-test-verdin-am62pq-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: verdin-am62pq
+  resource_group: "0099-Verdin-AM62P-2GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -498,11 +482,11 @@ e2e-test-verdin-am62pq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62pq"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0099-Verdin-AM62P-2GB-WB-IT-01"
 
 e2e-test-verdin-am62pq-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-am62pq
+  resource_group: "0099-Verdin-AM62P-2GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -514,14 +498,14 @@ e2e-test-verdin-am62pq-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-am62pq"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0099-Verdin-AM62P-2GB-WB-IT-01"
 
 # -----------------------------------------------------------------------------
 # AM67A BeagleY AI jobs
 # -----------------------------------------------------------------------------
 e2e-test-beagley-ai-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: beagley-ai
+  resource_group: "beagley-ai-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -534,11 +518,11 @@ e2e-test-beagley-ai-nightly:
       when: on_success
   variables:
     SOC_UDT: "beagley-ai"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "beagley-ai-01"
 
 e2e-test-beagley-ai-release:
   extends: .e2e-test-stable-common-template
-  resource_group: beagley-ai
+  resource_group: "beagley-ai-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -551,14 +535,14 @@ e2e-test-beagley-ai-release:
       when: on_success
   variables:
     SOC_UDT: "beagley-ai"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "beagley-ai-01"
 
 # -----------------------------------------------------------------------------
 # AM69 jobs
 # -----------------------------------------------------------------------------
 e2e-test-aquila-am69octa-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: aquila-am69octa
+  resource_group: "0088-Aquila-AM69-Octa-32GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -570,11 +554,11 @@ e2e-test-aquila-am69octa-nightly:
       when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0088-Aquila-AM69-Octa-32GB-WB-IT-01"
 
 e2e-test-aquila-am69octa-release:
   extends: .e2e-test-stable-template
-  resource_group: aquila-am69octa
+  resource_group: "0088-Aquila-AM69-Octa-32GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -586,7 +570,7 @@ e2e-test-aquila-am69octa-release:
       when: on_success
   variables:
     SOC_UDT: "aquila-am69octa"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0088-Aquila-AM69-Octa-32GB-WB-IT-01"
 
 # -----------------------------------------------------------------------------
 # NXP hardware
@@ -597,7 +581,7 @@ e2e-test-aquila-am69octa-release:
 # -----------------------------------------------------------------------------
 e2e-test-apalis-imx8qm-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: apalis-imx8qm
+  resource_group: "0037-Apalis-iMX8-QuadMax-4GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -609,11 +593,11 @@ e2e-test-apalis-imx8qm-nightly:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0037-Apalis-iMX8-QuadMax-4GB-WiFi-BT-IT-01"
 
 e2e-test-apalis-imx8qm-release:
   extends: .e2e-test-stable-template
-  resource_group: apalis-imx8qm
+  resource_group: "0037-Apalis-iMX8-QuadMax-4GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -625,11 +609,11 @@ e2e-test-apalis-imx8qm-release:
       when: on_success
   variables:
     SOC_UDT: "apalis-imx8qm"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0037-Apalis-iMX8-QuadMax-4GB-WiFi-BT-IT-01"
 
 e2e-test-colibri-imx8qxp-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: colibri-imx8qxp
+  resource_group: "0038-Colibri-iMX8-QuadXPlus-2GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -641,11 +625,11 @@ e2e-test-colibri-imx8qxp-nightly:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0038-Colibri-iMX8-QuadXPlus-2GB-WiFi-BT-IT-01"
 
 e2e-test-colibri-imx8qxp-release:
   extends: .e2e-test-stable-template
-  resource_group: colibri-imx8qxp
+  resource_group: "0038-Colibri-iMX8-QuadXPlus-2GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -657,11 +641,11 @@ e2e-test-colibri-imx8qxp-release:
       when: on_success
   variables:
     SOC_UDT: "colibri-imx8qxp"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0038-Colibri-iMX8-QuadXPlus-2GB-WiFi-BT-IT-01"
 
 e2e-test-verdin-imx8mmq-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: verdin-imx8mmq
+  resource_group: "0055-Verdin-iMX8M-Mini-Quad-2GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -673,11 +657,11 @@ e2e-test-verdin-imx8mmq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0055-Verdin-iMX8M-Mini-Quad-2GB-WiFi-BT-IT-01"
 
 e2e-test-verdin-imx8mmq-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-imx8mmq
+  resource_group: "0055-Verdin-iMX8M-Mini-Quad-2GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -689,11 +673,11 @@ e2e-test-verdin-imx8mmq-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mmq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0055-Verdin-iMX8M-Mini-Quad-2GB-WiFi-BT-IT-01"
 
 e2e-test-verdin-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: verdin-imx8mpq
+  resource_group: "0058-Verdin-iMX8M-Plus-Quad-4GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -705,11 +689,11 @@ e2e-test-verdin-imx8mpq-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0058-Verdin-iMX8M-Plus-Quad-4GB-WiFi-BT-IT-01"
 
 e2e-test-verdin-imx8mpq-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-imx8mpq
+  resource_group: "0058-Verdin-iMX8M-Plus-Quad-4GB-WiFi-BT-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -721,11 +705,11 @@ e2e-test-verdin-imx8mpq-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx8mpq"
-    AVAL_EXTRA_OPTIONS: "--ignore-different-secondaries-between-updates"
+    PLACE: "0058-Verdin-iMX8M-Plus-Quad-4GB-WiFi-BT-IT-01"
 
 e2e-test-smarc-imx8mpq-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: smarc-imx8mpq
+  resource_group: "0097-SMARC-iMX8M-Plus-Quad-4GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -737,11 +721,11 @@ e2e-test-smarc-imx8mpq-nightly:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx8mpq"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0097-SMARC-iMX8M-Plus-Quad-4GB-WB-IT-01"
 
 e2e-test-smarc-imx8mpq-release:
   extends: .e2e-test-stable-template
-  resource_group: smarc-imx8mpq
+  resource_group: "0097-SMARC-iMX8M-Plus-Quad-4GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -753,51 +737,81 @@ e2e-test-smarc-imx8mpq-release:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx8mpq"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0097-SMARC-iMX8M-Plus-Quad-4GB-WB-IT-01"
 
 # -----------------------------------------------------------------------------
 # IMX93 jobs
 # -----------------------------------------------------------------------------
-e2e-test-frdm-imx93-nightly:
-  extends: .e2e-test-nightly-common-template
-  resource_group: frdm-imx93
-  allow_failure: true
+e2e-test-lino-imx93-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: "0217-Lino-iMX93-Dual-2GB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
-    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+    - if: '$CI_TEST_LINO_IMX93 == "true"'
       when: on_success
     - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
     - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
       when: on_success
   variables:
-    SOC_UDT: "frdm-imx93"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
+    SOC_UDT: "lino-imx93"
+    PLACE: "0217-Lino-iMX93-Dual-2GB-IT-01"
 
-e2e-test-frdm-imx93-release:
-  extends: .e2e-test-stable-common-template
-  resource_group: frdm-imx93
-  allow_failure: true
+e2e-test-lino-imx93-release:
+  extends: .e2e-test-stable-template
+  resource_group: "0217-Lino-iMX93-Dual-2GB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
-    - if: '$CI_TEST_FRDM_IMX93 == "true"'
+    - if: '$CI_TEST_LINO_IMX93 == "true"'
       when: on_success
     - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
     - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
       when: on_success
   variables:
-    SOC_UDT: "frdm-imx93"
-    AVAL_EXTRA_OPTIONS: "--do-not-update"
+    SOC_UDT: "lino-imx93"
+    PLACE: "0217-Lino-iMX93-Dual-2GB-IT-01"
+
+e2e-test-osm-imx93-nightly:
+  extends: .e2e-test-nightly-template
+  resource_group: "0219-OSM-iMX93-Dual-2GB-IT-01"
+  rules:
+    - if: $CI_WORLD_TEST == "true"
+      when: on_success
+    - if: '$CI_TEST_OSM_IMX93 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::nightly/'
+      when: on_success
+  variables:
+    SOC_UDT: "osm-imx93"
+    PLACE: "0219-OSM-iMX93-Dual-2GB-IT-01"
+
+e2e-test-osm-imx93-release:
+  extends: .e2e-test-stable-template
+  resource_group: "0219-OSM-iMX93-Dual-2GB-IT-01"
+  rules:
+    - if: $CI_TEST_STABLE == "true"
+      when: on_success
+    - if: '$CI_TEST_OSM_IMX93 == "true"'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[imx93\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+    - if: '$CI_MERGE_REQUEST_LABELS =~ /platform\[all\]/ && $CI_MERGE_REQUEST_LABELS =~ /test::release/'
+      when: on_success
+  variables:
+    SOC_UDT: "osm-imx93"
+    PLACE: "0219-OSM-iMX93-Dual-2GB-IT-01"
 
 # -----------------------------------------------------------------------------
 # IMX95 jobs
 # -----------------------------------------------------------------------------
 e2e-test-verdin-imx95h-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: verdin-imx95h
+  resource_group: "0089-Verdin-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -809,11 +823,11 @@ e2e-test-verdin-imx95h-nightly:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0089-Verdin-iMX95-Hexa-8GB-WB-IT-01"
 
 e2e-test-verdin-imx95h-release:
   extends: .e2e-test-stable-template
-  resource_group: verdin-imx95h
+  resource_group: "0089-Verdin-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -825,11 +839,11 @@ e2e-test-verdin-imx95h-release:
       when: on_success
   variables:
     SOC_UDT: "verdin-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0089-Verdin-iMX95-Hexa-8GB-WB-IT-01"
 
 e2e-test-smarc-imx95h-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: smarc-imx95h
+  resource_group: "0096-SMARC-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -841,11 +855,11 @@ e2e-test-smarc-imx95h-nightly:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0096-SMARC-iMX95-Hexa-8GB-WB-IT-01"
 
 e2e-test-smarc-imx95h-release:
   extends: .e2e-test-stable-template
-  resource_group: smarc-imx95h
+  resource_group: "0096-SMARC-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -857,11 +871,11 @@ e2e-test-smarc-imx95h-release:
       when: on_success
   variables:
     SOC_UDT: "smarc-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0096-SMARC-iMX95-Hexa-8GB-WB-IT-01"
 
 e2e-test-aquila-imx95h-nightly:
   extends: .e2e-test-nightly-template
-  resource_group: aquila-imx95h
+  resource_group: "0098-Aquila-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_WORLD_TEST == "true"
       when: on_success
@@ -873,11 +887,11 @@ e2e-test-aquila-imx95h-nightly:
       when: on_success
   variables:
     SOC_UDT: "aquila-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0098-Aquila-iMX95-Hexa-8GB-WB-IT-01"
 
 e2e-test-aquila-imx95h-release:
   extends: .e2e-test-stable-template
-  resource_group: aquila-imx95h
+  resource_group: "0098-Aquila-iMX95-Hexa-8GB-WB-IT-01"
   rules:
     - if: $CI_TEST_STABLE == "true"
       when: on_success
@@ -889,7 +903,7 @@ e2e-test-aquila-imx95h-release:
       when: on_success
   variables:
     SOC_UDT: "aquila-imx95h"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "0098-Aquila-iMX95-Hexa-8GB-WB-IT-01"
 
 # -----------------------------------------------------------------------------
 # Synaptics hardware
@@ -900,7 +914,7 @@ e2e-test-aquila-imx95h-release:
 # -----------------------------------------------------------------------------
 e2e-test-astra-sl1680-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: astra-sl1680
+  resource_group: "astra-sl1680-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -913,11 +927,11 @@ e2e-test-astra-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "astra-sl1680"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "astra-sl1680-01"
 
 e2e-test-astra-sl1680-release:
   extends: .e2e-test-stable-common-template
-  resource_group: astra-sl1680
+  resource_group: "astra-sl1680-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -930,11 +944,11 @@ e2e-test-astra-sl1680-release:
       when: on_success
   variables:
     SOC_UDT: "astra-sl1680"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "astra-sl1680-01"
 
 e2e-test-luna-sl1680-nightly:
   extends: .e2e-test-nightly-common-template
-  resource_group: luna-sl1680
+  resource_group: "luna-sl1680-01"
   allow_failure: true
   rules:
     - if: $CI_WORLD_TEST == "true"
@@ -947,11 +961,11 @@ e2e-test-luna-sl1680-nightly:
       when: on_success
   variables:
     SOC_UDT: "luna-sl1680"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "luna-sl1680-01"
 
 e2e-test-luna-sl1680-release:
   extends: .e2e-test-stable-common-template
-  resource_group: luna-sl1680
+  resource_group: "luna-sl1680-01"
   allow_failure: true
   rules:
     - if: $CI_TEST_STABLE == "true"
@@ -964,5 +978,5 @@ e2e-test-luna-sl1680-release:
       when: on_success
   variables:
     SOC_UDT: "luna-sl1680"
-    AVAL_EXTRA_OPTIONS: ""
+    PLACE: "luna-sl1680-01"
 
