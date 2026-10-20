@@ -25,20 +25,16 @@ teardown_file() {
   run -0 gpu_kernel_logs
 }
 
-# bats test_tags=platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
-@test "Modetest is able to probe DRM information " {
-  docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest
-}
-
-# autodetection is frail for imx-drm
-# bats test_tags=platform:imx8, platform:imx93
+# bats test_tags=platform:imx8, platform:imx93, platform:imx95, platform:am62, platform:am62p, platform:upstream, platform:am69, platform:am67a
 @test "Modetest is able to probe DRM information" {
-  docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest -M imx-drm
-}
+  # autodetection is frail on NXP, so pass the DRM module explicitly
+  case "$PLATFORM" in
+    imx8 | imx93) MODETEST_ARGS=(-M imx-drm) ;;
+    imx95) MODETEST_ARGS=(-M imx95-dpu) ;;
+    *) MODETEST_ARGS=() ;;
+  esac
 
-# bats test_tags=platform:imx95
-@test "Modetest is able to probe DRM information" {
-  docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest -M imx95-dpu
+  docker compose -f "$COMPOSE_FILE" exec "${file_name}" modetest "${MODETEST_ARGS[@]}"
 }
 
 # bats test_tags=platform:imx8
