@@ -39,6 +39,8 @@ teardown_file() {
 @test "Weston g2d renderer module is loaded" {
   bats_require_minimum_version 1.5.0
 
+  [ -e /dev/pxp_device ] || skip "/dev/pxp_device not available, Weston uses the software renderer"
+
   run docker compose -f "$COMPOSE_FILE" logs "${file_name}"
   [ "$status" -eq 0 ]
 

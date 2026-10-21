@@ -10,8 +10,12 @@ services:
       - '/run/udev:/run/udev'
     device_cgroup_rules:
       - 'c 4:* rmw'
+      - 'c 10:223 rmw'
       - 'c 13:* rmw'
       - 'c 226:* rmw'
+      - 'c 252:* rmw'
+      - 'c 253:* rmw'
+      - 'c 509:* rmw'
     image: '$REGISTRY/${REGISTRY_NAMESPACE}/weston-imx93:${IMAGE_TAG}'
     command: '--developer --tty=/dev/tty7'
 

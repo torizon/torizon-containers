@@ -85,9 +85,10 @@ services:
       - 'c 4:* rmw'
       - 'c 10:* rmw'
       - 'c 13:* rmw'
-      - 'c 199:* rmw'
       - 'c 226:* rmw'
+      - 'c 252:* rmw'
       - 'c 253:* rmw'
+      - 'c 509:* rmw'
     command: '--developer -- --use-pixman'
     restart: unless-stopped
 

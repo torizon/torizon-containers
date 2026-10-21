@@ -132,6 +132,14 @@ test -n "$SOC_ID" && {
   HAS_DPU=$(has_feature 'imxdpu')
   HAS_PXP=$(has_feature 'imxpxp')
 }
+
+# The SoC may have a PXP while the running kernel does not expose it
+# (e.g. no PXP driver/device tree node), or the container's device cgroup
+# rules may not allow it, so check that the device node is usable too.
+if $HAS_PXP && [ ! -w /dev/pxp_device ]; then
+  echo "SoC has a PXP but /dev/pxp_device is not available, ignoring it."
+  HAS_PXP=false
+fi
 echo "SoC has GPU: $HAS_GPU"
 echo "SoC has DPU: $HAS_DPU"
 echo "SoC has PXP: $HAS_PXP"
@@ -157,7 +165,8 @@ fi
   test -e /etc/alternatives/libg2d.so.2 && update-alternatives --set libg2d.so.2 /usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2
 }
 
-[[ "$SOC_ID" =~ "MX93" ]] && {
+# i.MX93 g2d is PXP-backed only, without it fall back to the software renderer
+[[ "$SOC_ID" =~ "MX93" ]] && $HAS_PXP && {
   WESTON_ARGS="$WESTON_ARGS --use-g2d"
 
   G2D_IMPLEMENTATION='pxp'
