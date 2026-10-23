@@ -3,12 +3,12 @@ dotnet10: &dotnet
   release: &dotnet-release "10.0"
   semver: &dotnet-semver "10.0.13"
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10:
   <<: *dotnet
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-debug:
@@ -16,21 +16,21 @@ dotnet10-debug:
   semver: *dotnet-semver
   # The latest version of vsdbg can be obtained by running the follow command:
   # curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l ~/vsdbg
-  debugger-version: "18.10.10709.3"
+  debugger-version: "18.7.10521.2"
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -39,24 +39,24 @@ dotnet10-imx8: &dotnet-imx8
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-imx8:
   <<: *dotnet-imx8
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-imx8:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-imx8:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -65,24 +65,24 @@ dotnet10-am62: &dotnet-am62
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-am62:
   <<: *dotnet-am62
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-am62:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-am62:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -91,24 +91,24 @@ dotnet10-am62p: &dotnet-am62p
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-am62p:
   <<: *dotnet-am62p
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-am62p:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-am62p:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -117,24 +117,24 @@ dotnet10-am67a: &dotnet-am67a
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-am67a:
   <<: *dotnet-am67a
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-am67a:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-am67a:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -143,24 +143,24 @@ dotnet10-am69: &dotnet-am69
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-am69:
   <<: *dotnet-am69
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-am69:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-am69:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -169,24 +169,24 @@ dotnet10-imx93: &dotnet-imx93
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-imx93:
   <<: *dotnet-imx93
-  minor: 6
+  minor: 7
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-imx93:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-imx93:
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -195,24 +195,24 @@ dotnet10-imx95: &dotnet-imx95
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-imx95:
   <<: *dotnet-imx95
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-imx95:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-imx95:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 
@@ -221,23 +221,23 @@ dotnet10-sl1680: &dotnet-sl1680
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 aspdotnet10-sl1680:
   <<: *dotnet-sl1680
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-wayland-sl1680:
   release: *dotnet-release
   semver: *dotnet-semver
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 dotnet10-gtk3-sl1680:
   major: 4
-  minor: 11
+  minor: 12
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]

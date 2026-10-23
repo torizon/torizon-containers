@@ -1,117 +1,117 @@
 debian-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-base-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-base-dev-imx8:
   major: 4
-  minor: 16
+  minor: 17
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-gtk3-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 weston-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-examples-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-examples-imx8:
   major: 4
-  minor: 19
+  minor: 20
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-tests-imx8:
   major: 4
-  minor: 16
+  minor: 17
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-enterprise-demo-imx8:
   major: 4
-  minor: 16
+  minor: 17
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 weston-touch-calibrator-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 graphics-tests-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 chromium-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cog-imx8:
   major: 4
-  minor: 21
+  minor: 22
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 crank-weston-imx8:
   major: 4
-  minor: 8
+  minor: 9
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-imx8:
   major: 4
-  minor: 8
+  minor: 9
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-dev-imx8:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 tensorflow-lite-examples-imx8:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64-imx8:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm64-imx8:
   major: 4
-  minor: 5
+  minor: 6
   patch: 0
 gstreamer1.0-imx8:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 gstreamer1.0-dev-imx8:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
 gstreamer1.0-examples-imx8:
   major: 4
-  minor: 2
+  minor: 3
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
