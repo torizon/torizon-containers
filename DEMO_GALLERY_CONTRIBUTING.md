@@ -27,7 +27,7 @@ The workflow is:
 1. CI generates Docker run commands from compose files using the [decompose](https://gitlab.com/toradex/rd/torizon-core/decompose)
 during the [generate job](ci-scripts/generate/generate.yml)
 2. Run files are consumed during test-time by a [script](tests/helpers/read-docker-run.sh)
-3. Containers are tested by the BATS framework using [MAGMA](https://gitlab.com/toradex/rd/torizon-core/magma) as the testing infrastructure. Tests run every night or on-demand.
+3. Containers are tested by the BATS framework using [Aval](https://gitlab.com/toradex/rd/torizon-core/aval) as the testing infrastructure. Tests run every night or on-demand.
 3. The [Demo Gallery Repository](https://gitlab.com/toradex/rd/torizon-core/packages-and-containers/demo-gallery) is generated and pushed
 using a [Python script](ci-scripts/demo-gallery/demo-gallerizator.py)
 4. Delegation Publisher creates package source from feed once per day

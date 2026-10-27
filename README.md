@@ -71,7 +71,7 @@ the stages, looking from the pipeline YAML definitions:
 - [Main build pipeline](.gitlab-ci.yml) which pushes images to DockerHub with
  `<image-name>:<branch-name>-rc`.
 - [Test Pipeline](ci-scripts/test/test.yml) which runs integration tests on real
-hardware in the MAGMA lab.
+hardware using the Aval Framework and the Torizon Cloud API.
 - [Release Pipeline](ci-scripts/release/release.yml) which retags images from
 `<image-name>:<branch-name>-rc` to `<image-name>:<major>.<minor>.<patch>` using
 the [versioning metadata](ci-scripts/container-versions) tracked by the repo.
@@ -208,32 +208,31 @@ regressions during build time is imperative for the well-being of this project.
 
 Torizon Containers are tested in two levels:
 
-- [Integration tests](ci-scripts/test/magma-tests.yml) using
-[MAGMA](https://gitlab.com/toradex/rd/torizon-core/magma), Toradex's
-labgrid-based lab automation. These tests run on a board farm maintained by
+- [Integration tests](ci-scripts/test/aval-tests.yml) using the
+[Aval Framework](https://github.com/torizon/aval), which is our own orchestrator
+built on top of Torizon Cloud. These tests run from a board farm maintained by
 Toradex.
 
 Integration tests are written in bash using bats and are
 [divided in suites](tests/suites/) corresponding each of the SoC platforms we
-support. We package everything in a Docker image, flash the latest Torizon OS
-build on a MAGMA board and run this image on it through its serial console
-(`magma-client console-run`). Within the
-`docker run...` statement we mount the docker socket of the daemon
+support. We package everything in a Docker image and tell Aval to run this
+image to a board that matches our configuration. Within the `docker run...`
+statement we tell Aval to execute we mount the docker socket of the daemon
 running on the host Torizon OS which enables the subsequent `docker pulls` from
 the various `setup_suite.bash` to pull the image currently being tested.
 
 A helper [`run-tests.sh`](tests/suites/run-tests.sh) script is used to crawl
 through each of the tests inside a given suite, sequencially run each bats test
-and report a JUnit.xml `report.xml` file that is copied back over SSH to the
-`report: junit:` field in
-[`magma-tests.yml`](ci-scripts/test/magma-tests.yml), providing a visual
+and report a JUnit.xml `report.xml` file that is picked up by Aval via ssh over
+to the `report: junit:` field in
+[`aval-tests.yml`](ci-scripts/test/aval-tests.yml), providing a visual
 representation of which tests passed/failed from the GitLab UI.
 
 - Functional tests: these are for testing things like "is the correct version of
 dotnet installed?" or other basic checks for versions etc. Anything that can be
 easily tested on common runners (amd64, generally) and is not hardware-dependent
 is a functional test. Test pipelines are any `*-tests.yml`
-[here](ci-scripts/test/) that are not the MAGMA tests.
+[here](ci-scripts/test/) that are not the the Aval tests.
 
 ## Architecture Glossary
 

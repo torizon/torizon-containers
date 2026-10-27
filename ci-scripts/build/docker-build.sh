@@ -79,7 +79,7 @@ if [[ "$IS_RELEASE_BRANCH" == "true" ]]; then
   export IMAGE_TAG=${RELEASE_TAG}-rc
 fi
 
-# Override for MAGMA test images, push to GitLab even inside protected branches
+# Override for Aval test images, push to GitLab even inside protected branches
 if [[ "${CI_WORLD_TEST:-false}" == "true" || $(env | grep -c '^CI_TEST') -gt 0 ]]; then
   export REGISTRY=${CI_REGISTRY-}
   export PUSH_REGISTRY=${CI_REGISTRY-}
