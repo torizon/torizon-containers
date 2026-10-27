@@ -5,7 +5,7 @@ import subprocess
 import json
 
 """
-DEMO_GALLERY_VERSION is required: it replaces the "${RELEASE_TAG}-rc" image tags
+DEMO_GALLERY_VERSION is required: it replaces the "${IMAGE_TAG}" and "${RELEASE_TAG}-rc" image tags
 in the generated composes, so it has to be passed in the command.
 
 To run locally:
@@ -142,7 +142,12 @@ def main(composes_dir):
     # tcb doesn't support canonicalizing compose files with a fully qualified image
     # ie, an `image:` specifying the registry such as `docker.io/torizon/weston:stable-rc`
     recursively_replace_contents("$REGISTRY/", "", composes_dir)
+    # The composes are shared with the AVAL tests, which set REGISTRY_NAMESPACE
+    # and IMAGE_TAG at run time. Resolve them here to the published images,
+    # otherwise torizoncore-builder can't determine their digests.
+    recursively_replace_contents("${REGISTRY_NAMESPACE}", "torizon", composes_dir)
     # FIXME: we should only do this on torizon-containers releases, ie, tags
+    recursively_replace_contents("${IMAGE_TAG}", DEMO_GALLERY_VERSION, composes_dir)
     recursively_replace_contents("${RELEASE_TAG}-rc", DEMO_GALLERY_VERSION, composes_dir)
 
     temp_dir = "./temp"
