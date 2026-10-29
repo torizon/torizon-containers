@@ -1,92 +1,92 @@
 debian-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-base-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-base-dev-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 wayland-gtk3-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 weston-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 weston-touch-calibrator-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt5-wayland-examples-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-examples-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 qt6-wayland-tests-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 graphics-tests-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 chromium-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cog-imx93:
   major: 4
-  minor: 7
+  minor: 8
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-arm64-imx93:
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
 cross-toolchain-ssh-arm64-imx93:
   major: 4
-  minor: 6
+  minor: 7
   patch: 0
 tensorflow-lite-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 tensorflow-lite-dev-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
 tensorflow-lite-examples-imx93:
   major: 4
-  minor: 3
+  minor: 4
   patch: 0
   alias: [scarthgap, bookworm-scarthgap]
