@@ -48,6 +48,8 @@ platforms = {
     ],
     "imx93": [
         "frdm-imx93",
+        "osm-imx93",
+        "lino-imx93",
     ],
     "imx95": [
         "verdin-imx95",
