@@ -9,7 +9,6 @@ chromium_base_params="
   --use-gl=egl
   --in-process-gpu
   --check-for-update-interval=315360000
-  --disable-seccomp-filter-sandbox
   --no-sandbox
   --enable-features=UseOzonePlatform
   --ozone-platform=wayland
