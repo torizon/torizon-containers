@@ -14,7 +14,6 @@ RUN apt-get update \
         cmake \
         imx-gpu-viv-wayland-dev \
         libg2d-viv-dev \
-        libgles-dev \
         pkgconf \
     && apt-get clean \
     && apt-get autoremove \

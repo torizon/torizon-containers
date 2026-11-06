@@ -12,8 +12,8 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       libtim-vx \
-      libtensorflow-lite2.16.2 \
+      libtensorflow-lite-dev \
       tflite-vx-delegate-imx \
-      imx-gpu-viv-wayland \
       imx-gpu-viv-wayland-dev \
+      python3-tflite-runtime \
     && rm -rf /var/lib/apt/lists/*
