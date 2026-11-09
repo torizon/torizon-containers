@@ -1,0 +1,10 @@
+# description: launches the litert example
+services:
+  litert-examples:
+    volumes:
+        - /dev:/dev
+        - /tmp:/tmp
+    device_cgroup_rules:
+        - 'c 199:0 rmw'
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/litert-examples-imx8:${IMAGE_TAG}'
+    command: /bin/sh -lc ". /app/.venv/bin/activate && python3 /app/infer.py"

@@ -370,6 +370,36 @@ imx8:[tensorflow-lite-examples]:
     DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
   needs: ["imx8:[tensorflow-lite]"]
 
+imx8:[litert]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: debian-imx8
+    IMAGE_NAME: litert-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${LITERT_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${LITERT_FOLDER}/"
+  needs: ["imx8:[base]"]
+
+imx8:[litert-dev]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: litert-imx8
+    IMAGE_NAME: litert-dev-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${LITERT_DEV_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${LITERT_DEV_FOLDER}/"
+  needs: ["imx8:[litert]"]
+
+imx8:[litert-examples]:
+  extends: .build-imx8-template
+  variables:
+    BUILD_FOR_ARM_V8: "true"
+    BASE_IMAGE_NAME: litert-imx8
+    IMAGE_NAME: litert-examples-imx8
+    DOCKERFILE_FOLDER: "${PLATFORM_SPECIFIC_FOLDER}/${IMX8_FOLDER}/${LITERT_EXAMPLES_FOLDER}/"
+    DOCKERFILE_BUILD_CONTEXT_FOLDER: "${SUPPORT_FILES_FOLDER}/inference/examples"
+  needs: ["imx8:[litert]"]
+
 imx8:[gstreamer1.0]:
   extends: .build-imx8-template
   variables:
