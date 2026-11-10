@@ -173,7 +173,7 @@ if [ -n "$G2D_IMPLEMENTATION" ]; then
 
   if [ -e /etc/alternatives/libg2d.so.2 ]; then
     update-alternatives --set libg2d.so.2 \
-      "/usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}.so.2"
+      "/usr/lib/aarch64-linux-gnu/libg2d-${G2D_IMPLEMENTATION}/libg2d.so.2"
   fi
 fi
 
