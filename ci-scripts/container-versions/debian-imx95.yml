@@ -83,6 +83,21 @@ tensorflow-lite-examples-imx95:
   minor: 0
   patch: 0
   alias: [wrynose, forky-wrynose]
+litert-imx95:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
+litert-dev-imx95:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
+litert-examples-imx95:
+  major: 8
+  minor: 0
+  patch: 0
+  alias: [wrynose, forky-wrynose]
 cross-toolchain-arm64-imx95:
   major: 8
   minor: 0
