@@ -67,22 +67,11 @@ build-tests-container:
         REGISTRY_ARGS="-e REGISTRY=${CI_REGISTRY} -e REGISTRY_NAMESPACE=${CI_PROJECT_PATH} -e IMAGE_TAG=${CI_COMMIT_REF_SLUG}-magma"
         echo "Local alias tag: ${CI_REGISTRY}/${CI_PROJECT_PATH}/<image>:${CI_COMMIT_REF_SLUG}-magma"
       fi
-    # TODO: TAU-124: move this SSH bootstrap into the magma image or
-    # magma-client, so each repo doesn't need its own copy
-    # $LAB_SSH_PRIVATE_KEY holds the key base64-encoded on a single
-    # line — pasting the raw multi-line PEM into GitLab's variable field
-    # got mangled (CRLF/whitespace), which `ssh` rejected with
-    # "error in libcrypto"
-    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-    - echo "$LAB_SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
-    - chmod 600 ~/.ssh/id_ed25519
-    - LAB_HOST=$(magma-client -p "$PLACE" lab-host)
-    - echo "LAB_HOST=$LAB_HOST"
-    - ssh-keyscan -H "$LAB_HOST" >> ~/.ssh/known_hosts
-    # labgrid's own SSH to the exporter takes the user and key from here
-    - printf 'Host %s\n  User %s\n  IdentityFile ~/.ssh/id_ed25519\n  IdentitiesOnly yes\n' "$LAB_HOST" "$LAB_SSH_USER" > ~/.ssh/config
-    - chmod 600 ~/.ssh/config
-    - ssh -o BatchMode=yes -o ConnectTimeout=5 "$LAB_HOST" true
+    # Sets up SSH to the place's lab host as $LAB_SSH_USER, with the key
+    # in $LAB_SSH_PRIVATE_KEY (base64-encoded on a single line), and logs
+    # the lab host. For more details, see labgrid/wrappers/ssh_setup.py 
+    # in the magma repo
+    - magma-client -p "$PLACE" ssh-setup
     - apt update && apt install -y sshpass
     - magma-client -p "$PLACE" acquire
   script:
