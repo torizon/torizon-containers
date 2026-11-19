@@ -28,7 +28,7 @@ run_test() {
 
 # --- Platforms with GPU ---
 export HAS_GPU=true
-GPU="--use-gl=egl --use-angle=gles --in-process-gpu"
+GPU="--use-gl=angle --use-angle=gles --in-process-gpu"
 
 run_test "Default URL" "--dry-run" "$BASE $GPU --kiosk https://www.toradex.com"
 

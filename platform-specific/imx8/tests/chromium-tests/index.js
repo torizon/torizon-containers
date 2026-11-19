@@ -5,7 +5,8 @@ async function parse_main_webgl_report() {
   const vivanteArgs = [
     "--allow-insecure-localhost",
     "--disable-notifications",
-    "--use-gl=egl",
+    "--use-gl=angle",
+    "--use-angle=gles",
     "--in-process-gpu",
     "--check-for-update-interval=315360000",
     "--disable-seccomp-filter-sandbox",

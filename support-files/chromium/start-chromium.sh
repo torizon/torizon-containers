@@ -27,7 +27,7 @@ chromium_base_params="
 
 # Pick GPU-related params based on hardware
 if has_gpu; then
-  chromium_gpu_params="--use-gl=egl --use-angle=gles --in-process-gpu"
+  chromium_gpu_params="--use-gl=angle --use-angle=gles --in-process-gpu"
 else
   # No GPU (e.g. i.MX93): use software rendering
   chromium_gpu_params="--disable-gpu"
