@@ -1,0 +1,34 @@
+# description: launches the UXDivers climate box demo application
+services:
+  weston:
+    image: '$REGISTRY/${REGISTRY_NAMESPACE}/weston-imx8:${IMAGE_TAG}'
+    container_name: weston
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 10:* rmw'
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    command: '--developer --tty=/dev/tty7 -- --debug'
+
+  climate-box:
+    image: 'uxdivers/the-climate-box:v1.0.0'
+    container_name: climate-box
+    depends_on:
+      weston:
+        condition: service_healthy
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 199:* rmw'
+      - 'c 226:* rmw'
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
