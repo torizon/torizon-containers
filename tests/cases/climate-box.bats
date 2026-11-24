@@ -17,6 +17,10 @@ teardown_file() {
 @test "UXDivers The Climate Box" {
   bats_require_minimum_version 1.5.0
 
+  if [[ "$SOC_UDT" =~ imx8qxp || "$SOC_UDT" =~ imx8qm ]]; then
+    skip "This demo is unsupported on imx8qxp and imx8qm"
+  fi
+  
   run -0 clean_kernel_logs
 
   run -0 docker compose -f "$COMPOSE_FILE" top "${file_name}" | grep "TheClimateBox"
