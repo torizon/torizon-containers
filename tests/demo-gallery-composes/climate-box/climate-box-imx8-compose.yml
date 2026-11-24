@@ -16,7 +16,6 @@ services:
       - '/dev:/dev'
       - '/tmp:/tmp'
       - '/run/udev/:/run/udev/'
-    command: '--developer --tty=/dev/tty7 -- --debug'
 
   climate-box:
     image: 'uxdivers/the-climate-box:v1.0.0'
