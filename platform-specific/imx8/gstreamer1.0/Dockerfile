@@ -17,6 +17,7 @@ RUN apt-get -y update \
         gstreamer1.0-plugins-good \
         gstreamer1.0-plugins-bad \
         imx-gst1.0-plugin \
+        imx-vpu-hantro-daemon \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
