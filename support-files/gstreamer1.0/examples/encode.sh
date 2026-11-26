@@ -8,6 +8,7 @@
 
 set -euo pipefail
 
+readonly SOC_ID_FILE="/sys/devices/soc0/soc_id"
 readonly DEFAULT_FRAMES=120
 readonly DEFAULT_WIDTH=640
 readonly DEFAULT_HEIGHT=480
@@ -16,13 +17,14 @@ readonly DEFAULT_FRAMERATE="30/1"
 usage() {
   cat <<EOF
 Usage:
-  $(basename "$0") --backend <hantro|amphion> --output <file.h264> [options]
+  $(basename "$0") --output <file.h264> [options]
 
 Required options:
-  --backend BACKEND  Encoder backend: hantro or amphion
   --output FILE      Output H.264 elementary stream
 
 Optional:
+  --backend BACKEND  Encoder backend: hantro or amphion
+                     Default: detected from the SoC
   --frames NUMBER    Number of frames to encode
                      Default: ${DEFAULT_FRAMES}
   -h, --help         Show this help message
@@ -59,6 +61,23 @@ count_frames() {
     fail "GStreamer pipeline failed: $*"
 
   grep -c "last-message = chain" <<<"$output" || true
+}
+
+# Sets backend from the running SoC when --backend is not given.
+detect_backend() {
+  local soc_id
+
+  [[ -r "$SOC_ID_FILE" ]] ||
+    fail "Cannot detect the SoC: $SOC_ID_FILE is unavailable; pass --backend"
+
+  soc_id="$(<"$SOC_ID_FILE")"
+  echo "Detected SoC: $soc_id"
+
+  case "$soc_id" in
+    i.MX8MM | i.MX8MP) backend="hantro" ;;
+    i.MX8QM | i.MX8QXP) backend="amphion" ;;
+    *) fail "No hardware H.264 encoder known for $soc_id; pass --backend" ;;
+  esac
 }
 
 encode_hantro() {
@@ -128,7 +147,6 @@ while (($# > 0)); do
   esac
 done
 
-[[ -n "$backend" ]] || fail "--backend is required"
 [[ -n "$output_file" ]] || fail "--output is required"
 
 validate_positive_integer "$frames" "--frames"
@@ -159,6 +177,8 @@ echo "Output file: $output_file"
 echo "Frames: $frames"
 echo "Resolution: ${DEFAULT_WIDTH}x${DEFAULT_HEIGHT}"
 echo "Framerate: $DEFAULT_FRAMERATE"
+
+[[ -n "$backend" ]] || detect_backend
 
 case "$backend" in
   hantro)

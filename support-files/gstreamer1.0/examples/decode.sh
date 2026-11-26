@@ -8,13 +8,16 @@
 
 set -euo pipefail
 
+readonly SOC_ID_FILE="/sys/devices/soc0/soc_id"
+
 usage() {
   cat <<EOF
 Usage:
-  $(basename "$0") --backend <hantro|amphion> --input <file.h264>
+  $(basename "$0") [--backend <hantro|amphion>] --input <file.h264>
 
 Options:
   --backend BACKEND  Decoder backend: hantro or amphion
+                     Default: detected from the SoC
   --input FILE       H.264 elementary stream to decode
   -h, --help         Show this help message
 EOF
@@ -31,6 +34,23 @@ require_element() {
   if ! gst-inspect-1.0 "$element" >/dev/null 2>&1; then
     fail "Required GStreamer element is unavailable: $element"
   fi
+}
+
+# Sets backend from the running SoC when --backend is not given.
+detect_backend() {
+  local soc_id
+
+  [[ -r "$SOC_ID_FILE" ]] ||
+    fail "Cannot detect the SoC: $SOC_ID_FILE is unavailable; pass --backend"
+
+  soc_id="$(<"$SOC_ID_FILE")"
+  echo "Detected SoC: $soc_id"
+
+  case "$soc_id" in
+    i.MX8MM | i.MX8MP | i.MX8MQ) backend="hantro" ;;
+    i.MX8QM | i.MX8QXP) backend="amphion" ;;
+    *) fail "No hardware H.264 decoder known for $soc_id; pass --backend" ;;
+  esac
 }
 
 # Prints the number of buffers the given pipeline pushes into a fakesink.
@@ -71,7 +91,6 @@ while (($# > 0)); do
   esac
 done
 
-[[ -n "$backend" ]] || fail "--backend is required"
 [[ -n "$input_file" ]] || fail "--input is required"
 [[ -f "$input_file" ]] || fail "Input file does not exist: $input_file"
 [[ -r "$input_file" ]] || fail "Input file is not readable: $input_file"
@@ -88,6 +107,8 @@ require_element "h264parse"
 require_element "fakesink"
 
 echo "Input file: $input_file"
+
+[[ -n "$backend" ]] || detect_backend
 
 case "$backend" in
   hantro)
