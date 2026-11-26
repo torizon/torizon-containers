@@ -1,48 +1,43 @@
 #!/bin/bash
 
 # Initializes the container for the detected i.MX8 SoC.
-# It reads the device-tree compatibility information, selects the appropriate
-# HiFi4 DSP firmware for supported platforms, updates the firmware symlink,
-# selects the Hantro VPU wrapper library and daemon variants matching the
-# running SoC, and then executes the command passed to the container.
+# It reads the SoC identifier, selects the appropriate HiFi4 DSP firmware for
+# supported platforms, updates the firmware symlink, selects the Hantro VPU
+# wrapper library and daemon variants matching the running SoC, and then
+# executes the command passed to the container.
 
 set -e
 
-DSP_FIRMWARE_DIR="/usr/lib/firmware/imx/dsp"
-COMPATIBLE_FILE="/proc/device-tree/compatible"
-DSP_FIRMWARE_LINK="${DSP_FIRMWARE_DIR}/hifi4.bin"
+# /sys/devices/soc0/soc_id is readable in unprivileged containers, unlike
+# /proc/device-tree, which points to /sys/firmware and is masked by Docker.
 SOC_ID_FILE="/sys/devices/soc0/soc_id"
+DSP_FIRMWARE_DIR="/usr/lib/firmware/imx/dsp"
+DSP_FIRMWARE_LINK="${DSP_FIRMWARE_DIR}/hifi4.bin"
 VPUWRAP_LIB_DIR="/usr/lib/aarch64-linux-gnu"
 VPUWRAP_LD_CONF="/etc/ld.so.conf.d/00-imx-vpuwrap.conf"
 VSIDAEMON_BIN="/usr/bin/vsidaemon"
 
+read_soc_id() {
+  if [ ! -r "${SOC_ID_FILE}" ]; then
+    echo "Warning: ${SOC_ID_FILE} is not available; skipping SoC-specific setup" >&2
+    return 1
+  fi
+
+  soc_id="$(cat "${SOC_ID_FILE}")"
+  echo "Detected SoC: ${soc_id}"
+}
+
 select_imx_dsp_firmware() {
-  local compatible
   local platform
   local firmware
 
-  if [ ! -r "${COMPATIBLE_FILE}" ]; then
-    echo "Warning: ${COMPATIBLE_FILE} is not available; skipping DSP firmware selection" >&2
-    return 0
-  fi
-
-  compatible="$(tr '\0' '\n' <"${COMPATIBLE_FILE}")"
-
-  case "${compatible}" in
-    *fsl,imx8mp*)
-      platform="imx8m"
-      ;;
-
-    *fsl,imx8qm* | *fsl,imx8qxp* | *fsl,imx8dx*)
-      platform="imx8qmqxp"
-      ;;
-
-    *fsl,imx8ulp*)
-      platform="imx8ulp"
-      ;;
-
+  # The i.MX8DX shares the i.MX8QXP die and reports i.MX8QXP.
+  case "${soc_id}" in
+    i.MX8MP) platform="imx8m" ;;
+    i.MX8QM | i.MX8QXP | i.MX8DXL) platform="imx8qmqxp" ;;
+    i.MX8ULP) platform="imx8ulp" ;;
     *)
-      echo "No HiFi4 firmware selection required for this platform"
+      echo "No HiFi4 firmware selection required for ${soc_id}"
       return 0
       ;;
   esac
@@ -70,16 +65,8 @@ select_imx_dsp_firmware() {
 # variant. Point the dynamic loader to the variant matching the running SoC
 # and link the matching Hantro daemon.
 select_imx_vpu_hantro_variant() {
-  local soc_id
   local variant
   local libdir
-
-  if [ ! -r "${SOC_ID_FILE}" ]; then
-    echo "Warning: ${SOC_ID_FILE} is not available; skipping Hantro VPU variant selection" >&2
-    return 0
-  fi
-
-  soc_id="$(cat "${SOC_ID_FILE}")"
 
   case "${soc_id}" in
     i.MX8MM) variant="mx8mm" ;;
@@ -108,7 +95,9 @@ select_imx_vpu_hantro_variant() {
   ln -sfn "${VSIDAEMON_BIN}-${variant}" "${VSIDAEMON_BIN}"
 }
 
-select_imx_dsp_firmware
-select_imx_vpu_hantro_variant
+if read_soc_id; then
+  select_imx_dsp_firmware
+  select_imx_vpu_hantro_variant
+fi
 
 exec "$@"

@@ -14,6 +14,44 @@ teardown_file() {
 }
 
 # bats test_tags=platform:imx8
+@test "GStreamer container selects the Hantro VPU variant for the SoC" {
+  bats_require_minimum_version 1.5.0
+
+  if [[ "$SOC_UDT" =~ imx8mm ]]; then
+    variant="mx8mm"
+  elif [[ "$SOC_UDT" =~ imx8mp ]]; then
+    variant="mx8mp"
+  else
+    skip "No Hantro VPU variant selection on $SOC_UDT"
+  fi
+
+  run -0 docker compose -f "$COMPOSE_FILE" exec -T "${file_name}" \
+    cat /etc/ld.so.conf.d/00-imx-vpuwrap.conf
+  [[ "$output" == "/usr/lib/aarch64-linux-gnu/${variant}" ]]
+
+  run -0 docker compose -f "$COMPOSE_FILE" exec -T "${file_name}" \
+    readlink /usr/bin/vsidaemon
+  [[ "$output" == "/usr/bin/vsidaemon-${variant}" ]]
+}
+
+# bats test_tags=platform:imx8
+@test "GStreamer container selects the HiFi4 DSP firmware for the SoC" {
+  bats_require_minimum_version 1.5.0
+
+  if [[ "$SOC_UDT" =~ imx8mp ]]; then
+    platform="imx8m"
+  elif [[ "$SOC_UDT" =~ imx8q || "$SOC_UDT" =~ imx8dx ]]; then
+    platform="imx8qmqxp"
+  else
+    skip "No HiFi4 DSP firmware selection on $SOC_UDT"
+  fi
+
+  run -0 docker compose -f "$COMPOSE_FILE" exec -T "${file_name}" \
+    readlink /usr/lib/firmware/imx/dsp/hifi4.bin
+  [[ "$output" == "${platform}/hifi4.bin" ]]
+}
+
+# bats test_tags=platform:imx8
 @test "GStreamer hardware H.264 decode runs" {
   bats_require_minimum_version 1.5.0
   run -0 clean_kernel_logs

@@ -13,11 +13,14 @@ set -euo pipefail
 readonly DEFAULT_HOST="127.0.0.1"
 readonly DEFAULT_PORT="5000"
 readonly DEFAULT_DURATION="30"
-readonly RECEIVER_STARTUP_DELAY="1"
+readonly RECEIVER_STARTUP_TIMEOUT="10"
+readonly RECEIVER_STOP_TIMEOUT="10"
+readonly RECEIVER_DRAIN_DELAY="2"
 readonly RTP_CAPS="application/x-rtp,media=video,clock-rate=90000,encoding-name=H264,payload=96"
 
 loopback_receiver_pid=""
 loopback_tmpdir=""
+receiver_stop_requested=0
 
 usage() {
   cat <<EOF
@@ -68,7 +71,8 @@ Receive options:
       Default: ${DEFAULT_PORT}
 
   --duration SECONDS
-      Maximum time to receive packets.
+      Maximum time to receive packets. Sending SIGTERM to the receiver
+      stops it earlier.
       Default: ${DEFAULT_DURATION}
 
 Verify options:
@@ -90,7 +94,8 @@ Loopback options:
       Default: ${DEFAULT_PORT}
 
   --duration SECONDS
-      Maximum receiver execution time.
+      Maximum receiver execution time. The receiver is stopped as soon as
+      the sender finishes.
       Default: ${DEFAULT_DURATION}
 
 General:
@@ -201,6 +206,63 @@ cleanup_loopback() {
   return "$previous_status"
 }
 
+udp_port_is_bound() {
+  local port_hex
+  local table
+
+  port_hex="$(printf '%04X' "$1")"
+
+  for table in /proc/net/udp /proc/net/udp6; do
+    [[ -r "$table" ]] || continue
+
+    if awk -v suffix=":${port_hex}" '
+      NR > 1 && substr($2, length($2) - 4) == suffix { found = 1 }
+      END { exit !found }
+    ' "$table"; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+# Waits until the receiver has bound its UDP port, so the sender does not
+# start before the receiver can accept packets.
+wait_for_receiver() {
+  local receiver_pid="$1"
+  local deadline=$((SECONDS + RECEIVER_STARTUP_TIMEOUT))
+
+  until udp_port_is_bound "$port"; do
+    if ! kill -0 "$receiver_pid" >/dev/null 2>&1; then
+      return 1
+    fi
+
+    if ((SECONDS >= deadline)); then
+      return 2
+    fi
+
+    sleep 0.1
+  done
+}
+
+# Stops a gst-launch-1.0 -e process with SIGINT so it sends EOS and flushes
+# its sinks, and kills it if it does not exit within RECEIVER_STOP_TIMEOUT.
+stop_gstreamer() {
+  local gstreamer_pid="$1"
+  local deadline=$((SECONDS + RECEIVER_STOP_TIMEOUT))
+
+  kill -INT "$gstreamer_pid" >/dev/null 2>&1 || return 0
+
+  while kill -0 "$gstreamer_pid" >/dev/null 2>&1; do
+    if ((SECONDS >= deadline)); then
+      kill -KILL "$gstreamer_pid" >/dev/null 2>&1 || true
+      return 0
+    fi
+
+    sleep 0.1
+  done
+}
+
 send_stream() {
   local packet_count
   local pipeline_statuses
@@ -285,9 +347,11 @@ send_stream() {
 
 receive_stream() {
   local packet_count
-  local pipeline_statuses
+  local gstreamer_pid
   local gstreamer_status
-  local awk_status
+  local checksumsink_log
+  local deadline
+  local stop_reason=""
 
   validate_port
   validate_positive_integer "$duration" "--duration"
@@ -300,7 +364,7 @@ receive_stream() {
 
   require_command "gst-launch-1.0"
   require_command "gst-inspect-1.0"
-  require_command "timeout"
+  require_command "sleep"
   require_command "awk"
   require_command "wc"
   require_command "tr"
@@ -315,7 +379,9 @@ receive_stream() {
   require_element "filesink"
   require_element "checksumsink"
 
-  rm -f "$output_file" "$checksums_file"
+  checksumsink_log="${checksums_file}.log"
+
+  rm -f "$output_file" "$checksums_file" "$checksumsink_log"
 
   echo "Streaming mode: receive"
   echo "Listening port: $port"
@@ -323,13 +389,12 @@ receive_stream() {
   echo "Output file: $output_file"
   echo "RTP checksums file: $checksums_file"
 
-  set +e
+  # SIGINT (Ctrl+C) or SIGTERM stops the receiver early. A receiver started
+  # in the background by a non-interactive shell, as in loopback mode,
+  # ignores SIGINT, so loopback mode sends SIGTERM.
+  trap 'receiver_stop_requested=1' INT TERM
 
-  timeout \
-    --signal=INT \
-    --kill-after=10s \
-    "${duration}s" \
-    gst-launch-1.0 -q -e \
+  gst-launch-1.0 -q -e \
     udpsrc port="$port" caps="$RTP_CAPS" \
     ! rtpjitterbuffer latency=100 do-lost=true \
     ! tee name=rtp \
@@ -341,29 +406,54 @@ receive_stream() {
     ! filesink location="$output_file" sync=false \
     rtp. \
     ! queue \
-    ! checksumsink hash=sha256 sync=false |
-    awk '
-      length($2) == 64 && $2 ~ /^[0-9a-fA-F]+$/ {
-        print tolower($2)
-      }
-    ' >"$checksums_file"
+    ! checksumsink hash=sha256 sync=false \
+    >"$checksumsink_log" &
 
-  pipeline_statuses=("${PIPESTATUS[@]}")
+  gstreamer_pid=$!
+  deadline=$((SECONDS + duration))
 
-  set -e
+  while kill -0 "$gstreamer_pid" >/dev/null 2>&1; do
+    if ((receiver_stop_requested)); then
+      stop_reason="Receiver stopped on request"
+      break
+    fi
 
-  gstreamer_status="${pipeline_statuses[0]:-1}"
-  awk_status="${pipeline_statuses[1]:-1}"
+    if ((SECONDS >= deadline)); then
+      stop_reason="Receiver stopped after the configured duration"
+      break
+    fi
+
+    sleep 0.1
+  done
+
+  if [[ -n "$stop_reason" ]]; then
+    stop_gstreamer "$gstreamer_pid"
+  fi
+
+  gstreamer_status=0
+  wait "$gstreamer_pid" || gstreamer_status=$?
+
+  trap - INT TERM
+
+  # A Ctrl+C also reaches gst-launch-1.0 directly, which then stops on its
+  # own. udpsrc never sends EOS, so a clean exit means it was interrupted.
+  if [[ -z "$stop_reason" ]]; then
+    case "$gstreamer_status" in
+      0 | 130)
+        stop_reason="Receiver stopped on request"
+        ;;
+
+      *)
+        fail "The receiving pipeline exited unexpectedly with status $gstreamer_status"
+        ;;
+    esac
+  fi
 
   case "$gstreamer_status" in
-    0) ;;
-
-    124 | 130)
-      echo "Receiver stopped after the configured duration"
-      ;;
+    0 | 130) ;;
 
     137)
-      echo "Receiver was force-stopped after the timeout grace period"
+      echo "Receiver was force-stopped after the stop grace period"
       ;;
 
     *)
@@ -371,9 +461,17 @@ receive_stream() {
       ;;
   esac
 
-  if [[ "$awk_status" -ne 0 ]]; then
+  echo "$stop_reason"
+
+  if ! awk '
+    length($2) == 64 && $2 ~ /^[0-9a-fA-F]+$/ {
+      print tolower($2)
+    }
+  ' "$checksumsink_log" >"$checksums_file"; then
     fail "Failed to record received RTP packet checksums"
   fi
+
+  rm -f "$checksumsink_log"
 
   [[ -s "$output_file" ]] ||
     fail "No H.264 data was received"
@@ -431,6 +529,7 @@ loopback_stream() {
   local received_checksums
   local sender_status
   local receiver_status
+  local wait_status
 
   validate_port
   validate_positive_integer "$duration" "--duration"
@@ -439,6 +538,7 @@ loopback_stream() {
 
   require_command "mktemp"
   require_command "sleep"
+  require_command "kill"
   require_command "cat"
   require_command "rm"
 
@@ -468,16 +568,28 @@ loopback_stream() {
 
   loopback_receiver_pid=$!
 
-  sleep "$RECEIVER_STARTUP_DELAY"
+  wait_status=0
+  wait_for_receiver "$loopback_receiver_pid" || wait_status=$?
 
-  if ! kill -0 "$loopback_receiver_pid" >/dev/null 2>&1; then
-    receiver_status=0
-    wait "$loopback_receiver_pid" || receiver_status=$?
+  case "$wait_status" in
+    0) ;;
 
-    cat "$receiver_log"
+    1)
+      receiver_status=0
+      wait "$loopback_receiver_pid" || receiver_status=$?
+      loopback_receiver_pid=""
 
-    fail "The RTP receiver stopped before the sender started with status $receiver_status"
-  fi
+      cat "$receiver_log"
+
+      fail "The RTP receiver stopped before the sender started with status $receiver_status"
+      ;;
+
+    *)
+      cat "$receiver_log"
+
+      fail "The RTP receiver did not bind UDP port $port within ${RECEIVER_STARTUP_TIMEOUT}s"
+      ;;
+  esac
 
   sender_status=0
 
@@ -492,6 +604,11 @@ loopback_stream() {
     cat "$receiver_log"
     fail "The RTP sender failed with status $sender_status"
   fi
+
+  # Give the jitter buffer time to release the last packets, then stop the
+  # receiver instead of waiting for the full --duration.
+  sleep "$RECEIVER_DRAIN_DELAY"
+  kill -TERM "$loopback_receiver_pid" >/dev/null 2>&1 || true
 
   receiver_status=0
   wait "$loopback_receiver_pid" || receiver_status=$?
