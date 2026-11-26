@@ -4,6 +4,7 @@
 # stream using the hardware encoder selected for the target i.MX8 platform.
 # Hantro platforms use vpuenc_h264, while Amphion platforms use v4l2h264enc.
 # The resulting H.264 stream is written to the output file provided by the user.
+# Fails if the output frame count differs from --frames.
 
 set -euo pipefail
 
@@ -48,6 +49,16 @@ validate_positive_integer() {
   if [[ ! "$value" =~ ^[1-9][0-9]*$ ]]; then
     fail "$argument must be a positive integer: $value"
   fi
+}
+
+# Prints the number of buffers the given pipeline pushes into a fakesink.
+count_frames() {
+  local output
+
+  output="$(gst-launch-1.0 -v "$@" ! fakesink silent=false sync=false)" ||
+    fail "GStreamer pipeline failed: $*"
+
+  grep -c "last-message = chain" <<<"$output" || true
 }
 
 encode_hantro() {
@@ -131,6 +142,8 @@ command -v gst-inspect-1.0 >/dev/null 2>&1 ||
 require_element "videotestsrc"
 require_element "h264parse"
 require_element "filesink"
+require_element "filesrc"
+require_element "fakesink"
 
 output_directory="$(dirname "$output_file")"
 
@@ -167,5 +180,16 @@ if [[ ! -s "$output_file" ]]; then
 fi
 
 echo "Encoded bytes: $(stat -c '%s' "$output_file")"
+
+encoded_frames="$(count_frames \
+  filesrc location="$output_file" \
+  ! h264parse \
+  ! "video/x-h264,alignment=au")"
+
+echo "Encoded frames: $encoded_frames"
+
+((encoded_frames == frames)) ||
+  fail "Encoded $encoded_frames frames, expected $frames"
+
 echo "H.264 encoding completed successfully"
 echo "Result: PASS"

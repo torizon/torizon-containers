@@ -226,8 +226,7 @@ udp_port_is_bound() {
   return 1
 }
 
-# Waits until the receiver has bound its UDP port, so the sender does not
-# start before the receiver can accept packets.
+# Waits until the receiver has bound its UDP port.
 wait_for_receiver() {
   local receiver_pid="$1"
   local deadline=$((SECONDS + RECEIVER_STARTUP_TIMEOUT))
@@ -245,8 +244,7 @@ wait_for_receiver() {
   done
 }
 
-# Stops a gst-launch-1.0 -e process with SIGINT so it sends EOS and flushes
-# its sinks, and kills it if it does not exit within RECEIVER_STOP_TIMEOUT.
+# Stops gst-launch-1.0 with SIGINT, or SIGKILL after RECEIVER_STOP_TIMEOUT.
 stop_gstreamer() {
   local gstreamer_pid="$1"
   local deadline=$((SECONDS + RECEIVER_STOP_TIMEOUT))
@@ -389,9 +387,7 @@ receive_stream() {
   echo "Output file: $output_file"
   echo "RTP checksums file: $checksums_file"
 
-  # SIGINT (Ctrl+C) or SIGTERM stops the receiver early. A receiver started
-  # in the background by a non-interactive shell, as in loopback mode,
-  # ignores SIGINT, so loopback mode sends SIGTERM.
+  # SIGTERM is used by loopback mode, where background jobs ignore SIGINT.
   trap 'receiver_stop_requested=1' INT TERM
 
   gst-launch-1.0 -q -e \
@@ -435,8 +431,7 @@ receive_stream() {
 
   trap - INT TERM
 
-  # A Ctrl+C also reaches gst-launch-1.0 directly, which then stops on its
-  # own. udpsrc never sends EOS, so a clean exit means it was interrupted.
+  # udpsrc never sends EOS, so a clean exit means Ctrl+C reached gst directly.
   if [[ -z "$stop_reason" ]]; then
     case "$gstreamer_status" in
       0 | 130)
@@ -605,8 +600,7 @@ loopback_stream() {
     fail "The RTP sender failed with status $sender_status"
   fi
 
-  # Give the jitter buffer time to release the last packets, then stop the
-  # receiver instead of waiting for the full --duration.
+  # Let the jitter buffer flush, then stop the receiver.
   sleep "$RECEIVER_DRAIN_DELAY"
   kill -TERM "$loopback_receiver_pid" >/dev/null 2>&1 || true
 

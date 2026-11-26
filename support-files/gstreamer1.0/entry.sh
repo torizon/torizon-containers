@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Initializes the container for the detected i.MX8 SoC.
-# It reads the SoC identifier, selects the appropriate HiFi4 DSP firmware for
-# supported platforms, updates the firmware symlink, selects the Hantro VPU
-# wrapper library and daemon variants matching the running SoC, and then
-# executes the command passed to the container.
+# Sets up the DSP firmware and Hantro VPU variant for the SoC, then runs CMD.
 
 set -e
 
-# /sys/devices/soc0/soc_id is readable in unprivileged containers, unlike
-# /proc/device-tree, which points to /sys/firmware and is masked by Docker.
+# Unlike /proc/device-tree, soc_id is readable in unprivileged containers.
 SOC_ID_FILE="/sys/devices/soc0/soc_id"
 DSP_FIRMWARE_DIR="/usr/lib/firmware/imx/dsp"
 DSP_FIRMWARE_LINK="${DSP_FIRMWARE_DIR}/hifi4.bin"
@@ -31,7 +26,7 @@ select_imx_dsp_firmware() {
   local platform
   local firmware
 
-  # The i.MX8DX shares the i.MX8QXP die and reports i.MX8QXP.
+  # The i.MX8DX reports i.MX8QXP.
   case "${soc_id}" in
     i.MX8MP) platform="imx8m" ;;
     i.MX8QM | i.MX8QXP | i.MX8DXL) platform="imx8qmqxp" ;;
@@ -59,11 +54,7 @@ select_imx_dsp_firmware() {
   ls -l "${DSP_FIRMWARE_LINK}"
 }
 
-# libfslvpuwrap3 (imx-vpuwrap) installs one libfslvpuwrap.so.3 per i.MX8M
-# variant under /usr/lib/aarch64-linux-gnu/<variant>/, and
-# imx-vpu-hantro-daemon installs one /usr/bin/vsidaemon-<variant> binary per
-# variant. Point the dynamic loader to the variant matching the running SoC
-# and link the matching Hantro daemon.
+# Points the loader and vsidaemon to the per-SoC Hantro VPU variant.
 select_imx_vpu_hantro_variant() {
   local variant
   local libdir

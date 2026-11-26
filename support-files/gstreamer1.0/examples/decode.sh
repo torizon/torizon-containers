@@ -4,6 +4,7 @@
 # the target i.MX8 platform. Hantro platforms use vpudec, while Amphion
 # platforms use v4l2h264dec. Decoded frames are sent to fakesink so the entire
 # stream can be validated without requiring a display or producing a raw file.
+# Fails if the decoded frame count differs from the input.
 
 set -euo pipefail
 
@@ -32,30 +33,14 @@ require_element() {
   fi
 }
 
-decode_hantro() {
-  require_element "vpudec"
+# Prints the number of buffers the given pipeline pushes into a fakesink.
+count_frames() {
+  local output
 
-  echo "Decoder backend: Hantro"
-  echo "Decoder element: vpudec"
+  output="$(gst-launch-1.0 -v "$@" ! fakesink silent=false sync=false)" ||
+    fail "GStreamer pipeline failed: $*"
 
-  gst-launch-1.0 -q \
-    filesrc location="$input_file" \
-    ! h264parse \
-    ! vpudec \
-    ! fakesink sync=false
-}
-
-decode_amphion() {
-  require_element "v4l2h264dec"
-
-  echo "Decoder backend: Amphion"
-  echo "Decoder element: v4l2h264dec"
-
-  gst-launch-1.0 -q \
-    filesrc location="$input_file" \
-    ! h264parse \
-    ! v4l2h264dec \
-    ! fakesink sync=false
+  grep -c "last-message = chain" <<<"$output" || true
 }
 
 backend=""
@@ -106,17 +91,43 @@ echo "Input file: $input_file"
 
 case "$backend" in
   hantro)
-    decode_hantro
+    backend_name="Hantro"
+    decoder="vpudec"
     ;;
 
   amphion)
-    decode_amphion
+    backend_name="Amphion"
+    decoder="v4l2h264dec"
     ;;
 
   *)
     fail "Unsupported backend: $backend"
     ;;
 esac
+
+require_element "$decoder"
+
+echo "Decoder backend: $backend_name"
+echo "Decoder element: $decoder"
+
+input_frames="$(count_frames \
+  filesrc location="$input_file" \
+  ! h264parse \
+  ! "video/x-h264,alignment=au")"
+
+echo "Input frames: $input_frames"
+
+((input_frames > 0)) || fail "No H.264 frames found in $input_file"
+
+decoded_frames="$(count_frames \
+  filesrc location="$input_file" \
+  ! h264parse \
+  ! "$decoder")"
+
+echo "Decoded frames: $decoded_frames"
+
+((decoded_frames == input_frames)) ||
+  fail "Decoded $decoded_frames frames, expected $input_frames"
 
 echo "H.264 decoding completed successfully"
 echo "Result: PASS"
