@@ -8,9 +8,12 @@ services:
         - /proc/device-tree:/proc/device-tree:ro
     device_cgroup_rules:
         - 'c 81:* rmw'
+        - 'c 234:* rmw'
+        - 'c 235:* rmw'
         - 'c 237:* rmw'
         - 'c 238:* rmw'
         - 'c 251:* rmw'
+        - 'c 252:* rmw'
         - 'c 253:* rmw'
     image: '$REGISTRY/${REGISTRY_NAMESPACE}/gstreamer1.0-examples-imx8:${IMAGE_TAG}'
     command: ["sleep", "infinity"]
