@@ -27,7 +27,7 @@ export XDG_RUNTIME_DIR=/tmp/weston-xdg
 mkdir -p $XDG_RUNTIME_DIR
 mkdir -p /tmp/.X11-unix/
 # Make sure no leftovers from the last time are there
-rm -f $XDG_RUNTIME_DIR/*
+rm -f "${XDG_RUNTIME_DIR:?}"/*
 
 echo XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR >>/etc/environment
 
